@@ -1214,105 +1214,99 @@ body{background:var(--bg-page);color:var(--text-primary);font-family:var(--font-
       </div>
     </div>
     <div class="v-right">
-                        <!-- 3-tab intel component -->
-      <div style="display:flex;flex-direction:column;gap:14px">
-
-        <!-- Segmented tab control -->
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;background:var(--bg-surface-2);border-radius:10px;padding:4px;border:1px solid var(--border)">
-          <button class="brief-intel-tab active-tab" onclick="switchBriefTab(this,'brief-panel-decision')"
-            style="padding:10px 8px;border-radius:7px;border:none;cursor:pointer;background:var(--blue);transition:all var(--t-base) var(--ease);display:flex;flex-direction:column;align-items:center;gap:3px">
-            <span style="font-family:var(--font-mono);font-size:9px;font-weight:700;color:rgba(255,255,255,.6);letter-spacing:.1em;text-transform:uppercase">01</span>
-            <span style="font-family:var(--font-mono);font-size:11px;font-weight:700;color:#fff;letter-spacing:.06em;text-transform:uppercase">The Decision</span>
+            <!-- 3-tab intel -->
+      <div style="display:flex;flex-direction:column;gap:0">
+        <div style="display:flex;align-items:flex-end;gap:0;border-bottom:1px solid var(--border);margin-bottom:16px">
+          <button class="brief-intel-tab" onclick="switchBriefTab(this,'brief-panel-decision')"
+            style="display:flex;flex-direction:column;gap:3px;padding:0 20px 11px 0;background:none;border:none;border-bottom:2px solid var(--blue);cursor:pointer;margin-bottom:-1px">
+            <span style="font-family:var(--font-mono);font-size:8px;color:var(--blue);letter-spacing:.16em;text-transform:uppercase">01</span>
+            <span style="font-family:var(--font-mono);font-size:12px;font-weight:700;color:var(--text-primary);letter-spacing:.06em;text-transform:uppercase">The Decision</span>
           </button>
           <button class="brief-intel-tab" onclick="switchBriefTab(this,'brief-panel-upside')"
-            style="padding:10px 8px;border-radius:7px;border:none;cursor:pointer;background:transparent;transition:all var(--t-base) var(--ease);display:flex;flex-direction:column;align-items:center;gap:3px">
-            <span style="font-family:var(--font-mono);font-size:9px;font-weight:700;color:var(--text-muted);letter-spacing:.1em;text-transform:uppercase">02</span>
-            <span style="font-family:var(--font-mono);font-size:11px;font-weight:700;color:var(--text-muted);letter-spacing:.06em;text-transform:uppercase">The Upside</span>
+            style="display:flex;flex-direction:column;gap:3px;padding:0 20px 11px;background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;margin-bottom:-1px;opacity:.5;transition:opacity 200ms">
+            <span style="font-family:var(--font-mono);font-size:8px;color:var(--text-muted);letter-spacing:.16em;text-transform:uppercase">02</span>
+            <span style="font-family:var(--font-mono);font-size:12px;font-weight:700;color:var(--text-secondary);letter-spacing:.06em;text-transform:uppercase">The Upside</span>
           </button>
           <button class="brief-intel-tab" onclick="switchBriefTab(this,'brief-panel-why')"
-            style="padding:10px 8px;border-radius:7px;border:none;cursor:pointer;background:transparent;transition:all var(--t-base) var(--ease);display:flex;flex-direction:column;align-items:center;gap:3px">
-            <span style="font-family:var(--font-mono);font-size:9px;font-weight:700;color:var(--text-muted);letter-spacing:.1em;text-transform:uppercase">03</span>
-            <span style="font-family:var(--font-mono);font-size:11px;font-weight:700;color:var(--text-muted);letter-spacing:.06em;text-transform:uppercase">The Why</span>
+            style="display:flex;flex-direction:column;gap:3px;padding:0 20px 11px;background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;margin-bottom:-1px;opacity:.5;transition:opacity 200ms">
+            <span style="font-family:var(--font-mono);font-size:8px;color:var(--text-muted);letter-spacing:.16em;text-transform:uppercase">03</span>
+            <span style="font-family:var(--font-mono);font-size:12px;font-weight:700;color:var(--text-secondary);letter-spacing:.06em;text-transform:uppercase">The Why</span>
           </button>
         </div>
 
-        <!-- Panel: THE DECISION -->
         <div id="brief-panel-decision" style="display:block">
-          <div style="font-size:13px;line-height:1.65;color:var(--text-secondary);margin-bottom:14px"><strong style="color:var(--text-primary);font-weight:700">The ELT approved OPT-5: Minimal Viable Entry &mdash; $150K phases immediately for GDPR, legal entity, and DPO.</strong> The remaining $350K is hard-gated on a signed EU customer contract before any FTE or GTM spend.</div>
+          <p style="font-size:14px;font-weight:600;color:var(--text-primary);line-height:1.55;margin:0 0 14px 0">The ELT approved OPT-5: Minimal Viable Entry &mdash; $150K phases immediately for GDPR, legal entity, and DPO. The remaining $350K is hard-gated on a signed EU customer contract.</p>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
             <div>
-              <div style="font-family:var(--font-mono);font-size:9px;font-weight:700;color:var(--amber);text-transform:uppercase;letter-spacing:.12em;margin-bottom:8px;display:flex;align-items:center;gap:6px"><span style="display:inline-block;width:16px;height:2px;background:var(--amber);border-radius:1px"></span>3 Conditions</div>
-              <div style="display:flex;flex-direction:column;gap:5px">
-                <div style="display:flex;gap:8px;font-size:12px;color:var(--text-secondary);line-height:1.4"><span style="color:var(--amber);font-weight:700;flex-shrink:0;font-family:var(--font-mono)">01</span>GDPR scope confirmed within $150K</div>
-                <div style="display:flex;gap:8px;font-size:12px;color:var(--text-secondary);line-height:1.4"><span style="color:var(--amber);font-weight:700;flex-shrink:0;font-family:var(--font-mono)">02</span>EU employment law resolved before FTE offers</div>
-                <div style="display:flex;gap:8px;font-size:12px;color:var(--text-secondary);line-height:1.4"><span style="color:var(--amber);font-weight:700;flex-shrink:0;font-family:var(--font-mono)">03</span>CAC validated at or below $50K</div>
+              <div style="font-family:var(--font-mono);font-size:9px;font-weight:700;color:var(--amber);text-transform:uppercase;letter-spacing:.14em;margin-bottom:8px;display:flex;align-items:center;gap:7px"><span style="width:14px;height:1px;background:var(--amber);display:inline-block"></span>3 Conditions</div>
+              <div style="display:flex;flex-direction:column;gap:6px">
+                <div style="display:flex;gap:8px;font-size:12px;color:var(--text-secondary);line-height:1.45"><span style="color:var(--amber);font-weight:700;font-family:var(--font-mono);flex-shrink:0">01</span>GDPR scope confirmed within $150K</div>
+                <div style="display:flex;gap:8px;font-size:12px;color:var(--text-secondary);line-height:1.45"><span style="color:var(--amber);font-weight:700;font-family:var(--font-mono);flex-shrink:0">02</span>EU employment law resolved before FTE offers</div>
+                <div style="display:flex;gap:8px;font-size:12px;color:var(--text-secondary);line-height:1.45"><span style="color:var(--amber);font-weight:700;font-family:var(--font-mono);flex-shrink:0">03</span>CAC validated at or below $50K</div>
               </div>
             </div>
             <div>
-              <div style="font-family:var(--font-mono);font-size:9px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:.12em;margin-bottom:8px;display:flex;align-items:center;gap:6px"><span style="display:inline-block;width:16px;height:2px;background:var(--red);border-radius:1px"></span>2 Kill Criteria</div>
-              <div style="display:flex;flex-direction:column;gap:5px">
-                <div style="display:flex;gap:8px;font-size:12px;color:var(--text-secondary);line-height:1.4"><span style="color:var(--red);font-weight:700;flex-shrink:0">&#x2715;</span>GDPR scope &gt;14 eng-weeks &mdash; Phase 2 halts</div>
-                <div style="display:flex;gap:8px;font-size:12px;color:var(--text-secondary);line-height:1.4"><span style="color:var(--red);font-weight:700;flex-shrink:0">&#x2715;</span>EU CAC &gt;$50K two months running &mdash; pause</div>
+              <div style="font-family:var(--font-mono);font-size:9px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:.14em;margin-bottom:8px;display:flex;align-items:center;gap:7px"><span style="width:14px;height:1px;background:var(--red);display:inline-block"></span>2 Kill Criteria</div>
+              <div style="display:flex;flex-direction:column;gap:6px">
+                <div style="display:flex;gap:8px;font-size:12px;color:var(--text-secondary);line-height:1.45"><span style="color:var(--red);font-weight:700;flex-shrink:0">&#x2715;</span>GDPR scope &gt;14 eng-weeks &mdash; Phase 2 halts</div>
+                <div style="display:flex;gap:8px;font-size:12px;color:var(--text-secondary);line-height:1.45"><span style="color:var(--red);font-weight:700;flex-shrink:0">&#x2715;</span>EU CAC &gt;$50K two months running &mdash; pause</div>
               </div>
             </div>
           </div>
-          <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:14px;padding-top:12px;border-top:1px solid var(--border)">
+          <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:16px;padding-top:12px;border-top:1px solid var(--border)">
             <span class="chip chip-amber">Board Auth. Required</span>
             <span id="v-gt-chip" class="chip chip-red">Groupthink &middot; HIGH</span>
             <span class="chip chip-blue">EU Expansion</span>
           </div>
         </div>
 
-        <!-- Panel: THE UPSIDE -->
         <div id="brief-panel-upside" style="display:none">
-          <div style="font-size:13px;line-height:1.65;color:var(--text-secondary);margin-bottom:14px"><strong style="color:var(--text-primary);font-weight:700">First-mover window closes in 6 months &mdash; Competitor X is closing 2&ndash;3 EU prospects every month.</strong> Phase-gated structure limits downside to $150K if any pre-condition fails.</div>
+          <p style="font-size:14px;font-weight:600;color:var(--text-primary);line-height:1.55;margin:0 0 14px 0">First-mover window closes in 6 months &mdash; Competitor X closes 2&ndash;3 EU prospects every month we wait.</p>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
             <div>
-              <div style="font-family:var(--font-mono);font-size:9px;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:.12em;margin-bottom:8px;display:flex;align-items:center;gap:6px"><span style="display:inline-block;width:16px;height:2px;background:var(--teal);border-radius:1px"></span>Financial</div>
-              <div style="display:flex;flex-direction:column;gap:5px">
-                <div style="display:flex;gap:8px;font-size:12px;color:var(--text-secondary);line-height:1.4"><span style="color:var(--teal);flex-shrink:0">+</span>$1.5M ARR EU beachhead validates Series B segment</div>
-                <div style="display:flex;gap:8px;font-size:12px;color:var(--text-secondary);line-height:1.4"><span style="color:var(--teal);flex-shrink:0">+</span>3.5&times; LTV/CAC: $175K LTV &divide; $50K ceiling</div>
-                <div style="display:flex;gap:8px;font-size:12px;color:var(--text-secondary);line-height:1.4"><span style="color:var(--teal);flex-shrink:0">+</span>$525K pipeline from 3 confirmed EU prospects</div>
-                <div style="display:flex;gap:8px;font-size:12px;color:var(--text-secondary);line-height:1.4"><span style="color:var(--teal);flex-shrink:0">+</span>$150K limits downside if pre-conditions fail</div>
+              <div style="font-family:var(--font-mono);font-size:9px;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:.14em;margin-bottom:8px;display:flex;align-items:center;gap:7px"><span style="width:14px;height:1px;background:var(--teal);display:inline-block"></span>Financial</div>
+              <div style="display:flex;flex-direction:column;gap:6px">
+                <div style="display:flex;gap:8px;font-size:12px;color:var(--text-secondary);line-height:1.45"><span style="color:var(--teal);flex-shrink:0">+</span>$1.5M ARR EU beachhead validates Series B segment</div>
+                <div style="display:flex;gap:8px;font-size:12px;color:var(--text-secondary);line-height:1.45"><span style="color:var(--teal);flex-shrink:0">+</span>3.5&times; LTV/CAC: $175K LTV &divide; $50K ceiling</div>
+                <div style="display:flex;gap:8px;font-size:12px;color:var(--text-secondary);line-height:1.45"><span style="color:var(--teal);flex-shrink:0">+</span>$525K pipeline from 3 confirmed EU prospects</div>
+                <div style="display:flex;gap:8px;font-size:12px;color:var(--text-secondary);line-height:1.45"><span style="color:var(--teal);flex-shrink:0">+</span>$150K limits downside if pre-conditions fail</div>
               </div>
             </div>
             <div>
-              <div style="font-family:var(--font-mono);font-size:9px;font-weight:700;color:var(--purple);text-transform:uppercase;letter-spacing:.12em;margin-bottom:8px;display:flex;align-items:center;gap:6px"><span style="display:inline-block;width:16px;height:2px;background:var(--purple);border-radius:1px"></span>Market &amp; Growth</div>
-              <div style="display:flex;flex-direction:column;gap:5px">
-                <div style="display:flex;gap:8px;font-size:12px;color:var(--text-secondary);line-height:1.4"><span style="color:var(--purple);flex-shrink:0">+</span>Competitor X closes 2&ndash;3 EU prospects/month</div>
-                <div style="display:flex;gap:8px;font-size:12px;color:var(--text-secondary);line-height:1.4"><span style="color:var(--purple);flex-shrink:0">+</span>GDPR infrastructure becomes durable moat</div>
-                <div style="display:flex;gap:8px;font-size:12px;color:var(--text-secondary);line-height:1.4"><span style="color:var(--purple);flex-shrink:0">+</span>EU revenue diversifies US concentration risk</div>
-                <div style="display:flex;gap:8px;font-size:12px;color:var(--text-secondary);line-height:1.4"><span style="color:var(--purple);flex-shrink:0">+</span>3 EU FTEs unlock new talent pipelines</div>
+              <div style="font-family:var(--font-mono);font-size:9px;font-weight:700;color:var(--purple);text-transform:uppercase;letter-spacing:.14em;margin-bottom:8px;display:flex;align-items:center;gap:7px"><span style="width:14px;height:1px;background:var(--purple);display:inline-block"></span>Market &amp; Growth</div>
+              <div style="display:flex;flex-direction:column;gap:6px">
+                <div style="display:flex;gap:8px;font-size:12px;color:var(--text-secondary);line-height:1.45"><span style="color:var(--purple);flex-shrink:0">+</span>Competitor X closes 2&ndash;3 EU prospects/month</div>
+                <div style="display:flex;gap:8px;font-size:12px;color:var(--text-secondary);line-height:1.45"><span style="color:var(--purple);flex-shrink:0">+</span>GDPR infrastructure becomes durable moat</div>
+                <div style="display:flex;gap:8px;font-size:12px;color:var(--text-secondary);line-height:1.45"><span style="color:var(--purple);flex-shrink:0">+</span>EU revenue diversifies US concentration risk</div>
+                <div style="display:flex;gap:8px;font-size:12px;color:var(--text-secondary);line-height:1.45"><span style="color:var(--purple);flex-shrink:0">+</span>3 EU FTEs unlock new talent pipelines</div>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Panel: THE WHY -->
         <div id="brief-panel-why" style="display:none">
-          <div style="font-size:13px;line-height:1.65;color:var(--text-secondary);margin-bottom:14px"><strong style="color:var(--text-primary);font-weight:700">OPT-5 was the only option satisfying both the $250K governance threshold and 12-month runway covenant &mdash; voted 7/7 in R2.</strong> 5 options were evaluated across 3 rounds.</div>
+          <p style="font-size:14px;font-weight:600;color:var(--text-primary);line-height:1.55;margin:0 0 14px 0">OPT-5 was the only path satisfying both the $250K governance threshold and 12-month runway covenant &mdash; voted 7/7 in R2.</p>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
             <div>
-              <div style="font-family:var(--font-mono);font-size:9px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.12em;margin-bottom:8px;display:flex;align-items:center;gap:6px"><span style="display:inline-block;width:16px;height:2px;background:var(--text-muted);border-radius:1px"></span>Options Weighed</div>
-              <div style="display:flex;flex-direction:column;gap:5px">
-                <div style="display:flex;gap:8px;font-size:12px;color:var(--text-secondary);line-height:1.4"><span style="color:var(--teal);font-weight:700;flex-shrink:0;font-family:var(--font-mono);min-width:36px">OPT-5</span>Minimal Viable Entry &mdash; approved 7/7</div>
-                <div style="display:flex;gap:8px;font-size:12px;color:var(--text-muted);line-height:1.4"><span style="font-weight:700;flex-shrink:0;font-family:var(--font-mono);min-width:36px;text-decoration:line-through">OPT-4</span>Deferred &mdash; cedes first-mover window</div>
-                <div style="display:flex;gap:8px;font-size:12px;color:var(--text-muted);line-height:1.4"><span style="font-weight:700;flex-shrink:0;font-family:var(--font-mono);min-width:36px;text-decoration:line-through">OPT-3</span>Partner-Led &mdash; margin loss, no data</div>
-                <div style="display:flex;gap:8px;font-size:12px;color:var(--text-muted);line-height:1.4"><span style="font-weight:700;flex-shrink:0;font-family:var(--font-mono);min-width:36px;text-decoration:line-through">OPT-2</span>Full-Speed &mdash; breaches threshold</div>
-                <div style="display:flex;gap:8px;font-size:12px;color:var(--text-muted);line-height:1.4"><span style="font-weight:700;flex-shrink:0;font-family:var(--font-mono);min-width:36px;text-decoration:line-through">OPT-1</span>No Entry &mdash; rejected unanimously R0</div>
+              <div style="font-family:var(--font-mono);font-size:9px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.14em;margin-bottom:8px;display:flex;align-items:center;gap:7px"><span style="width:14px;height:1px;background:var(--text-muted);display:inline-block"></span>Options Weighed</div>
+              <div style="display:flex;flex-direction:column;gap:6px">
+                <div style="display:flex;gap:8px;font-size:12px;color:var(--text-secondary);line-height:1.45"><span style="color:var(--teal);font-weight:700;font-family:var(--font-mono);flex-shrink:0;min-width:36px">OPT-5</span>Minimal Viable Entry &mdash; approved 7/7</div>
+                <div style="display:flex;gap:8px;font-size:12px;color:var(--text-muted);line-height:1.45"><span style="font-weight:700;font-family:var(--font-mono);flex-shrink:0;min-width:36px;text-decoration:line-through">OPT-4</span>Deferred &mdash; cedes first-mover window</div>
+                <div style="display:flex;gap:8px;font-size:12px;color:var(--text-muted);line-height:1.45"><span style="font-weight:700;font-family:var(--font-mono);flex-shrink:0;min-width:36px;text-decoration:line-through">OPT-3</span>Partner-Led &mdash; margin loss, no data</div>
+                <div style="display:flex;gap:8px;font-size:12px;color:var(--text-muted);line-height:1.45"><span style="font-weight:700;font-family:var(--font-mono);flex-shrink:0;min-width:36px;text-decoration:line-through">OPT-2</span>Full-Speed &mdash; breaches threshold</div>
+                <div style="display:flex;gap:8px;font-size:12px;color:var(--text-muted);line-height:1.45"><span style="font-weight:700;font-family:var(--font-mono);flex-shrink:0;min-width:36px;text-decoration:line-through">OPT-1</span>No Entry &mdash; rejected R0</div>
               </div>
             </div>
             <div>
-              <div style="font-family:var(--font-mono);font-size:9px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.12em;margin-bottom:8px;display:flex;align-items:center;gap:6px"><span style="display:inline-block;width:16px;height:2px;background:var(--blue);border-radius:1px"></span>Next Milestones</div>
-              <div style="display:flex;flex-direction:column;gap:5px">
-                <div style="display:flex;gap:8px;font-size:12px;color:var(--text-secondary);line-height:1.4"><span style="color:var(--blue);font-weight:700;flex-shrink:0;font-family:var(--font-mono)">1</span>Board approval &mdash; auth by Feb 15</div>
-                <div style="display:flex;gap:8px;font-size:12px;color:var(--text-secondary);line-height:1.4"><span style="color:var(--blue);font-weight:700;flex-shrink:0;font-family:var(--font-mono)">2</span>GDPR scoping &mdash; CTO + LEGAL by Feb 28</div>
-                <div style="display:flex;gap:8px;font-size:12px;color:var(--text-secondary);line-height:1.4"><span style="color:var(--blue);font-weight:700;flex-shrink:0;font-family:var(--font-mono)">3</span>Headcount plan &mdash; comp bands by Apr 15</div>
+              <div style="font-family:var(--font-mono);font-size:9px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.14em;margin-bottom:8px;display:flex;align-items:center;gap:7px"><span style="width:14px;height:1px;background:var(--blue);display:inline-block"></span>Next Milestones</div>
+              <div style="display:flex;flex-direction:column;gap:6px">
+                <div style="display:flex;gap:8px;font-size:12px;color:var(--text-secondary);line-height:1.45"><span style="color:var(--blue);font-weight:700;font-family:var(--font-mono);flex-shrink:0">1</span>Board approval &mdash; auth by Feb 15</div>
+                <div style="display:flex;gap:8px;font-size:12px;color:var(--text-secondary);line-height:1.45"><span style="color:var(--blue);font-weight:700;font-family:var(--font-mono);flex-shrink:0">2</span>GDPR scoping &mdash; CTO + LEGAL by Feb 28</div>
+                <div style="display:flex;gap:8px;font-size:12px;color:var(--text-secondary);line-height:1.45"><span style="color:var(--blue);font-weight:700;font-family:var(--font-mono);flex-shrink:0">3</span>Headcount plan &mdash; comp bands by Apr 15</div>
               </div>
             </div>
           </div>
         </div>
-
       </div>
     </div>
   </div>
@@ -2398,9 +2392,28 @@ body{background:var(--bg-page);color:var(--text-primary);font-family:var(--font-
 <script>
 // \u2500\u2500 UTILITIES \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
 function el(id) { return document.getElementById(id); }
+function switchBriefTab(btn, panelId) {
+  document.querySelectorAll('.brief-intel-tab').forEach(b => {
+    b.style.borderBottomColor = 'transparent';
+    b.style.opacity = '0.5';
+    b.querySelectorAll('span').forEach((s, i) => {
+      s.style.color = i === 0 ? 'var(--text-muted)' : 'var(--text-secondary)';
+    });
+  });
+  btn.style.borderBottomColor = 'var(--blue)';
+  btn.style.opacity = '1';
+  btn.querySelectorAll('span').forEach((s, i) => {
+    s.style.color = i === 0 ? 'var(--blue)' : 'var(--text-primary)';
+  });
+  ['brief-panel-decision','brief-panel-upside','brief-panel-why'].forEach(id => {
+    const p = document.getElementById(id);
+    if (p) p.style.display = id === panelId ? 'block' : 'none';
+  });
+}
 function set(id, text) { const e = el(id); if (e) e.textContent = text; }
 function setHTML(id, html) { const e = el(id); if (e) e.innerHTML = html; }
-function switchBriefTab(btn,panelId){const COLORS={'brief-panel-decision':'var(--blue)','brief-panel-upside':'var(--teal)','brief-panel-why':'var(--purple)'};document.querySelectorAll('.brief-intel-tab').forEach(b=>{b.style.background='transparent';b.querySelectorAll('span').forEach(s=>s.style.color='var(--text-muted)');});btn.style.background=COLORS[panelId]||'var(--blue)';const sp=btn.querySelectorAll('span');if(sp[0])sp[0].style.color='rgba(255,255,255,.6)';if(sp[1])sp[1].style.color='#fff';['brief-panel-decision','brief-panel-upside','brief-panel-why'].forEach(id=>{const p=document.getElementById(id);if(p)p.style.display=id===panelId?'block':'none';});});
+function switchBriefTab(btn, panelId) {
+  document.querySelectorAll('.brief-intel-tab').forEach(b => { b.style.borderBottomColor='transparent'; b.style.color='var(--text-muted)'; });
   btn.style.borderBottomColor='var(--blue)'; btn.style.color='var(--blue)';
   ['brief-panel-decision','brief-panel-upside','brief-panel-why'].forEach(id => { const p=document.getElementById(id); if(p) p.style.display=id===panelId?'block':'none'; });
 }
@@ -2756,17 +2769,14 @@ function riskDotPos(impact, prob) {
   const im = { HIGH: 12, MEDIUM: 45, LOW: 78 };
   const pm = { HIGH: 78, MEDIUM: 45, LOW: 12 };
   const i = (impact||'').toUpperCase(); const p = (prob||'').toUpperCase();
-  const baseX = pm[p]||45; const baseY = im[i]||45;
+  const baseX = pm[p]||45, baseY = im[i]||45;
   const minDist = 14;
-  let attempts = 0, x, y;
+  let x, y, attempts = 0;
   do {
-    const jx = (Math.random()-0.5)*18, jy = (Math.random()-0.5)*18;
-    x = Math.max(4, Math.min(88, baseX+jx));
-    y = Math.max(4, Math.min(88, baseY+jy));
-    const clear = _riskUsedPos.every(pos => Math.hypot(pos.x-x, pos.y-y) >= minDist);
-    if (clear) break;
-    attempts++;
-  } while (attempts < 30);
+    x = Math.max(4, Math.min(88, baseX + (Math.random()-0.5)*18));
+    y = Math.max(4, Math.min(88, baseY + (Math.random()-0.5)*18));
+    if (_riskUsedPos.every(q => Math.hypot(q.x-x, q.y-y) >= minDist)) break;
+  } while (++attempts < 30);
   _riskUsedPos.push({x, y});
   return { tp: y+'%', lp: x+'%' };
 }

@@ -1964,6 +1964,30 @@ body{background:var(--bg-page);color:var(--text-primary);font-family:var(--font-
 <div class="s-section" id="sec-risk">
 
   <div class="g7030">
+    <div class="card">
+      <div class="card-head" style="--ct-accent:var(--red)">
+        <div class="card-title">Exposure Matrix</div>
+        <button class="info-btn" data-title="Exposure Matrix" data-body="15 risks plotted by probability x impact. Top-right = highest urgency (Act Now). Hover any executive headshot to see the risk they own, domain, and severity.">i</button>
+        <div class="u-flex u-items-ctr u-gap-lg">
+          <span class="u-flex u-items-ctr u-gap-xs" style="font-family:var(--font-mono);font-size:var(--font-9);color:var(--red)"><span class="u-legend-dot-round" style="background:var(--red)"></span>Act Now</span>
+          <span class="u-flex u-items-ctr u-gap-xs" style="font-family:var(--font-mono);font-size:var(--font-9);color:var(--amber)"><span class="u-legend-dot-round" style="background:var(--amber)"></span>Manage</span>
+          <span class="u-flex u-items-ctr u-gap-xs" style="font-family:var(--font-mono);font-size:var(--font-9);color:var(--blue)"><span class="u-legend-dot-round" style="background:var(--blue)"></span>Monitor</span>
+        </div>
+      </div>
+      <div class="card-body" class="u-pb-sm">
+        <div class="risk-matrix-outer">
+          <div class="risk-zone-grid">
+            <div class="rzg-cell rzc-manage">Manage</div><div class="rzg-cell rzc-act">Act Now</div><div class="rzg-cell rzc-act">Act Now</div>
+            <div class="rzg-cell rzc-monitor">Monitor</div><div class="rzg-cell rzc-manage">Manage</div><div class="rzg-cell rzc-manage">Manage</div>
+            <div class="rzg-cell rzc-monitor">Monitor</div><div class="rzg-cell rzc-monitor">Monitor</div><div class="rzg-cell rzc-manage">Manage</div>
+          </div>
+        </div>
+        <div class="risk-axes-row"><span class="risk-axis-lbl">&larr; Low Prob</span><span class="risk-axis-lbl" style="flex:1;text-align:center">Probability &rarr;</span><span class="risk-axis-lbl">High Prob &rarr;</span></div>
+        <div class="u-font-9">Impact: High (top) &rarr; Low (bottom) &middot; Hover dots to expand</div>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:var(--block-gap)">
+      
     <div class="card" style="--ct-accent:var(--red)">
     <div class="risk-panel">
       <div class="risk-panel-half">

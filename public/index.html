@@ -2309,6 +2309,11 @@ body{background:var(--bg-page);color:var(--text-primary);font-family:var(--font-
 function el(id) { return document.getElementById(id); }
 function set(id, text) { const e = el(id); if (e) e.textContent = text; }
 function setHTML(id, html) { const e = el(id); if (e) e.innerHTML = html; }
+function switchBriefTab(btn, panelId) {
+  document.querySelectorAll('.brief-intel-tab').forEach(b => { b.style.borderBottomColor='transparent'; b.style.color='var(--text-muted)'; });
+  btn.style.borderBottomColor='var(--blue)'; btn.style.color='var(--blue)';
+  ['brief-panel-decision','brief-panel-upside','brief-panel-why'].forEach(id => { const p=document.getElementById(id); if(p) p.style.display=id===panelId?'block':'none'; });
+}
 function chipColor(level) {
   return level === 'HIGH' ? 'var(--red)' : level === 'MEDIUM' ? 'var(--amber)' : 'var(--blue)';
 }
@@ -2673,8 +2678,12 @@ function riskZoneCls(impact, prob) {
 }
 
 function buildRisk(raw, mso, dash) {
+  const DOMAIN_ROLE = { Financial:'CFO', People:'CHRO', Technical:'CTO', Legal:'LEGAL', Strategic:'CSO', Operational:'COO', Compliance:'LEGAL', Governance:'LEGAL', Market:'CSO' };
   let risks = Array.isArray(mso.risks) ? mso.risks : Object.values(mso.risks || {});
-  if (!risks.length) risks = STATIC_RISKS;
+  risks = risks.map(r => ({...r, role_key: r.role_key || DOMAIN_ROLE[r.domain] || 'CEO', img: r.img || ''}));
+  const usedDomains = new Set(risks.map(r => r.domain));
+  const extra = STATIC_RISKS.filter(s => !usedDomains.has(s.domain));
+  risks = [...risks, ...extra].slice(0, 8);
 
   // Role dots on matrix
   const matrixOuter = document.querySelector('.risk-matrix-outer');
@@ -2682,14 +2691,19 @@ function buildRisk(raw, mso, dash) {
     document.querySelectorAll('.risk-dot-abs').forEach(d => d.remove());
     risks.slice(0, 8).forEach(r => {
       const img = r.img || ROLE_IMAGES[r.role_key] || ROLE_IMAGES[(r.role||'').toUpperCase()] || '';
-      if (!img) return;
       const pos = riskDotPos(r.impact, r.probability || r.prob);
       const dot = document.createElement('div');
       const cls = riskZoneCls(r.impact, r.probability || r.prob);
       dot.className = 'risk-dot-abs ' + cls;
       dot.style.left = pos.lp;
       dot.style.top  = pos.tp;
-      dot.innerHTML = '<img src="' + img + '" alt="' + (r.role_key||r.role||'') + '">';
+      if (img) {
+        dot.innerHTML = '<img src="' + img + '" alt="' + (r.role_key||r.role||'') + '">';
+      } else {
+        const bg = cls==='act'?'var(--red)':cls==='manage'?'var(--amber)':'var(--blue)';
+        dot.style.cssText += ';background:'+bg+';display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;font-family:var(--font-mono)';
+        dot.textContent = (r.role_key||r.domain||'?').substring(0,2);
+      }
       dot.title = (r.role||'') + ': ' + (r.risk||'').substring(0,80);
       dot.addEventListener('mouseenter', e => showRP(e, r));
       dot.addEventListener('mouseleave', hideRP);

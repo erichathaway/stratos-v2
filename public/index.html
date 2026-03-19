@@ -199,6 +199,8 @@
   --r-full:  50%;
   /* ── Slide animation ── */
   --slide-up: translateY(100%);
+
+  --gap-3: 3px;
 }
 
 /* ── 2  RESET & BASE ──────────────────────────────────────────────────────── */
@@ -1175,9 +1177,9 @@ body{background:var(--bg-page);color:var(--text-primary);font-family:var(--font-
 .risk-panel-domain{font-family:var(--font-mono);font-size:var(--font-9);color:var(--text-muted);text-transform:uppercase;letter-spacing:var(--ls-md)}
 /* ── Risk impact rows (section 3) ───────────────────────────────── */
 .risk-row-list{display:flex;flex-direction:column;gap:0}
-.risk-impact-row{display:grid;grid-template-columns:var(--gap-3) 1fr;gap:var(--gap-lg);padding:var(--gap-xl) 0;border-bottom:1px solid var(--border);align-items:start}
+.risk-impact-row{display:grid;grid-template-columns:4px 1fr;gap:var(--gap-lg);padding:var(--gap-xl) 0;border-bottom:1px solid var(--border);align-items:start}
 .risk-impact-row:last-child{border-bottom:none}
-.risk-impact-bar{width:var(--gap-3);border-radius:var(--r-full);align-self:stretch;min-height:40px}
+.risk-impact-bar{width:4px;flex-shrink:0;border-radius:var(--r-sm);align-self:stretch;min-height:40px}
 .risk-impact-bar.red{background:var(--red)}
 .risk-impact-content{display:flex;flex-direction:column;gap:var(--gap-xs)}
 .risk-impact-title{font-size:var(--text-sm);font-weight:600;color:var(--text-primary);line-height:1.45}

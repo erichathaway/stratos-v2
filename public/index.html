@@ -1214,17 +1214,67 @@ body{background:var(--bg-page);color:var(--text-primary);font-family:var(--font-
       </div>
     </div>
     <div class="v-right">
-      <div class="v-answer">
-        <small>Decision</small>
-        <span id="v-answer-body">After three rounds of structured deliberation, the ELT unanimously approved <strong>OPT-5: Minimal Viable Entry</strong> &mdash; a phase-gated land-and-expand motion that stages capital against validated demand rather than committing the full envelope upfront. <span class="cite strat" data-t="INTERNAL_STRATEGY" data-l="Kill criteria and GO/NO-GO framework &mdash; Strategic Plan">&#9670;</span> The structure is deliberately conservative: $150K releases immediately to fund GDPR compliance architecture, EU legal entity or EOR setup, and DPO recruitment &mdash; the minimum required to operate legally in the EU. The remaining $350K is hard-gated on a signed, referenceable EU customer contract before any FTE hiring or GTM spend is authorized. <span class="cite doc" data-t="INTERNAL_DOCUMENT" data-l="Executive summary confirming 16.7 months runway">&#9671;</span><br><br>Board authorization is required before any capital deploys &mdash; the $250K governance threshold is triggered. Three conditions must clear before Phase 2 proceeds: GDPR feasibility confirmed within budget, EU employment law constraints resolved, and CAC ceiling validated at or below $50K. The Q3 EU window closes if Board approval misses March&nbsp;31. <span class="cite anal" data-t="INTERNAL_ANALYSIS" data-l="Company parameters &mdash; $25M cash, Legal budget $1.1M FY25">&#9670;</span></span>
+            <!-- 3-tab intel component -->
+      <div style="display:flex;flex-direction:column;gap:0">
+        <div style="display:flex;gap:0;border-bottom:1px solid var(--border)">
+          <button class="brief-intel-tab" onclick="switchBriefTab(this,'brief-panel-decision')" style="padding:10px 18px;font-family:var(--font-mono);font-size:var(--font-9);font-weight:700;letter-spacing:.12em;text-transform:uppercase;background:none;border:none;border-bottom:2px solid var(--blue);cursor:pointer;color:var(--blue);margin-bottom:-1px">&#9670; The Decision</button>
+          <button class="brief-intel-tab" onclick="switchBriefTab(this,'brief-panel-upside')" style="padding:10px 18px;font-family:var(--font-mono);font-size:var(--font-9);font-weight:700;letter-spacing:.12em;text-transform:uppercase;background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;color:var(--text-muted);margin-bottom:-1px">&#9670; The Upside</button>
+          <button class="brief-intel-tab" onclick="switchBriefTab(this,'brief-panel-why')" style="padding:10px 18px;font-family:var(--font-mono);font-size:var(--font-9);font-weight:700;letter-spacing:.12em;text-transform:uppercase;background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;color:var(--text-muted);margin-bottom:-1px">&#9670; The Why</button>
+        </div>
+        <div id="brief-panel-decision" style="display:block;padding:var(--gap-lg) 0">
+          <div id="v-answer-body" class="prose" style="font-size:var(--text-sm);line-height:1.75;color:var(--text-secondary);margin-bottom:var(--gap-md)">After three rounds of structured deliberation, the ELT unanimously approved <strong>OPT-5: Minimal Viable Entry</strong> &mdash; a phase-gated motion staging capital against validated demand. $150K releases immediately for GDPR architecture, legal entity setup, and DPO recruitment. The remaining $350K is hard-gated on a signed EU customer contract before any FTE or GTM spend.</div>
+          <div style="display:flex;flex-direction:column;gap:var(--gap-xs)">
+            <div style="font-family:var(--font-mono);font-size:var(--font-9);font-weight:700;letter-spacing:.12em;color:var(--text-muted);text-transform:uppercase;margin-bottom:4px">3 Conditions to Hold</div>
+            <div style="display:flex;gap:8px;font-size:var(--text-xs);color:var(--text-secondary)"><span style="color:var(--amber);font-weight:700;flex-shrink:0">01</span>GDPR technical scope confirmed within $150K budget envelope</div>
+            <div style="display:flex;gap:8px;font-size:var(--text-xs);color:var(--text-secondary)"><span style="color:var(--amber);font-weight:700;flex-shrink:0">02</span>EU employment law constraints resolved before any FTE offer letters</div>
+            <div style="display:flex;gap:8px;font-size:var(--text-xs);color:var(--text-secondary)"><span style="color:var(--amber);font-weight:700;flex-shrink:0">03</span>CAC ceiling validated at or below $50K via first two closed EU deals</div>
+            <div style="font-family:var(--font-mono);font-size:var(--font-9);font-weight:700;letter-spacing:.12em;color:var(--text-muted);text-transform:uppercase;margin-top:var(--gap-md);margin-bottom:4px">2 Kill Criteria</div>
+            <div style="display:flex;gap:8px;font-size:var(--text-xs);color:var(--text-secondary)"><span style="color:var(--red);font-weight:700;flex-shrink:0">&#x2715;</span>GDPR scope exceeds 14 engineer-weeks &mdash; Q3 launch infeasible, Phase 2 halts</div>
+            <div style="display:flex;gap:8px;font-size:var(--text-xs);color:var(--text-secondary)"><span style="color:var(--red);font-weight:700;flex-shrink:0">&#x2715;</span>EU CAC exceeds $50K for two consecutive months after first close &mdash; immediate pause</div>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:var(--gap-xs);margin-top:var(--gap-md)">
+            <span class="chip chip-amber">Board Auth. Required</span>
+            <span id="v-gt-chip" class="chip chip-red">Groupthink &middot; HIGH</span>
+            <span class="chip chip-blue">EU Expansion</span>
+          </div>
+        </div>
+        <div id="brief-panel-upside" style="display:none;padding:var(--gap-lg) 0">
+          <div style="font-size:var(--text-sm);line-height:1.75;color:var(--text-secondary);margin-bottom:var(--gap-md)">EU expansion at $28M ARR creates a first-mover window closing within 6 months. The financial model is conservative &mdash; each phase only scales after the prior one validates the assumption.</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--gap-lg)">
+            <div><div style="font-family:var(--font-mono);font-size:var(--font-9);font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:.1em;margin-bottom:var(--gap-xs)">Financial</div>
+              <div style="display:flex;flex-direction:column;gap:5px">
+                <div style="display:flex;gap:8px;font-size:var(--text-xs);color:var(--text-secondary)"><span style="color:var(--teal);flex-shrink:0">+</span>$1.5M ARR EU beachhead validates segment for Series B</div>
+                <div style="display:flex;gap:8px;font-size:var(--text-xs);color:var(--text-secondary)"><span style="color:var(--teal);flex-shrink:0">+</span>3.5&times; LTV/CAC: $175K LTV &divide; $50K CAC ceiling</div>
+                <div style="display:flex;gap:8px;font-size:var(--text-xs);color:var(--text-secondary)"><span style="color:var(--teal);flex-shrink:0">+</span>$150K Phase 1 limits downside if pre-conditions fail</div>
+                <div style="display:flex;gap:8px;font-size:var(--text-xs);color:var(--text-secondary)"><span style="color:var(--teal);flex-shrink:0">+</span>$525K pipeline from 3 confirmed inbound EU prospects</div>
+              </div>
+            </div>
+            <div><div style="font-family:var(--font-mono);font-size:var(--font-9);font-weight:700;color:var(--purple);text-transform:uppercase;letter-spacing:.1em;margin-bottom:var(--gap-xs)">Market &amp; Growth</div>
+              <div style="display:flex;flex-direction:column;gap:5px">
+                <div style="display:flex;gap:8px;font-size:var(--text-xs);color:var(--text-secondary)"><span style="color:var(--purple);flex-shrink:0">+</span>First-mover: Competitor X closes 2&ndash;3 EU prospects/month</div>
+                <div style="display:flex;gap:8px;font-size:var(--text-xs);color:var(--text-secondary)"><span style="color:var(--purple);flex-shrink:0">+</span>GDPR infrastructure becomes durable moat for later entrants</div>
+                <div style="display:flex;gap:8px;font-size:var(--text-xs);color:var(--text-secondary)"><span style="color:var(--purple);flex-shrink:0">+</span>EU revenue diversifies US concentration risk</div>
+                <div style="display:flex;gap:8px;font-size:var(--text-xs);color:var(--text-secondary)"><span style="color:var(--purple);flex-shrink:0">+</span>3 EU FTE roles unlock talent pipelines unavailable today</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="brief-panel-why" style="display:none;padding:var(--gap-lg) 0">
+          <div style="font-size:var(--text-sm);line-height:1.75;color:var(--text-secondary);margin-bottom:var(--gap-md)">5 options evaluated across 3 rounds. OPT-5 was the only option satisfying the $250K governance threshold and 12-month runway covenant simultaneously &mdash; voted 7/7 in R2.</div>
+          <div style="display:flex;flex-direction:column;gap:var(--gap-xs)">
+            <div style="font-family:var(--font-mono);font-size:var(--font-9);font-weight:700;letter-spacing:.12em;color:var(--text-muted);text-transform:uppercase;margin-bottom:4px">Why This Over the Alternatives</div>
+            <div style="display:flex;gap:8px;font-size:var(--text-xs);color:var(--text-secondary)"><span style="color:var(--teal);font-weight:700;flex-shrink:0;min-width:42px">OPT-5 &#x2713;</span>Minimal Viable Entry &mdash; phases capital, satisfies governance, 7/7 approved</div>
+            <div style="display:flex;gap:8px;font-size:var(--text-xs);color:var(--text-muted)"><span style="font-weight:700;flex-shrink:0;min-width:42px">OPT-4 &#x2715;</span>Deferred Entry &mdash; forfeits first-mover window, Competitor X accelerates</div>
+            <div style="display:flex;gap:8px;font-size:var(--text-xs);color:var(--text-muted)"><span style="font-weight:700;flex-shrink:0;min-width:42px">OPT-3 &#x2715;</span>Partner-Led &mdash; margin compression, loses direct EU customer data</div>
+            <div style="display:flex;gap:8px;font-size:var(--text-xs);color:var(--text-muted)"><span style="font-weight:700;flex-shrink:0;min-width:42px">OPT-2 &#x2715;</span>Full-Speed Entry &mdash; breaches $250K threshold, runway below 12-month floor</div>
+            <div style="display:flex;gap:8px;font-size:var(--text-xs);color:var(--text-muted)"><span style="font-weight:700;flex-shrink:0;min-width:42px">OPT-1 &#x2715;</span>No Entry &mdash; highest long-term risk, rejected unanimously in R0</div>
+            <div style="font-family:var(--font-mono);font-size:var(--font-9);font-weight:700;letter-spacing:.12em;color:var(--text-muted);text-transform:uppercase;margin-top:var(--gap-md);margin-bottom:4px">Next Milestones</div>
+            <div style="display:flex;gap:8px;font-size:var(--text-xs);color:var(--text-secondary)"><span style="color:var(--blue);font-weight:700;flex-shrink:0">1</span>Board approval &mdash; materials Feb 7&ndash;8, authorization by Feb 15</div>
+            <div style="display:flex;gap:8px;font-size:var(--text-xs);color:var(--text-secondary)"><span style="color:var(--blue);font-weight:700;flex-shrink:0">2</span>GDPR technical scoping &mdash; CTO + LEGAL binding document by Feb 28</div>
+            <div style="display:flex;gap:8px;font-size:var(--text-xs);color:var(--text-secondary)"><span style="color:var(--blue);font-weight:700;flex-shrink:0">3</span>EU headcount plan &mdash; CHRO + CFO comp bands confirmed by Apr 15</div>
+          </div>
+        </div>
       </div>
-      <div class="u-flex u-flex-wrap u-gap-sm">
-        <span class="chip chip-amber">Board Authorization Required</span>
-        <span class="chip chip-red">Groupthink &middot; HIGH</span>
-        <span class="chip chip-blue">EU Expansion</span>
-      </div>
-    </div>
-  </div>
 
   <div class="ib-wrap">
     <div class="ib-cols">
@@ -2661,13 +2711,24 @@ const ROLE_IMAGES = {
   CRO:   'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=80&h=80&fit=crop',
 };
 
+const _riskUsedPos = [];
 function riskDotPos(impact, prob) {
   const im = { HIGH: 12, MEDIUM: 45, LOW: 78 };
   const pm = { HIGH: 78, MEDIUM: 45, LOW: 12 };
-  const i = (impact || '').toUpperCase(); const p = (prob || '').toUpperCase();
-  // Scatter slightly to avoid perfect overlap
-  const jx = (Math.random()-0.5)*8, jy = (Math.random()-0.5)*8;
-  return { tp: (im[i]||45) + jy + '%', lp: (pm[p]||45) + jx + '%' };
+  const i = (impact||'').toUpperCase(); const p = (prob||'').toUpperCase();
+  const baseX = pm[p]||45; const baseY = im[i]||45;
+  const minDist = 14;
+  let attempts = 0, x, y;
+  do {
+    const jx = (Math.random()-0.5)*18, jy = (Math.random()-0.5)*18;
+    x = Math.max(4, Math.min(88, baseX+jx));
+    y = Math.max(4, Math.min(88, baseY+jy));
+    const clear = _riskUsedPos.every(pos => Math.hypot(pos.x-x, pos.y-y) >= minDist);
+    if (clear) break;
+    attempts++;
+  } while (attempts < 30);
+  _riskUsedPos.push({x, y});
+  return { tp: y+'%', lp: x+'%' };
 }
 
 function riskZoneCls(impact, prob) {
@@ -2678,6 +2739,7 @@ function riskZoneCls(impact, prob) {
 }
 
 function buildRisk(raw, mso, dash) {
+  _riskUsedPos.length = 0;
   const DOMAIN_ROLE = { Financial:'CFO', People:'CHRO', Technical:'CTO', Legal:'LEGAL', Strategic:'CSO', Operational:'COO', Compliance:'LEGAL', Governance:'LEGAL', Market:'CSO' };
   let risks = Array.isArray(mso.risks) ? mso.risks : Object.values(mso.risks || {});
   risks = risks.map(r => ({...r, role_key: r.role_key || DOMAIN_ROLE[r.domain] || 'CEO', img: r.img || ''}));

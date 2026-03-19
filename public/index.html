@@ -2400,13 +2400,13 @@ function switchBriefTab(btn, panelId) {
   };
   const c = COLORS[panelId] || 'var(--amber)';
   document.querySelectorAll('.brief-intel-tab').forEach(b => {
-    b.style.borderBottomColor = 'transparent';
+    b.style.borderBottom = '2px solid transparent';
     b.style.opacity = '0.5';
     const spans = b.querySelectorAll('span');
     if (spans[0]) spans[0].style.color = 'var(--text-muted)';
     if (spans[1]) spans[1].style.color = 'var(--text-secondary)';
   });
-  btn.style.borderBottomColor = c;
+  btn.style.borderBottom = '2px solid ' + c;
   btn.style.opacity = '1';
   const sp = btn.querySelectorAll('span');
   if (sp[0]) sp[0].style.color = c;

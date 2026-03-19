@@ -1218,8 +1218,8 @@ body{background:var(--bg-page);color:var(--text-primary);font-family:var(--font-
       <div style="display:flex;flex-direction:column;gap:0">
         <div style="display:flex;align-items:flex-end;gap:0;border-bottom:1px solid var(--border);margin-bottom:16px">
           <button class="brief-intel-tab" onclick="switchBriefTab(this,'brief-panel-decision')"
-            style="display:flex;flex-direction:column;gap:3px;padding:0 20px 11px 0;background:none;border:none;border-bottom:2px solid var(--blue);cursor:pointer;margin-bottom:-1px">
-            <span style="font-family:var(--font-mono);font-size:8px;color:var(--blue);letter-spacing:.16em;text-transform:uppercase">01</span>
+            style="display:flex;flex-direction:column;gap:3px;padding:0 20px 11px 0;background:none;border:none;border-bottom:2px solid var(--amber);cursor:pointer;margin-bottom:-1px">
+            <span style="font-family:var(--font-mono);font-size:8px;color:var(--amber);letter-spacing:.16em;text-transform:uppercase">01</span>
             <span style="font-family:var(--font-mono);font-size:12px;font-weight:700;color:var(--text-primary);letter-spacing:.06em;text-transform:uppercase">The Decision</span>
           </button>
           <button class="brief-intel-tab" onclick="switchBriefTab(this,'brief-panel-upside')"
@@ -1234,7 +1234,7 @@ body{background:var(--bg-page);color:var(--text-primary);font-family:var(--font-
           </button>
         </div>
 
-        <div id="brief-panel-decision" style="display:block">
+        <div id="brief-panel-decision" style="display:block;border-left:2px solid var(--amber);padding-left:16px;margin-left:2px">
           <p style="font-size:14px;font-weight:600;color:var(--text-primary);line-height:1.55;margin:0 0 14px 0">The ELT approved OPT-5: Minimal Viable Entry &mdash; $150K phases immediately for GDPR, legal entity, and DPO. The remaining $350K is hard-gated on a signed EU customer contract.</p>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
             <div>
@@ -1260,7 +1260,7 @@ body{background:var(--bg-page);color:var(--text-primary);font-family:var(--font-
           </div>
         </div>
 
-        <div id="brief-panel-upside" style="display:none">
+        <div id="brief-panel-upside" style="display:none;border-left:2px solid var(--teal);padding-left:16px;margin-left:2px">
           <p style="font-size:14px;font-weight:600;color:var(--text-primary);line-height:1.55;margin:0 0 14px 0">First-mover window closes in 6 months &mdash; Competitor X closes 2&ndash;3 EU prospects every month we wait.</p>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
             <div>
@@ -1284,7 +1284,7 @@ body{background:var(--bg-page);color:var(--text-primary);font-family:var(--font-
           </div>
         </div>
 
-        <div id="brief-panel-why" style="display:none">
+        <div id="brief-panel-why" style="display:none;border-left:2px solid var(--purple);padding-left:16px;margin-left:2px">
           <p style="font-size:14px;font-weight:600;color:var(--text-primary);line-height:1.55;margin:0 0 14px 0">OPT-5 was the only path satisfying both the $250K governance threshold and 12-month runway covenant &mdash; voted 7/7 in R2.</p>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
             <div>
@@ -2393,18 +2393,24 @@ body{background:var(--bg-page);color:var(--text-primary);font-family:var(--font-
 // \u2500\u2500 UTILITIES \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
 function el(id) { return document.getElementById(id); }
 function switchBriefTab(btn, panelId) {
+  const COLORS = {
+    'brief-panel-decision': 'var(--amber)',
+    'brief-panel-upside':   'var(--teal)',
+    'brief-panel-why':      'var(--purple)'
+  };
+  const c = COLORS[panelId] || 'var(--amber)';
   document.querySelectorAll('.brief-intel-tab').forEach(b => {
     b.style.borderBottomColor = 'transparent';
     b.style.opacity = '0.5';
-    b.querySelectorAll('span').forEach((s, i) => {
-      s.style.color = i === 0 ? 'var(--text-muted)' : 'var(--text-secondary)';
-    });
+    const spans = b.querySelectorAll('span');
+    if (spans[0]) spans[0].style.color = 'var(--text-muted)';
+    if (spans[1]) spans[1].style.color = 'var(--text-secondary)';
   });
-  btn.style.borderBottomColor = 'var(--blue)';
+  btn.style.borderBottomColor = c;
   btn.style.opacity = '1';
-  btn.querySelectorAll('span').forEach((s, i) => {
-    s.style.color = i === 0 ? 'var(--blue)' : 'var(--text-primary)';
-  });
+  const sp = btn.querySelectorAll('span');
+  if (sp[0]) sp[0].style.color = c;
+  if (sp[1]) sp[1].style.color = 'var(--text-primary)';
   ['brief-panel-decision','brief-panel-upside','brief-panel-why'].forEach(id => {
     const p = document.getElementById(id);
     if (p) p.style.display = id === panelId ? 'block' : 'none';

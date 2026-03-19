@@ -1066,6 +1066,55 @@ body{background:var(--bg-page);color:var(--text-primary);font-family:var(--font-
 @keyframes ap-pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
 
 .cmd-role-row{display:flex;align-items:center;gap:var(--gap-sm);padding:var(--gap-sm) var(--gap-md);border-radius:var(--r-md);background:var(--bg-surface-2)}
+
+/* ── Brief intel tab component ──────────────────────────────────────── */
+.bit-wrap{display:flex;flex-direction:column;gap:0}
+.bit-nav{display:flex;align-items:flex-end;gap:0;border-bottom:1px solid var(--border);margin-bottom:var(--gap-xl)}
+.brief-intel-tab{display:flex;flex-direction:column;gap:3px;padding:0 var(--gap-xl) var(--gap-md) 0;background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;opacity:.45;transition:opacity var(--t-base) var(--ease),border-color var(--t-base) var(--ease);margin-bottom:-1px}
+.brief-intel-tab .bit-num{font-family:var(--font-mono);font-size:var(--font-9);letter-spacing:.16em;text-transform:uppercase;color:var(--text-muted)}
+.brief-intel-tab .bit-lbl{font-family:var(--font-mono);font-size:var(--text-xs);font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-secondary)}
+.brief-intel-tab.active{opacity:1}
+.brief-intel-tab[data-c="amber"].active{border-bottom-color:var(--amber)}
+.brief-intel-tab[data-c="amber"].active .bit-num{color:var(--amber)}
+.brief-intel-tab[data-c="amber"].active .bit-lbl{color:var(--text-primary)}
+.brief-intel-tab[data-c="teal"].active{border-bottom-color:var(--teal)}
+.brief-intel-tab[data-c="teal"].active .bit-num{color:var(--teal)}
+.brief-intel-tab[data-c="teal"].active .bit-lbl{color:var(--text-primary)}
+.brief-intel-tab[data-c="purple"].active{border-bottom-color:var(--purple)}
+.brief-intel-tab[data-c="purple"].active .bit-num{color:var(--purple)}
+.brief-intel-tab[data-c="purple"].active .bit-lbl{color:var(--text-primary)}
+.brief-intel-tab:hover:not(.active){opacity:.7}
+.bit-panel{display:none}
+.bit-panel.active{display:block}
+.bit-panel[data-c="amber"]{border-left:2px solid var(--amber);padding-left:var(--gap-xl);margin-left:2px}
+.bit-panel[data-c="teal"]{border-left:2px solid var(--teal);padding-left:var(--gap-xl);margin-left:2px}
+.bit-panel[data-c="purple"]{border-left:2px solid var(--purple);padding-left:var(--gap-xl);margin-left:2px}
+.bit-lead{font-size:var(--text-sm);font-weight:600;color:var(--text-primary);line-height:1.55;margin:0 0 var(--gap-lg) 0}
+.bit-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--gap-2xl)}
+.bit-col-head{font-family:var(--font-mono);font-size:var(--font-9);font-weight:700;text-transform:uppercase;letter-spacing:.14em;margin-bottom:var(--gap-sm);display:flex;align-items:center;gap:var(--gap-sm)}
+.bit-col-head-bar{width:14px;height:1px;display:inline-block;flex-shrink:0}
+.bit-col-head[data-c="amber"]{color:var(--amber)}
+.bit-col-head[data-c="amber"] .bit-col-head-bar{background:var(--amber)}
+.bit-col-head[data-c="teal"]{color:var(--teal)}
+.bit-col-head[data-c="teal"] .bit-col-head-bar{background:var(--teal)}
+.bit-col-head[data-c="purple"]{color:var(--purple)}
+.bit-col-head[data-c="purple"] .bit-col-head-bar{background:var(--purple)}
+.bit-col-head[data-c="muted"]{color:var(--text-muted)}
+.bit-col-head[data-c="muted"] .bit-col-head-bar{background:var(--text-muted)}
+.bit-col-head[data-c="blue"]{color:var(--blue)}
+.bit-col-head[data-c="blue"] .bit-col-head-bar{background:var(--blue)}
+.bit-rows{display:flex;flex-direction:column;gap:var(--gap-sm)}
+.bit-row{display:flex;gap:var(--gap-sm);font-size:var(--text-xs);color:var(--text-secondary);line-height:1.45}
+.bit-row.muted{color:var(--text-muted)}
+.bit-row-icon{font-weight:700;flex-shrink:0;font-family:var(--font-mono)}
+.bit-row-icon[data-c="amber"]{color:var(--amber)}
+.bit-row-icon[data-c="red"]{color:var(--red)}
+.bit-row-icon[data-c="teal"]{color:var(--teal)}
+.bit-row-icon[data-c="purple"]{color:var(--purple)}
+.bit-row-icon[data-c="blue"]{color:var(--blue)}
+.bit-row-icon[data-c="teal-strike"]{color:var(--teal);font-weight:700;min-width:var(--gap-2xl);font-family:var(--font-mono)}
+.bit-row-icon[data-c="muted-strike"]{color:var(--text-muted);font-weight:700;min-width:var(--gap-2xl);font-family:var(--font-mono);text-decoration:line-through}
+.bit-chips{display:flex;flex-wrap:wrap;gap:var(--gap-xs);margin-top:var(--gap-lg);padding-top:var(--gap-md);border-top:1px solid var(--border)}
 </style>
 </head>
 <body>
@@ -1214,95 +1263,86 @@ body{background:var(--bg-page);color:var(--text-primary);font-family:var(--font-
       </div>
     </div>
     <div class="v-right">
-            <!-- 3-tab intel -->
-      <div style="display:flex;flex-direction:column;gap:0">
-        <div style="display:flex;align-items:flex-end;gap:0;border-bottom:1px solid var(--border);margin-bottom:16px">
-          <button class="brief-intel-tab" onclick="switchBriefTab(this,'brief-panel-decision')"
-            style="display:flex;flex-direction:column;gap:3px;padding:0 20px 11px 0;background:none;border:none;border-bottom:2px solid var(--amber);cursor:pointer;margin-bottom:-1px">
-            <span style="font-family:var(--font-mono);font-size:8px;color:var(--amber);letter-spacing:.16em;text-transform:uppercase">01</span>
-            <span style="font-family:var(--font-mono);font-size:12px;font-weight:700;color:var(--text-primary);letter-spacing:.06em;text-transform:uppercase">The Decision</span>
+                  <!-- 3-tab intel -->
+      <div class="bit-wrap">
+        <div class="bit-nav">
+          <button class="brief-intel-tab active" data-c="amber" onclick="switchBriefTab(this,'brief-panel-decision')">
+            <span class="bit-num">01</span><span class="bit-lbl">The Decision</span>
           </button>
-          <button class="brief-intel-tab" onclick="switchBriefTab(this,'brief-panel-upside')"
-            style="display:flex;flex-direction:column;gap:3px;padding:0 20px 11px;background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;margin-bottom:-1px;opacity:.5;transition:opacity 200ms">
-            <span style="font-family:var(--font-mono);font-size:8px;color:var(--text-muted);letter-spacing:.16em;text-transform:uppercase">02</span>
-            <span style="font-family:var(--font-mono);font-size:12px;font-weight:700;color:var(--text-secondary);letter-spacing:.06em;text-transform:uppercase">The Upside</span>
+          <button class="brief-intel-tab" data-c="teal" onclick="switchBriefTab(this,'brief-panel-upside')">
+            <span class="bit-num">02</span><span class="bit-lbl">The Upside</span>
           </button>
-          <button class="brief-intel-tab" onclick="switchBriefTab(this,'brief-panel-why')"
-            style="display:flex;flex-direction:column;gap:3px;padding:0 20px 11px;background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;margin-bottom:-1px;opacity:.5;transition:opacity 200ms">
-            <span style="font-family:var(--font-mono);font-size:8px;color:var(--text-muted);letter-spacing:.16em;text-transform:uppercase">03</span>
-            <span style="font-family:var(--font-mono);font-size:12px;font-weight:700;color:var(--text-secondary);letter-spacing:.06em;text-transform:uppercase">The Why</span>
+          <button class="brief-intel-tab" data-c="purple" onclick="switchBriefTab(this,'brief-panel-why')">
+            <span class="bit-num">03</span><span class="bit-lbl">The Why</span>
           </button>
         </div>
-
-        <div id="brief-panel-decision" style="display:block;border-left:2px solid var(--amber);padding-left:16px;margin-left:2px">
-          <p style="font-size:14px;font-weight:600;color:var(--text-primary);line-height:1.55;margin:0 0 14px 0">The ELT approved OPT-5: Minimal Viable Entry &mdash; $150K phases immediately for GDPR, legal entity, and DPO. The remaining $350K is hard-gated on a signed EU customer contract.</p>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+        <div id="brief-panel-decision" class="bit-panel active" data-c="amber">
+          <p class="bit-lead">The ELT approved OPT-5: Minimal Viable Entry &mdash; $150K phases immediately for GDPR, legal entity, and DPO. The remaining $350K is hard-gated on a signed EU customer contract.</p>
+          <div class="bit-grid">
             <div>
-              <div style="font-family:var(--font-mono);font-size:9px;font-weight:700;color:var(--amber);text-transform:uppercase;letter-spacing:.14em;margin-bottom:8px;display:flex;align-items:center;gap:7px"><span style="width:14px;height:1px;background:var(--amber);display:inline-block"></span>3 Conditions</div>
-              <div style="display:flex;flex-direction:column;gap:6px">
-                <div style="display:flex;gap:8px;font-size:12px;color:var(--text-secondary);line-height:1.45"><span style="color:var(--amber);font-weight:700;font-family:var(--font-mono);flex-shrink:0">01</span>GDPR scope confirmed within $150K</div>
-                <div style="display:flex;gap:8px;font-size:12px;color:var(--text-secondary);line-height:1.45"><span style="color:var(--amber);font-weight:700;font-family:var(--font-mono);flex-shrink:0">02</span>EU employment law resolved before FTE offers</div>
-                <div style="display:flex;gap:8px;font-size:12px;color:var(--text-secondary);line-height:1.45"><span style="color:var(--amber);font-weight:700;font-family:var(--font-mono);flex-shrink:0">03</span>CAC validated at or below $50K</div>
+              <div class="bit-col-head" data-c="amber"><span class="bit-col-head-bar"></span>3 Conditions</div>
+              <div class="bit-rows">
+                <div class="bit-row"><span class="bit-row-icon" data-c="amber">01</span>GDPR scope confirmed within $150K</div>
+                <div class="bit-row"><span class="bit-row-icon" data-c="amber">02</span>EU employment law resolved before FTE offers</div>
+                <div class="bit-row"><span class="bit-row-icon" data-c="amber">03</span>CAC validated at or below $50K</div>
               </div>
             </div>
             <div>
-              <div style="font-family:var(--font-mono);font-size:9px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:.14em;margin-bottom:8px;display:flex;align-items:center;gap:7px"><span style="width:14px;height:1px;background:var(--red);display:inline-block"></span>2 Kill Criteria</div>
-              <div style="display:flex;flex-direction:column;gap:6px">
-                <div style="display:flex;gap:8px;font-size:12px;color:var(--text-secondary);line-height:1.45"><span style="color:var(--red);font-weight:700;flex-shrink:0">&#x2715;</span>GDPR scope &gt;14 eng-weeks &mdash; Phase 2 halts</div>
-                <div style="display:flex;gap:8px;font-size:12px;color:var(--text-secondary);line-height:1.45"><span style="color:var(--red);font-weight:700;flex-shrink:0">&#x2715;</span>EU CAC &gt;$50K two months running &mdash; pause</div>
+              <div class="bit-col-head" data-c="red"><span class="bit-col-head-bar"></span>2 Kill Criteria</div>
+              <div class="bit-rows">
+                <div class="bit-row"><span class="bit-row-icon" data-c="red">&#x2715;</span>GDPR scope &gt;14 eng-weeks &mdash; Phase 2 halts</div>
+                <div class="bit-row"><span class="bit-row-icon" data-c="red">&#x2715;</span>EU CAC &gt;$50K two months running &mdash; pause</div>
               </div>
             </div>
           </div>
-          <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:16px;padding-top:12px;border-top:1px solid var(--border)">
+          <div class="bit-chips">
             <span class="chip chip-amber">Board Auth. Required</span>
             <span id="v-gt-chip" class="chip chip-red">Groupthink &middot; HIGH</span>
             <span class="chip chip-blue">EU Expansion</span>
           </div>
         </div>
-
-        <div id="brief-panel-upside" style="display:none;border-left:2px solid var(--teal);padding-left:16px;margin-left:2px">
-          <p style="font-size:14px;font-weight:600;color:var(--text-primary);line-height:1.55;margin:0 0 14px 0">First-mover window closes in 6 months &mdash; Competitor X closes 2&ndash;3 EU prospects every month we wait.</p>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+        <div id="brief-panel-upside" class="bit-panel" data-c="teal">
+          <p class="bit-lead">First-mover window closes in 6 months &mdash; Competitor X closes 2&ndash;3 EU prospects every month we wait.</p>
+          <div class="bit-grid">
             <div>
-              <div style="font-family:var(--font-mono);font-size:9px;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:.14em;margin-bottom:8px;display:flex;align-items:center;gap:7px"><span style="width:14px;height:1px;background:var(--teal);display:inline-block"></span>Financial</div>
-              <div style="display:flex;flex-direction:column;gap:6px">
-                <div style="display:flex;gap:8px;font-size:12px;color:var(--text-secondary);line-height:1.45"><span style="color:var(--teal);flex-shrink:0">+</span>$1.5M ARR EU beachhead validates Series B segment</div>
-                <div style="display:flex;gap:8px;font-size:12px;color:var(--text-secondary);line-height:1.45"><span style="color:var(--teal);flex-shrink:0">+</span>3.5&times; LTV/CAC: $175K LTV &divide; $50K ceiling</div>
-                <div style="display:flex;gap:8px;font-size:12px;color:var(--text-secondary);line-height:1.45"><span style="color:var(--teal);flex-shrink:0">+</span>$525K pipeline from 3 confirmed EU prospects</div>
-                <div style="display:flex;gap:8px;font-size:12px;color:var(--text-secondary);line-height:1.45"><span style="color:var(--teal);flex-shrink:0">+</span>$150K limits downside if pre-conditions fail</div>
+              <div class="bit-col-head" data-c="teal"><span class="bit-col-head-bar"></span>Financial</div>
+              <div class="bit-rows">
+                <div class="bit-row"><span class="bit-row-icon" data-c="teal">+</span>$1.5M ARR EU beachhead validates Series B segment</div>
+                <div class="bit-row"><span class="bit-row-icon" data-c="teal">+</span>3.5&times; LTV/CAC: $175K LTV &divide; $50K ceiling</div>
+                <div class="bit-row"><span class="bit-row-icon" data-c="teal">+</span>$525K pipeline from 3 confirmed EU prospects</div>
+                <div class="bit-row"><span class="bit-row-icon" data-c="teal">+</span>$150K limits downside if pre-conditions fail</div>
               </div>
             </div>
             <div>
-              <div style="font-family:var(--font-mono);font-size:9px;font-weight:700;color:var(--purple);text-transform:uppercase;letter-spacing:.14em;margin-bottom:8px;display:flex;align-items:center;gap:7px"><span style="width:14px;height:1px;background:var(--purple);display:inline-block"></span>Market &amp; Growth</div>
-              <div style="display:flex;flex-direction:column;gap:6px">
-                <div style="display:flex;gap:8px;font-size:12px;color:var(--text-secondary);line-height:1.45"><span style="color:var(--purple);flex-shrink:0">+</span>Competitor X closes 2&ndash;3 EU prospects/month</div>
-                <div style="display:flex;gap:8px;font-size:12px;color:var(--text-secondary);line-height:1.45"><span style="color:var(--purple);flex-shrink:0">+</span>GDPR infrastructure becomes durable moat</div>
-                <div style="display:flex;gap:8px;font-size:12px;color:var(--text-secondary);line-height:1.45"><span style="color:var(--purple);flex-shrink:0">+</span>EU revenue diversifies US concentration risk</div>
-                <div style="display:flex;gap:8px;font-size:12px;color:var(--text-secondary);line-height:1.45"><span style="color:var(--purple);flex-shrink:0">+</span>3 EU FTEs unlock new talent pipelines</div>
+              <div class="bit-col-head" data-c="purple"><span class="bit-col-head-bar"></span>Market &amp; Growth</div>
+              <div class="bit-rows">
+                <div class="bit-row"><span class="bit-row-icon" data-c="purple">+</span>Competitor X closes 2&ndash;3 EU prospects/month</div>
+                <div class="bit-row"><span class="bit-row-icon" data-c="purple">+</span>GDPR infrastructure becomes durable moat</div>
+                <div class="bit-row"><span class="bit-row-icon" data-c="purple">+</span>EU revenue diversifies US concentration risk</div>
+                <div class="bit-row"><span class="bit-row-icon" data-c="purple">+</span>3 EU FTEs unlock new talent pipelines</div>
               </div>
             </div>
           </div>
         </div>
-
-        <div id="brief-panel-why" style="display:none;border-left:2px solid var(--purple);padding-left:16px;margin-left:2px">
-          <p style="font-size:14px;font-weight:600;color:var(--text-primary);line-height:1.55;margin:0 0 14px 0">OPT-5 was the only path satisfying both the $250K governance threshold and 12-month runway covenant &mdash; voted 7/7 in R2.</p>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+        <div id="brief-panel-why" class="bit-panel" data-c="purple">
+          <p class="bit-lead">OPT-5 was the only path satisfying both the $250K governance threshold and 12-month runway covenant &mdash; voted 7/7 in R2.</p>
+          <div class="bit-grid">
             <div>
-              <div style="font-family:var(--font-mono);font-size:9px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.14em;margin-bottom:8px;display:flex;align-items:center;gap:7px"><span style="width:14px;height:1px;background:var(--text-muted);display:inline-block"></span>Options Weighed</div>
-              <div style="display:flex;flex-direction:column;gap:6px">
-                <div style="display:flex;gap:8px;font-size:12px;color:var(--text-secondary);line-height:1.45"><span style="color:var(--teal);font-weight:700;font-family:var(--font-mono);flex-shrink:0;min-width:36px">OPT-5</span>Minimal Viable Entry &mdash; approved 7/7</div>
-                <div style="display:flex;gap:8px;font-size:12px;color:var(--text-muted);line-height:1.45"><span style="font-weight:700;font-family:var(--font-mono);flex-shrink:0;min-width:36px;text-decoration:line-through">OPT-4</span>Deferred &mdash; cedes first-mover window</div>
-                <div style="display:flex;gap:8px;font-size:12px;color:var(--text-muted);line-height:1.45"><span style="font-weight:700;font-family:var(--font-mono);flex-shrink:0;min-width:36px;text-decoration:line-through">OPT-3</span>Partner-Led &mdash; margin loss, no data</div>
-                <div style="display:flex;gap:8px;font-size:12px;color:var(--text-muted);line-height:1.45"><span style="font-weight:700;font-family:var(--font-mono);flex-shrink:0;min-width:36px;text-decoration:line-through">OPT-2</span>Full-Speed &mdash; breaches threshold</div>
-                <div style="display:flex;gap:8px;font-size:12px;color:var(--text-muted);line-height:1.45"><span style="font-weight:700;font-family:var(--font-mono);flex-shrink:0;min-width:36px;text-decoration:line-through">OPT-1</span>No Entry &mdash; rejected R0</div>
+              <div class="bit-col-head" data-c="muted"><span class="bit-col-head-bar"></span>Options Weighed</div>
+              <div class="bit-rows">
+                <div class="bit-row"><span class="bit-row-icon" data-c="teal-strike">OPT-5</span>Minimal Viable Entry &mdash; approved 7/7</div>
+                <div class="bit-row muted"><span class="bit-row-icon" data-c="muted-strike">OPT-4</span>Deferred &mdash; cedes first-mover window</div>
+                <div class="bit-row muted"><span class="bit-row-icon" data-c="muted-strike">OPT-3</span>Partner-Led &mdash; margin loss, no data</div>
+                <div class="bit-row muted"><span class="bit-row-icon" data-c="muted-strike">OPT-2</span>Full-Speed &mdash; breaches threshold</div>
+                <div class="bit-row muted"><span class="bit-row-icon" data-c="muted-strike">OPT-1</span>No Entry &mdash; rejected R0</div>
               </div>
             </div>
             <div>
-              <div style="font-family:var(--font-mono);font-size:9px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.14em;margin-bottom:8px;display:flex;align-items:center;gap:7px"><span style="width:14px;height:1px;background:var(--blue);display:inline-block"></span>Next Milestones</div>
-              <div style="display:flex;flex-direction:column;gap:6px">
-                <div style="display:flex;gap:8px;font-size:12px;color:var(--text-secondary);line-height:1.45"><span style="color:var(--blue);font-weight:700;font-family:var(--font-mono);flex-shrink:0">1</span>Board approval &mdash; auth by Feb 15</div>
-                <div style="display:flex;gap:8px;font-size:12px;color:var(--text-secondary);line-height:1.45"><span style="color:var(--blue);font-weight:700;font-family:var(--font-mono);flex-shrink:0">2</span>GDPR scoping &mdash; CTO + LEGAL by Feb 28</div>
-                <div style="display:flex;gap:8px;font-size:12px;color:var(--text-secondary);line-height:1.45"><span style="color:var(--blue);font-weight:700;font-family:var(--font-mono);flex-shrink:0">3</span>Headcount plan &mdash; comp bands by Apr 15</div>
+              <div class="bit-col-head" data-c="blue"><span class="bit-col-head-bar"></span>Next Milestones</div>
+              <div class="bit-rows">
+                <div class="bit-row"><span class="bit-row-icon" data-c="blue">1</span>Board approval &mdash; auth by Feb 15</div>
+                <div class="bit-row"><span class="bit-row-icon" data-c="blue">2</span>GDPR scoping &mdash; CTO + LEGAL by Feb 28</div>
+                <div class="bit-row"><span class="bit-row-icon" data-c="blue">3</span>Headcount plan &mdash; comp bands by Apr 15</div>
               </div>
             </div>
           </div>
@@ -2393,28 +2433,11 @@ body{background:var(--bg-page);color:var(--text-primary);font-family:var(--font-
 // \u2500\u2500 UTILITIES \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
 function el(id) { return document.getElementById(id); }
 function switchBriefTab(btn, panelId) {
-  const COLORS = {
-    'brief-panel-decision': 'var(--amber)',
-    'brief-panel-upside':   'var(--teal)',
-    'brief-panel-why':      'var(--purple)'
-  };
-  const c = COLORS[panelId] || 'var(--amber)';
-  document.querySelectorAll('.brief-intel-tab').forEach(b => {
-    b.style.borderBottom = '2px solid transparent';
-    b.style.opacity = '0.5';
-    const spans = b.querySelectorAll('span');
-    if (spans[0]) spans[0].style.color = 'var(--text-muted)';
-    if (spans[1]) spans[1].style.color = 'var(--text-secondary)';
-  });
-  btn.style.borderBottom = '2px solid ' + c;
-  btn.style.opacity = '1';
-  const sp = btn.querySelectorAll('span');
-  if (sp[0]) sp[0].style.color = c;
-  if (sp[1]) sp[1].style.color = 'var(--text-primary)';
-  ['brief-panel-decision','brief-panel-upside','brief-panel-why'].forEach(id => {
-    const p = document.getElementById(id);
-    if (p) p.style.display = id === panelId ? 'block' : 'none';
-  });
+  document.querySelectorAll('.brief-intel-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.bit-panel').forEach(p => p.classList.remove('active'));
+  const panel = document.getElementById(panelId);
+  if (panel) panel.classList.add('active');
 }
 function set(id, text) { const e = el(id); if (e) e.textContent = text; }
 function setHTML(id, html) { const e = el(id); if (e) e.innerHTML = html; }

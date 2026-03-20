@@ -1163,12 +1163,11 @@ body{background:var(--bg-page);color:var(--text-primary);font-family:var(--font-
 .oq-item.open .expand-body{max-height:600px;border-top-width:1px}
 /* ── Risk right panel ───────────────────────────────────────────── */
 .risk-panel{display:flex;flex-direction:column;height:100%}
-.risk-panel-half{display:flex;flex-direction:column;flex:1;min-height:0;max-height:var(--risk-half-h)}
-.risk-panel-half+.risk-panel-half{border-top:2px solid var(--border)}
-.risk-panel-head{display:flex;align-items:center;justify-content:space-between;padding:var(--card-head-py) var(--card-px);flex-shrink:0}
+.risk-panel-head{display:flex;align-items:center;justify-content:space-between;padding:var(--card-head-py) var(--card-px);flex-shrink:0;background:var(--bg-card);border-bottom:1px solid var(--border)}
 .risk-panel-title{font-family:var(--font-mono);font-size:var(--font-9);font-weight:700;letter-spacing:var(--ls-lg);text-transform:uppercase}
 .risk-panel-title.is-red{color:var(--red)}
 .risk-panel-title.is-amber{color:var(--amber)}
+.risk-panel-fixed{flex-shrink:0}
 .risk-panel-scroll{overflow-y:auto;flex:1;padding:0 var(--card-px) var(--gap-sm)}
 .risk-panel-scroll::-webkit-scrollbar{width:var(--gap-3)}
 .risk-panel-scroll::-webkit-scrollbar-thumb{background:var(--border-hover);border-radius:var(--r-full)}
@@ -1177,6 +1176,7 @@ body{background:var(--bg-page);color:var(--text-primary);font-family:var(--font-
 .risk-panel-row-text{font-size:var(--text-xs);color:var(--text-secondary);line-height:1.5}
 .risk-panel-row-meta{display:flex;align-items:center;gap:var(--gap-sm);margin-top:var(--gap-3)}
 .risk-panel-domain{font-family:var(--font-mono);font-size:var(--font-9);color:var(--text-muted);text-transform:uppercase;letter-spacing:var(--ls-md)}
+.risk-panel-divider{height:1px;background:var(--border);flex-shrink:0;margin:0}
 /* ── Risk impact rows (section 3) ───────────────────────────────── */
 .risk-row-list{display:flex;flex-direction:column;gap:0}
 .risk-impact-row{display:grid;grid-template-columns:4px 1fr;gap:var(--gap-lg);padding:var(--gap-xl) 0;border-bottom:1px solid var(--border);align-items:start}
@@ -1946,61 +1946,63 @@ body{background:var(--bg-page);color:var(--text-primary);font-family:var(--font-
       </div>
     </div>
     <div class="card" style="--ct-accent:var(--red)">
-      <div class="risk-panel">
-        <div class="risk-panel-half">
-          <div class="risk-panel-head">
-            <span class="risk-panel-title is-red">Act Now</span>
-            <span class="chip chip-red">2 CRITICAL</span>
+    <div class="risk-panel">
+      <!-- CRITICAL header: fixed, never scrolls -->
+      <div class="risk-panel-head">
+        <span class="risk-panel-title is-red">Act Now</span>
+        <span class="chip chip-red">2 CRITICAL</span>
+      </div>
+      <div class="risk-panel-fixed">
+        <div style="padding:0 var(--card-px)">
+          <div class="risk-panel-row">
+            <div class="risk-panel-row-text">GDPR scope exceeds 14 eng-weeks &mdash; Q3 launch infeasible</div>
+            <div class="risk-panel-row-meta"><span class="risk-panel-domain">Technical</span><span class="chip chip-red">KILL GATE</span></div>
           </div>
-          <div class="risk-panel-scroll">
-            <div class="risk-panel-row">
-              <div class="risk-panel-row-text">GDPR scope exceeds 14 eng-weeks &mdash; Q3 launch infeasible</div>
-              <div class="risk-panel-row-meta"><span class="risk-panel-domain">Technical</span><span class="chip chip-red">KILL GATE</span></div>
-            </div>
-            <div class="risk-panel-row">
-              <div class="risk-panel-row-text">$247K/month burn discrepancy &mdash; unreconciled against $500K envelope</div>
-              <div class="risk-panel-row-meta"><span class="risk-panel-domain">Financial</span><span class="chip chip-red">HIGH</span></div>
-            </div>
-          </div>
-        </div>
-        <div class="risk-panel-half">
-          <div class="risk-panel-head">
-            <span class="risk-panel-title is-amber">Manage</span>
-            <span class="chip chip-amber">7 ACTIVE</span>
-          </div>
-          <div class="risk-panel-scroll">
-            <div class="risk-panel-row">
-              <div class="risk-panel-row-text">EU hiring cycle 8&ndash;12 weeks &mdash; offer must land by April 2025 for Q3</div>
-              <div class="risk-panel-row-meta"><span class="risk-panel-domain">People</span><span class="chip chip-amber">HIGH</span></div>
-            </div>
-            <div class="risk-panel-row">
-              <div class="risk-panel-row-text">Competitor X closing EU prospects during Board approval delay</div>
-              <div class="risk-panel-row-meta"><span class="risk-panel-domain">Strategic</span><span class="chip chip-amber">MED</span></div>
-            </div>
-            <div class="risk-panel-row">
-              <div class="risk-panel-row-text">CS capacity at 95% &mdash; EU accounts require headcount before onboarding</div>
-              <div class="risk-panel-row-meta"><span class="risk-panel-domain">Operations</span><span class="chip chip-amber">MED</span></div>
-            </div>
-            <div class="risk-panel-row">
-              <div class="risk-panel-row-text">Legal budget $1.1M FY25 &mdash; GDPR counsel cost unconfirmed</div>
-              <div class="risk-panel-row-meta"><span class="risk-panel-domain">Legal</span><span class="chip chip-amber">MED</span></div>
-            </div>
-            <div class="risk-panel-row">
-              <div class="risk-panel-row-text">EOR structure adds 15&ndash;20% per FTE cost at scale vs. legal entity</div>
-              <div class="risk-panel-row-meta"><span class="risk-panel-domain">Financial</span><span class="chip chip-amber">MED</span></div>
-            </div>
-            <div class="risk-panel-row">
-              <div class="risk-panel-row-text">DACH employment law complexity &mdash; works council requirements unresolved</div>
-              <div class="risk-panel-row-meta"><span class="risk-panel-domain">Legal</span><span class="chip chip-amber">MED</span></div>
-            </div>
-            <div class="risk-panel-row">
-              <div class="risk-panel-row-text">Board approval window Mar 31 &mdash; slip past Apr 15 kills Q3 launch</div>
-              <div class="risk-panel-row-meta"><span class="risk-panel-domain">Governance</span><span class="chip chip-amber">MED</span></div>
-            </div>
+          <div class="risk-panel-row">
+            <div class="risk-panel-row-text">$247K/month burn discrepancy &mdash; unreconciled against $500K envelope</div>
+            <div class="risk-panel-row-meta"><span class="risk-panel-domain">Financial</span><span class="chip chip-red">HIGH</span></div>
           </div>
         </div>
       </div>
+      <!-- MANAGE header: fixed, sits below critical -->
+      <div class="risk-panel-divider"></div>
+      <div class="risk-panel-head">
+        <span class="risk-panel-title is-amber">Manage</span>
+        <span class="chip chip-amber">7 ACTIVE</span>
+      </div>
+      <!-- MANAGE items: scrollable -->
+      <div class="risk-panel-scroll">
+        <div class="risk-panel-row">
+          <div class="risk-panel-row-text">EU hiring cycle 8&ndash;12 weeks &mdash; offer must land by April 2025 for Q3</div>
+          <div class="risk-panel-row-meta"><span class="risk-panel-domain">People</span><span class="chip chip-amber">HIGH</span></div>
+        </div>
+        <div class="risk-panel-row">
+          <div class="risk-panel-row-text">Competitor X closing EU prospects during Board approval delay</div>
+          <div class="risk-panel-row-meta"><span class="risk-panel-domain">Strategic</span><span class="chip chip-amber">MED</span></div>
+        </div>
+        <div class="risk-panel-row">
+          <div class="risk-panel-row-text">CS capacity at 95% &mdash; EU accounts require headcount before onboarding</div>
+          <div class="risk-panel-row-meta"><span class="risk-panel-domain">Operations</span><span class="chip chip-amber">MED</span></div>
+        </div>
+        <div class="risk-panel-row">
+          <div class="risk-panel-row-text">Legal budget $1.1M FY25 &mdash; GDPR counsel cost unconfirmed</div>
+          <div class="risk-panel-row-meta"><span class="risk-panel-domain">Legal</span><span class="chip chip-amber">MED</span></div>
+        </div>
+        <div class="risk-panel-row">
+          <div class="risk-panel-row-text">EOR structure adds 15&ndash;20% per FTE cost at scale vs. legal entity</div>
+          <div class="risk-panel-row-meta"><span class="risk-panel-domain">Financial</span><span class="chip chip-amber">MED</span></div>
+        </div>
+        <div class="risk-panel-row">
+          <div class="risk-panel-row-text">DACH employment law complexity &mdash; works council requirements unresolved</div>
+          <div class="risk-panel-row-meta"><span class="risk-panel-domain">Legal</span><span class="chip chip-amber">MED</span></div>
+        </div>
+        <div class="risk-panel-row">
+          <div class="risk-panel-row-text">Board approval window Mar 31 &mdash; slip past Apr 15 kills Q3 launch</div>
+          <div class="risk-panel-row-meta"><span class="risk-panel-domain">Governance</span><span class="chip chip-amber">MED</span></div>
+        </div>
+      </div>
     </div>
+  </div>
   </div>
 
   <div class="ib-wrap">

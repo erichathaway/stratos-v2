@@ -403,7 +403,7 @@ body{background:var(--bg-page);color:var(--text-primary);font-family:var(--font-
 .v-option span{font-size:var(--text-sm);font-weight:600;color:var(--teal)}
 
 /* ── 17  INSIGHT BOX ──────────────────────────────────────────────────────── */
-.insight-box{background:var(--bg-surface);border:1px solid var(--border);border-left:3px solid var(--blue);border-radius:var(--r-lg);padding:40px var(--card-px);display:grid;grid-template-columns:1fr 1fr 1fr;gap:var(--gap-56);box-shadow:var(--shadow-sm);transition:border-color var(--t-base),box-shadow var(--t-base)}
+.insight-box{background:var(--bg-surface);border:1px solid var(--border);border-left:3px solid var(--tab-c);border-radius:var(--r-lg);padding:var(--gap-2xl) var(--card-px);display:grid;grid-template-columns:1fr 1fr 1fr;gap:var(--gap-56);box-shadow:var(--shadow-sm);transition:border-color var(--t-base),box-shadow var(--t-base)}
 .insight-box:hover{border-color:var(--border-hover);border-left-color:var(--blue);box-shadow:var(--shadow-md)}
 .insight-col{display:flex;flex-direction:column;gap:var(--gap-md)}
 .insight-q{font-family:var(--font-mono);font-size:var(--text-xs);font-weight:700;letter-spacing:var(--ls-md);text-transform:uppercase;color:var(--blue);position:relative;display:inline-block}
@@ -853,7 +853,7 @@ body{background:var(--bg-page);color:var(--text-primary);font-family:var(--font-
 #sec-risk       {--tab-c:var(--purple)}
 #sec-financials {--tab-c:var(--teal)}
 
-#sec-room       {--tab-c:var(--blue)}
+#sec-room       {--tab-c:var(--amber)}
 #sec-management {--tab-c:var(--teal)}
 #sec-board      {--tab-c:var(--red)}
 
@@ -1408,7 +1408,7 @@ body{background:var(--bg-page);color:var(--text-primary);font-family:var(--font-
 .fin-kill-outcome{font-family:var(--font-mono);font-size:var(--font-9);color:var(--text-muted);text-transform:uppercase;letter-spacing:var(--ls-md);margin-top:var(--gap-xs)}
 
 /* -- Room & Options ---- */
-.room-header{display:grid;grid-template-columns:1fr auto;gap:var(--gap-2xl);align-items:center;padding:var(--gap-2xl) var(--card-px);background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--r-xl);border-left:3px solid var(--blue)}
+.room-header{display:grid;grid-template-columns:1fr auto;gap:var(--gap-2xl);align-items:center;padding:var(--gap-2xl) var(--card-px);background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--r-xl);border-left:3px solid var(--tab-c)}
 .room-header-eyebrow{font-family:var(--font-mono);font-size:var(--font-9);font-weight:700;letter-spacing:var(--ls-lg);text-transform:uppercase;color:var(--blue)}
 .room-header-title{font-size:var(--text-xl);font-weight:700;color:var(--text-primary);line-height:1.35;margin:var(--gap-xs) 0}
 .room-header-sub{font-size:var(--text-xs);color:var(--text-secondary);line-height:1.6;max-width:640px}
@@ -1468,6 +1468,8 @@ body{background:var(--bg-page);color:var(--text-primary);font-family:var(--font-
 .room-opt-item-dot{width:5px;height:5px;border-radius:var(--r-full);flex-shrink:0;margin-top:5px}
 .room-opt-item-dot.pos{background:var(--teal)}.room-opt-item-dot.neg{background:var(--red)}
 .room-opt-item-text{font-size:var(--text-xs);color:var(--text-secondary);line-height:1.45}
+
+.insight-btn-row{grid-column:1/-1;margin-top:var(--gap-2xl)}
 </style>
 </head>
 <body>
@@ -2508,7 +2510,7 @@ body{background:var(--bg-page);color:var(--text-primary);font-family:var(--font-
       <div class="insight-q">What the room did not resolve</div>
       <div class="insight-a">Five questions remained open at approval: GDPR technical scope, EU FTE composition, entity jurisdiction, comp benchmark data, and engineering capacity. The groupthink flag signals the room may have moved to conditional alignment before those were adequately stress-tested. The conditions gate is the only protection.</div>
     </div>
-    <div style="grid-column:1/-1;margin-top:var(--gap-xl)">
+    <div class="insight-btn-row">
       <button class="ib-audio" onclick="toggleAudio('audio-room')">&#x25BA; The Room &amp; Options &middot; 3 min</button>
     </div>
   </div>
@@ -2565,7 +2567,7 @@ body{background:var(--bg-page);color:var(--text-primary);font-family:var(--font-
       <div class="insight-q">The board's financial exposure</div>
       <div class="insight-a">The $250K board authorization threshold is triggered. The board must receive CFO burn reconciliation, CTO GDPR architecture cost, and LEGAL EU entity recommendation before the Phase 2 gate can clear. The board does not rubber-stamp this -- it owns it.</div>
     </div>
-    <div style="grid-column:1/-1;margin-top:var(--gap-xl)">
+    <div class="insight-btn-row">
       <button class="ib-audio" onclick="toggleAudio('audio-financials')">&#x25BA; Financial Impact &middot; 3 min</button>
     </div>
   </div>

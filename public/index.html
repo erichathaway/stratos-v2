@@ -1273,7 +1273,31 @@ body{background:var(--bg-page);color:var(--text-primary);font-family:var(--font-
 .fin-kill-trigger{font-size:var(--text-sm);font-weight:700;color:var(--red);font-family:var(--font-mono)}
 .fin-kill-desc{font-size:var(--text-xs);color:var(--text-secondary);line-height:1.45}
 .fin-kill-outcome{font-family:var(--font-mono);font-size:var(--font-9);color:var(--text-muted);text-transform:uppercase;letter-spacing:var(--ls-md);margin-top:var(--gap-xs)}
+
+/* ── Financials header ───────────────────────────────────────────── */
+.fin-header{display:grid;grid-template-columns:1fr auto;gap:var(--gap-2xl);align-items:center;padding:var(--gap-2xl) var(--card-px);background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--r-xl);border-left:3px solid var(--teal)}
+.fin-header-narrative{display:flex;flex-direction:column;gap:var(--gap-sm)}
+.fin-header-eyebrow{font-family:var(--font-mono);font-size:var(--font-9);font-weight:700;letter-spacing:var(--ls-lg);text-transform:uppercase;color:var(--teal)}
+.fin-header-title{font-size:var(--text-xl);font-weight:700;color:var(--text-primary);line-height:1.35}
+.fin-header-sub{font-size:var(--text-xs);color:var(--text-secondary);line-height:1.6;max-width:620px}
+.fin-header-stat{display:flex;flex-direction:column;align-items:flex-end;gap:var(--gap-xs);flex-shrink:0}
+.fin-header-conf{font-size:var(--text-34px);font-weight:700;color:var(--text-primary);font-family:var(--font-mono);letter-spacing:var(--ls-neg-md)}
+.fin-header-conf-label{font-family:var(--font-mono);font-size:var(--font-9);color:var(--text-muted);text-transform:uppercase;letter-spacing:var(--ls-lg);text-align:right}
+/* ── Decision quality radar ──────────────────────────────────────── */
+.fin-radar-row{display:grid;grid-template-columns:1fr 1fr;gap:var(--gap-lg);align-items:start}
+.fin-radar-canvas-wrap{position:relative;width:100%;aspect-ratio:1/1;max-width:360px;margin:0 auto}
+.fin-radar-legend{display:flex;flex-direction:column;gap:var(--gap-md);padding:var(--gap-xl) 0}
+.fin-radar-leg-item{display:flex;align-items:center;gap:var(--gap-md)}
+.fin-radar-leg-dot{width:10px;height:10px;border-radius:var(--r-full);flex-shrink:0}
+.fin-radar-leg-text{display:flex;flex-direction:column;gap:2px}
+.fin-radar-leg-name{font-family:var(--font-mono);font-size:var(--font-9);font-weight:700;text-transform:uppercase;letter-spacing:var(--ls-md)}
+.fin-radar-leg-score{display:flex;align-items:center;gap:var(--gap-sm)}
+.fin-radar-leg-val{font-size:var(--text-sm);font-weight:700;color:var(--text-primary);font-family:var(--font-mono)}
+.fin-radar-leg-bar{height:4px;border-radius:var(--r-full);flex:1;background:var(--border)}
+.fin-radar-leg-fill{height:4px;border-radius:var(--r-full)}
+.fin-radar-leg-desc{font-size:var(--font-9);color:var(--text-muted);line-height:1.4}
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 </head>
 <body>
 
@@ -2612,8 +2636,21 @@ body{background:var(--bg-page);color:var(--text-primary);font-family:var(--font-
 <!-- SECTION: FINANCIALS -->
 <div class="s-section" id="sec-financials">
 
-  <!-- ROW 1: HERO KPIs -->
-  <div class="section-label">Financial Model &mdash; Investment Structure &amp; Returns <button class="info-btn" data-title="Financial Model" data-body="CFO-validated unit economics, two-tranche capital deployment, and scenario returns. All figures from the deliberation record.">i</button></div>
+  <!-- HEADER ─────────────────────────────────────────────────────────── -->
+  <div class="fin-header">
+    <div class="fin-header-narrative">
+      <div class="fin-header-eyebrow">Financial Overview &mdash; EU Market Entry</div>
+      <div class="fin-header-title">The strategic case is real. The execution case is unbuilt.</div>
+      <div class="fin-header-sub">$500K deploys against a $5M EU ARR target with 3.5&times; LTV/CAC unit economics &mdash; the numbers work if the unknowns resolve. GDPR scope, FTE costs, and legal counsel are unvalidated. A two-tranche structure gates $350K on March 15 confirmation. All seven roles approved conditionally; none with high confidence.</div>
+    </div>
+    <div class="fin-header-stat">
+      <div class="fin-header-conf" id="fin-conf-display">67%</div>
+      <div class="fin-header-conf-label">Avg Confidence<br>7/7 Conditional</div>
+    </div>
+  </div>
+
+  <!-- ROW 1: HERO KPIs ────────────────────────────────────────────────── -->
+  <div class="section-label">Investment Structure &amp; Unit Economics <button class="info-btn" data-title="Unit Economics" data-body="CFO-validated metrics from the deliberation record. CAC ceiling and LTV/CAC ratio directly govern the Phase 2 GO/NO-GO gate.">i</button></div>
   <div class="fin-kpi-row">
     <div class="fin-kpi neutral">
       <div class="fin-kpi-label">Total Investment</div>
@@ -2637,7 +2674,24 @@ body{background:var(--bg-page);color:var(--text-primary);font-family:var(--font-
     </div>
   </div>
 
-  <!-- ROW 2: THREE-COLUMN CASE -->
+  <!-- ROW 2: DECISION QUALITY RADAR + THE CASE ────────────────────────── -->
+  <div class="section-label">Decision Quality &mdash; Where the Shape Breaks <button class="info-btn" data-title="Decision Quality Radar" data-body="Six dimensions scored from the deliberation record. The shape shows where the investment thesis is strong (strategy, financials) and where it is exposed (execution readiness, evidence quality). The gap between them is the risk.">i</button></div>
+  <div class="card">
+    <div class="card-body">
+      <div class="fin-radar-row">
+        <div>
+          <div class="fin-radar-canvas-wrap">
+            <canvas id="fin-radar-chart"></canvas>
+          </div>
+        </div>
+        <div class="fin-radar-legend" id="fin-radar-legend">
+          <!-- populated by JS -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROW 3: THREE-COLUMN CASE ─────────────────────────────────────────── -->
   <div class="section-label">The Full Picture &mdash; Upside, Risk &amp; What We Don&rsquo;t Know</div>
   <div class="fin-case-row">
     <div class="fin-case-card">
@@ -2646,22 +2700,10 @@ body{background:var(--bg-page);color:var(--text-primary);font-family:var(--font-
         <span class="chip chip-teal">4 DRIVERS</span>
       </div>
       <div class="fin-case-body">
-        <div class="fin-case-item">
-          <span class="fin-case-num pos">$525K</span>
-          <span class="fin-case-desc">LTV pipeline from 3 confirmed EU prospects &mdash; immediate revenue catalyst</span>
-        </div>
-        <div class="fin-case-item">
-          <span class="fin-case-num pos">$5M</span>
-          <span class="fin-case-desc">EU ARR target by 2026 &mdash; board-mandated North Star component</span>
-        </div>
-        <div class="fin-case-item">
-          <span class="fin-case-num pos">16.4mo</span>
-          <span class="fin-case-desc">Post-investment runway &mdash; above 12-month CFO hard floor</span>
-        </div>
-        <div class="fin-case-item">
-          <span class="fin-case-num pos">0.95%</span>
-          <span class="fin-case-desc">$500K as share of FY25 budget &mdash; not material if thesis holds</span>
-        </div>
+        <div class="fin-case-item"><span class="fin-case-num pos">$525K</span><span class="fin-case-desc">LTV pipeline from 3 confirmed EU prospects &mdash; immediate revenue catalyst</span></div>
+        <div class="fin-case-item"><span class="fin-case-num pos">$5M</span><span class="fin-case-desc">EU ARR target by 2026 &mdash; board-mandated North Star component</span></div>
+        <div class="fin-case-item"><span class="fin-case-num pos">16.4mo</span><span class="fin-case-desc">Post-investment runway &mdash; above 12-month CFO hard floor</span></div>
+        <div class="fin-case-item"><span class="fin-case-num pos">0.95%</span><span class="fin-case-desc">$500K as share of FY25 budget &mdash; not material if thesis holds</span></div>
       </div>
     </div>
     <div class="fin-case-card">
@@ -2670,18 +2712,9 @@ body{background:var(--bg-page);color:var(--text-primary);font-family:var(--font-
         <span class="chip chip-red">3 EXPOSURES</span>
       </div>
       <div class="fin-case-body">
-        <div class="fin-case-item">
-          <span class="fin-case-num neg">$460K</span>
-          <span class="fin-case-desc">EU FTE costs upper bound &mdash; 3 hires fully loaded, before GTM spend</span>
-        </div>
-        <div class="fin-case-item">
-          <span class="fin-case-num neg">$375K</span>
-          <span class="fin-case-desc">GDPR legal counsel upper bound &mdash; combined may breach $500K envelope</span>
-        </div>
-        <div class="fin-case-item">
-          <span class="fin-case-num neg">25&ndash;35%</span>
-          <span class="fin-case-desc">Employer social charge in Germany/France &mdash; unvalidated in FTE model</span>
-        </div>
+        <div class="fin-case-item"><span class="fin-case-num neg">$460K</span><span class="fin-case-desc">EU FTE costs upper bound &mdash; 3 hires fully loaded, before GTM spend</span></div>
+        <div class="fin-case-item"><span class="fin-case-num neg">$375K</span><span class="fin-case-desc">GDPR legal counsel upper bound &mdash; combined may breach $500K envelope</span></div>
+        <div class="fin-case-item"><span class="fin-case-num neg">25&ndash;35%</span><span class="fin-case-desc">Employer social charge in Germany/France &mdash; unvalidated in FTE model</span></div>
       </div>
     </div>
     <div class="fin-case-card">
@@ -2690,27 +2723,15 @@ body{background:var(--bg-page);color:var(--text-primary);font-family:var(--font-
         <span class="chip chip-amber">4 GAPS</span>
       </div>
       <div class="fin-case-body">
-        <div class="fin-case-item">
-          <span class="fin-case-num warn">FTE</span>
-          <span class="fin-case-desc">No validated line-item cost by role and country &mdash; Radford EMEA not applied</span>
-        </div>
-        <div class="fin-case-item">
-          <span class="fin-case-num warn">GDPR</span>
-          <span class="fin-case-desc">No legal counsel quote obtained &mdash; estimate range $160K&ndash;$375K unconfirmed</span>
-        </div>
-        <div class="fin-case-item">
-          <span class="fin-case-num warn">ENTITY</span>
-          <span class="fin-case-desc">No confirmed EU entity setup cost from local counsel &mdash; Ireland unverified</span>
-        </div>
-        <div class="fin-case-item">
-          <span class="fin-case-num warn">ARCH</span>
-          <span class="fin-case-desc">No CTO data residency architecture decision or cost estimate yet</span>
-        </div>
+        <div class="fin-case-item"><span class="fin-case-num warn">FTE</span><span class="fin-case-desc">No validated line-item cost by role and country &mdash; Radford EMEA not applied</span></div>
+        <div class="fin-case-item"><span class="fin-case-num warn">GDPR</span><span class="fin-case-desc">No legal counsel quote obtained &mdash; estimate range $160K&ndash;$375K unconfirmed</span></div>
+        <div class="fin-case-item"><span class="fin-case-num warn">ENTITY</span><span class="fin-case-desc">No confirmed EU entity setup cost from local counsel &mdash; Ireland unverified</span></div>
+        <div class="fin-case-item"><span class="fin-case-num warn">ARCH</span><span class="fin-case-desc">No CTO data residency architecture decision or cost estimate yet</span></div>
       </div>
     </div>
   </div>
 
-  <!-- ROW 3: CAPITAL STRUCTURE -->
+  <!-- ROW 4: CAPITAL STRUCTURE ─────────────────────────────────────────── -->
   <div class="section-label">Capital Structure &mdash; Two-Tranche Deployment</div>
   <div class="card">
     <div class="card-body">
@@ -2719,7 +2740,7 @@ body{background:var(--bg-page);color:var(--text-primary);font-family:var(--font-
           <div class="fin-tranche-seg p1">
             <div class="fin-tranche-label">Phase 1 &mdash; Pre-Authorized</div>
             <div class="fin-tranche-amount pos" id="fin-p1">$150K</div>
-            <div class="fin-tranche-desc">Releases immediately upon approval. Covers GDPR compliance architecture, EU legal entity setup, external counsel engagement. No board vote required below threshold.</div>
+            <div class="fin-tranche-desc">Releases immediately. Covers GDPR compliance architecture, EU legal entity setup, external counsel engagement. No board vote required below threshold.</div>
           </div>
           <div class="fin-tranche-seg gate">
             <div class="fin-tranche-gate-label">&#x25C6; GO / NO-GO</div>
@@ -2729,14 +2750,14 @@ body{background:var(--bg-page);color:var(--text-primary);font-family:var(--font-
           <div class="fin-tranche-seg p2">
             <div class="fin-tranche-label">Phase 2 &mdash; Gate-Contingent</div>
             <div class="fin-tranche-amount" id="fin-p2">$350K</div>
-            <div class="fin-tranche-desc">Releases only if March 15 gate clears: validated FTE costs by role/country, GDPR counsel quote confirmed, entity setup cost confirmed, CTO architecture decision in writing. EU entity formation + first FTE offers begin.</div>
+            <div class="fin-tranche-desc">Releases only if March 15 gate clears: validated FTE costs by role/country, GDPR counsel quote confirmed, entity setup cost confirmed, CTO architecture decision in writing.</div>
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ROW 4: KILL THRESHOLDS -->
+  <!-- ROW 5: KILL THRESHOLDS ───────────────────────────────────────────── -->
   <div class="section-label">Financial Kill Criteria &mdash; What Stops the Clock</div>
   <div class="fin-kill-row">
     <div class="fin-kill-item">
@@ -2746,7 +2767,7 @@ body{background:var(--bg-page);color:var(--text-primary);font-family:var(--font-
     </div>
     <div class="fin-kill-item">
       <div class="fin-kill-trigger">EU ARR &lt; $62.5K by Q4 2025</div>
-      <div class="fin-kill-desc">25% of $250K FY25 EU ARR target &mdash; signals pipeline is not converting at required velocity</div>
+      <div class="fin-kill-desc">25% of $250K FY25 EU ARR target &mdash; signals pipeline not converting at required velocity</div>
       <div class="fin-kill-outcome">Triggers CFO review &rarr; revert to OPT-3 analysis</div>
     </div>
     <div class="fin-kill-item">
@@ -3588,6 +3609,83 @@ function wireListeners() {
     });
   });
   NT?.addEventListener('mouseleave', () => NT.classList.remove('show'));
+
+  // ── Financials radar chart ──────────────────────────────────────────
+  const radarCanvas = document.getElementById('fin-radar-chart');
+  if (radarCanvas && typeof Chart !== 'undefined') {
+    const style = getComputedStyle(document.documentElement);
+    const teal   = style.getPropertyValue('--teal').trim()   || '#2dd4bf';
+    const red    = style.getPropertyValue('--red').trim()    || '#f87171';
+    const amber  = style.getPropertyValue('--amber').trim()  || '#fbbf24';
+    const border = style.getPropertyValue('--border').trim() || '#1e2a3a';
+    const textMuted = style.getPropertyValue('--text-muted').trim() || '#4a5568';
+
+    const axes = [
+      { label: 'Financial Viability',    score: 75, color: teal,   desc: '3.5× LTV/CAC · 16.4mo runway · 0.95% of FY25' },
+      { label: 'Strategic Alignment',    score: 88, color: teal,   desc: 'Board-mandated · North Star · #4 investment priority' },
+      { label: 'Decision Confidence',    score: 67, color: amber,  desc: '67% avg · 10% band · HIGH groupthink flag' },
+      { label: 'Risk Profile',           score: 20, color: red,    desc: 'HIGH exposure · HIGH execution complexity · 3 blockers' },
+      { label: 'Execution Readiness',    score: 22, color: red,    desc: 'HIGH complexity · no FTE plan · no GDPR scope' },
+      { label: 'Evidence Quality',       score: 18, color: red,    desc: 'Gap score 9/10 · single-source warning · 10 unknowns' },
+    ];
+
+    new Chart(radarCanvas, {
+      type: 'radar',
+      data: {
+        labels: axes.map(a => a.label),
+        datasets: [{
+          data: axes.map(a => a.score),
+          backgroundColor: 'rgba(45,212,191,0.08)',
+          borderColor: teal,
+          borderWidth: 2,
+          pointBackgroundColor: axes.map(a => a.color),
+          pointBorderColor: axes.map(a => a.color),
+          pointRadius: 5,
+          pointHoverRadius: 7,
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: true,
+        scales: {
+          r: {
+            min: 0, max: 100,
+            ticks: { stepSize: 25, display: false },
+            grid: { color: border },
+            angleLines: { color: border },
+            pointLabels: {
+              color: textMuted,
+              font: { size: 9, family: "'JetBrains Mono', monospace", weight: '700' },
+            }
+          }
+        },
+        plugins: { legend: { display: false }, tooltip: {
+          callbacks: {
+            label: ctx => ' Score: ' + ctx.raw + '/100'
+          }
+        }}
+      }
+    });
+
+    // Populate legend
+    const legend = document.getElementById('fin-radar-legend');
+    if (legend) {
+      legend.innerHTML = axes.map(a => {
+        const barW = a.score + '%';
+        const col = a.score >= 70 ? teal : a.score >= 50 ? amber : red;
+        return '<div class="fin-radar-leg-item">' +
+          '<div class="fin-radar-leg-dot" style="background:' + col + '"></div>' +
+          '<div class="fin-radar-leg-text">' +
+            '<div class="fin-radar-leg-name" style="color:' + col + '">' + a.label + '</div>' +
+            '<div class="fin-radar-leg-score">' +
+              '<div class="fin-radar-leg-val">' + a.score + '</div>' +
+              '<div class="fin-radar-leg-bar"><div class="fin-radar-leg-fill" style="width:' + barW + ';background:' + col + '"></div></div>' +
+            '</div>' +
+            '<div class="fin-radar-leg-desc">' + a.desc + '</div>' +
+          '</div>' +
+        '</div>';
+      }).join('');
+    }
+  }
 }
 
 // Info panel

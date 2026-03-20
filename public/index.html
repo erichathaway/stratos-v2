@@ -1,13 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>StratOS — Master CSS v2.0</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600;700&family=DM+Mono:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
 /* STRATOS MASTER CSS v2.0
    Single source of truth. Change one token = changes everything globally.
@@ -953,7 +943,6 @@ body{background:var(--bg-page);color:var(--text-primary);font-family:var(--font-
 
 
 /* ══ RISK PANEL HEADERS ══════════════════════════════════════════════════════ */
-.risk-panel-head{display:flex;align-items:center;gap:var(--gap-sm);margin-bottom:var(--gap-md);flex-wrap:wrap}
 .rph-eyebrow{font-family:var(--font-mono);font-size:var(--text-xs);font-weight:700;letter-spacing:var(--ls-md);text-transform:uppercase;color:var(--tab-c,var(--purple))}
 .rph-count{font-family:var(--font-mono);font-size:var(--font-9);font-weight:700;padding:2px var(--gap-xs);border-radius:var(--r-xs);color:var(--amber);background:color-mix(in srgb,var(--amber) 12%,transparent);border:1px solid color-mix(in srgb,var(--amber) 25%,transparent)}
 .rph-sub{font-family:var(--font-mono);font-size:var(--font-9);color:var(--text-muted);letter-spacing:var(--ls-xs)}
@@ -1167,19 +1156,22 @@ body{background:var(--bg-page);color:var(--text-primary);font-family:var(--font-
 .oq-item.open .expand-body{max-height:600px;border-top-width:1px}
 /* ── Risk right panel ───────────────────────────────────────────── */
 .risk-side-card{display:flex;flex-direction:column;overflow:hidden}
-.risk-panel{display:flex;flex-direction:column;flex:1;overflow-y:auto;min-height:0}
-.risk-panel::-webkit-scrollbar{width:var(--gap-3)}
-.risk-panel::-webkit-scrollbar-thumb{background:var(--border-hover);border-radius:var(--r-full)}
-.risk-panel-head{position:sticky;top:0;z-index:2;display:flex;align-items:center;justify-content:space-between;padding:var(--card-head-py) var(--card-px);background:var(--bg-card);border-bottom:1px solid var(--border);flex-shrink:0}
-.risk-panel-title{font-family:var(--font-mono);font-size:var(--font-9);font-weight:700;letter-spacing:var(--ls-lg);text-transform:uppercase}
-.risk-panel-title.is-red{color:var(--red)}
-.risk-panel-title.is-amber{color:var(--amber)}
-.risk-panel-rows{padding:0 var(--card-px)}
+.risk-panel{display:flex;flex-direction:column;flex:1;min-height:0}
+.risk-panel-bar{display:flex;align-items:stretch;border-bottom:2px solid var(--border);flex-shrink:0;background:var(--bg-card)}
+.risk-panel-bar-seg{display:flex;align-items:center;justify-content:space-between;gap:var(--gap-sm);padding:var(--gap-sm) var(--card-px);flex:1}
+.risk-panel-bar-seg+.risk-panel-bar-seg{border-left:1px solid var(--border)}
+.risk-panel-label{font-family:var(--font-mono);font-size:var(--font-9);font-weight:700;letter-spacing:var(--ls-lg);text-transform:uppercase}
+.risk-panel-label.is-red{color:var(--red)}
+.risk-panel-label.is-amber{color:var(--amber)}
+.risk-panel-scroll{overflow-y:auto;flex:1;padding:0 var(--card-px) var(--gap-sm)}
+.risk-panel-scroll::-webkit-scrollbar{width:var(--gap-3)}
+.risk-panel-scroll::-webkit-scrollbar-thumb{background:var(--border-hover);border-radius:var(--r-full)}
 .risk-panel-row{padding:var(--gap-sm) 0;border-bottom:1px solid var(--border)}
 .risk-panel-row:last-child{border-bottom:none}
 .risk-panel-row-text{font-size:var(--text-xs);color:var(--text-secondary);line-height:1.5}
 .risk-panel-row-meta{display:flex;align-items:center;gap:var(--gap-sm);margin-top:var(--gap-3)}
 .risk-panel-domain{font-family:var(--font-mono);font-size:var(--font-9);color:var(--text-muted);text-transform:uppercase;letter-spacing:var(--ls-md)}
+.risk-panel-divider{height:2px;background:var(--border);margin:var(--gap-sm) 0;flex-shrink:0}
 /* ── Risk impact rows (section 3) ───────────────────────────────── */
 .risk-row-list{display:flex;flex-direction:column;gap:0}
 .risk-impact-row{display:grid;grid-template-columns:4px 1fr;gap:var(--gap-lg);padding:var(--gap-xl) 0;border-bottom:1px solid var(--border);align-items:start}
@@ -1221,7 +1213,7 @@ body{background:var(--bg-page);color:var(--text-primary);font-family:var(--font-
 .ev-card-desc{font-size:var(--text-xs);color:var(--text-secondary);line-height:1.55}
 .ev-card-chips{display:flex;gap:var(--gap-xs);flex-wrap:wrap;margin-top:var(--gap-3)}
 .risk-side-card{max-height:var(--risk-card-h);display:flex;flex-direction:column;overflow:hidden}
-.risk-panel-head-2{top:var(--risk-head-h)}
+
 </style>
 </head>
 <body>
@@ -1952,12 +1944,19 @@ body{background:var(--bg-page);color:var(--text-primary);font-family:var(--font-
     </div>
     <div class="card risk-side-card" style="--ct-accent:var(--red)">
     <div class="risk-panel">
-      <!-- ACT NOW header: sticky top:0 -->
-      <div class="risk-panel-head">
-        <span class="risk-panel-title is-red">Act Now</span>
-        <span class="chip chip-red">2 CRITICAL</span>
+      <!-- Single title bar: both labels side by side, fixed, never scrolls -->
+      <div class="risk-panel-bar">
+        <div class="risk-panel-bar-seg">
+          <span class="risk-panel-label is-red">Act Now</span>
+          <span class="chip chip-red">2 CRITICAL</span>
+        </div>
+        <div class="risk-panel-bar-seg">
+          <span class="risk-panel-label is-amber">Manage</span>
+          <span class="chip chip-amber">7 ACTIVE</span>
+        </div>
       </div>
-      <div class="risk-panel-rows">
+      <!-- Single scroll body: critical items, divider, manage items -->
+      <div class="risk-panel-scroll">
         <div class="risk-panel-row">
           <div class="risk-panel-row-text">GDPR scope exceeds 14 eng-weeks &mdash; Q3 launch infeasible</div>
           <div class="risk-panel-row-meta"><span class="risk-panel-domain">Technical</span><span class="chip chip-red">KILL GATE</span></div>
@@ -1966,13 +1965,7 @@ body{background:var(--bg-page);color:var(--text-primary);font-family:var(--font-
           <div class="risk-panel-row-text">$247K/month burn discrepancy &mdash; unreconciled against $500K envelope</div>
           <div class="risk-panel-row-meta"><span class="risk-panel-domain">Financial</span><span class="chip chip-red">HIGH</span></div>
         </div>
-      </div>
-      <!-- MANAGE header: sticky, sits below ACT NOW when scrolled -->
-      <div class="risk-panel-head risk-panel-head-2">
-        <span class="risk-panel-title is-amber">Manage</span>
-        <span class="chip chip-amber">7 ACTIVE</span>
-      </div>
-      <div class="risk-panel-rows">
+        <div class="risk-panel-divider"></div>
         <div class="risk-panel-row">
           <div class="risk-panel-row-text">EU hiring cycle 8&ndash;12 weeks &mdash; offer must land by April 2025 for Q3</div>
           <div class="risk-panel-row-meta"><span class="risk-panel-domain">People</span><span class="chip chip-amber">HIGH</span></div>

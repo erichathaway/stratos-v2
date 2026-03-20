@@ -4029,27 +4029,42 @@ function ibToggleAudio(btn) {
 
 // \u2500\u2500 TOUR \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
 const TOUR_STEPS = {
-  briefing: { audio: 'Briefing overview \u2014 2 min', steps: [
-    { el:'#sec-briefing .verdict-hero', title:'Decision Verdict',    body:'The final ruling from a 3-round governed deliberation. Board authorization is the <strong>binding next step</strong> before any capital deploys.' },
-    { el:'#sec-briefing .ib-wrap',      title:'Executive Brief',     body:'What happened, why it matters, capital impact. Use the audio buttons for the spoken brief.' },
-    { el:'#sec-briefing .g5.dim-group', title:'Key Metrics',         body:'Five headline numbers. <strong>Hover the \u25c7 badge</strong> after any number to see the exact data source.' },
-    { el:'#sec-briefing .g3.dim-group', title:'Decision Areas',      body:'Six functional domains. <strong>Hover any card</strong> to expand the full analysis.' },
+  briefing: { audio: 'Briefing overview -- 2 min', steps: [
+    { el:'#sec-briefing .verdict-hero',        title:'Decision Verdict',            body:'The final ruling from a 3-round governed deliberation. Board authorization is the <strong>binding next step</strong> before any spend is committed.' },
+    { el:'#sec-briefing .ib-wrap',             title:'Executive Brief',             body:'Three lenses: what the decision quality looks like, what needs to be true, and what the Board specifically owns in this outcome.' },
+    { el:'#sec-briefing .g5.dim-group',        title:'Key Metrics',                 body:'The five numbers defining this decision: confidence band, investment envelope, LTV/CAC ratio, timeline, and vote unanimity.' },
+    { el:'#sec-briefing .g3.dim-group',        title:'Decision Areas',              body:'The four domains the room deliberated across -- each with its own risk profile, owner, and gate condition.' }
   ]},
-  command: { audio: 'Command Center \u2014 3 min', steps: [
-    { el:'#sec-command .card',          title:'Execution Timeline',  body:'Phase-gated plan from Board approval through Q3 launch. Each phase has named owners, milestone dates, and hard stop conditions.' },
-    { el:'#sec-command #cmd-questions', title:'Open Questions',      body:'Questions blocking Phase 2 capital. Each has a named owner and a kill gate. <strong>Click any</strong> to expand.' },
+  command: { audio: 'Command Center overview -- 2 min', steps: [
+    { el:'#sec-command .card',                 title:'Execution Timeline',          body:'Phase-gated deployment from board approval through Phase 2 release. Every milestone has an owner and a kill condition.' },
+    { el:'#sec-command #cmd-questions',        title:'Open Questions',              body:'Seven unresolved questions the room flagged as decision-material. These gaps must close before Phase 2 releases.' }
   ]},
-  risk: { audio: 'Risk & Intelligence \u2014 2 min', steps: [
-    { el:'#sec-risk .g3.dim-group',     title:'Top Risks',           body:'Highest-severity risks from deliberation. HIGH groupthink means these may be underweighted \u2014 apply independent judgment.' },
-    { el:'#sec-risk .card',             title:'Full Risk Register',  body:'Complete risk register from 7 ELT roles across 3 rounds, sorted by severity.' },
+  risk: { audio: 'Risk and Intel overview -- 2 min', steps: [
+    { el:'#sec-risk .ib-wrap',                 title:'Risk Intelligence Brief',     body:'Three angles: what the confidence scores actually mean, where the math breaks, and what the Board specifically owns in this exposure.' },
+    { el:'#sec-risk .card',                    title:'Full Risk Register',          body:'Every risk surfaced across all 7 roles and 3 rounds -- rated by severity, domain owner, and kill-gate trigger status.' }
   ]},
-  room: { audio: 'The Room \u2014 3 min', steps: [
-    { el:'#sec-room #room-role-cards',  title:'Final Positions',     body:'Every C-suite voice at R2. Final stance, confidence score. <strong>Hover any card</strong> to focus it.' },
-    { el:'#sec-room #room-deliberation',title:'Deliberation Record', body:'Full R0\u2192R1\u2192R2 record. <strong>Click any row</strong> to expand rationale and cost-of-inaction.' },
+  financials: { audio: 'Financial Impact -- 3 min', steps: [
+    { el:'#sec-financials .fin-header',        title:'Financial Overview',          body:'The strategic case is real. The execution case is unbuilt. $500K deploys against a $5M EU ARR target -- but the line-item budget has never been validated.' },
+    { el:'#sec-financials .ib-wrap',           title:'Capital at Risk',             body:'Where the envelope fails, which two line items can breach the ceiling alone, and what the Board must receive before Phase 2 clears.' },
+    { el:'#sec-financials .section-label',     title:'Investment Structure',        body:'Unit economics, scenario analysis, CAC sensitivity, capital structure, and kill criteria -- five financial frames for this decision.' }
   ]},
+  room: { audio: 'The Room -- 3 min', steps: [
+    { el:'#sec-room .room-arc-row',            title:'3-Round Deliberation Arc',    body:'1 GO and 6 NOT YET in Round 0. Unanimous conditional by Round 2. The arc from entry to resolution, live from the engine deliberation record.' },
+    { el:'#sec-room .room-commit-grid',        title:'Hard Commitments',            body:'What each of the 7 roles requires to approve. Non-negotiable gate conditions backed by the R2 deliberation record.' },
+    { el:'#sec-room .room-gt-flag',            title:'Groupthink Flag',             body:'HIGH severity detected. All 7 roles converged on CONDITIONAL_SUPPORT. Apparent consensus may mask unvoiced dissent -- probe before committing.' },
+    { el:'#sec-room .room-role-table',         title:'Member Breakdown',            body:'Click any row to read the role\'s direct R2 quote. Confidence scores and stance evolution across all 3 rounds.' }
+  ]},
+  management: { audio: 'Management Handoff -- 3 min', steps: [
+    { el:'#sec-management .mh-priority-grid', title:'Top 3 Priority Actions',      body:'The three actions gating everything else. Board approval Feb 15, GDPR validation Mar 31, validated $500K budget Mar 15 -- running in parallel, not sequence.' },
+    { el:'#sec-management .card',             title:'Department Briefs',           body:'Each role\'s Phase 1 action plan: timing, success metrics, kill gate rows, and their exact approval condition from R2. Click a role tab to expand.' },
+    { el:'#sec-management .cf-grid',          title:'Cross-Function Dependencies', body:'Four role pairs with hard coordination gates. Neither closes without the other delivering. CTO+LEGAL and CEO+CFO own the critical path.' }
+  ]},
+  board: { audio: 'Board Governance -- 2 min', steps: [
+    { el:'#sec-board',                         title:'Board Governance Packet',     body:'Everything the Board needs to authorize the $500K: the decision record, risk exposure, financial gate conditions, and legal entities that must clear.' }
+  ]}
 };
 
-const TAB_ORDER = ['briefing','command','risk','room'];
+const TAB_ORDER = ['briefing','command','risk','financials','room','management','board'];
 let _tSec='briefing', _tIdx=0, _tAudio='manual', _tPlaying=false;
 
 function setAudioPref(p) {

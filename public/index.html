@@ -28,7 +28,6 @@
   --purple: #9b78f0;
   --red:    #e86060;
   --green:  #38cc70;
-  --pink:   #e060a8;
   /* Text */
   --text-primary:   #edf1fa;
   --text-secondary: #7a8aa8;
@@ -48,15 +47,13 @@
   --text-lg:   19px;
   --text-xl:   22px;
   --text-2xl:  28px;
-  --text-3xl:  36px;
 
   /* ── WHITESPACE — change these 7 vars to control ALL spacing globally ──── */
   --page-pad-x:   48px;   /* page left/right padding */
   --page-pad-y:   56px;   /* page top/bottom padding */
   --page-pad-top:  36px;   /* page TOP padding — tighter under tabs */
   --section-gap:  80px;   /* space BETWEEN major page sections */
-  --block-gap:    28px;   /* space BETWEEN content blocks within a section */
-  --card-gap:     16px;   /* space inside cards between sub-elements */
+  --block-gap:    28px;   /* space BETWEEN content blocks within a section */   /* space inside cards between sub-elements */
   --card-px:      28px;   /* card horizontal padding */
   --card-py:      24px;   /* card vertical padding */
   --card-head-py: 14px;   /* card header top/bottom padding */
@@ -129,9 +126,6 @@
   /* Stat card */
   --stat-val-size: 42px;
   /* Chart */
-  --chart-font-size: 13;
-  --chart-tick-c:    #7a8aa8;
-  --chart-grid-c:    #1c2232;
   /* Executive Insight Layer */
   --ei-bg:          var(--bg-surface);
   --ei-border-c:    var(--blue);
@@ -147,8 +141,6 @@
   --ib-ul-dur: 0.32s;
   --ib-ul-c:   var(--blue);
   /* Tour card position */
-  --tour-card-top:   24px;
-  --tour-card-right: 24px;
   --tour-card-w:     280px;
 
   /* Avatar sizes */
@@ -192,11 +184,9 @@
 
   --gap-3: 3px;
 
-  --risk-half-h: 195px;
 
   --risk-card-h: 480px;
 
-  --risk-head-h: 40px;
 
   /* ── Extended font sizes ── */
   --text-7px:  7px;
@@ -828,7 +818,6 @@ body{background:var(--bg-page);color:var(--text-primary);font-family:var(--font-
 .tl-arrow{display:flex;align-items:center;padding:0 var(--gap-sm);color:var(--border-hover);font-size:var(--text-xl);padding-bottom:18px;flex-shrink:0}
 /* ── Management / Board list ─── */
 .open-q-list{display:flex;flex-direction:column;gap:0}
-.oq-item{display:flex;align-items:flex-start;gap:var(--gap-lg);padding:var(--gap-md) 0;border-bottom:1px solid var(--border)}
 .oq-item:last-child{border-bottom:none}
 .oq-num{font-family:var(--font-display);font-size:var(--text-xl);font-weight:800;color:var(--tab-c,var(--blue));min-width:var(--avatar-xs);flex-shrink:0;padding-top:var(--pt-xs)}
 .oq-body{flex:1;display:flex;flex-direction:column;gap:var(--gap-xs)}
@@ -837,9 +826,6 @@ body{background:var(--bg-page);color:var(--text-primary);font-family:var(--font-
 .oq-owner{font-family:var(--font-mono);font-size:var(--font-9);font-weight:700;letter-spacing:var(--ls-sm);color:var(--text-muted);background:var(--bg-surface-2);border:1px solid var(--border);padding:1px var(--gap-xs);border-radius:var(--r-xs)}
 .oq-note{font-family:var(--font-mono);font-size:var(--font-9);color:var(--text-muted)}
 /* ── Tab accent scoping ─── */
-#sec-financials{--tab-c:var(--teal)}
-#sec-management{--tab-c:var(--teal)}
-#sec-board{--tab-c:var(--red)}
 @media(max-width:768px){
   .tl-nodes-row{flex-wrap:wrap;justify-content:center}
   .tl-arrow{transform:rotate(90deg);padding:var(--gap-xs) 0}

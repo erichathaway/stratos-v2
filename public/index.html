@@ -2708,7 +2708,7 @@ function applyLiveData(raw) {
 
   // v-question (Command Center card + briefing "i" tooltip)
   const q = dash.decision_question || '';
-  const qShort = q.split(/\s*—\s*/)[0].trim() || q.substring(0, 80);
+  const qShort = q.split(/\s*--\s*/)[0].trim() || q.substring(0, 80);
   const qCtx   = raw.master?.context || raw.master?.decision_context || '';
   set('cmd-q-short',    qShort || q.substring(0,80));
   set('cmd-q-internals', q);
@@ -2856,7 +2856,7 @@ function buildCommandCenter(raw, tl, dir, exec, fm, mso) {
   set('cmd-confidence2', confPct + '%');
   const gt2El = el('cmd-groupthink2');
   const gt2 = dash.groupthink_flag || {};
-  if (gt2El) { gt2El.textContent = gt2.triggered ? 'Groupthink · HIGH' : 'Groupthink · CLEAR'; gt2El.className = gt2.triggered ? 'chip chip-red' : 'chip chip-teal'; gt2El.style.fontSize='var(--font-9)'; }
+  if (gt2El) { gt2El.textContent = gt2.triggered ? 'Groupthink . HIGH' : 'Groupthink . CLEAR'; gt2El.className = gt2.triggered ? 'chip chip-red' : 'chip chip-teal'; gt2El.style.fontSize='var(--font-9)'; }
   const optLabel2 = dash.approved_option_id ? dash.approved_option_id+': '+(dir?.chosen_option_name||'Minimal Viable Entry') : 'OPT-5: Minimal Viable Entry';
   set('cmd-option-badge2', optLabel2);
   const heroRolesEl = el('cmd-hero-roles');
@@ -2918,9 +2918,9 @@ function buildCommandCenter(raw, tl, dir, exec, fm, mso) {
   }
 
   // Narrative from direction_package
-  set('cmd-narrative', (dir?.strategic_narrative || '').substring(0, 400) || 'EU expansion creates a first-mover window closing within 6 months. Phase-gated structure limits downside — $150K proves the market before $350K scales it.');
+  set('cmd-narrative', (dir?.strategic_narrative || '').substring(0, 400) || 'EU expansion creates a first-mover window closing within 6 months. Phase-gated structure limits downside -- $150K proves the market before $350K scales it.');
 
-  // Wins from functional_mandates — handles both array and keyed-object shapes
+  // Wins from functional_mandates -- handles both array and keyed-object shapes
   const mandatesRaw = dir?.functional_mandates;
   const mandates = Array.isArray(mandatesRaw) ? mandatesRaw
     : (mandatesRaw && typeof mandatesRaw === 'object' ? Object.values(mandatesRaw) : []);
@@ -2945,7 +2945,7 @@ function buildCommandCenter(raw, tl, dir, exec, fm, mso) {
 }
 
 
-// ── RISK DOT POPUP ──────────────────────────────────────────────────────────
+// ?? RISK DOT POPUP ??????????????????????????????????????????????????????????
 let _rpEl = null;
 
 function showRP(e, r) {
@@ -2980,7 +2980,7 @@ function showRP(e, r) {
   const hdChips = document.getElementById('rhd-chips');
   if (hd && r) {
     hd.classList.remove('is-empty');
-    hdRole.textContent = (r.role || r.domain || 'Risk') + (r.domain ? ' · ' + r.domain : '');
+    hdRole.textContent = (r.role || r.domain || 'Risk') + (r.domain ? ' . ' + r.domain : '');
     hdText.textContent = r.risk || '';
     hdChips.innerHTML = [
       r.impact ? '<span class="chip chip-red">Impact: ' + r.impact + '</span>' : '',
@@ -3001,12 +3001,12 @@ function hideRP() {
 // Role headshots for risk matrix
 
 const STATIC_RISKS = [
-  { risk:'GDPR technical scoping reveals >14 engineering weeks — Q3 launch infeasible', domain:'Technical', impact:'HIGH', probability:'MEDIUM', role_key:'CTO',   img:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop' },
-  { risk:'Burn rate discrepancy $1.25M vs $1.497M/month — runway materially shorter', domain:'Financial', impact:'HIGH', probability:'MEDIUM', role_key:'CFO',   img:'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=80&h=80&fit=crop' },
-  { risk:'EU hiring timeline underestimated — specialized SaaS roles run 8-12 weeks', domain:'People',    impact:'HIGH', probability:'HIGH',   role_key:'CHRO',  img:'https://images.unsplash.com/photo-1598550874175-4d0ef436c909?w=80&h=80&fit=crop' },
-  { risk:'GDPR Article 83(4) fines — 2% global ARR if contracts precede compliance',  domain:'Legal',     impact:'HIGH', probability:'LOW',    role_key:'LEGAL', img:'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&h=80&fit=crop' },
+  { risk:'GDPR technical scoping reveals >14 engineering weeks -- Q3 launch infeasible', domain:'Technical', impact:'HIGH', probability:'MEDIUM', role_key:'CTO',   img:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop' },
+  { risk:'Burn rate discrepancy $1.25M vs $1.497M/month -- runway materially shorter', domain:'Financial', impact:'HIGH', probability:'MEDIUM', role_key:'CFO',   img:'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=80&h=80&fit=crop' },
+  { risk:'EU hiring timeline underestimated -- specialized SaaS roles run 8-12 weeks', domain:'People',    impact:'HIGH', probability:'HIGH',   role_key:'CHRO',  img:'https://images.unsplash.com/photo-1598550874175-4d0ef436c909?w=80&h=80&fit=crop' },
+  { risk:'GDPR Article 83(4) fines -- 2% global ARR if contracts precede compliance',  domain:'Legal',     impact:'HIGH', probability:'LOW',    role_key:'LEGAL', img:'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&h=80&fit=crop' },
   { risk:'Competitor X closes EU prospects during Board approval delay',               domain:'Strategic', impact:'MEDIUM','probability':'MEDIUM', role_key:'CSO', img:'https://images.unsplash.com/photo-1614644147798-f8c0fc9da7f6?w=80&h=80&fit=crop' },
-  { risk:'CS capacity at 95% — cannot absorb new EU accounts without NRR degradation',domain:'Operational',impact:'MEDIUM','probability':'HIGH', role_key:'COO', img:'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=80&h=80&fit=crop' },
+  { risk:'CS capacity at 95% -- cannot absorb new EU accounts without NRR degradation',domain:'Operational',impact:'MEDIUM','probability':'HIGH', role_key:'COO', img:'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=80&h=80&fit=crop' },
 ];
 
 const ROLE_IMAGES = {
@@ -3178,13 +3178,13 @@ function buildFinancials(raw, fm, fo, bgp, mso, dash) {
   var tk=el('fin-cac-track');
   if(tk)tk.innerHTML=cpts.map(function(p){
     return '<div class="fin-cac-marker" style="left:'+p.pos+'%"><span class="fin-cac-dot '+p.dc+'"></span>'+
-      '<div class="fin-cac-tick-'+p.dir+'"><div class="fin-cac-tick-val">$'+p.v+'K'+(p.base?' ◆':'')+'</div>'+
+      '<div class="fin-cac-tick-'+p.dir+'"><div class="fin-cac-tick-val">$'+p.v+'K'+(p.base?' *':'')+'</div>'+
       '<div class="fin-cac-tick-sub">'+p.t+'</div></div></div>';
   }).join('');
   var cr=el('fin-cac-rows');
   if(cr)cr.innerHTML=cpts.map(function(p){
-    var tg=p.base?'<span class="fin-cac-tag">← BASE CASE</span>':'<span style="font-size:var(--font-9);color:var(--text-muted)">('+p.t+')</span>';
-    var rt=p.rm!==null?'<div class="fin-cac-return" style="color:'+p.col+'">'+p.rm+'× return</div>':'<div class="fin-cac-return" style="color:var(--red)">PHASE 2 HALTS</div>';
+    var tg=p.base?'<span class="fin-cac-tag"><- BASE CASE</span>':'<span style="font-size:var(--font-9);color:var(--text-muted)">('+p.t+')</span>';
+    var rt=p.rm!==null?'<div class="fin-cac-return" style="color:'+p.col+'">'+p.rm+'? return</div>':'<div class="fin-cac-return" style="color:var(--red)">PHASE 2 HALTS</div>';
     return '<div class="fin-cac-row '+p.rc+'">'+'<div class="fin-cac-label">CAC = $'+p.v+'K '+tg+'</div>'+
       '<div style="display:flex;align-items:center;gap:var(--gap-sm)"><div class="fin-cac-bar-bg"><div class="fin-cac-bar-inner" style="width:'+p.bp+'%;background:'+p.col+'"></div></div></div>'+rt+'</div>';
   }).join('');
@@ -3358,7 +3358,7 @@ document.addEventListener('click', e => {
 
 // IB audio buttons
 
-// ── AUDIO PLAYBACK ─────────────────────────────────────────────────────────
+// ?? AUDIO PLAYBACK ?????????????????????????????????????????????????????????
 const AUDIO_FILES = {
   'audio-brief':      { id: '14yIbmcRwmGVAEkvRAchMoRkym3AgDq_I', label: '2-min Overview Brief' },
   'audio-deep':       { id: '1_0OugCktqJXy6gu2LkJ-lNyKHzUm0ILo', label: '4-min Deep Dive' },
@@ -3391,7 +3391,7 @@ function toggleAudio(id) {
   _syncBtns(_audId, false);
   _audId = id;
 
-  // Use GDrive preview iframe — no CORS, plays inline
+  // Use GDrive preview iframe -- no CORS, plays inline
   const src = 'https://drive.google.com/file/d/' + af.id + '/preview';
 
   if (apEl)    { apEl.style.display = 'flex'; }
@@ -3416,13 +3416,13 @@ function _syncBtns(id, playing) {
     const isThis = b.getAttribute('onclick') === "toggleAudio('" + id + "')";
     b.classList.toggle('ib-playing', playing && isThis);
     const ic = b.querySelector('.ib-audio-icon');
-    if (ic) ic.textContent = (playing && isThis) ? '■' : '▶';
+    if (ic) ic.textContent = (playing && isThis) ? '?' : '?';
   });
 }
 
 
 
-// ── UI HELPERS ──────────────────────────────────────────────────────────────
+// ?? UI HELPERS ??????????????????????????????????????????????????????????????
 
 function toggleOQ(id) { document.getElementById(id)?.classList.toggle('open'); }
 
@@ -3654,7 +3654,7 @@ function _renderStep() {
 
 // \u2500\u2500 BOOT \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
 
-// ── DATA FETCH ───────────────────────────────────────────────────────────────
+// ?? DATA FETCH ???????????????????????????????????????????????????????????????
 const SB_RUN = 'RUN-20260319005013-tb378vka';
 
 async function fetchRunData() {
@@ -3669,7 +3669,7 @@ async function fetchRunData() {
 }
 
 
-// ── INFO PANEL DRAG ──────────────────────────────────────────────────────────
+// ?? INFO PANEL DRAG ??????????????????????????????????????????????????????????
 (function() {
   const panel = document.getElementById('info-panel');
   const handle = document.getElementById('ip-drag');
@@ -3697,7 +3697,7 @@ wireListeners();
   applyLiveData(raw);
 })();
 
-// ── TOUR CARD DRAGGABLE ─────────────────────────────────────────────────────
+// ?? TOUR CARD DRAGGABLE ?????????????????????????????????????????????????????
 (function(){
   const card = document.getElementById('tour-card');
   if (!card) return;

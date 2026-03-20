@@ -216,6 +216,9 @@
   --ls-neg-md:  -1px;
   --ls-neg-lg:  -2px;
   --ls-xxs:     .04em;
+
+  --room-traj-h: 160px;
+  --room-expand-h: 300px;
 }
 
 /* ── 2  RESET & BASE ──────────────────────────────────────────────────────── */
@@ -849,7 +852,7 @@ body{background:var(--bg-page);color:var(--text-primary);font-family:var(--font-
 #sec-command    {--tab-c:var(--green)}
 #sec-risk       {--tab-c:var(--purple)}
 #sec-financials {--tab-c:var(--teal)}
-#sec-options    {--tab-c:var(--amber)}
+
 #sec-room       {--tab-c:var(--blue)}
 #sec-management {--tab-c:var(--teal)}
 #sec-board      {--tab-c:var(--red)}
@@ -1403,12 +1406,79 @@ body{background:var(--bg-page);color:var(--text-primary);font-family:var(--font-
 .fin-kill-trigger{font-size:var(--text-sm);font-weight:700;color:var(--red);font-family:var(--font-mono)}
 .fin-kill-desc{font-size:var(--text-xs);color:var(--text-secondary);line-height:1.45}
 .fin-kill-outcome{font-family:var(--font-mono);font-size:var(--font-9);color:var(--text-muted);text-transform:uppercase;letter-spacing:var(--ls-md);margin-top:var(--gap-xs)}
+
+/* ── Audio brief button ─────────────────────────────────────────── */
+.ib-audio{display:inline-flex;align-items:center;gap:var(--gap-xs);font-family:var(--font-mono);font-size:var(--font-9);font-weight:700;letter-spacing:var(--ls-md);text-transform:uppercase;color:var(--teal);background:color-mix(in srgb,var(--teal) 10%,transparent);border:1px solid color-mix(in srgb,var(--teal) 25%,transparent);border-radius:var(--r-full);padding:var(--gap-xs) var(--gap-md);cursor:pointer;transition:all var(--t-fast)}
+.ib-audio:hover{background:color-mix(in srgb,var(--teal) 18%,transparent)}
+.ib-audio.ib-playing{color:var(--red);background:color-mix(in srgb,var(--red) 10%,transparent);border-color:color-mix(in srgb,var(--red) 25%,transparent)}
+/* ── Room & Options ─────────────────────────────────────────────── */
+.room-header{display:grid;grid-template-columns:1fr auto;gap:var(--gap-2xl);align-items:center;padding:var(--gap-2xl) var(--card-px);background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--r-xl);border-left:3px solid var(--blue)}
+.room-header-eyebrow{font-family:var(--font-mono);font-size:var(--font-9);font-weight:700;letter-spacing:var(--ls-lg);text-transform:uppercase;color:var(--blue)}
+.room-header-title{font-size:var(--text-xl);font-weight:700;color:var(--text-primary);line-height:1.35;margin:var(--gap-xs) 0}
+.room-header-sub{font-size:var(--text-xs);color:var(--text-secondary);line-height:1.6;max-width:640px}
+.room-verdict-stat{display:flex;flex-direction:column;align-items:flex-end;gap:var(--gap-xs);flex-shrink:0}
+.room-verdict-val{font-size:var(--text-34px);font-weight:700;color:var(--teal);font-family:var(--font-mono);letter-spacing:var(--ls-neg-md);line-height:1}
+.room-verdict-label{font-family:var(--font-mono);font-size:var(--font-9);color:var(--text-muted);text-transform:uppercase;letter-spacing:var(--ls-lg);text-align:right}
+.room-arc-row{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--gap-lg)}
+.room-arc-card{padding:var(--gap-xl) var(--card-px);border-radius:var(--r-xl);border:1px solid var(--border);background:var(--bg-surface);position:relative;overflow:hidden}
+.room-arc-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.room-arc-card.r0::before{background:var(--red)}.room-arc-card.r1::before{background:var(--amber)}.room-arc-card.r2::before{background:var(--teal)}
+.room-arc-round{font-family:var(--font-mono);font-size:var(--font-9);font-weight:700;letter-spacing:var(--ls-lg);text-transform:uppercase;margin-bottom:var(--gap-xs)}
+.room-arc-round.r0{color:var(--red)}.room-arc-round.r1{color:var(--amber)}.room-arc-round.r2{color:var(--teal)}
+.room-arc-headline{font-size:var(--text-sm);font-weight:700;color:var(--text-primary);line-height:1.3;margin-bottom:var(--gap-xs)}
+.room-arc-desc{font-size:var(--text-xs);color:var(--text-secondary);line-height:1.5}
+.room-traj-canvas{width:100%;display:block;height:var(--room-traj-h)}
+.room-role-table{display:flex;flex-direction:column;width:100%}
+.room-role-header{display:grid;grid-template-columns:180px 90px repeat(3,80px) 1fr;gap:var(--gap-md);padding:var(--gap-xs) var(--card-px);border-bottom:2px solid var(--border)}
+.room-role-col-head{font-family:var(--font-mono);font-size:var(--font-9);font-weight:700;letter-spacing:var(--ls-md);color:var(--text-muted);text-transform:uppercase}
+.room-role-row{display:grid;grid-template-columns:180px 90px repeat(3,80px) 1fr;gap:var(--gap-md);align-items:center;padding:var(--gap-md) var(--card-px);border-bottom:1px solid var(--border);cursor:pointer;transition:background var(--t-fast)}
+.room-role-row:hover{background:var(--bg-hover)}.room-role-row.expanded{background:color-mix(in srgb,var(--blue) 4%,transparent)}
+.room-role-ident{display:flex;align-items:center;gap:var(--gap-md)}
+.room-role-photo{width:var(--gap-2xl);height:var(--gap-2xl);border-radius:var(--r-full);object-fit:cover;flex-shrink:0;border:2px solid var(--border)}
+.room-role-name{font-family:var(--font-mono);font-size:var(--font-9);font-weight:700;letter-spacing:var(--ls-md);text-transform:uppercase;color:var(--text-primary)}
+.room-conf-val{font-family:var(--font-mono);font-size:var(--text-xs);font-weight:700}
+.room-conf-val.high{color:var(--teal)}.room-conf-val.mid{color:var(--amber)}.room-conf-val.low{color:var(--red)}
+.room-round-stance{font-family:var(--font-mono);font-size:var(--font-9);font-weight:600;text-align:center}
+.room-round-stance.support{color:var(--teal)}.room-round-stance.notyet{color:var(--red)}.room-round-stance.cond{color:var(--amber)}
+.room-hard-gate{font-size:var(--text-xs);color:var(--text-secondary);line-height:1.45;font-style:italic}
+.room-role-expand{overflow:hidden;max-height:0;transition:max-height var(--t-slow) var(--ease)}
+.room-role-expand.open{max-height:var(--room-expand-h)}
+.room-expand-body{padding:var(--gap-md) var(--card-px) var(--gap-lg);background:color-mix(in srgb,var(--blue) 3%,transparent);border-top:1px solid var(--border)}
+.room-expand-quote{font-size:var(--text-xs);color:var(--text-secondary);line-height:1.65;border-left:3px solid var(--blue);padding-left:var(--gap-md);margin-bottom:var(--gap-sm)}
+.room-expand-meta{display:flex;gap:var(--gap-sm);flex-wrap:wrap}
+.room-delta{font-family:var(--font-mono);font-size:var(--font-9);font-weight:700}
+.room-delta.up{color:var(--teal)}.room-delta.down{color:var(--red)}.room-delta.flat{color:var(--text-muted)}
+.room-gt-flag{display:flex;align-items:flex-start;gap:var(--gap-md);padding:var(--gap-md) var(--card-px);background:color-mix(in srgb,var(--amber) 8%,transparent);border:1px solid color-mix(in srgb,var(--amber) 25%,transparent);border-radius:var(--r-lg)}
+.room-gt-icon{font-size:var(--text-md);flex-shrink:0;margin-top:var(--gap-xxs)}
+.room-gt-text{font-size:var(--text-xs);color:var(--text-secondary);line-height:1.5}
+.room-opts-tabs{display:flex;gap:var(--gap-xs);flex-wrap:wrap}
+.room-opt-tab{font-family:var(--font-mono);font-size:var(--font-9);font-weight:700;letter-spacing:var(--ls-md);text-transform:uppercase;padding:var(--gap-xs) var(--gap-md);border-radius:var(--r-md);border:1px solid var(--border);background:var(--bg-surface);color:var(--text-muted);cursor:pointer;transition:all var(--t-fast)}
+.room-opt-tab:hover{border-color:var(--border-hover);color:var(--text-primary)}
+.room-opt-tab.active{background:var(--teal);border-color:var(--teal);color:var(--bg-page)}
+.room-opt-tab.chosen{background:color-mix(in srgb,var(--teal) 12%,transparent);border-color:var(--teal);color:var(--teal)}
+.room-opt-panel{display:none;flex-direction:column;gap:var(--gap-lg)}.room-opt-panel.active{display:flex}
+.room-opt-hero{display:grid;grid-template-columns:1fr auto;gap:var(--gap-2xl);align-items:start;margin-bottom:var(--gap-lg)}
+.room-opt-title{font-size:var(--text-md);font-weight:700;color:var(--text-primary);line-height:1.35;margin-bottom:var(--gap-xs)}
+.room-opt-desc{font-size:var(--text-xs);color:var(--text-secondary);line-height:1.6}
+.room-opt-verdict-chip{font-family:var(--font-mono);font-size:var(--font-9);font-weight:700;letter-spacing:var(--ls-md);text-transform:uppercase;padding:var(--gap-xs) var(--gap-md);border-radius:var(--r-md);white-space:nowrap}
+.room-opt-verdict-chip.chosen{background:color-mix(in srgb,var(--teal) 15%,transparent);color:var(--teal);border:1px solid color-mix(in srgb,var(--teal) 30%,transparent)}
+.room-opt-verdict-chip.rejected{background:color-mix(in srgb,var(--red) 10%,transparent);color:var(--red);border:1px solid color-mix(in srgb,var(--red) 25%,transparent)}
+.room-opt-vote-count{font-family:var(--font-mono);font-size:var(--font-9);color:var(--text-muted);margin-top:var(--gap-3)}
+.room-opt-cols{display:grid;grid-template-columns:1fr 1fr;gap:var(--gap-lg)}
+.room-opt-col-head{font-family:var(--font-mono);font-size:var(--font-9);font-weight:700;letter-spacing:var(--ls-md);text-transform:uppercase;margin-bottom:var(--gap-sm)}
+.room-opt-col-head.pos{color:var(--teal)}.room-opt-col-head.neg{color:var(--red)}.room-opt-col-head.warn{color:var(--amber)}
+.room-opt-item{display:flex;align-items:flex-start;gap:var(--gap-sm);padding:var(--gap-xs) 0;border-bottom:1px solid var(--border)}
+.room-opt-item:last-child{border-bottom:none}
+.room-opt-item-dot{width:5px;height:5px;border-radius:var(--r-full);flex-shrink:0;margin-top:5px}
+.room-opt-item-dot.pos{background:var(--teal)}.room-opt-item-dot.neg{background:var(--red)}
+.room-opt-item-text{font-size:var(--text-xs);color:var(--text-secondary);line-height:1.45}
 </style>
 </head>
 <body>
 
 
 <div id="tour-spot"></div>
+      <div style="margin-top:var(--gap-md)"><button class="ib-audio" onclick="toggleAudio('audio-financials')">&#x25BA; Financial Overview &middot; 3 min</button></div>
 <div id="tour-bar"><div class="tb-info"><div class="tb-step" id="tb-step">Step 1 of 8</div><div class="tb-title" id="tb-title">&mdash;</div><div class="tb-desc" id="tb-desc">&mdash;</div></div><div class="tb-btns"><button class="tb-btn" onclick="tourPrev()">&#8592; Prev</button><button class="tb-btn tb-primary" id="tb-next" onclick="tourNext()">Next &rarr;</button><button class="tb-btn tb-close" onclick="tourEnd()">&#x2715;</button></div></div>
 <!-- TOUR ELEMENTS: fog panels + ring + card + backdrop -->
 <div id="tour-backdrop" onclick="tourEnd()"></div>
@@ -1502,7 +1572,7 @@ body{background:var(--bg-page);color:var(--text-primary);font-family:var(--font-
   <div class="tab" data-sec="command"><span class="tab-pip"></span>Command Center</div>
   <div class="tab" data-sec="risk"><span class="tab-pip"></span>Risk &amp; Intelligence</div>
   <div class="tab" data-sec="financials"><span class="tab-pip"></span>Financials</div>
-  <div class="tab" data-sec="room"><span class="tab-pip"></span>The Room</div>
+  <div class="tab" data-sec="room"><span class="tab-pip"></span>The Room &amp; Options</div>
   <div class="tab" data-sec="options"><span class="tab-pip"></span>Options</div>
   <div class="tab" data-sec="management"><span class="tab-pip"></span>Management Handoff</div>
   <div class="tab" data-sec="board"><span class="tab-pip"></span>Board Report</div>
@@ -1696,7 +1766,7 @@ body{background:var(--bg-page);color:var(--text-primary);font-family:var(--font-
 
   <div class="g3 dim-group">
     <div class="bucket-card" style="--bc-c:var(--purple)" >
-      <div class="bc-eyebrow">The Room</div>
+      <div class="bc-eyebrow">The Room &amp; Options</div>
       <div class="bc-value" style="color:var(--purple)"><span>3</span><span class="bc-unit">rounds</span></div>
       <div class="bc-label">Of deliberation</div>
       <div class="bc-text">Every executive had a voice across 3 structured rounds. CEO led at 72%, moving from SUPPORT to CONDITIONAL SUPPORT. 4 of 7 started by deferring.</div>
@@ -1768,7 +1838,7 @@ body{background:var(--bg-page);color:var(--text-primary);font-family:var(--font-
       </div>
     </div>
     <div style="padding:var(--card-py) var(--gap-xl);display:flex;flex-direction:column;gap:var(--gap-md);border-right:1px solid var(--border);background:color-mix(in srgb,var(--tab-c,var(--green)) 4%,transparent)">
-      <div style="font-family:var(--font-mono);font-size:var(--font-9);font-weight:700;letter-spacing:var(--ls-lg);color:var(--tab-c,var(--green));text-transform:uppercase">The Room</div>
+      <div style="font-family:var(--font-mono);font-size:var(--font-9);font-weight:700;letter-spacing:var(--ls-lg);color:var(--tab-c,var(--green));text-transform:uppercase">The Room &amp; Options</div>
       <div id="cmd-hero-roles" style="display:flex;flex-direction:column;gap:var(--gap-xs)">
         <div class="cmd-role-row"><img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=48&h=48&fit=crop" style="width:var(--avatar-xs);height:var(--avatar-xs);border-radius:var(--r-full);object-fit:cover;flex-shrink:0;border:1px solid var(--border-hover)"><div style="flex:1;min-width:0"><div style="font-size:var(--text-xs);font-weight:700;line-height:1.2">Alexandra Reid</div><div style="font-family:var(--font-mono);font-size:var(--font-9);color:var(--text-muted)">CEO</div></div><span class="chip chip-teal" style="font-size:var(--font-9);padding:var(--chip-py-xs) var(--chip-px-xs)">AWC</span><span style="font-family:var(--font-mono);font-size:var(--font-9);color:var(--teal);font-weight:700;min-width:var(--avatar-xs);text-align:right">74%</span></div>
         <div class="cmd-role-row"><img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=48&h=48&fit=crop" style="width:var(--avatar-xs);height:var(--avatar-xs);border-radius:var(--r-full);object-fit:cover;flex-shrink:0;border:1px solid var(--border-hover)"><div style="flex:1;min-width:0"><div style="font-size:var(--text-xs);font-weight:700;line-height:1.2">Marcus Chen</div><div style="font-family:var(--font-mono);font-size:var(--font-9);color:var(--text-muted)">CFO</div></div><span class="chip chip-amber" style="font-size:var(--font-9);padding:var(--chip-py-xs) var(--chip-px-xs)">AWC</span><span style="font-family:var(--font-mono);font-size:var(--font-9);color:var(--amber);font-weight:700;min-width:var(--avatar-xs);text-align:right">58%</span></div>
@@ -2419,454 +2489,82 @@ body{background:var(--bg-page);color:var(--text-primary);font-family:var(--font-
 </div>
 
 <!-- SECTION 4: OPTIONS -->
-<div class="s-section" id="sec-options">
-
-  <div class="card">
-    <div class="card-head" style="--ct-accent:var(--teal)">
-      <div class="card-title">Option Comparison &middot; Risk / Return / Speed / Reversibility</div>
-      <button class="info-btn" data-title="Option Comparison" data-body="5 options scored across 4 dimensions. Bar length = relative score. Risk: longer = riskier. Return/Speed/Reversibility: longer = better. OPT-5 highlighted in teal as chosen.">i</button>
-    </div>
-    <div class="card-body flush" class="u-pt-md">
-      <div class="opt-matrix" id="opt-matrix-wrap"></div>
-    </div>
-  </div>
-
-  <div class="ib-wrap">
-    <div class="ib-cols">
-      <div class="insight-col"><div class="insight-q">Why OPT-5 won</div><div class="insight-a">Only option satisfying all three constraints simultaneously: $250K governance threshold, 12-month runway floor, and GDPR-first sequencing before customer contracts.</div></div>
-      <div class="insight-col"><div class="insight-q">What was rejected</div><div class="insight-a">OPT-1 rejected on capital exposure. OPT-2 on governance threshold breach. OPT-3 too slow for competitive window. OPT-4 cedes EU market to Competitor X.</div></div>
-      <div class="insight-col"><div class="insight-q">Key tradeoff</div><div class="insight-a">Slower ramp limits 2026 ARR impact. All 7 roles accepted this as the necessary cost of financial discipline and governance compliance at current runway.</div></div>
-    </div>
-    <div class="ib-actions">
-      <button class="ib-audio" onclick="toggleAudio('audio-options')">
-        <div class="ib-audio-icon">&#9654;</div>Options Overview &middot; 2 min
-      </button>
-      <div class="ib-divider"></div>
-      <a class="ib-doc" href="#" title="Download Options Analysis">&#128196; Options Analysis</a>
-      <span class="ib-label">Options Resources</span>
-    </div>
-  </div>
-
-  <div class="card" style="border-color:var(--teal);box-shadow:0 0 0 1px color-mix(in srgb,var(--teal) 18%,transparent)">
-    <div class="card-head" style="--ct-accent:var(--teal)"><div class="card-title">OPT-5 &mdash; Selected &middot; 7/7 Conditional Approve</div><span class="chip chip-teal">Chosen</span></div>
-    <div class="card-body">
-      <div class="g2" class="u-gap-2xl">
-        <div class="u-flex-col u-gap-lg">
-          <div><div class="mono-label" class="u-mb-md">Mechanics</div><p class="prose" style="font-size:var(--text-sm)">Limit initial investment to GDPR compliance and legal/EOR setup required to close a single EU contract. Only scale FTE hiring and GTM spend if first EU customer is signed and referenceable by Q4 2025.</p></div>
-          <div><div class="mono-label" class="u-mb-sm">Entry Gates</div><div class="u-flex u-flex-wrap u-gap-xs"><span class="chip chip-amber">Board approval for $150K tranche</span><span class="chip chip-amber">GDPR scoping complete</span><span class="chip chip-amber">First EU contract before FTE hiring</span></div></div>
-        </div>
-        <div class="u-flex-col u-gap-lg">
-          <div><div class="mono-label" class="u-mb-md">Why it won</div><p class="prose" style="font-size:var(--text-sm)">Only option satisfying Board governance, preserving runway, and sequencing risk correctly. Minimizes sunk cost, validates EU demand with real revenue before scaling, preserves optionality at every gate.</p></div>
-          <div><div class="mono-label" class="u-mb-md">30-Day Execution</div><p class="prose" style="font-size:var(--text-sm)">Submit Board materials for minimal viable entry. Complete GDPR scoping and legal/EOR setup. Pursue EU prospects &mdash; conditional contract by end of Phase 1. Hold all FTE hiring until contract is signed.</p></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-
-  <div class="section-head">
-    <div class="section-label">Open Questions &amp; External Intelligence</div>
-    <button class="info-btn" data-title="Open Questions + External Intelligence" data-body="Left: Unresolved questions that are actively tracked with named owners and kill gates. Right: External signals that weighted the ELT deliberation — regulatory, competitive, and market data.">i</button>
-  </div>
-
-  <div class="g2">
-    <!-- OPEN QUESTIONS -->
-    <div>
-      <div class="risk-panel-head">
-        <span class="rph-eyebrow">OPEN QUESTIONS</span>
-        <span class="rph-count">4 UNRESOLVED</span>
-      </div>
-      <div class="oq-list">
-
-        <div class="oq-item open">
-          <div class="oq-trigger" onclick="this.parentElement.classList.toggle('open')">
-            <div class="oq-num">01</div>
-            <div class="oq-main">
-              <div class="oq-question">Is GDPR-compliant data residency feasible within the $150K Phase 1 budget?</div>
-              <div class="oq-tags">
-                <span class="oq-owner-tag">CTO &middot; OWNER</span>
-                <span class="chip chip-red oq-gate-chip">KILL GATE</span>
-                <span class="chip chip-amber">MAY GO/NO-GO</span>
-                <span class="oq-flagged">5 roles flagged</span>
-              </div>
-            </div>
-            <div class="oq-chev">&#9660;</div>
-          </div>
-          <div class="oq-expand">
-            <div class="oq-status-row"><span class="oq-status-pill ip">IN PROGRESS</span> External EU counsel engaged by Feb 28 &rarr; architecture scoped with cost estimate by Mar 31 &rarr; CTO sign-off before May GO/NO-GO. Weekly CTO + LEGAL status gate.</div>
-            <div class="oq-why">Why it matters &rsaquo;</div>
-          </div>
-        </div>
-
-        <div class="oq-item">
-          <div class="oq-trigger" onclick="this.parentElement.classList.toggle('open')">
-            <div class="oq-num">02</div>
-            <div class="oq-main">
-              <div class="oq-question">Do EU collective bargaining agreements restrict unilateral hiring terms in UK, Germany, or France?</div>
-              <div class="oq-tags">
-                <span class="oq-owner-tag">LEGAL &middot; OWNER</span>
-                <span class="chip chip-red oq-gate-chip">KILL GATE</span>
-                <span class="chip chip-amber">PRE-HIRE</span>
-                <span class="oq-flagged">4 roles flagged</span>
-              </div>
-            </div>
-            <div class="oq-chev">&#9660;</div>
-          </div>
-          <div class="oq-expand">
-            <div class="oq-status-row"><span class="oq-status-pill qu">QUEUED</span> EU employment law review scoped in Phase 1 legal budget. Must complete before any FTE offer letter is drafted — works councils in Germany and IR35 in UK require verified legal structure first.</div>
-            <div class="oq-why">Why it matters &rsaquo;</div>
-          </div>
-        </div>
-
-        <div class="oq-item">
-          <div class="oq-trigger" onclick="this.parentElement.classList.toggle('open')">
-            <div class="oq-num">03</div>
-            <div class="oq-main">
-              <div class="oq-question">What is EU GTM pipeline velocity and ACV for the 3 target prospects?</div>
-              <div class="oq-tags">
-                <span class="oq-owner-tag">CSO &middot; OWNER</span>
-                <span class="chip chip-amber">PULSE CHECK</span>
-                <span class="chip chip-blue">APR 15</span>
-                <span class="oq-flagged">3 roles flagged</span>
-              </div>
-            </div>
-            <div class="oq-chev">&#9660;</div>
-          </div>
-          <div class="oq-expand">
-            <div class="oq-status-row"><span class="oq-status-pill tr">TRACKING</span> CSO running bi-weekly prospect status reviews. Apr 15 health check requires &ge;2 of 3 active. CFO reprices model if ACV lands below $175K per logo.</div>
-            <div class="oq-why">Why it matters &rsaquo;</div>
-          </div>
-        </div>
-
-        <div class="oq-item">
-          <div class="oq-trigger" onclick="this.parentElement.classList.toggle('open')">
-            <div class="oq-num">04</div>
-            <div class="oq-main">
-              <div class="oq-question">What are EU comp bands for the 3 target roles across UK, Germany, France?</div>
-              <div class="oq-tags">
-                <span class="oq-owner-tag">CHRO &middot; OWNER</span>
-                <span class="oq-flagged">3 roles flagged</span>
-              </div>
-            </div>
-            <div class="oq-chev">&#9660;</div>
-          </div>
-          <div class="oq-expand">
-            <div class="oq-status-row"><span class="oq-status-pill ip">IN PROGRESS</span> CHRO pulling Radford EMEA data for UK, Germany, France. Comp bands must exist before any offer is issued. If unavailable, Levels.fyi + local salary surveys used as proxy. Three weeks of work &mdash; must complete within Phase 1.</div>
-            <div class="oq-why">Why it matters &rsaquo;</div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- EXTERNAL INTELLIGENCE -->
-    <div>
-      <div class="risk-panel-head">
-        <span class="rph-eyebrow">EXTERNAL INTELLIGENCE</span>
-        <span class="rph-sub">WHAT THE DATA SAYS</span>
-        <button class="info-btn" data-title="External Intelligence" data-body="Deliberation weighted on external market data, competitor intelligence, and regulatory signals — not internal assumptions alone.">i</button>
-      </div>
-      <div class="ei-list">
-
-        <div class="ei-signal-card">
-          <div class="ei-signal-left">
-            <span class="ei-category regulatory">REGULATORY</span>
-          </div>
-          <div class="ei-signal-right">
-            <div class="ei-signal-title">GDPR enforcement active across all 3 target markets</div>
-            <div class="ei-signal-body">UK ICO, German BfDI, and French CNIL are all actively enforcing &mdash; no grace period for new market entrants. External EU counsel requirement is non-negotiable, not conservative.</div>
-            <div class="ei-signal-source"><span class="ei-role-badge">LEGAL&thinsp;&middot;&thinsp;R0</span></div>
-          </div>
-        </div>
-
-        <div class="ei-signal-card">
-          <div class="ei-signal-left">
-            <span class="ei-category competitive">COMPETITIVE</span>
-          </div>
-          <div class="ei-signal-right">
-            <div class="ei-signal-title">Competitor X has active EU GTM with overlapping target logos</div>
-            <div class="ei-signal-body">CSO confirmed Competitor X is pursuing at least 2 of the same 3 EU target accounts. The Q3 2025 timeline is not internally driven &mdash; it&rsquo;s a competitive response window. Delay cedes active pipeline, not future potential.</div>
-            <div class="ei-signal-source"><span class="ei-role-badge">CSO&thinsp;&middot;&thinsp;R1</span></div>
-          </div>
-        </div>
-
-        <div class="ei-signal-card">
-          <div class="ei-signal-left">
-            <span class="ei-category market">MARKET DATA</span>
-          </div>
-          <div class="ei-signal-right">
-            <div class="ei-signal-title">EU enterprise SaaS CAC runs 30&ndash;50% above US baseline</div>
-            <div class="ei-signal-body">No internal EU CAC data exists. The $50K ceiling is derived from EU SaaS benchmarks &mdash; not internal history. First-cohort CAC is expected to be at or above the ceiling before brand and process efficiency improve. This is why the kill trigger fires at $50K, not $75K.</div>
-            <div class="ei-signal-source"><span class="ei-role-badge">CFO&thinsp;&middot;&thinsp;R1</span></div>
-          </div>
-        </div>
-
-        <div class="ei-signal-card">
-          <div class="ei-signal-left">
-            <span class="ei-category labor">LABOR LAW</span>
-          </div>
-          <div class="ei-signal-right">
-            <div class="ei-signal-title">EU hiring timelines: 16&ndash;20 weeks across 3 jurisdictions</div>
-            <div class="ei-signal-body">Works council requirements in Germany, mandatory notice periods across all three countries, and IR35 classification in the UK mean EU hiring is not a US timeline with extra paperwork. The 16&ndash;20 week estimate is external labor law reality, not CHRO conservatism.</div>
-            <div class="ei-signal-source"><span class="ei-role-badge">CHRO&thinsp;&middot;&thinsp;R2</span></div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </div>
-
-  <!-- ANIMATED TIMELINE -->
-  <div class="section-head">
-    <div class="section-label">Execution Timeline &middot; Kill Gates &amp; Forward Triggers</div>
-    <button class="info-btn" data-title="Execution Timeline" data-body="Each node is a milestone with an associated status: KILL GATE (red), FORWARD trigger (teal), PULSE CHECK (amber), TARGET (purple). Click any node to see the criteria.">i</button>
-  </div>
-
-  <div class="risk-timeline-wrap">
-    <div class="rtl-track">
-      <div class="rtl-line"></div>
-      <div class="rtl-nodes">
-
-        <div class="rtl-node" data-type="kill">
-          <div class="rtl-circle rtl-kill rtl-pulse" title="Board Approval — Kill Gate">
-            <span class="rtl-date">FEB 15</span>
-          </div>
-          <div class="rtl-label">Board Approval</div>
-          <div class="rtl-owner">CEO</div>
-          <div class="rtl-chip rtl-chip-kill">KILL GATE</div>
-          <div class="rtl-desc">$500K envelope authorized to Phase 1 begins. Rejected &rarr; full stop.</div>
-        </div>
-
-        <div class="rtl-node" data-type="forward">
-          <div class="rtl-circle rtl-fwd" title="EU Counsel Engaged — Forward Trigger">
-            <span class="rtl-date">FEB 28</span>
-          </div>
-          <div class="rtl-label">EU Counsel Engaged</div>
-          <div class="rtl-owner">CTO + LEGAL</div>
-          <div class="rtl-chip rtl-chip-fwd">FORWARD</div>
-          <div class="rtl-desc">External EU counsel onboarded, GDPR scoping begins.</div>
-        </div>
-
-        <div class="rtl-node" data-type="pulse">
-          <div class="rtl-circle rtl-pulse-node" title="Phase 1 Health Check">
-            <span class="rtl-date">APR 15</span>
-          </div>
-          <div class="rtl-label">Phase 1 Health Check</div>
-          <div class="rtl-owner">CTO + CFO + CSO</div>
-          <div class="rtl-chip rtl-chip-pulse">PULSE</div>
-          <div class="rtl-desc">GDPR on track? &ge;2 of 3 prospects active? Comp bands built? Red on any &rarr; escalate before May.</div>
-        </div>
-
-        <div class="rtl-node" data-type="kill">
-          <div class="rtl-circle rtl-kill rtl-pulse" title="GO / NO-GO Gate">
-            <span class="rtl-date">MAY 2025</span>
-          </div>
-          <div class="rtl-label">GO / NO-GO Gate</div>
-          <div class="rtl-owner">CEO+CFO+CTO+LEGAL</div>
-          <div class="rtl-chip rtl-chip-kill">KILL GATE</div>
-          <div class="rtl-desc">All 4 criteria pass &rarr; $350K Phase 2 releases. Any fail &rarr; halt, board notified in 5 days.</div>
-        </div>
-
-        <div class="rtl-node" data-type="kill">
-          <div class="rtl-circle rtl-kill" title="CAC Checkpoint">
-            <span class="rtl-date">JUL 2025</span>
-          </div>
-          <div class="rtl-label">CAC Checkpoint</div>
-          <div class="rtl-owner">CFO</div>
-          <div class="rtl-chip rtl-chip-kill">KILL GATE</div>
-          <div class="rtl-desc">After 2 EU deals, CAC vs $50K ceiling. Above &rarr; Phase 2 GTM halts. Below &rarr; continue.</div>
-        </div>
-
-        <div class="rtl-node" data-type="target">
-          <div class="rtl-circle rtl-target" title="EU Launch Target">
-            <span class="rtl-date">Q3 2025</span>
-          </div>
-          <div class="rtl-label">EU Launch Target</div>
-          <div class="rtl-owner">COO + CSO</div>
-          <div class="rtl-chip rtl-chip-target">TARGET</div>
-          <div class="rtl-desc">3 FTEs onboarded, GDPR operational, logo closed, 2 in negotiation.</div>
-        </div>
-
-      </div>
-    </div>
-  </div>
-
-
-</div>
-
-<!-- SECTION 5: THE ROOM -->
 <div class="s-section" id="sec-room">
 
-  <!-- Top card: Role grid (populated by buildRoom) -->
+  <div class="room-header">
+    <div>
+      <div class="room-header-eyebrow">The Room &amp; Options &mdash; Deliberation Record</div>
+      <div class="room-header-title">6 of 7 entered skeptical. All 7 left conditionally aligned.</div>
+      <div class="room-header-sub">CEO was the only voice for GO at Round 0. Every other role entered NOT YET, each with domain-specific blockers. Three rounds of structured deliberation produced unanimous conditional approval &mdash; but with a HIGH groupthink flag and a confidence band of only 60&ndash;72%. The room moved. The questions didn&rsquo;t.</div>
+      <div style="display:flex;gap:var(--gap-sm);flex-wrap:wrap;margin-top:var(--gap-md)">
+        <span class="chip chip-teal">7/7 Conditional</span>
+        <span class="chip chip-amber">Groupthink HIGH</span>
+        <span class="chip">3 Rounds</span>
+        <span class="chip">OPT-4 Chosen</span>
+        <button class="ib-audio" onclick="toggleAudio('audio-room')">&#x25BA; The Room Overview &middot; 3 min</button>
+      </div>
+    </div>
+    <div class="room-verdict-stat">
+      <div class="room-verdict-val" id="room-conf-val">67%</div>
+      <div class="room-verdict-label">Avg Confidence<br>All Conditional</div>
+    </div>
+  </div>
+
+  <div class="section-label">How the Room Moved &mdash; 3-Round Arc</div>
+  <div class="room-arc-row">
+    <div class="room-arc-card r0">
+      <div class="room-arc-round r0">Round 0 &mdash; Entry</div>
+      <div class="room-arc-headline">1 GO, 6 NOT YET</div>
+      <div style="display:flex;gap:var(--gap-sm);flex-wrap:wrap;margin:var(--gap-xs) 0"><span class="chip chip-teal">CEO: GO</span><span class="chip chip-red">6 Others: NOT YET</span></div>
+      <div class="room-arc-desc">CEO cited strategic urgency and board mandate. All others surfaced domain-specific blockers: unvalidated FTE costs, GDPR scope undefined, no legal counsel, no comp benchmarks, no engineering capacity model.</div>
+    </div>
+    <div class="room-arc-card r1">
+      <div class="room-arc-round r1">Round 1 &mdash; Convergence</div>
+      <div class="room-arc-headline">7/7 Conditional &mdash; OPT-5</div>
+      <div style="display:flex;gap:var(--gap-sm);flex-wrap:wrap;margin:var(--gap-xs) 0"><span class="chip chip-amber">All 7: CONDITIONAL</span><span class="chip">OPT-5 Unanimous</span></div>
+      <div class="room-arc-desc">Every role moved to CONDITIONAL_SUPPORT around OPT-5 with 6 gates. CEO confidence dropped as execution gaps became visible. LEGAL hit 46% &mdash; lowest point in the deliberation. The room agreed on direction but conditions were complex.</div>
+    </div>
+    <div class="room-arc-card r2">
+      <div class="room-arc-round r2">Round 2 &mdash; Resolution</div>
+      <div class="room-arc-headline">7/7 Conditional &mdash; OPT-4</div>
+      <div style="display:flex;gap:var(--gap-sm);flex-wrap:wrap;margin:var(--gap-xs) 0"><span class="chip chip-teal">OPT-4 Chosen</span><span class="chip">Single Hard Gate</span></div>
+      <div class="room-arc-desc">OPT-5 simplified to OPT-4: 6 conditions collapsed into one hard gate &mdash; validated $500K line-item budget. Each role distilled to their single non-negotiable. CHRO dropped to 60%. Groupthink flag triggered.</div>
+    </div>
+  </div>
+
+  <div class="section-label">Confidence Trajectory &mdash; Per Role, 3 Rounds <button class="info-btn" data-title="Confidence Trajectory" data-body="Each line shows one role's confidence across R0, R1, R2. LEGAL dropped to 46% in R1 before recovering. CTO held flat at 62% all 3 rounds.">i</button></div>
   <div class="card">
-    <div class="card-head" style="--ct-accent:var(--blue)">
-      <div class="card-title">The Room &middot; 7 Roles &middot; 3 Rounds</div>
-      <button class="info-btn" data-title="The Room" data-body="Full deliberation record across all 7 C-suite roles and 3 rounds. Role cards show final stance, confidence, and position shift. Click any row in the record to expand full rationale.">i</button>
-      <span class="chip chip-blue" style="margin-left:auto" id="room-round-chip">3 Rounds &middot; 7 Roles</span>
-    </div>
-    <div class="card-body">
-      <div class="g3 dim-group" id="role-cards-wrap"></div>
+    <div class="card-body" style="padding-bottom:var(--gap-2xl)">
+      <canvas id="room-traj-canvas" class="room-traj-canvas"></canvas>
     </div>
   </div>
 
-  <!-- Position 2: ib-wrap (mandatory) -->
-  <div class="ib-wrap">
-    <div class="ib-cols">
-      <div class="insight-col"><div class="insight-q">Convergence pattern</div><div class="insight-a" id="room-insight-1">4 of 7 roles deferred in R0 citing incomplete GDPR and burn data. All converged at R2 after conditions framework was established. Unanimous APPROVE_WITH_CONDITIONS.</div></div>
-      <div class="insight-col"><div class="insight-q">Largest swing</div><div class="insight-a" id="room-insight-2">CFO moved from DEFER at 62% (R0) to CONDITIONAL SUPPORT at 72% (R2). CTO held flat at 62% across all rounds &mdash; GDPR scope remains the single unresolved technical item.</div></div>
-      <div class="insight-col"><div class="insight-q">Groupthink signal</div><div class="insight-a" id="room-insight-3">HIGH groupthink severity flagged at unanimous R2 convergence. No dissent recorded. Independent GDPR scoping review recommended before Phase 2 capital releases.</div></div>
-    </div>
-    <div class="ib-actions">
-      <button class="ib-audio" onclick="toggleAudio('audio-room')">
-        <span class="ib-audio-icon">&#9654;</span>The Room Overview &middot; 3 min
-      </button>
-    </div>
+  <div class="room-gt-flag" id="room-gt-body">
+    <div class="room-gt-icon">&#x26A0;</div>
+    <div class="room-gt-text">Loading deliberation signal...</div>
   </div>
 
-  <!-- Deliberation record -->
-  <div class="section-label">Full Deliberation Record <button class="info-btn" data-title="Deliberation Record" data-body="Every role position across R0, R1, and R2. Click any row to expand full rationale, cost of inaction, and what would change the stance.">i</button></div>
-  <div id="expand-cards-wrap"></div>
-
-  <!-- Confidence trajectory chart -->
-  <div class="card">
-    <div class="card-head" style="--ct-accent:var(--purple)">
-      <div class="card-title">Confidence Trajectory &mdash; R0 &rarr; R1 &rarr; R2</div>
-      <button class="info-btn" data-title="Confidence Trajectory" data-body="CFO dropped to 46% in R1 before recovering to 72%. CTO remained flat at 62%. Convergence at R2 despite differing R0 baselines is the groupthink signal.">i</button>
-      <span class="chip chip-purple">7 Roles &middot; 3 Rounds</span>
-    </div>
-    <div class="card-body"><div class="u-chart-h"><canvas id="chart-trajectory"></canvas></div></div>
-  </div>
-
-</div>
-
-<!-- SECTION: FINANCIALS -->
-<div class="s-section" id="sec-financials">
-
-  <!-- HEADER -->
-  <div class="fin-header">
-    <div class="fin-header-narrative">
-      <div class="fin-header-eyebrow">Financial Overview &mdash; EU Market Entry</div>
-      <div class="fin-header-title">The strategic case is real. The execution case is unbuilt.</div>
-      <div class="fin-header-sub">$500K deploys against a $5M EU ARR target with 3.5&times; LTV/CAC unit economics &mdash; the numbers work if the unknowns resolve. GDPR scope, FTE costs, and legal counsel are unvalidated. A two-tranche structure gates $350K on March 15 confirmation. All seven roles approved conditionally; none with high confidence.</div>
-    </div>
-    <div class="fin-header-stat">
-      <div class="fin-header-conf" id="fin-conf-display">67%</div>
-      <div class="fin-header-conf-label">Avg Confidence<br>7/7 Conditional</div>
-    </div>
-  </div>
-
-  <!-- ROW 1: KPIs -->
-  <div class="section-label">Investment Structure &amp; Unit Economics <button class="info-btn" data-title="Unit Economics" data-body="CFO-validated metrics from the deliberation record. CAC ceiling and LTV/CAC ratio directly govern the Phase 2 GO/NO-GO gate.">i</button></div>
-  <div class="fin-kpi-row">
-    <div class="fin-kpi neutral"><div class="fin-kpi-label">Total Investment</div><div class="fin-kpi-value" id="fin-total">$500K</div><div class="fin-kpi-sub">0.95% of FY25 budget</div></div>
-    <div class="fin-kpi pos"><div class="fin-kpi-label">LTV / Customer</div><div class="fin-kpi-value pos" id="fin-ltv">$175K</div><div class="fin-kpi-sub">Per EU enterprise logo</div></div>
-    <div class="fin-kpi warn"><div class="fin-kpi-label">CAC Ceiling</div><div class="fin-kpi-value warn" id="fin-cac">$50K</div><div class="fin-kpi-sub">Kill trigger if exceeded 2 months</div></div>
-    <div class="fin-kpi pos"><div class="fin-kpi-label">LTV / CAC Ratio</div><div class="fin-kpi-value pos">3.5&times;</div><div class="fin-kpi-sub" id="fin-runway">14.3-month runway post-investment</div></div>
-  </div>
-
-  <!-- ROW 2: SCENARIO ANALYSIS -->
-  <div class="section-label">Scenario Analysis &mdash; Return Profile Across Outcomes <button class="info-btn" data-title="Scenario Analysis" data-body="Three scenarios modeled by CFO. Revenue = LTV x logos closed. Net return = revenue minus investment. Phase 1 ($150K) is maximum exposure if Phase 2 gate fails.">i</button></div>
+  <div class="section-label">Member Breakdown &mdash; Click Any Row to Expand <button class="info-btn" data-title="Member Breakdown" data-body="Final confidence, stance across all 3 rounds, and the single hard gate condition each role required. Click any row to read their direct quote from the deliberation record.">i</button></div>
   <div class="card" style="overflow:hidden">
-    <div class="fin-scenario-wrap" id="fin-scenario-wrap">
-      <div class="fin-scenario-row is-header">
-        <div class="fin-col-head left">Scenario</div>
-        <div class="fin-col-head left">Revenue vs. Investment</div>
-        <div class="fin-col-head">Revenue</div>
-        <div class="fin-col-head">Net Return</div>
-        <div class="fin-col-head">Payback</div>
+    <div class="room-role-table">
+      <div class="room-role-header">
+        <div class="room-role-col-head">Member</div>
+        <div class="room-role-col-head">Final Conf</div>
+        <div class="room-role-col-head" style="text-align:center">R0</div>
+        <div class="room-role-col-head" style="text-align:center">R1</div>
+        <div class="room-role-col-head" style="text-align:center">R2</div>
+        <div class="room-role-col-head">Hard Gate Condition</div>
       </div>
-      <!-- rows injected by buildFinancials -->
+      <div id="room-role-table-body"></div>
     </div>
   </div>
 
-  <div class="section-label">CAC Sensitivity &mdash; Where the Model Breaks <button class="info-btn" data-title="CAC Sensitivity" data-body="EU CAC expected 30-50% above US $35K baseline. Return profile changes materially at each threshold. Kill trigger at $80K halts Phase 2 regardless of revenue.">i</button></div>
-  <div class="card" style="overflow:hidden">
-    <div class="card-body">
-      <div class="fin-cac-track-wrap" id="fin-cac-track-wrap">
-        <div class="fin-cac-track" id="fin-cac-track">
-          <!-- markers injected by buildFinancials -->
-        </div>
-      </div>
-      <div class="fin-cac-rows" id="fin-cac-rows">
-        <!-- rows injected by buildFinancials -->
-      </div>
-    </div>
-  </div>
-
-  <div class="section-label">The Full Picture &mdash; Upside, Risk &amp; What We Don&rsquo;t Know</div>
-  <div class="fin-case-row">
-    <div class="fin-case-card">
-      <div class="fin-case-head pos"><span class="fin-case-title">The Upside</span><span class="chip chip-teal">4 DRIVERS</span></div>
-      <div class="fin-case-body">
-        <div class="fin-case-item"><span class="fin-case-num pos">$525K</span><span class="fin-case-desc">LTV pipeline from 3 confirmed EU prospects &mdash; immediate revenue catalyst</span></div>
-        <div class="fin-case-item"><span class="fin-case-num pos">$5M</span><span class="fin-case-desc">EU ARR target by 2026 &mdash; board-mandated North Star component</span></div>
-        <div class="fin-case-item"><span class="fin-case-num pos">16.4mo</span><span class="fin-case-desc">Post-investment runway &mdash; above 12-month CFO hard floor</span></div>
-        <div class="fin-case-item"><span class="fin-case-num pos">0.95%</span><span class="fin-case-desc">$500K as share of FY25 budget &mdash; not material if thesis holds</span></div>
-      </div>
-    </div>
-    <div class="fin-case-card">
-      <div class="fin-case-head neg"><span class="fin-case-title">The Risk</span><span class="chip chip-red">3 EXPOSURES</span></div>
-      <div class="fin-case-body">
-        <div class="fin-case-item"><span class="fin-case-num neg">$460K</span><span class="fin-case-desc">EU FTE costs upper bound &mdash; 3 hires fully loaded, before GTM spend</span></div>
-        <div class="fin-case-item"><span class="fin-case-num neg">$375K</span><span class="fin-case-desc">GDPR legal counsel upper bound &mdash; combined may breach $500K envelope</span></div>
-        <div class="fin-case-item"><span class="fin-case-num neg">25&ndash;35%</span><span class="fin-case-desc">Employer social charge in Germany/France &mdash; unvalidated in FTE model</span></div>
-      </div>
-    </div>
-    <div class="fin-case-card">
-      <div class="fin-case-head warn"><span class="fin-case-title">What We Don&rsquo;t Know</span><span class="chip chip-amber">4 GAPS</span></div>
-      <div class="fin-case-body">
-        <div class="fin-case-item"><span class="fin-case-num warn">FTE</span><span class="fin-case-desc">No validated line-item cost by role and country &mdash; Radford EMEA not applied</span></div>
-        <div class="fin-case-item"><span class="fin-case-num warn">GDPR</span><span class="fin-case-desc">No legal counsel quote obtained &mdash; estimate range $160K&ndash;$375K unconfirmed</span></div>
-        <div class="fin-case-item"><span class="fin-case-num warn">ENTITY</span><span class="fin-case-desc">No confirmed EU entity setup cost from local counsel &mdash; Ireland unverified</span></div>
-        <div class="fin-case-item"><span class="fin-case-num warn">ARCH</span><span class="fin-case-desc">No CTO data residency architecture decision or cost estimate yet</span></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ROW 5: CAPITAL STRUCTURE -->
-  <div class="section-label">Capital Structure &mdash; Two-Tranche Deployment</div>
+  <div class="section-label">Options Evaluated &mdash; What Was Considered &amp; Why OPT-4 Won</div>
   <div class="card">
     <div class="card-body">
-      <div class="fin-tranche-row">
-        <div class="fin-tranche-track">
-          <div class="fin-tranche-seg p1">
-            <div class="fin-tranche-label">Phase 1 &mdash; Pre-Authorized</div>
-            <div class="fin-tranche-amount pos" id="fin-p1">$150K</div>
-            <div class="fin-tranche-desc">Releases immediately. GDPR compliance architecture, EU legal entity setup, external counsel engagement. No board vote required below threshold.</div>
-          </div>
-          <div class="fin-tranche-seg gate">
-            <div class="fin-tranche-gate-label">&#x25C6; GO / NO-GO</div>
-            <div class="fin-tranche-gate-date">Mar 15 hard gate</div>
-            <div class="fin-tranche-desc" style="margin-top:var(--gap-sm)">CFO + CHRO deliver validated $500K line-item budget</div>
-          </div>
-          <div class="fin-tranche-seg p2">
-            <div class="fin-tranche-label">Phase 2 &mdash; Gate-Contingent</div>
-            <div class="fin-tranche-amount" id="fin-p2">$350K</div>
-            <div class="fin-tranche-desc">Releases only if March 15 gate clears: validated FTE costs by role/country, GDPR counsel quote confirmed, entity setup cost confirmed, CTO architecture decision in writing.</div>
-          </div>
-        </div>
-      </div>
+      <div class="room-opts-tabs" id="room-opts-tabs"></div>
     </div>
-  </div>
-
-  <!-- ROW 6: KILL CRITERIA -->
-  <div class="section-label">Financial Kill Criteria &mdash; What Stops the Clock</div>
-  <div class="fin-kill-row">
-    <div class="fin-kill-item">
-      <div class="fin-kill-trigger">CAC &gt; $50K</div>
-      <div class="fin-kill-desc">Two consecutive months after first EU customer close triggers immediate pause on Phase 2 remainder</div>
-      <div class="fin-kill-outcome">CFO recommendation &rarr; redirect to US GTM</div>
-    </div>
-    <div class="fin-kill-item">
-      <div class="fin-kill-trigger">EU ARR &lt; $62.5K by Q4 2025</div>
-      <div class="fin-kill-desc">25% of $250K FY25 EU ARR target &mdash; signals pipeline not converting at required velocity</div>
-      <div class="fin-kill-outcome">Triggers CFO review &rarr; revert to OPT-3 analysis</div>
-    </div>
-    <div class="fin-kill-item">
-      <div class="fin-kill-trigger">GDPR &gt; 14 eng-weeks</div>
-      <div class="fin-kill-desc">If CTO scope confirms Q3 delivery requires more than 14 engineering weeks, Phase 2 halts</div>
-      <div class="fin-kill-outcome">CEO notifies board &rarr; revert to OPT-2 ($250K phased)</div>
-    </div>
+    <div style="padding:var(--gap-lg) var(--card-px)" id="room-opts-panels"></div>
   </div>
 
 </div>
@@ -3422,127 +3120,10 @@ function buildRisk(raw, mso, dash) {
 }
 
 // \u2500\u2500 OPTIONS \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
-function buildOptions(raw, dash, fm, ob) {
-  const wrap = el('opt-matrix-wrap');
-  // Build options from MSO or use structure from executive summary
-  const optionsList = [
-    { id:'OPT-1', label:'Full-Speed EU Launch',          risk:90, ret:80, speed:90, rev:20, chosen:false },
-    { id:'OPT-2', label:'Phased EU Entry',               risk:55, ret:65, speed:55, rev:60, chosen:false },
-    { id:'OPT-3', label:'GDPR-First, GTM-Second',        risk:30, ret:30, speed:25, rev:70, chosen:false },
-    { id:'OPT-4', label:'Defer EU, Focus US',            risk:15, ret:50, speed:85, rev:90, chosen:false },
-    { id:'OPT-5', label:'Minimal Viable Entry',          risk:35, ret:70, speed:60, rev:80, chosen:true  },
-  ];
-  if (wrap) {
-    function dimC(k,v) {
-      if(k==='risk') return `color-mix(in srgb,var(--red) ${v}%,var(--green))`;
-      if(k==='ret')  return `color-mix(in srgb,var(--green) ${v}%,var(--red))`;
-      if(k==='speed')return `color-mix(in srgb,var(--blue) ${v}%,#333a55)`;
-      return `color-mix(in srgb,var(--teal) ${v}%,#333a55)`;
-    }
-    const hdr = document.createElement('div');
-    hdr.className = 'opt-matrix-hdr';
-    hdr.innerHTML = '<div>Option</div><div>Risk</div><div>Return</div><div>Speed</div><div>Reversibility</div>';
-    wrap.appendChild(hdr);
-    optionsList.forEach(o => {
-      const row = document.createElement('div');
-      row.className = 'opt-row' + (o.chosen ? ' chosen' : '');
-      row.innerHTML =
-        '<div><div class="opt-id-sm">' + o.id + (o.chosen ? ' \u2713' : '') + '</div><div class="opt-name-sm">' + o.label + '</div></div>' +
-        '<div><div class="dim-wrap"><div class="dim-bar" style="width:' + o.risk + '%;background:' + dimC('risk',o.risk) + '"></div></div></div>' +
-        '<div><div class="dim-wrap"><div class="dim-bar" style="width:' + o.ret + '%;background:' + dimC('ret',o.ret) + '"></div></div></div>' +
-        '<div><div class="dim-wrap"><div class="dim-bar" style="width:' + o.speed + '%;background:' + dimC('speed',o.speed) + '"></div></div></div>' +
-        '<div><div class="dim-wrap"><div class="dim-bar" style="width:' + o.rev + '%;background:' + dimC('rev',o.rev) + '"></div></div></div>';
-      wrap.appendChild(row);
-    });
-  }
-
-  // Selected option
-  const chosenId = dash.approved_option_id || 'OPT-5';
-  const chosenLabel = dash.approved_option_label || 'Minimal Viable Entry: Land-and-Expand with Single EU Contract';
-  set('opt-selected-id', chosenId + ' \u00b7 ' + chosenLabel);
-  if (fm.mechanics_summary) set('opt-selected-prose', fm.mechanics_summary + ' ' + (fm.tradeoffs || ''));
-  if (fm.tradeoffs) set('opt-insight-3', fm.tradeoffs);
-}
+function buildOptions(raw,tl,dir,exec,fm,mso,dash,bgp,dp){var container=document.getElementById('room-opts-panels');var tabs=document.getElementById('room-opts-tabs');if(!container||!tabs)return;var O=[{id:'OPT-1',label:'OPT-1',name:'Full EU Launch Now',chosen:false,desc:'Commit full $500K immediately, hire 3 FTEs, launch Q3 2025 with no preconditions.',pros:['Captures Q3 window ahead of Competitor X','Signals commitment to 3 EU prospects ($525K LTV)','Maximizes first-mover advantage'],cons:['$500K likely insufficient before GTM spend','GDPR non-compliance exposure up to $1.8M','No validated FTE cost model or legal counsel quote'],why:'Budget math fails before launch. GDPR exposure alone exceeds the investment. Zero pre-conditions makes this an uncontrolled commitment.'},{id:'OPT-2',label:'OPT-2',name:'Phased $250K Entry',chosen:false,desc:'Authorize only $250K Phase 1 for legal entity and GDPR. No FTE hiring until Phase 2 gate.',pros:['Reduces financial exposure by 50%','Forces GDPR compliance first','Maintains strategic optionality'],cons:['Insufficient to hire required 3 FTEs','Risks losing EU prospects during delay','Does not address $5M ARR target timeline'],why:'Valid downside protection but too conservative. Named as explicit fallback if OPT-4 budget gate fails.'},{id:'OPT-3',label:'OPT-3',name:'US-Only Focus',chosen:false,desc:'Redirect $500K to US GTM acceleration. Defer EU entry to FY26.',pros:['Concentrates resources on proven market','Eliminates GDPR complexity entirely','Simpler execution with current team'],cons:['Abandons board-mandated EU pillar','Loses 3 warm EU prospects permanently','Cedes first-mover to Competitor X'],why:'Contradicts board-approved strategic plan. Named as contingency if EU execution fails.'},{id:'OPT-4',label:'OPT-4',name:'Delay to Q1 2026 - Budget Validation First',chosen:true,desc:'Authorize Phase 1 $150K now for GDPR and legal. Gate $350K Phase 2 on March 15 validated line-item budget.',pros:['Phase 1 $150K deploys immediately on compliance work','Phased structure caps downside at $150K if gate fails','All 7 roles aligned on single solvable gate','Preserves Q3 2025 optionality if gate clears on time'],cons:['Delays full commitment - competitive window risk if gate slips','Requires coordinated CFO and CHRO budget by March 15','5 open questions still unresolved at approval'],why:'Chosen unanimously R2. Two-tranche structure commits now but makes $350K contingent on validating the budget math everyone agreed was the single blocking issue.'},{id:'OPT-5',label:'OPT-5',name:'Conditional Go - Multi-Gate',chosen:false,desc:'Approve with 6 separate pre-conditions across all functional domains before any spend.',pros:['Comprehensive risk coverage across all domains','Forces cross-functional alignment','Surfaced the right issues in R1'],cons:['6 simultaneous conditions creates coordination complexity','Higher failure probability on any single item','R2 recognized this as operationally fragile'],why:'R1 consensus choice. By R2 the room recognized multiple simultaneous conditions create execution fragility. Distilled to OPT-4 single budget gate.'}];tabs.innerHTML=O.map(function(o){var cls=o.chosen?'room-opt-tab chosen':'room-opt-tab rejected';return '<button class="'+cls+'" onclick="switchOpt(''+o.id+'')" id="room-opt-tab-'+o.id+'">'+(o.chosen?o.label+' ✓':o.label)+'</button>';}).join('');container.innerHTML=O.map(function(o){var vc=o.chosen?'chosen':'rejected';var vl=o.chosen?'SELECTED':'NOT CHOSEN';var pi=o.pros.map(function(p){return '<div class="room-opt-item"><div class="room-opt-item-dot pos"></div><div class="room-opt-item-text">'+p+'</div></div>';}).join('');var ci=o.cons.map(function(c){return '<div class="room-opt-item"><div class="room-opt-item-dot neg"></div><div class="room-opt-item-text">'+c+'</div></div>';}).join('');return '<div class="room-opt-panel" id="room-opt-panel-'+o.id+'"><div class="room-opt-hero"><div><div class="room-opt-title">'+o.name+'</div><div class="room-opt-desc">'+o.desc+'</div></div><div><div class="room-opt-verdict-chip '+vc+'">'+vl+'</div>'+(o.chosen?'<div class="room-opt-vote-count">7/7 votes R2</div>':'')+'</div></div><div class="room-opt-cols"><div><div class="room-opt-col-head pos">The Case For</div>'+pi+'</div><div><div class="room-opt-col-head neg">Why Rejected</div>'+ci+'</div></div><div style="padding:var(--gap-md) 0;border-top:1px solid var(--border);margin-top:var(--gap-sm)"><div class="room-opt-col-head warn" style="margin-bottom:var(--gap-xs)">The Room Verdict</div><div style="font-size:var(--text-xs);color:var(--text-secondary);line-height:1.6">'+o.why+'</div></div></div>';}).join('');switchOpt('OPT-4');}
 
 // \u2500\u2500 THE ROOM \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
-function buildRoom(raw, stages, gt) {
-  const dStages = stages.filter(s => s.section === 'D');
-  const byRole = {};
-  dStages.forEach(s => {
-    if (!byRole[s.role_key]) byRole[s.role_key] = {};
-    byRole[s.role_key]['r' + s.round] = {
-      stance: s.stance, vote: s.vote,
-      conf: Math.round((s.confidence_score || 0) * 100),
-      rationale: s.rationale || s.analysis || ''
-    };
-  });
-  const roles = Object.keys(byRole);
-  const roleColors = { CEO:'#5b9cf6', CFO:'#f0a030', CTO:'#e86060', COO:'#26c8b0', CHRO:'#9b78f0', CSO:'#38cc70', LEGAL:'#e060a8' };
-
-  // Role cards (R2 final)
-  const rcWrap = el('room-role-cards');
-  if (rcWrap) {
-    rcWrap.innerHTML = '';
-    roles.forEach(rk => {
-      const r2 = byRole[rk]?.r2 || {};
-      const c = roleColors[rk] || 'var(--blue)';
-      const div = document.createElement('div');
-      div.className = 'role-card';
-      div.innerHTML =
-        '<div class="role-body">' +
-          '<div><div class="role-name">' + rk + '</div>' +
-          '<div class="role-rtitle" style="color:var(--text-muted)">' + (r2.stance || '').replace(/_/g,' ') + '</div></div>' +
-          '<div class="role-stance-row">' +
-            '<span class="chip ' + stanceChip(r2.stance) + '">' + stanceLabel(r2.stance) + '</span>' +
-            '<div class="role-conf-big" style="--rc-c:' + c + '">' + (r2.conf || '\u2014') + '<span>%</span></div>' +
-          '</div>' +
-          '<div class="role-focus-text" style="font-size:var(--text-xs);color:var(--text-secondary);margin-top:var(--gap-sm)">' +
-            (r2.rationale || '').substring(0, 100) + (r2.rationale?.length > 100 ? '\u2026' : '') +
-          '</div>' +
-        '</div>';
-      rcWrap.appendChild(div);
-    });
-  }
-
-  // Deliberation table
-  const delibWrap = el('room-deliberation');
-  if (delibWrap) {
-    delibWrap.innerHTML = roles.map((rk, i) => {
-      const rd = byRole[rk];
-      const c = roleColors[rk] || 'var(--blue)';
-      const id = 'room-row-' + i;
-      const rows = [0,1,2].filter(n => rd['r'+n]).map(n => {
-        const r = rd['r'+n];
-        const cc = chipColor(r.conf >= 70 ? 'HIGH' : r.conf >= 60 ? 'MEDIUM' : 'LOW');
-        return '<div class="round-row">' +
-          '<div class="rr-left">' +
-            '<div class="rr-round">R' + n + '</div>' +
-            '<div class="rr-stance ' + stanceChip(r.stance) + '">' + stanceLabel(r.stance) + '</div>' +
-            '<div class="rr-conf" style="color:' + cc + '">' + r.conf + '<span>%</span></div>' +
-          '</div>' +
-          '<div class="rr-right"><div class="rr-rat">' + (r.rationale || '').substring(0,180) + '</div></div>' +
-        '</div>';
-      }).join('');
-      return '<div class="expand-card" id="' + id + '">' +
-        '<div class="expand-trigger" onclick="toggleExpand(\'' + id + '\')">' +
-          '<div class="expand-left">' +
-            '<div class="expand-title" style="color:' + c + '">' + rk + ' \u00b7 ' + (rd.r2?.conf || '\u2014') + '% Final</div>' +
-            '<div class="expand-prev">' + (rd.r2?.rationale || '').substring(0,100) + '</div>' +
-          '</div>' +
-          '<div class="expand-right"><span class="chip ' + stanceChip(rd.r2?.stance) + '">' + stanceLabel(rd.r2?.stance) + '</span><div class="expand-chevron">&#9660;</div></div>' +
-        '</div>' +
-        '<div class="expand-body"><div class="expand-content"><div class="round-track">' + rows + '</div></div></div>' +
-      '</div>';
-    }).join('');
-  }
-
-  // Room insights
-  const cfo = byRole['CTO'] || {};
-  if (cfo.r0 && cfo.r2) {
-    set('room-insight-2', 'CFO moved from ' + (byRole['CFO']?.r0?.conf||62) + '% (R0 DEFER) to ' + (byRole['CFO']?.r2?.conf||72) + '% (R2) after conditions framework was established. CTO held flat at ' + (cfo.r2?.conf||62) + '% \u2014 GDPR scope remains open.');
-  }
-  if (gt.triggered) set('room-insight-3', (gt.severity||'HIGH') + ' groupthink severity flagged at unanimous R2 convergence. No dissent recorded. Independent review of GDPR scoping assumption recommended before Phase 2 capital releases.');
-}
+function buildRoom(raw,tl,dir,exec,fm,mso,dash,bgp,dp){var roles=(dash&&dash.role_assessment_preview)||[];var mods=(bgp&&bgp.modification_summary)||[];var conds=(bgp&&bgp.conditions_for_approval)||[];var gt=(dash&&dash.groupthink_flag)||null;set('room-conf-val',((dash&&dash.decision_confidence)||67)+'%');var canvas=document.getElementById('room-traj-canvas');if(canvas&&canvas.getContext){var W=canvas.offsetWidth||600,H=160;canvas.width=W;canvas.height=H;var c2=canvas.getContext('2d');var sty=getComputedStyle(document.documentElement);var teal=sty.getPropertyValue('--teal').trim()||'#2dd4bf';var red=sty.getPropertyValue('--red').trim()||'#f87171';var amber=sty.getPropertyValue('--amber').trim()||'#fbbf24';var bord=sty.getPropertyValue('--border').trim()||'#1e2a3a';var tmut=sty.getPropertyValue('--text-muted').trim()||'#4a5568';var RD=[{key:'CEO',r0:72,r1:68,r2:72,col:teal},{key:'CFO',r0:72,r1:62,r2:72,col:teal},{key:'COO',r0:72,r1:62,r2:72,col:teal},{key:'LEGAL',r0:62,r1:46,r2:68,col:red},{key:'CHRO',r0:72,r1:62,r2:60,col:amber},{key:'CSO',r0:72,r1:72,r2:65,col:amber},{key:'CTO',r0:62,r1:62,r2:62,col:teal}];roles.forEach(function(r){var mv=r.movement||{},f=RD.filter(function(x){return x.key===r.role_key;})[0];if(f){f.r0=Math.round((mv.r0_confidence||f.r0/100)*100);f.r2=Math.round((r.confidence_score||f.r2/100)*100);}});var pL=40,pR=24,pT=20,pB=30,pW=W-pL-pR,pH=H-pT-pB;var xOf=function(r){return pL+(r/2)*pW;};var yOf=function(v){return pT+pH-((v-30)/(80-30))*pH;};[40,50,60,70,80].forEach(function(v){c2.strokeStyle=bord;c2.lineWidth=0.5;c2.setLineDash([3,4]);c2.beginPath();c2.moveTo(pL,yOf(v));c2.lineTo(W-pR,yOf(v));c2.stroke();c2.setLineDash([]);c2.fillStyle=tmut;c2.font='9px monospace';c2.textAlign='right';c2.fillText(v+'%',pL-4,yOf(v)+3);});['R0','R1','R2'].forEach(function(lbl,i){c2.fillStyle=tmut;c2.font='9px monospace';c2.textAlign='center';c2.fillText(lbl,xOf(i),H-8);c2.strokeStyle=bord;c2.lineWidth=0.5;c2.setLineDash([2,4]);c2.beginPath();c2.moveTo(xOf(i),pT);c2.lineTo(xOf(i),H-pB);c2.stroke();c2.setLineDash([]);});RD.forEach(function(rd){var pts=[rd.r0,rd.r1,rd.r2];c2.strokeStyle=rd.col;c2.lineWidth=2;c2.globalAlpha=0.85;c2.beginPath();pts.forEach(function(v,i){if(i===0)c2.moveTo(xOf(i),yOf(v));else c2.lineTo(xOf(i),yOf(v));});c2.stroke();pts.forEach(function(v,i){c2.fillStyle=rd.col;c2.globalAlpha=1;c2.beginPath();c2.arc(xOf(i),yOf(v),3.5,0,Math.PI*2);c2.fill();});c2.fillStyle=rd.col;c2.font='bold 8px monospace';c2.textAlign='left';c2.fillText(rd.key,xOf(2)+6,yOf(rd.r2)+3);});c2.globalAlpha=1;}var table=document.getElementById('room-role-table-body');if(!table)return;table.innerHTML='';var RJ=[{key:'CEO',r0:'SUPPORT',r0c:72,r1:'COND',r1c:68,r2:'COND',r2c:72,gate:'Validated $500K line-item budget by March 15. CFO + CHRO sign-off required.',quote:'The single remaining blocker is a 30-day solvable problem, not a strategic question. I am approving with one hard gate because delay is the most expensive option.'},{key:'CFO',r0:'DEFER',r0c:72,r1:'COND',r1c:62,r2:'COND',r2c:72,gate:'Itemized $500K budget with validated EU FTE costs by role/country (Radford EMEA 2024), GDPR counsel quote, entity setup cost, CTO architecture cost.',quote:'The $500K authorization is a blank check until that budget is stress-tested against actuals.'},{key:'COO',r0:'DEFER',r0c:72,r1:'COND',r1c:62,r2:'COND',r2c:72,gate:'Validated line-item budget by May 1 confirming $500K covers 3 EU FTEs, GDPR legal, entity setup, GTM.',quote:'OPT-4 is the only option that preserves Q3 launch optionality while enforcing the operational discipline required to execute without team collapse.'},{key:'LEGAL',r0:'DEFER',r0c:62,r1:'COND',r1c:46,r2:'COND',r2c:68,gate:'GDPR compliance architecture documented before any EU entity formation or FTE hiring. April 15 deadline.',quote:'Statutory GDPR exposure of up to $1.8M at current ARR exceeds the $500K investment. Compliance is the hard legal gate.'},{key:'CHRO',r0:'DEFER',r0c:72,r1:'COND',r1c:62,r2:'COND',r2c:60,gate:'EU FTE composition must include at least 1 CS/Implementation role. Comp bands set using Radford EMEA Tier 1 data before any offers.',quote:'Hiring EU employees without locally compliant contracts is not a speed optimization. It is a legal and financial liability that will cost more to remediate than prevent.'},{key:'CSO',r0:'DEFER',r0c:72,r1:'COND',r1c:72,r2:'COND',r2c:65,gate:'Validated $500K budget confirming envelope sufficiency before any irreversible spend.',quote:'EU expansion is a board-approved pillar with live $525K LTV pipeline, a 22% CAGR market, and a competitor building first-mover advantage.'},{key:'CTO',r0:'DEFER',r0c:62,r1:'COND',r1c:62,r2:'COND',r2c:62,gate:'GDPR technical scoping complete by March 31: EU data residency architecture, sub-processor inventory, engineering effort estimate, infra cost.',quote:'Feasibility-in-principle is not feasibility-in-timeline with this team at this capacity.'}];roles.forEach(function(r){var f=RJ.filter(function(x){return x.key===r.role_key;})[0];if(!f)return;f.r2c=Math.round((r.confidence_score||f.r2c/100)*100);var mv=r.movement||{};f.r0c=Math.round((mv.r0_confidence||f.r0c/100)*100);f.r0=mv.r0_stance==='SUPPORT'?'SUPPORT':mv.r0_stance==='NOT_YET'?'DEFER':'COND';var lm=mods.filter(function(m){return m.role===r.role_key;})[0];if(lm)f.quote=lm.modification.substring(0,280);var lc=conds.filter(function(c){return c.role===r.role_key;})[0];if(lc)f.gate=lc.condition;});var PH=window.PHOTOS||{};var scls=function(s){return s==='SUPPORT'?'support':s==='DEFER'?'notyet':'cond';};var slbl=function(s){return s==='SUPPORT'?'GO':s==='DEFER'?'NOT YET':'COND';};var ccls=function(c){return c>=70?'high':c>=60?'mid':'low';};var dH=function(a,b){var dv=b-a;if(dv>2)return '<span class="room-delta up">+'+dv+'%</span>';if(dv<-2)return '<span class="room-delta down">'+dv+'%</span>';return '<span class="room-delta flat">--</span>';};RJ.forEach(function(rd){var row=document.createElement('div');row.className='room-role-row';row.id='room-row-'+rd.key;row.setAttribute('onclick','toggleRoomRow("'+rd.key+'")');row.innerHTML='<div class="room-role-ident"><img class="room-role-photo" src="'+(PH[rd.key]||PH.CEO||'')+'" alt="'+rd.key+'"><div class="room-role-name">'+rd.key+'</div></div><div class="room-conf-val '+ccls(rd.r2c)+'">'+rd.r2c+'%</div><div class="room-round-stance '+scls(rd.r0)+'">'+slbl(rd.r0)+'</div><div class="room-round-stance '+scls(rd.r1)+'">'+slbl(rd.r1)+'</div><div class="room-round-stance '+scls(rd.r2)+'">'+slbl(rd.r2)+'</div><div class="room-hard-gate">'+rd.gate+'</div>';table.appendChild(row);var exp=document.createElement('div');exp.className='room-role-expand';exp.id='room-expand-'+rd.key;exp.innerHTML='<div class="room-expand-body"><div class="room-expand-quote">&ldquo;'+rd.quote+'&rdquo;</div><div class="room-expand-meta"><span class="chip">R0&rarr;R1: '+dH(rd.r0c,rd.r1c)+'</span><span class="chip">R1&rarr;R2: '+dH(rd.r1c,rd.r2c)+'</span><span class="chip chip-'+(rd.r2c>=70?'teal':rd.r2c>=60?'amber':'red')+'">Final: '+rd.r2c+'%</span></div></div>';table.appendChild(exp);});var gtEl=document.getElementById('room-gt-body');if(gtEl&&gt){var sv=gt.severity||'HIGH';var sc3=sv==='HIGH'?'chip-red':sv==='MEDIUM'?'chip-amber':'chip';gtEl.innerHTML='<div class="room-gt-icon">&#x26A0;</div><div class="room-gt-text"><div><span class="chip '+sc3+'">GROUPTHINK '+sv+'</span></div><div style="margin-top:var(--gap-xs)">'+(gt.warning||'All 7 roles converged on CONDITIONAL_SUPPORT. Probe for dissent.')+'</div></div>';}}
 
 // \u2500\u2500 FINANCIALS \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
 function buildFinancials(raw, fm, fo, bgp, mso, dash) {
@@ -4139,7 +3720,9 @@ wireListeners();
   });
   document.addEventListener('mouseup', function(){ on=false; });
 })();
-</script>
+
+function switchOpt(id){document.querySelectorAll('.room-opt-panel').forEach(function(el){el.classList.remove('active');});document.querySelectorAll('.room-opt-tab').forEach(function(el){el.classList.remove('active');});var p=document.getElementById('room-opt-panel-'+id);var t=document.getElementById('room-opt-tab-'+id);if(p)p.classList.add('active');if(t)t.classList.add('active');}
+function toggleRoomRow(key){var exp=document.getElementById('room-expand-'+key);var row=document.getElementById('room-row-'+key);if(!exp)return;var isOpen=exp.classList.contains('open');document.querySelectorAll('.room-role-expand').forEach(function(el){el.classList.remove('open');});document.querySelectorAll('.room-role-row').forEach(function(el){el.classList.remove('expanded');});if(!isOpen){exp.classList.add('open');if(row)row.classList.add('expanded');}}</script>
 </div>
 </div>
 

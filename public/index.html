@@ -2939,7 +2939,6 @@ function switchBriefTab(btn, panelId) {
   if (panel) panel.classList.add('active');
 }
 function set(id, text) { const e = el(id); if (e) e.textContent = text; }
-function setHTML(id, html) { const e = el(id); if (e) e.innerHTML = html; }
 
 function chipColor(level) {
   return level === 'HIGH' ? 'var(--red)' : level === 'MEDIUM' ? 'var(--amber)' : 'var(--blue)';
@@ -2948,13 +2947,6 @@ function stanceLabel(s) {
   const map = { SUPPORT:'Support', CONDITIONAL_SUPPORT:'Cond. Support',
     NOT_YET:'Defer', DEFER:'Defer', APPROVE_WITH_CONDITIONS:'Cond. Support' };
   return map[s] || s?.replace(/_/g,' ') || '\u2014';
-}
-function stanceChip(s) {
-  if (!s) return 'chip-amber';
-  const u = s.toUpperCase();
-  if (u.includes('SUPPORT') || u.includes('APPROVE')) return 'chip-blue';
-  if (u.includes('DEFER') || u.includes('NOT_YET')) return 'chip-red';
-  return 'chip-amber';
 }
 
 // \u2500\u2500 APPLY ALL LIVE DATA \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
@@ -3279,12 +3271,6 @@ function showRP(e, r) {
   }
 }
 
-function hideRP() {
-  if (_rpEl) _rpEl.style.opacity = '0';
-
-  const hd = document.getElementById('risk-hover-detail');
-  if (hd) hd.classList.add('is-empty');
-}
 
 
 // Role headshots for risk matrix
@@ -3998,7 +3984,6 @@ function _syncBtns(id, playing) {
 
 // ── UI HELPERS ──────────────────────────────────────────────────────────────
 
-function toggleOQ(id) { document.getElementById(id)?.classList.toggle('open'); }
 
 function toggleMS(id) {
   const el = document.getElementById(id);
@@ -4007,53 +3992,11 @@ function toggleMS(id) {
   if (!was && el) el.classList.add('show');
 }
 
-function toggleExpand(id) {
-  const card = document.getElementById(id);
-  if (!card) return;
-  const wasOpen = card.classList.contains('open');
-  document.querySelectorAll('.expand-card.open').forEach(c => c.classList.remove('open'));
-  if (!wasOpen) card.classList.add('open');
-}
 
 let _activeRisk = null;
-function openRisk(dot, riskObj) {
-  _activeRisk = riskObj;
-  document.querySelectorAll('.risk-dot').forEach(d => d.classList.remove('active'));
-  if (dot) dot.classList.add('active');
-  const detail = document.getElementById('risk-detail');
-  if (!detail) return;
-  detail.querySelector && (detail.querySelector('.rd-title') || {}).textContent !== undefined
-    ? detail.querySelector('.rd-title').textContent = riskObj?.risk || ''
-    : null;
-  detail.classList.add('open');
-}
 
-function closeRisk() {
-  const detail = document.getElementById('risk-detail');
-  if (detail) detail.classList.remove('open');
-  _activeRisk = null;
-  document.querySelectorAll('.risk-dot').forEach(d => d.classList.remove('active'));
-}
 
-function selectRolePanel(btn, prefix, role) {
-  const nav = btn?.parentElement;
-  if (nav) nav.querySelectorAll('.rc-nav-btn').forEach(b => b.classList.remove('active'));
-  if (btn) btn.classList.add('active');
-  const panelContainer = document.getElementById(prefix + '-panel');
-  if (!panelContainer) return;
-  panelContainer.querySelectorAll('.rc-panel-body').forEach(p => p.style.display = 'none');
-  const target = document.getElementById(prefix + '-panel-' + role);
-  if (target) target.style.display = 'block';
-}
 
-function selectMgmt(role) {
-  document.querySelectorAll('.mgmt-nav-btn').forEach(b => b.classList.remove('active'));
-  const btn = document.querySelector('[data-mgmt="' + role + '"]');
-  if (btn) btn.classList.add('active');
-  document.querySelectorAll('.mgmt-panel').forEach(p => p.style.display = 'none');
-  const panel = document.getElementById('mgmt-' + role);
-  if (panel) panel.style.display = 'block';
-}
 
 function closeInfo() {
   const IP = document.getElementById('info-panel');
@@ -4063,19 +4006,6 @@ function closeInfo() {
 }
 
 
-function ibToggleAudio(btn) {
-  const playing = btn.classList.contains('ib-playing');
-  document.querySelectorAll('.ib-audio').forEach(b => {
-    b.classList.remove('ib-playing');
-    const ic = b.querySelector('.ib-audio-icon');
-    if (ic) ic.textContent = '\u25B6';
-  });
-  if (!playing) {
-    btn.classList.add('ib-playing');
-    const ic = btn.querySelector('.ib-audio-icon');
-    if (ic) ic.textContent = '\u25A0';
-  }
-}
 
 // \u2500\u2500 TOUR \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
 const TOUR_STEPS = {
@@ -4312,122 +4242,6 @@ wireListeners();
 function switchOpt(id){document.querySelectorAll('.room-opt-panel').forEach(function(el){el.classList.remove('active');});document.querySelectorAll('.room-opt-tab').forEach(function(el){el.classList.remove('active');});var p=document.getElementById('room-opt-panel-'+id);var t=document.getElementById('room-opt-tab-'+id);if(p)p.classList.add('active');if(t)t.classList.add('active');}
 function toggleRoomRow(key){var exp=document.getElementById('room-expand-'+key);var row=document.getElementById('room-row-'+key);if(!exp)return;var isOpen=exp.classList.contains('open');document.querySelectorAll('.room-role-expand').forEach(function(el){el.classList.remove('open');});document.querySelectorAll('.room-role-row').forEach(function(el){el.classList.remove('expanded');});if(!isOpen){exp.classList.add('open');if(row)row.classList.add('expanded');}}
 
-function buildManagement(raw,stages,gt){
-var so=raw.stageOutputs||[];
-var dp=raw.dPacket||{};
-var PH=window.PHOTOS||{};
-var byRoleR2={};
-so.filter(function(s){return s.round===2;}).forEach(function(s){byRoleR2[s.role_key]=s;});
-var pillTabs=document.getElementById("mgmt-pill-tabs");
-var panelsEl=document.getElementById("mgmt-panels");
-var cfEl=document.getElementById("mgmt-cf-grid");
-if(!pillTabs||!panelsEl)return;
-var ROLES=[
-{key:"CEO",title:"Chief Executive Officer",mandate:"Governance and strategic ownership. Board approval on Feb 15 is the controlling event -- every other workstream gates on it.",
- actions:[
-  {t:"Feb 8",a:"1:1 pre-briefs with each board member before the vote",m:"Board approval probability",k:false},
-  {t:"Feb 12",a:"Distribute CFO unit economics model as board pre-read",m:"Board preparedness",k:false},
-  {t:"Feb 15",a:"Facilitate board vote and document formal decision",m:"KILL GATE",k:true}],
- cond:"Board approval of $500K investment envelope at Feb 15 meeting.",
- gap:"No formal board pre-read distributed -- CFO unit economics model not yet sent to board members.",
- p2:["Commission external EU market entry advisor post-approval","Define EU GTM ownership: hire VP EU or promote internally","Monthly board cadence on EU progress through Q3 2025"]},
-{key:"CFO",title:"Chief Financial Officer",mandate:"Financial kill triggers and phase gate enforcement. Phase 2 does not release without CFO sign-off. CAC measurement is not optional.",
- actions:[
-  {t:"Feb 12",a:"Build board pre-read: two-tranche model and unit economics",m:"Board readiness",k:false},
-  {t:"Feb 15+",a:"Track Phase 1 spend vs $150K cap from day one",m:"Budget guard",k:false},
-  {t:"Mar 15",a:"Deliver validated line-item $500K budget",m:"KILL GATE",k:true}],
- cond:"Itemized $500K budget with validated EU FTE costs by role/country (Radford EMEA 2024), GDPR counsel quote, entity setup cost, CTO architecture cost.",
- gap:"$500K envelope built on assumptions. Radford EMEA 2024 comp data not pulled. No GDPR legal counsel quote on file.",
- p2:["Establish EU cost center with currency hedge for GBP/EUR","Monthly CFO-to-board burn vs budget report","CAC tracking from first EU prospect touch"]},
-{key:"CTO",title:"Chief Technology Officer",mandate:"GDPR architecture is the controlling technical constraint. Engineering capacity for EU must be scoped before any FTE hire or customer commitment.",
- actions:[
-  {t:"Feb 28",a:"Engage external EU counsel for GDPR architecture scoping",m:"Counsel onboarded",k:false},
-  {t:"Mar 31",a:"Deliver GDPR technical scope: data residency, sub-processors, infra cost",m:"KILL GATE",k:true},
-  {t:"Weekly",a:"CTO-to-CEO status on GDPR scope and engineering capacity",m:"Blocker visibility",k:false}],
- cond:"GDPR technical scoping complete by March 31: EU data residency architecture, sub-processor inventory, engineering effort estimate, infrastructure cost.",
- gap:"No EU data residency architecture documented. Sub-processor inventory does not exist. Engineering capacity model for Q3 not built.",
- p2:["Select EU data residency region (Frankfurt vs Dublin vs London)","Build sub-processor data processing agreements before first EU customer","Engineering spike on data isolation: multi-tenant vs EU-dedicated instance"]},
-{key:"LEGAL",title:"Chief Legal Officer",mandate:"Compliance sequence is non-negotiable. GDPR certification, entity formation, and employment law must precede all EU operations.",
- actions:[
-  {t:"Feb 28",a:"Engage EU legal counsel: GDPR, entity structure, employment law",m:"Counsel onboarded",k:false},
-  {t:"Apr 1",a:"GDPR compliance architecture certified by EU counsel",m:"KILL GATE",k:true},
-  {t:"Apr 15",a:"EU entity jurisdiction confirmed: UK, Germany, or France",m:"Entity filing begun",k:false}],
- cond:"GDPR compliance architecture documented and scoped by April 15, 2025 before any EU entity formation or FTE hiring.",
- gap:"No EU legal counsel engaged. No GDPR compliance architecture. No jurisdiction analysis for entity formation. No employment law review for target markets.",
- p2:["Draft EU-compliant employment contracts for all 3 FTE roles","Register as data controller with relevant EU supervisory authority","DPA templates for all EU customer contracts"]},
-{key:"CHRO",title:"Chief People Officer",mandate:"No FTE offers until entity is formed and comp benchmarks are set. EU hiring without legal and comp framework creates immediate liability.",
- actions:[
-  {t:"Apr 15",a:"Pull Radford EMEA 2024 data for EU roles by country",m:"Comp benchmarks set",k:false},
-  {t:"May 1",a:"EU FTE job specs finalized: minimum 1 CS/Implementation role",m:"Specs approved",k:false},
-  {t:"May 15",a:"First EU FTE offer only after entity clearance and comp benchmarks",m:"KILL GATE",k:true}],
- cond:"EU FTE composition must include at least 1 CS/Implementation role. EU compensation bands set using Radford EMEA Tier 1 data before any offers.",
- gap:"No EU comp benchmarks. No EU-compliant employment contracts. EU FTE role composition not defined. No HR data processing framework for EU employees.",
- p2:["Establish EU payroll provider (Deel or Remote) for Phase 1 before entity","Design EU onboarding workflow compliant with GDPR employee data rules","Build EU-specific performance framework tied to CAC and pipeline metrics"]},
-{key:"COO",title:"Chief Operating Officer",mandate:"Operational delivery model for EU must be designed before headcount decisions. EOR vs entity is an operational, not just legal, decision.",
- actions:[
-  {t:"Mar 1",a:"Map EU customer delivery model: EOR vs entity for Phase 1",m:"Model selected",k:false},
-  {t:"Mar 15",a:"Contribute operational cost estimates to CFO budget validation",m:"Budget input delivered",k:false},
-  {t:"May 1",a:"EU operational runbook ready before first FTE start date",m:"Runbook approved",k:false}],
- cond:"Validated line-item budget by May 1 confirming $500K covers 3 EU FTEs, GDPR legal, entity setup, and GTM spend.",
- gap:"No EU delivery model defined. EOR vs entity cost comparison not built. No customer success playbook for EU accounts.",
- p2:["Build EU SLA framework for enterprise accounts","Define escalation path for EU customer issues during US business hours","OKR framework for EU team aligned to pipeline and revenue targets"]},
-{key:"CSO",title:"Chief Strategy Officer",mandate:"Pipeline stewardship and competitive watch during the gate window. 3 warm prospects at $525K LTV cannot go cold during board approval.",
- actions:[
-  {t:"Now",a:"Maintain active contact cadence with 3 EU prospects during approval window",m:"Pipeline stays warm",k:false},
-  {t:"Feb 15",a:"Brief EU prospects on approval timeline -- do not lose momentum",m:"Prospect confidence",k:false},
-  {t:"Weekly",a:"Competitor X tracking: EU market entry velocity and prospect overlap",m:"Competitive intel current",k:false}],
- cond:"Validated $500K budget confirming envelope sufficiency before any irreversible spend is committed.",
- gap:"No formal competitive tracking on Competitor X EU timeline. No prospect communication plan for the board approval window. Pipeline at risk of going cold during 45-day gate.",
- p2:["Define EU ICP: verticals, company sizes, and geographies for Phase 1","Build EU pipeline target: 3 additional qualified prospects by Q3","Develop EU pricing model and competitive positioning vs local players"]}
-];
-pillTabs.innerHTML=ROLES.map(function(r,i){
-  var ph=PH[r.key]?"<img class='mh-pill-photo' src='"+PH[r.key]+"' alt='"+r.key+"'>":"";
-  return '<button class="mh-pill-btn'+(i===0?" mh-pill-active":"")+" data-role='"+r.key+"'"+" onclick='selectMgmtRole(this)'>"
-    +ph+"<span>"+r.key+"</span></button>";
-}).join("");
-panelsEl.innerHTML=ROLES.map(function(r,i){
-  var live=byRoleR2[r.key]||{};
-  var liveRat=(live.analysis||live.rationale||"").substring(0,280);
-  var liveCond=(live.conditions||live.top_conditions||"").replace(/^[?"?/,"").replace(/"?]?$/,"").substring(0,200);
-  if(liveCond)r.cond=liveCond;
-  var rows=r.actions.map(function(a){
-    var kc=a.k?" kill-gate":"";var mc=a.k?" kill":"";
-    return "<div class='mh-action-row"+kc+"'><div class='mh-action-timing'>"+a.t+"</div><div class='mh-action-text'>"+a.a+"</div><div class='mh-action-metric"+mc+"'>"+a.m+"</div></div>";
-  }).join("");
-  var p2=r.p2.map(function(p){return "<div class='mh-phase2-item'><div class='mh-phase2-dot'></div><div>"+p+"</div></div>";}).join("");
-  return "<div class='mh-panel"+(i===0?" active":"")+"' id='mhpanel-"+r.key+"'>"
-    +"<div class='mh-role-header'><div class='mh-role-tag'>"+r.key+"</div>"
-    +"<div class='mh-role-title'>"+r.title+"</div>"
-    +"<div class='mh-role-mandate'>"+r.mandate+"</div></div>"
-    +"<div class='mh-section-lbl'>Phase 1 Actions</div>"
-    +"<div><div class='mh-action-header'><div>Timing</div><div>Action</div><div>Success Metric</div></div>"
-    +rows+"</div>"
-    +"<div class='mh-expand-trigger' onclick='toggleMgmtExpand(this)'>&#9656; More detail</div>"
-    +"<div class='mh-expand-section'><div class='mh-expand-inner'>"
-    +"<div><div class='mh-expand-lbl'>Approval Condition</div><div class='mh-expand-row'>"+r.cond+"</div></div>"
-    +"<div><div class='mh-expand-lbl'>Evidence Gap</div><div class='mh-expand-row'>"+r.gap+"</div></div>"
-    +(liveRat?"<div><div class='mh-expand-lbl'>R2 Rationale (live)</div><div class='mh-expand-row'>"+liveRat+"</div></div>":"")
-    +"</div></div>"
-    +"<div class='mh-section-lbl'>Phase 2 Commitments</div>"
-    +"<div class='mh-phase2-grid'>"+p2+"</div></div>";
-}).join("");
-if(cfEl){
-var CF=[
-  {r:"CTO + LEGAL",s:"ACTIVE",sc:"active",t:"GDPR Architecture + Compliance Certification",d:"CTO scopes data residency architecture and sub-processor inventory. LEGAL certifies GDPR compliance with EU counsel. Neither clears until both deliver.",g:"KILL GATE: Both must clear before May 2025 GO/NO-GO",gc:"kill"},
-  {r:"CEO + CFO",s:"PENDING",sc:"pending",t:"Board Approval Package + Unit Economics",d:"CFO builds the unit economics pre-read ($175K LTV, $50K CAC ceiling, two-tranche model). CEO secures board approval at Feb 15.",g:"KILL GATE: Feb 15 board vote -- CFO pre-read distributes by Feb 12",gc:"kill"},
-  {r:"CHRO + LEGAL",s:"ACTIVE",sc:"active",t:"EU Employment Law + Hiring Readiness",d:"LEGAL clears entity structure and employment law by jurisdiction. CHRO cannot post jobs or set comp until LEGAL signs off. Sequence is mandatory.",g:"HIGH: Employment law review due Apr 15 -- No FTE offers before clearance",gc:"warn"},
-  {r:"COO + CSO",s:"ACTIVE",sc:"active",t:"EU Delivery Model + Pipeline Velocity",d:"COO defines EOR vs entity delivery model for EU customers. CSO maintains pipeline velocity with 3 warm prospects during the gate window.",g:"HIGH: EOR vs entity decision needed before first EU customer onboards",gc:"warn"}
-];
-cfEl.innerHTML=CF.map(function(c){
-  return "<div class='cf-card'>"
-    +"<div class='cf-header'><span>"+c.r+"</span><span class='cf-status "+c.sc+"'>"+c.s+"</span></div>"
-    +"<div class='cf-body'><div class='cf-title'>"+c.t+"</div>"
-    +"<div class='cf-desc'>"+c.d+"</div>"
-    +"<div class='cf-gate'><div class='cf-gate-dot "+c.gc+"'></div><span>"+c.g+"</span></div>"
-    +"</div></div>";
-}).join("");
-}
-}
 function selectMgmtRole(btn){
   var key=btn.dataset.role;
   document.querySelectorAll(".mh-panel").forEach(function(el){el.classList.remove("active");});

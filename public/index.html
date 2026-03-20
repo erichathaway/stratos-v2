@@ -205,6 +205,8 @@
   --risk-half-h: 195px;
 
   --risk-card-h: 480px;
+
+  --risk-head-h: 40px;
 }
 
 /* ── 2  RESET & BASE ──────────────────────────────────────────────────────── */
@@ -1219,6 +1221,7 @@ body{background:var(--bg-page);color:var(--text-primary);font-family:var(--font-
 .ev-card-desc{font-size:var(--text-xs);color:var(--text-secondary);line-height:1.55}
 .ev-card-chips{display:flex;gap:var(--gap-xs);flex-wrap:wrap;margin-top:var(--gap-3)}
 .risk-side-card{max-height:var(--risk-card-h);display:flex;flex-direction:column;overflow:hidden}
+.risk-panel-head-2{top:var(--risk-head-h)}
 </style>
 </head>
 <body>
@@ -1965,7 +1968,7 @@ body{background:var(--bg-page);color:var(--text-primary);font-family:var(--font-
         </div>
       </div>
       <!-- MANAGE header: sticky, sits below ACT NOW when scrolled -->
-      <div class="risk-panel-head">
+      <div class="risk-panel-head risk-panel-head-2">
         <span class="risk-panel-title is-amber">Manage</span>
         <span class="chip chip-amber">7 ACTIVE</span>
       </div>

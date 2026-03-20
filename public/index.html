@@ -3088,11 +3088,11 @@ function riskDotPos(impact, prob) {
   const pm = { HIGH: 78, MEDIUM: 45, LOW: 12 };
   const i = (impact||'').toUpperCase(); const p = (prob||'').toUpperCase();
   const baseX = pm[p]||45, baseY = im[i]||45;
-  const minDist = 14;
+  const minDist = 16;
   let x, y, attempts = 0;
   do {
-    x = Math.max(4, Math.min(88, baseX + (Math.random()-0.5)*18));
-    y = Math.max(4, Math.min(88, baseY + (Math.random()-0.5)*18));
+    x = Math.max(4, Math.min(88, baseX + (Math.random()-0.5)*28));
+    y = Math.max(4, Math.min(88, baseY + (Math.random()-0.5)*28));
     if (_riskUsedPos.every(q => Math.hypot(q.x-x, q.y-y) >= minDist)) break;
   } while (++attempts < 30);
   _riskUsedPos.push({x, y});

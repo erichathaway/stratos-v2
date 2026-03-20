@@ -1394,11 +1394,7 @@ room-opt-item-text{font-size:var(--text-xs);color:var(--text-secondary);line-hei
 </style>
 </head>
 <body>
-
-
-<div id="tour-spot"></div>
-<div id="tour-bar"><div class="tb-info"><div class="tb-step" id="tb-step">Step 1 of 8</div><div class="tb-title" id="tb-title">&mdash;</div><div class="tb-desc" id="tb-desc">&mdash;</div></div><div class="tb-btns"><button class="tb-btn" onclick="tourPrev()">&#8592; Prev</button>
-      <button class="tb-btn tb-primary" id="tb-next" onclick="tourNext()">Next &rarr;</button><button class="tb-btn tb-close" onclick="tourEnd()">&#x2715;</button></div></div>
+</div><div class="tb-btns"><button class="tb-btn" onclick="tourPrev()">&#8592; Prev</button><button class="tb-btn tb-close" onclick="tourEnd()">&#x2715;</button></div></div>
 <!-- TOUR ELEMENTS: fog panels + ring + card + backdrop -->
 <div id="tour-backdrop" onclick="tourEnd()"></div>
 <div class="tour-fog" id="tour-fog-top"></div>
@@ -1508,11 +1504,7 @@ room-opt-item-text{font-size:var(--text-xs);color:var(--text-secondary);line-hei
     <div class="ip-title" id="ip-title">&#8212;</div>
     <div class="ip-body" id="ip-body">Click any i button to learn about that section.</div>
   </div>
-</div>
-<div class="risk-popup" id="risk-popup">
-  <div class="rp-hdr"><div class="rp-avatar"><img id="rp-img" src="" alt=""></div><div><div class="rp-role" id="rp-role">&#8212;</div><div class="rp-name" id="rp-name">&#8212;</div></div></div>
-  <div class="rp-risk" id="rp-risk">&#8212;</div>
-  <div class="rp-chips" id="rp-chips"></div>
+</div></div></div>
 </div>
 
 <!-- PAGE -->
@@ -1573,7 +1565,6 @@ room-opt-item-text{font-size:var(--text-xs);color:var(--text-secondary);line-hei
           </div>
           <div class="bit-chips">
             <span class="chip chip-amber">Board Auth. Required</span>
-            <span id="v-gt-chip" class="chip chip-red">Groupthink &middot; HIGH</span>
             <span class="chip chip-blue">EU Expansion</span>
           </div>
         </div>
@@ -4107,23 +4098,11 @@ function toggleMgmtExpand(trigger){
 </div>
 
 <!-- Download Banner -->
-<div id="download-banner" style="position:fixed;bottom:0;left:0;right:0;z-index:2000;background:linear-gradient(90deg,var(--bg-surface-2),var(--bg-surface-3));border-top:1px solid var(--border-accent);padding:14px var(--page-pad-x);display:flex;align-items:center;gap:var(--gap-xl);transform:var(--slide-up);transition:transform 0.4s var(--ease)">
-  <div style="display:flex;align-items:center;gap:var(--gap-md);flex:1">
-    <span style="font-family:var(--font-mono);font-size:var(--font-9);font-weight:700;letter-spacing:var(--ls-md);color:var(--blue);text-transform:uppercase">StratOS Decision Report</span>
-    <span style="font-size:var(--text-sm);color:var(--text-secondary)">Save this report to your device to ensure access when offline. All data, charts, and AI analysis are embedded.</span>
-  </div>
-  <div style="display:flex;align-items:center;gap:var(--gap-md)">
-    <a id="exec-summary-link" href="https://drive.google.com/file/d/1CekOIz0zFAE_grfnlgXbQ-F2joOnGRXF/view" target="_blank" style="display:inline-flex;align-items:center;gap:var(--gap-xs);height:var(--avatar-md);padding:0 var(--gap-lg);border-radius:var(--r-md);background:color-mix(in srgb,var(--blue) 14%,transparent);border:1px solid color-mix(in srgb,var(--blue) 30%,transparent);color:var(--blue);font-family:var(--font-mono);font-size:var(--text-xs);font-weight:700;text-decoration:none;letter-spacing:var(--ls-xxs)">&#128196; Exec Summary</a>
-    <button onclick="document.querySelector('[download]')?.click()||window.print()" style="height:var(--avatar-md);padding:0 var(--gap-xl);border-radius:var(--r-md);background:var(--blue);color:var(--bg-page);border:none;font-family:var(--font-mono);font-size:var(--text-xs);font-weight:700;letter-spacing:var(--ls-xxs);cursor:pointer">&#8681; Save Report</button>
-    <button onclick="document.getElementById('download-banner').style.transform='translateY(100%)';" style="width:var(--avatar-xs);height:var(--avatar-xs);border-radius:var(--r-full);background:var(--bg-surface-3);border:1px solid var(--border);color:var(--text-muted);cursor:pointer;font-size:var(--text-sm)">&#x2715;</button>
-  </div>
-</div>
 
 <!-- Floating Audio Player -->
 <div id="ap" style="position:fixed;bottom:var(--gap-2xl);right:var(--gap-2xl);z-index:8000;width:var(--tour-card-w);background:var(--bg-surface);border:1px solid var(--border-hover);border-top:3px solid var(--teal);border-radius:var(--r-xl);box-shadow:var(--shadow-pop);padding:var(--gap-lg) var(--gap-xl);display:none;flex-direction:column;gap:var(--gap-md)">
   <div style="display:flex;align-items:center;justify-content:space-between">
     <div style="display:flex;align-items:center;gap:var(--gap-sm)">
-      <div id="ap-spinner" style="width:var(--dot-sm);height:var(--dot-sm);border-radius:var(--r-full);background:var(--teal);animation:ap-pulse 1.2s ease-in-out infinite"></div>
       <span id="ap-label" style="font-family:var(--font-mono);font-size:var(--font-10);font-weight:700;letter-spacing:var(--ls-xs);color:var(--text-primary)">Loading&hellip;</span>
     </div>
     <button onclick="apClose()" style="width:var(--icon-sm);height:var(--icon-sm);border-radius:var(--r-full);background:var(--bg-surface-3);border:1px solid var(--border);color:var(--text-muted);cursor:pointer;font-size:var(--text-xs);display:flex;align-items:center;justify-content:center">&#x2715;</button>

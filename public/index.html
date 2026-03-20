@@ -1225,11 +1225,6 @@ body{background:var(--bg-page);color:var(--text-primary);font-family:var(--font-
 
 
 <div id="tour-spot"></div>
-        <div class="risk-hover-detail is-empty" id="risk-hover-detail">
-          <div class="rhd-role" id="rhd-role">Hover a dot to see detail</div>
-          <div class="rhd-text" id="rhd-text">&mdash;</div>
-          <div class="rhd-chips" id="rhd-chips"></div>
-        </div>
 <div id="tour-bar"><div class="tb-info"><div class="tb-step" id="tb-step">Step 1 of 8</div><div class="tb-title" id="tb-title">&mdash;</div><div class="tb-desc" id="tb-desc">&mdash;</div></div><div class="tb-btns"><button class="tb-btn" onclick="tourPrev()">&#8592; Prev</button><button class="tb-btn tb-primary" id="tb-next" onclick="tourNext()">Next &rarr;</button><button class="tb-btn tb-close" onclick="tourEnd()">&#x2715;</button></div></div>
 <!-- TOUR ELEMENTS: fog panels + ring + card + backdrop -->
 <div id="tour-backdrop" onclick="tourEnd()"></div>
@@ -1951,6 +1946,11 @@ body{background:var(--bg-page);color:var(--text-primary);font-family:var(--font-
         <div class="risk-axes-row"><span class="risk-axis-lbl">&larr; Low Prob</span><span class="risk-axis-lbl" style="flex:1;text-align:center">Probability &rarr;</span><span class="risk-axis-lbl">High Prob &rarr;</span></div>
         <div class="u-font-9">Impact: High (top) &rarr; Low (bottom) &middot; Hover dots to expand</div>
       </div>
+        <div class="risk-hover-detail is-empty" id="risk-hover-detail">
+          <div class="rhd-role" id="rhd-role">Hover a dot to see detail</div>
+          <div class="rhd-text" id="rhd-text">&mdash;</div>
+          <div class="rhd-chips" id="rhd-chips"></div>
+        </div>
     </div>
     <div class="card risk-side-card" style="--ct-accent:var(--red)">
     <div class="card-head">

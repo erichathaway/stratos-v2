@@ -3241,71 +3241,64 @@ function buildRisk(raw, mso, dash) {
 
 // \u2500\u2500 OPTIONS \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
 function buildOptions(raw,stages,gt){
-var container=document.getElementById('room-opts-panels');
-var tabs=document.getElementById('room-opts-tabs');
+var container=document.getElementById("room-opts-panels");
+var tabs=document.getElementById("room-opts-tabs");
 if(!container||!tabs)return;
 var ob=raw.optionsBlob||{};
 var dp=raw.dPacket||{};
 var ot=dp.option_tally||[];
 var so=raw.stageOutputs||[];
-// Canonical option IDs
-var canonIds=(ob.canonical_options_array||[]).map(function(o){return o.option_id;});
-// Build vote count per option from option_tally
 var voteCounts={};
 ot.forEach(function(t){voteCounts[t.option_id]=t.vote_count||0;});
-// Find chosen option (most votes in R2, or from tally)
-var chosenId=ob.final_option_id||'OPT-4';
+var chosenId="OPT-4";
 ot.forEach(function(t){if(t.vote_count===7)chosenId=t.option_id;});
-// Gather analysis per option from stageOutputs R2
 var optAnalysis={};
 so.filter(function(s){return s.round===2;}).forEach(function(s){
   var pid=s.preferred_option_id;
-  if(pid&&!optAnalysis[pid]){
-    optAnalysis[pid]={pros:[],cons:[],why:''};
-  }
+  if(pid&&!optAnalysis[pid]){optAnalysis[pid]={pros:[],cons:[],why:""};}
   if(pid){
     if(s.rationale)optAnalysis[pid].why=s.rationale.substring(0,200);
-    if(s.opportunities)optAnalysis[pid].pros=optAnalysis[pid].pros.concat([s.opportunities.substring(0,80)]);
-    if(s.risks)optAnalysis[pid].cons=optAnalysis[pid].cons.concat([s.risks.substring(0,80)]);
+    if(s.opportunities)optAnalysis[pid].pros.push(s.opportunities.substring(0,100));
+    if(s.risks)optAnalysis[pid].cons.push(s.risks.substring(0,100));
   }
 });
-// Option definitions - use canonical list or defaults
 var optDefs=[
-  {id:'OPT-1',name:'Full EU Launch Now',desc:'Commit full $500K immediately, hire 3 FTEs, launch Q3 2025 with no preconditions.'},
-  {id:'OPT-2',name:'Phased $250K Entry',desc:'Authorize only $250K Phase 1 for legal entity and GDPR. No FTE hiring until Phase 2 gate.'},
-  {id:'OPT-3',name:'US-Only Focus',desc:'Redirect $500K to US GTM acceleration. Defer EU entry to FY26.'},
-  {id:'OPT-4',name:'Delay to Q1 2026 - Budget Validation First',desc:'Authorize Phase 1 $150K now for GDPR and legal. Gate $350K Phase 2 on validated line-item budget.'},
-  {id:'OPT-5',name:'Conditional Go - Multi-Gate',desc:'Approve with 6 separate pre-conditions across all functional domains before any spend.'}
+  {id:"OPT-1",name:"Full EU Launch Now",desc:"Commit full $500K immediately, hire 3 FTEs, launch Q3 2025 with no preconditions."},
+  {id:"OPT-2",name:"Phased $250K Entry",desc:"Authorize only $250K Phase 1 for legal entity and GDPR. No FTE hiring until Phase 2 gate."},
+  {id:"OPT-3",name:"US-Only Focus",desc:"Redirect $500K to US GTM acceleration. Defer EU entry to FY26."},
+  {id:"OPT-4",name:"Delay to Q1 2026 - Budget Validation First",desc:"Authorize Phase 1 $150K now for GDPR and legal. Gate $350K Phase 2 on validated line-item budget."},
+  {id:"OPT-5",name:"Conditional Go - Multi-Gate",desc:"Approve with 6 separate pre-conditions across all functional domains before any spend."}
 ];
 tabs.innerHTML=optDefs.map(function(o){
-  var isChosen=o.id===chosenId;
-  var cls=isChosen?'room-opt-tab chosen':'room-opt-tab rejected';
-  return '<button class="'+cls+'" onclick="switchOpt(''+o.id+'')" id="room-opt-tab-'+o.id+'">'+o.id+(isChosen?' (chosen)':'')+'</button>';
-}).join('');
+  var isChosen=(o.id===chosenId);
+  var cls=isChosen?"room-opt-tab chosen":"room-opt-tab rejected";
+  return "<button class=\""+cls+"\" data-opt-id=\""+o.id+"\" onclick=\"switchOpt(this.dataset.optId)\" id=\"room-opt-tab-"+o.id+"\">"+o.id+(isChosen?" (chosen)":"")+"</button>";
+}).join("");
 container.innerHTML=optDefs.map(function(o){
-  var isChosen=o.id===chosenId;
-  var vc=isChosen?'chosen':'rejected';
-  var vl=isChosen?'SELECTED':'NOT CHOSEN';
+  var isChosen=(o.id===chosenId);
+  var vc=isChosen?"chosen":"rejected";
+  var vl=isChosen?"SELECTED":"NOT CHOSEN";
   var vc_count=voteCounts[o.id]||0;
-  var an=optAnalysis[o.id]||{pros:['Strategic optionality preserved'],cons:['Execution complexity'],why:o.desc};
-  var pi=an.pros.slice(0,3).map(function(p){return '<div class="room-opt-item"><div class="room-opt-item-dot pos"></div><div class="room-opt-item-text">'+p+'</div></div>';}).join('');
-  var ci=an.cons.slice(0,3).map(function(c){return '<div class="room-opt-item"><div class="room-opt-item-dot neg"></div><div class="room-opt-item-text">'+c+'</div></div>';}).join('');
-  return '<div class="room-opt-panel" id="room-opt-panel-'+o.id+'">'+
-    '<div class="room-opt-hero"><div>'+
-    '<div class="room-opt-title">'+o.name+'</div>'+
-    '<div class="room-opt-desc">'+o.desc+'</div>'+
-    '</div>'+
-    '<div><div class="room-opt-verdict-chip '+vc+'">'+vl+'</div>'+
-    (vc_count>0?'<div class="room-opt-vote-count">'+vc_count+'/7 votes R2</div>':'')+'</div></div>'+
-    '<div class="room-opt-cols">'+
-    '<div><div class="room-opt-col-head pos">The Case For</div>'+pi+'</div>'+
-    '<div><div class="room-opt-col-head neg">Why Rejected</div>'+ci+'</div>'+
-    '</div>'+
-    '<div style="padding:var(--gap-md) 0;border-top:1px solid var(--border);margin-top:var(--gap-sm)">'+
-    '<div class="room-opt-col-head warn" style="margin-bottom:var(--gap-xs)">The Room Verdict</div>'+
-    '<div style="font-size:var(--text-xs);color:var(--text-secondary);line-height:1.6">'+an.why+'</div>'+
-    '</div></div>';
-}).join('');
+  var an=optAnalysis[o.id]||{pros:["Strategic optionality preserved"],cons:["Execution complexity"],why:o.desc};
+  var pi=an.pros.slice(0,3).map(function(p){return "<div class=\"room-opt-item\"><div class=\"room-opt-item-dot pos\"></div><div class=\"room-opt-item-text\">"+p+"</div></div>";}).join("");
+  var ci=an.cons.slice(0,3).map(function(c){return "<div class=\"room-opt-item\"><div class=\"room-opt-item-dot neg\"></div><div class=\"room-opt-item-text\">"+c+"</div></div>";}).join("");
+  return "<div class=\"room-opt-panel\" id=\"room-opt-panel-"+o.id+"\">"
+    +"<div class=\"room-opt-hero\"><div>"
+    +"<div class=\"room-opt-title\">"+o.name+"</div>"
+    +"<div class=\"room-opt-desc\">"+o.desc+"</div>"
+    +"</div><div>"
+    +"<div class=\"room-opt-verdict-chip "+vc+"\">"+vl+"</div>"
+    +(vc_count>0?"<div class=\"room-opt-vote-count\">"+vc_count+"/7 votes R2</div>":"")
+    +"</div></div>"
+    +"<div class=\"room-opt-cols\">"
+    +"<div><div class=\"room-opt-col-head pos\">The Case For</div>"+pi+"</div>"
+    +"<div><div class=\"room-opt-col-head neg\">Why Rejected</div>"+ci+"</div>"
+    +"</div>"
+    +"<div style=\"padding:var(--gap-md) 0;border-top:1px solid var(--border);margin-top:var(--gap-sm)\">"
+    +"<div class=\"room-opt-col-head warn\" style=\"margin-bottom:var(--gap-xs)\">The Room Verdict</div>"
+    +"<div style=\"font-size:var(--text-xs);color:var(--text-secondary);line-height:1.6\">"+an.why+"</div>"
+    +"</div></div>";
+}).join("");
 switchOpt(chosenId);
 }
 

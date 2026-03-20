@@ -201,6 +201,8 @@
   --slide-up: translateY(100%);
 
   --gap-3: 3px;
+
+  --risk-half-h: 195px;
 }
 
 /* ── 2  RESET & BASE ──────────────────────────────────────────────────────── */
@@ -1161,7 +1163,7 @@ body{background:var(--bg-page);color:var(--text-primary);font-family:var(--font-
 .oq-item.open .expand-body{max-height:600px;border-top-width:1px}
 /* ── Risk right panel ───────────────────────────────────────────── */
 .risk-panel{display:flex;flex-direction:column;height:100%}
-.risk-panel-half{display:flex;flex-direction:column;flex:1;min-height:0}
+.risk-panel-half{display:flex;flex-direction:column;flex:1;min-height:0;max-height:var(--risk-half-h)}
 .risk-panel-half+.risk-panel-half{border-top:2px solid var(--border)}
 .risk-panel-head{display:flex;align-items:center;justify-content:space-between;padding:var(--card-head-py) var(--card-px);flex-shrink:0}
 .risk-panel-title{font-family:var(--font-mono);font-size:var(--font-9);font-weight:700;letter-spacing:var(--ls-lg);text-transform:uppercase}

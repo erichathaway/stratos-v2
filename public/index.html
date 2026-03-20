@@ -1297,7 +1297,7 @@ body{background:var(--bg-page);color:var(--text-primary);font-family:var(--font-
 .fin-kill-outcome{font-family:var(--font-mono);font-size:var(--font-9);color:var(--text-muted);text-transform:uppercase;letter-spacing:var(--ls-md);margin-top:var(--gap-xs)}
 
 /* ── Financials header ───────────────────────────────────────────── */
-.fin-header{display:grid;grid-template-columns:1fr auto;gap:var(--gap-2xl);align-items:center;padding:var(--gap-2xl) var(--card-px);background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--r-xl);border-left:3px solid var(--teal)}
+.fin-header{display:grid;grid-template-columns:1fr auto;gap:var(--gap-2xl);align-items:start;padding:var(--gap-2xl) var(--card-px) var(--gap-2xl);border-bottom:1px solid var(--border)}
 .fin-header-narrative{display:flex;flex-direction:column;gap:var(--gap-sm)}
 .fin-header-eyebrow{font-family:var(--font-mono);font-size:var(--font-9);font-weight:700;letter-spacing:var(--ls-lg);text-transform:uppercase;color:var(--teal)}
 .fin-header-title{font-size:var(--text-xl);font-weight:700;color:var(--text-primary);line-height:1.35}
@@ -1408,7 +1408,7 @@ body{background:var(--bg-page);color:var(--text-primary);font-family:var(--font-
 .fin-kill-outcome{font-family:var(--font-mono);font-size:var(--font-9);color:var(--text-muted);text-transform:uppercase;letter-spacing:var(--ls-md);margin-top:var(--gap-xs)}
 
 /* -- Room & Options ---- */
-.room-header{display:grid;grid-template-columns:1fr auto;gap:var(--gap-2xl);align-items:center;padding:var(--gap-2xl) var(--card-px);background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--r-xl);border-left:3px solid var(--tab-c)}
+.room-header{display:grid;grid-template-columns:1fr auto;gap:var(--gap-2xl);align-items:start;padding:var(--gap-2xl) var(--card-px) var(--gap-2xl);border-bottom:1px solid var(--border)}
 .room-header-eyebrow{font-family:var(--font-mono);font-size:var(--font-9);font-weight:700;letter-spacing:var(--ls-lg);text-transform:uppercase;color:var(--blue)}
 .room-header-title{font-size:var(--text-xl);font-weight:700;color:var(--text-primary);line-height:1.35;margin:var(--gap-xs) 0}
 .room-header-sub{font-size:var(--text-xs);color:var(--text-secondary);line-height:1.6;max-width:640px}
@@ -3240,126 +3240,183 @@ function buildRisk(raw, mso, dash) {
 }
 
 // \u2500\u2500 OPTIONS \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
-function buildOptions(raw, dash, fm, ob) {
-  const wrap = el('opt-matrix-wrap');
-  // Build options from MSO or use structure from executive summary
-  const optionsList = [
-    { id:'OPT-1', label:'Full-Speed EU Launch',          risk:90, ret:80, speed:90, rev:20, chosen:false },
-    { id:'OPT-2', label:'Phased EU Entry',               risk:55, ret:65, speed:55, rev:60, chosen:false },
-    { id:'OPT-3', label:'GDPR-First, GTM-Second',        risk:30, ret:30, speed:25, rev:70, chosen:false },
-    { id:'OPT-4', label:'Defer EU, Focus US',            risk:15, ret:50, speed:85, rev:90, chosen:false },
-    { id:'OPT-5', label:'Minimal Viable Entry',          risk:35, ret:70, speed:60, rev:80, chosen:true  },
-  ];
-  if (wrap) {
-    function dimC(k,v) {
-      if(k==='risk') return `color-mix(in srgb,var(--red) ${v}%,var(--green))`;
-      if(k==='ret')  return `color-mix(in srgb,var(--green) ${v}%,var(--red))`;
-      if(k==='speed')return `color-mix(in srgb,var(--blue) ${v}%,#333a55)`;
-      return `color-mix(in srgb,var(--teal) ${v}%,#333a55)`;
-    }
-    const hdr = document.createElement('div');
-    hdr.className = 'opt-matrix-hdr';
-    hdr.innerHTML = '<div>Option</div><div>Risk</div><div>Return</div><div>Speed</div><div>Reversibility</div>';
-    wrap.appendChild(hdr);
-    optionsList.forEach(o => {
-      const row = document.createElement('div');
-      row.className = 'opt-row' + (o.chosen ? ' chosen' : '');
-      row.innerHTML =
-        '<div><div class="opt-id-sm">' + o.id + (o.chosen ? ' \u2713' : '') + '</div><div class="opt-name-sm">' + o.label + '</div></div>' +
-        '<div><div class="dim-wrap"><div class="dim-bar" style="width:' + o.risk + '%;background:' + dimC('risk',o.risk) + '"></div></div></div>' +
-        '<div><div class="dim-wrap"><div class="dim-bar" style="width:' + o.ret + '%;background:' + dimC('ret',o.ret) + '"></div></div></div>' +
-        '<div><div class="dim-wrap"><div class="dim-bar" style="width:' + o.speed + '%;background:' + dimC('speed',o.speed) + '"></div></div></div>' +
-        '<div><div class="dim-wrap"><div class="dim-bar" style="width:' + o.rev + '%;background:' + dimC('rev',o.rev) + '"></div></div></div>';
-      wrap.appendChild(row);
-    });
+function buildOptions(raw,stages,gt){
+var container=document.getElementById('room-opts-panels');
+var tabs=document.getElementById('room-opts-tabs');
+if(!container||!tabs)return;
+var ob=raw.optionsBlob||{};
+var dp=raw.dPacket||{};
+var ot=dp.option_tally||[];
+var so=raw.stageOutputs||[];
+// Canonical option IDs
+var canonIds=(ob.canonical_options_array||[]).map(function(o){return o.option_id;});
+// Build vote count per option from option_tally
+var voteCounts={};
+ot.forEach(function(t){voteCounts[t.option_id]=t.vote_count||0;});
+// Find chosen option (most votes in R2, or from tally)
+var chosenId=ob.final_option_id||'OPT-4';
+ot.forEach(function(t){if(t.vote_count===7)chosenId=t.option_id;});
+// Gather analysis per option from stageOutputs R2
+var optAnalysis={};
+so.filter(function(s){return s.round===2;}).forEach(function(s){
+  var pid=s.preferred_option_id;
+  if(pid&&!optAnalysis[pid]){
+    optAnalysis[pid]={pros:[],cons:[],why:''};
   }
-
-  // Selected option
-  const chosenId = dash.approved_option_id || 'OPT-5';
-  const chosenLabel = dash.approved_option_label || 'Minimal Viable Entry: Land-and-Expand with Single EU Contract';
-  set('opt-selected-id', chosenId + ' \u00b7 ' + chosenLabel);
-  if (fm.mechanics_summary) set('opt-selected-prose', fm.mechanics_summary + ' ' + (fm.tradeoffs || ''));
-  if (fm.tradeoffs) set('opt-insight-3', fm.tradeoffs);
+  if(pid){
+    if(s.rationale)optAnalysis[pid].why=s.rationale.substring(0,200);
+    if(s.opportunities)optAnalysis[pid].pros=optAnalysis[pid].pros.concat([s.opportunities.substring(0,80)]);
+    if(s.risks)optAnalysis[pid].cons=optAnalysis[pid].cons.concat([s.risks.substring(0,80)]);
+  }
+});
+// Option definitions - use canonical list or defaults
+var optDefs=[
+  {id:'OPT-1',name:'Full EU Launch Now',desc:'Commit full $500K immediately, hire 3 FTEs, launch Q3 2025 with no preconditions.'},
+  {id:'OPT-2',name:'Phased $250K Entry',desc:'Authorize only $250K Phase 1 for legal entity and GDPR. No FTE hiring until Phase 2 gate.'},
+  {id:'OPT-3',name:'US-Only Focus',desc:'Redirect $500K to US GTM acceleration. Defer EU entry to FY26.'},
+  {id:'OPT-4',name:'Delay to Q1 2026 - Budget Validation First',desc:'Authorize Phase 1 $150K now for GDPR and legal. Gate $350K Phase 2 on validated line-item budget.'},
+  {id:'OPT-5',name:'Conditional Go - Multi-Gate',desc:'Approve with 6 separate pre-conditions across all functional domains before any spend.'}
+];
+tabs.innerHTML=optDefs.map(function(o){
+  var isChosen=o.id===chosenId;
+  var cls=isChosen?'room-opt-tab chosen':'room-opt-tab rejected';
+  return '<button class="'+cls+'" onclick="switchOpt(''+o.id+'')" id="room-opt-tab-'+o.id+'">'+o.id+(isChosen?' (chosen)':'')+'</button>';
+}).join('');
+container.innerHTML=optDefs.map(function(o){
+  var isChosen=o.id===chosenId;
+  var vc=isChosen?'chosen':'rejected';
+  var vl=isChosen?'SELECTED':'NOT CHOSEN';
+  var vc_count=voteCounts[o.id]||0;
+  var an=optAnalysis[o.id]||{pros:['Strategic optionality preserved'],cons:['Execution complexity'],why:o.desc};
+  var pi=an.pros.slice(0,3).map(function(p){return '<div class="room-opt-item"><div class="room-opt-item-dot pos"></div><div class="room-opt-item-text">'+p+'</div></div>';}).join('');
+  var ci=an.cons.slice(0,3).map(function(c){return '<div class="room-opt-item"><div class="room-opt-item-dot neg"></div><div class="room-opt-item-text">'+c+'</div></div>';}).join('');
+  return '<div class="room-opt-panel" id="room-opt-panel-'+o.id+'">'+
+    '<div class="room-opt-hero"><div>'+
+    '<div class="room-opt-title">'+o.name+'</div>'+
+    '<div class="room-opt-desc">'+o.desc+'</div>'+
+    '</div>'+
+    '<div><div class="room-opt-verdict-chip '+vc+'">'+vl+'</div>'+
+    (vc_count>0?'<div class="room-opt-vote-count">'+vc_count+'/7 votes R2</div>':'')+'</div></div>'+
+    '<div class="room-opt-cols">'+
+    '<div><div class="room-opt-col-head pos">The Case For</div>'+pi+'</div>'+
+    '<div><div class="room-opt-col-head neg">Why Rejected</div>'+ci+'</div>'+
+    '</div>'+
+    '<div style="padding:var(--gap-md) 0;border-top:1px solid var(--border);margin-top:var(--gap-sm)">'+
+    '<div class="room-opt-col-head warn" style="margin-bottom:var(--gap-xs)">The Room Verdict</div>'+
+    '<div style="font-size:var(--text-xs);color:var(--text-secondary);line-height:1.6">'+an.why+'</div>'+
+    '</div></div>';
+}).join('');
+switchOpt(chosenId);
 }
 
 // \u2500\u2500 THE ROOM \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
-function buildRoom(raw, stages, gt) {
-  const dStages = stages.filter(s => s.section === 'D');
-  const byRole = {};
-  dStages.forEach(s => {
-    if (!byRole[s.role_key]) byRole[s.role_key] = {};
-    byRole[s.role_key]['r' + s.round] = {
-      stance: s.stance, vote: s.vote,
-      conf: Math.round((s.confidence_score || 0) * 100),
-      rationale: s.rationale || s.analysis || ''
-    };
+function buildRoom(raw,stages,gt){
+var so=raw.stageOutputs||[];
+var dp=raw.dPacket||{};
+var cs=dp.confidence_summary||{};
+var conf=Math.round((cs.avg||0.67)*100);
+set('room-conf-val',conf+'%');
+var PH=window.PHOTOS||{};
+// ── Trajectory canvas ──
+var canvas=document.getElementById('room-traj-canvas');
+if(canvas&&canvas.getContext){
+  var W=canvas.offsetWidth||600,H=160;
+  canvas.width=W;canvas.height=H;
+  var c2=canvas.getContext('2d');
+  var sty=getComputedStyle(document.documentElement);
+  var teal=sty.getPropertyValue('--teal').trim()||'#2dd4bf';
+  var red=sty.getPropertyValue('--red').trim()||'#f87171';
+  var amber=sty.getPropertyValue('--amber').trim()||'#fbbf24';
+  var bord=sty.getPropertyValue('--border').trim()||'#1e2a3a';
+  var tmut=sty.getPropertyValue('--text-muted').trim()||'#4a5568';
+  var colMap={CEO:teal,CFO:teal,COO:teal,LEGAL:red,CHRO:amber,CSO:amber,CTO:teal};
+  var roles=['CEO','CFO','COO','LEGAL','CHRO','CSO','CTO'];
+  var byRole={};
+  so.forEach(function(s){
+    if(!byRole[s.role_key])byRole[s.role_key]={};
+    byRole[s.role_key][s.round]=Math.round(s.confidence_score*100);
   });
-  const roles = Object.keys(byRole);
-  const roleColors = { CEO:'#5b9cf6', CFO:'#f0a030', CTO:'#e86060', COO:'#26c8b0', CHRO:'#9b78f0', CSO:'#38cc70', LEGAL:'#e060a8' };
-
-  // Role cards (R2 final)
-  const rcWrap = el('room-role-cards');
-  if (rcWrap) {
-    rcWrap.innerHTML = '';
-    roles.forEach(rk => {
-      const r2 = byRole[rk]?.r2 || {};
-      const c = roleColors[rk] || 'var(--blue)';
-      const div = document.createElement('div');
-      div.className = 'role-card';
-      div.innerHTML =
-        '<div class="role-body">' +
-          '<div><div class="role-name">' + rk + '</div>' +
-          '<div class="role-rtitle" style="color:var(--text-muted)">' + (r2.stance || '').replace(/_/g,' ') + '</div></div>' +
-          '<div class="role-stance-row">' +
-            '<span class="chip ' + stanceChip(r2.stance) + '">' + stanceLabel(r2.stance) + '</span>' +
-            '<div class="role-conf-big" style="--rc-c:' + c + '">' + (r2.conf || '\u2014') + '<span>%</span></div>' +
-          '</div>' +
-          '<div class="role-focus-text" style="font-size:var(--text-xs);color:var(--text-secondary);margin-top:var(--gap-sm)">' +
-            (r2.rationale || '').substring(0, 100) + (r2.rationale?.length > 100 ? '\u2026' : '') +
-          '</div>' +
-        '</div>';
-      rcWrap.appendChild(div);
+  var pL=40,pR=24,pT=20,pB=30,pW=W-pL-pR,pH=H-pT-pB;
+  var xOf=function(r){return pL+(r/2)*pW;};
+  var yOf=function(v){return pT+pH-((v-30)/(80-30))*pH;};
+  [40,50,60,70,80].forEach(function(v){
+    c2.strokeStyle=bord;c2.lineWidth=0.5;c2.setLineDash([3,4]);
+    c2.beginPath();c2.moveTo(pL,yOf(v));c2.lineTo(W-pR,yOf(v));c2.stroke();
+    c2.setLineDash([]);c2.fillStyle=tmut;c2.font='9px monospace';c2.textAlign='right';
+    c2.fillText(v+'%',pL-4,yOf(v)+3);
+  });
+  ['R0','R1','R2'].forEach(function(lbl,i){
+    c2.fillStyle=tmut;c2.font='9px monospace';c2.textAlign='center';c2.fillText(lbl,xOf(i),H-8);
+  });
+  roles.forEach(function(rk){
+    var pts=byRole[rk]||{};
+    var col=colMap[rk]||teal;
+    c2.strokeStyle=col;c2.lineWidth=2;c2.globalAlpha=0.85;c2.beginPath();
+    var started=false;
+    [0,1,2].forEach(function(rd){
+      var v=pts[rd]||65;
+      if(!started){c2.moveTo(xOf(rd),yOf(v));started=true;}else{c2.lineTo(xOf(rd),yOf(v));}
     });
-  }
-
-  // Deliberation table
-  const delibWrap = el('room-deliberation');
-  if (delibWrap) {
-    delibWrap.innerHTML = roles.map((rk, i) => {
-      const rd = byRole[rk];
-      const c = roleColors[rk] || 'var(--blue)';
-      const id = 'room-row-' + i;
-      const rows = [0,1,2].filter(n => rd['r'+n]).map(n => {
-        const r = rd['r'+n];
-        const cc = chipColor(r.conf >= 70 ? 'HIGH' : r.conf >= 60 ? 'MEDIUM' : 'LOW');
-        return '<div class="round-row">' +
-          '<div class="rr-left">' +
-            '<div class="rr-round">R' + n + '</div>' +
-            '<div class="rr-stance ' + stanceChip(r.stance) + '">' + stanceLabel(r.stance) + '</div>' +
-            '<div class="rr-conf" style="color:' + cc + '">' + r.conf + '<span>%</span></div>' +
-          '</div>' +
-          '<div class="rr-right"><div class="rr-rat">' + (r.rationale || '').substring(0,180) + '</div></div>' +
-        '</div>';
-      }).join('');
-      return '<div class="expand-card" id="' + id + '">' +
-        '<div class="expand-trigger" onclick="toggleExpand(\'' + id + '\')">' +
-          '<div class="expand-left">' +
-            '<div class="expand-title" style="color:' + c + '">' + rk + ' \u00b7 ' + (rd.r2?.conf || '\u2014') + '% Final</div>' +
-            '<div class="expand-prev">' + (rd.r2?.rationale || '').substring(0,100) + '</div>' +
-          '</div>' +
-          '<div class="expand-right"><span class="chip ' + stanceChip(rd.r2?.stance) + '">' + stanceLabel(rd.r2?.stance) + '</span><div class="expand-chevron">&#9660;</div></div>' +
-        '</div>' +
-        '<div class="expand-body"><div class="expand-content"><div class="round-track">' + rows + '</div></div></div>' +
-      '</div>';
-    }).join('');
-  }
-
-  // Room insights
-  const cfo = byRole['CTO'] || {};
-  if (cfo.r0 && cfo.r2) {
-    set('room-insight-2', 'CFO moved from ' + (byRole['CFO']?.r0?.conf||62) + '% (R0 DEFER) to ' + (byRole['CFO']?.r2?.conf||72) + '% (R2) after conditions framework was established. CTO held flat at ' + (cfo.r2?.conf||62) + '% \u2014 GDPR scope remains open.');
-  }
-  if (gt.triggered) set('room-insight-3', (gt.severity||'HIGH') + ' groupthink severity flagged at unanimous R2 convergence. No dissent recorded. Independent review of GDPR scoping assumption recommended before Phase 2 capital releases.');
+    c2.stroke();
+    [0,1,2].forEach(function(rd){
+      var v=pts[rd]||65;
+      c2.fillStyle=col;c2.globalAlpha=1;c2.beginPath();c2.arc(xOf(rd),yOf(v),3.5,0,Math.PI*2);c2.fill();
+    });
+    var r2v=pts[2]||65;
+    c2.fillStyle=col;c2.font='bold 8px monospace';c2.textAlign='left';c2.fillText(rk,xOf(2)+6,yOf(r2v)+3);
+  });
+  c2.globalAlpha=1;
+}
+// ── Groupthink flag ──
+var gtEl=document.getElementById('room-gt-body');
+if(gtEl&&gt&&gt.detected){
+  var sv=gt.severity||'HIGH';
+  var sc3=sv==='HIGH'?'chip-red':sv==='MEDIUM'?'chip-amber':'chip';
+  gtEl.innerHTML='<div class="room-gt-icon">&#x26A0;</div><div class="room-gt-text"><div><span class="chip '+sc3+'">GROUPTHINK '+sv+'</span></div><div style="margin-top:var(--gap-xs)">'+(gt.warning||'All roles converged. No meaningful dissent recorded.')+'</div></div>';
+}
+// ── Member breakdown table ──
+var table=document.getElementById('room-role-table-body');
+if(!table)return;
+table.innerHTML='';
+var ordRoles=['CEO','CFO','COO','LEGAL','CHRO','CSO','CTO'];
+var byRoleRows={};
+so.forEach(function(s){
+  if(!byRoleRows[s.role_key])byRoleRows[s.role_key]={};
+  byRoleRows[s.role_key][s.round]=s;
+});
+var scls=function(s){return s==='SUPPORT'?'support':s==='NOT_YET'||s==='DEFER'?'notyet':'cond';};
+var slbl=function(s){return s==='SUPPORT'?'GO':s==='NOT_YET'||s==='DEFER'?'NOT YET':'COND';};
+var ccls=function(c){return c>=70?'high':c>=60?'mid':'low';};
+var dH=function(a,b){var dv=b-a;if(dv>2)return '<span class="room-delta up">+'+dv+'%</span>';if(dv<-2)return '<span class="room-delta down">'+dv+'%</span>';return '<span class="room-delta flat">--</span>';};
+ordRoles.forEach(function(rk){
+  var rows=byRoleRows[rk]||{};
+  var r0=rows[0]||{};var r1=rows[1]||{};var r2=rows[2]||{};
+  var r0c=Math.round((r0.confidence_score||0.65)*100);
+  var r1c=Math.round((r1.confidence_score||0.65)*100);
+  var r2c=Math.round((r2.confidence_score||0.65)*100);
+  var r0s=r0.stance||'NOT_YET';var r1s=r1.stance||'CONDITIONAL_SUPPORT';var r2s=r2.stance||'CONDITIONAL_SUPPORT';
+  var conds=r2.conditions||r2.top_conditions||'';
+  var gateText=conds.replace(/^["|"]$/g,'').replace(/","/g,' ').substring(0,120);
+  var quote=(r2.analysis||r2.rationale||'').substring(0,250);
+  var row=document.createElement('div');
+  row.className='room-role-row';row.id='room-row-'+rk;
+  row.setAttribute('onclick','toggleRoomRow("'+rk+'")');
+  row.innerHTML='<div class="room-role-ident"><img class="room-role-photo" src="'+(PH[rk]||'')+'" alt="'+rk+'"><div class="room-role-name">'+rk+'</div></div>'+
+    '<div class="room-conf-val '+ccls(r2c)+'">'+r2c+'%</div>'+
+    '<div class="room-round-stance '+scls(r0s)+'">'+slbl(r0s)+'</div>'+
+    '<div class="room-round-stance '+scls(r1s)+'">'+slbl(r1s)+'</div>'+
+    '<div class="room-round-stance '+scls(r2s)+'">'+slbl(r2s)+'</div>'+
+    '<div class="room-hard-gate">'+gateText+'</div>';
+  table.appendChild(row);
+  var exp=document.createElement('div');exp.className='room-role-expand';exp.id='room-expand-'+rk;
+  exp.innerHTML='<div class="room-expand-body"><div class="room-expand-quote">&ldquo;'+quote+'&rdquo;</div>'+
+    '<div class="room-expand-meta">'+
+    '<span class="chip">R0&rarr;R1: '+dH(r0c,r1c)+'</span>'+
+    '<span class="chip">R1&rarr;R2: '+dH(r1c,r2c)+'</span>'+
+    '<span class="chip chip-'+(r2c>=70?'teal':r2c>=60?'amber':'red')+'">Final: '+r2c+'%</span>'+
+    '</div></div>';
+  table.appendChild(exp);
+});
 }
 
 // \u2500\u2500 FINANCIALS \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
@@ -3958,8 +4015,6 @@ wireListeners();
   document.addEventListener('mouseup', function(){ on=false; });
 })();
 
-function switchOpt(id){document.querySelectorAll('.room-opt-panel').forEach(function(el){el.classList.remove('active');});document.querySelectorAll('.room-opt-tab').forEach(function(el){el.classList.remove('active');});var p=document.getElementById('room-opt-panel-'+id);var t=document.getElementById('room-opt-tab-'+id);if(p)p.classList.add('active');if(t)t.classList.add('active');}
-function toggleRoomRow(key){var exp=document.getElementById('room-expand-'+key);var row=document.getElementById('room-row-'+key);if(!exp)return;var isOpen=exp.classList.contains('open');document.querySelectorAll('.room-role-expand').forEach(function(el){el.classList.remove('open');});document.querySelectorAll('.room-role-row').forEach(function(el){el.classList.remove('expanded');});if(!isOpen){exp.classList.add('open');if(row)row.classList.add('expanded');}}
 </script>
 </div>
 </div>

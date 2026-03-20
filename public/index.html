@@ -1212,12 +1212,24 @@ body{background:var(--bg-page);color:var(--text-primary);font-family:var(--font-
 .ev-card-chips{display:flex;gap:var(--gap-xs);flex-wrap:wrap;margin-top:var(--gap-3)}
 .risk-side-card{max-height:var(--risk-card-h);display:flex;flex-direction:column;overflow:hidden}
 
+
+/* ── Risk matrix hover detail ───────────────────────────────────── */
+.risk-hover-detail{padding:var(--gap-lg) var(--card-px);border-top:1px solid var(--border);transition:opacity var(--t-base)}
+.risk-hover-detail.is-empty{opacity:.4}
+.rhd-role{font-family:var(--font-mono);font-size:var(--font-9);font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:var(--ls-md);margin-bottom:var(--gap-xs)}
+.rhd-text{font-size:var(--text-xs);color:var(--text-primary);line-height:1.6;font-weight:500;margin-bottom:var(--gap-sm)}
+.rhd-chips{display:flex;gap:var(--gap-xs);flex-wrap:wrap}
 </style>
 </head>
 <body>
 
 
 <div id="tour-spot"></div>
+        <div class="risk-hover-detail is-empty" id="risk-hover-detail">
+          <div class="rhd-role" id="rhd-role">Hover a dot to see detail</div>
+          <div class="rhd-text" id="rhd-text">&mdash;</div>
+          <div class="rhd-chips" id="rhd-chips"></div>
+        </div>
 <div id="tour-bar"><div class="tb-info"><div class="tb-step" id="tb-step">Step 1 of 8</div><div class="tb-title" id="tb-title">&mdash;</div><div class="tb-desc" id="tb-desc">&mdash;</div></div><div class="tb-btns"><button class="tb-btn" onclick="tourPrev()">&#8592; Prev</button><button class="tb-btn tb-primary" id="tb-next" onclick="tourNext()">Next &rarr;</button><button class="tb-btn tb-close" onclick="tourEnd()">&#x2715;</button></div></div>
 <!-- TOUR ELEMENTS: fog panels + ring + card + backdrop -->
 <div id="tour-backdrop" onclick="tourEnd()"></div>
@@ -3048,10 +3060,29 @@ function showRP(e, r) {
   _rpEl.style.left = x + 'px';
   _rpEl.style.top  = y + 'px';
   _rpEl.style.opacity = '1';
+
+  // Update hover detail panel
+  const hd = document.getElementById('risk-hover-detail');
+  const hdRole = document.getElementById('rhd-role');
+  const hdText = document.getElementById('rhd-text');
+  const hdChips = document.getElementById('rhd-chips');
+  if (hd && r) {
+    hd.classList.remove('is-empty');
+    hdRole.textContent = (r.role || r.domain || 'Risk') + (r.domain ? ' · ' + r.domain : '');
+    hdText.textContent = r.risk || '';
+    hdChips.innerHTML = [
+      r.impact ? '<span class="chip chip-red">Impact: ' + r.impact + '</span>' : '',
+      r.probability ? '<span class="chip chip-red">Prob: ' + r.probability + '</span>' : '',
+      r.domain ? '<span class="chip">' + r.domain + '</span>' : ''
+    ].filter(Boolean).join('');
+  }
 }
 
 function hideRP() {
   if (_rpEl) _rpEl.style.opacity = '0';
+
+  const hd = document.getElementById('risk-hover-detail');
+  if (hd) hd.classList.add('is-empty');
 }
 
 
@@ -3129,7 +3160,7 @@ function buildRisk(raw, mso, dash) {
         dot.style.cssText += ';background:'+bg+';display:flex;align-items:center;justify-content:center;font-size:var(--font-10);font-weight:700;color:#fff;font-family:var(--font-mono)';
         dot.textContent = (r.role_key||r.domain||'?').substring(0,2);
       }
-      dot.title = (r.role||'') + ': ' + (r.risk||'').substring(0,80);
+      dot.dataset.riskIdx = risks.indexOf(r);
       dot.addEventListener('mouseenter', e => showRP(e, r));
       dot.addEventListener('mouseleave', hideRP);
       matrixOuter.appendChild(dot);

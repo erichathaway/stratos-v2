@@ -262,9 +262,9 @@ body{background:var(--bg-page);color:var(--text-primary);font-family:var(--font-
 .tab.active .tab-pip{opacity:1;background:var(--accent)}
 
 /* ── 6  TOUR OVERLAY ──────────────────────────────────────────────────────── */
-.tour-overlay{position:fixed;inset:0;z-index:1000;background:rgba(8,8,14,.92);backdrop-filter:blur(20px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity var(--t-slow) var(--ease)}
+.tour-overlay{position:fixed;inset:0;z-index:1000;background:rgba(8,8,14,.92);backdrop-filter:blur(20px);display:flex;align-items:center;justify-content:center;padding:var(--gap-2xl);opacity:0;pointer-events:none;transition:opacity var(--t-slow) var(--ease)}
 .tour-overlay.show{opacity:1;pointer-events:all;position:fixed}
-.tour-modal{background:var(--bg-surface);border:1px solid var(--border-hover);border-radius:var(--r-xl);padding:var(--ib-col-gap);max-width:560px;width:90%;box-shadow:var(--shadow-pop);display:flex;flex-direction:column;gap:var(--card-py);transform:scale(.96) translateY(10px);transition:transform var(--t-slow) var(--ease)}
+.tour-modal{background:var(--bg-surface);border:1px solid var(--border-hover);border-radius:var(--r-xl);padding:var(--ib-col-gap);max-width:560px;width:100%;max-height:calc(100vh - var(--gap-2xl) * 4);overflow-y:auto;box-shadow:var(--shadow-pop);display:flex;flex-direction:column;gap:var(--card-py);transform:scale(.96) translateY(10px);transition:transform var(--t-slow) var(--ease)}
 .tour-overlay.show .tour-modal{transform:scale(1) translateY(0)}
 .tour-badge{font-family:var(--font-mono);font-size:var(--text-xs);font-weight:700;letter-spacing:var(--ls-md);text-transform:uppercase;color:var(--purple);padding:var(--pad-4-10);border-radius:var(--r-xs);background:color-mix(in srgb,var(--purple) 14%,transparent);border:1px solid color-mix(in srgb,var(--purple) 28%,transparent);align-self:flex-start}
 .tour-title{font-family:var(--font-display);font-size:var(--text-2xl);font-weight:800;letter-spacing:var(--ls-tight);line-height:1.2}

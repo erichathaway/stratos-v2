@@ -1407,7 +1407,7 @@ body{background:var(--bg-page);color:var(--text-primary);font-family:var(--font-
 .fin-kill-desc{font-size:var(--text-xs);color:var(--text-secondary);line-height:1.45}
 .fin-kill-outcome{font-family:var(--font-mono);font-size:var(--font-9);color:var(--text-muted);text-transform:uppercase;letter-spacing:var(--ls-md);margin-top:var(--gap-xs)}
 
-/* -- Room & Options ------------------------------------------------- */
+/* -- Room & Options ---- */
 .room-header{display:grid;grid-template-columns:1fr auto;gap:var(--gap-2xl);align-items:center;padding:var(--gap-2xl) var(--card-px);background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--r-xl);border-left:3px solid var(--blue)}
 .room-header-eyebrow{font-family:var(--font-mono);font-size:var(--font-9);font-weight:700;letter-spacing:var(--ls-lg);text-transform:uppercase;color:var(--blue)}
 .room-header-title{font-size:var(--text-xl);font-weight:700;color:var(--text-primary);line-height:1.35;margin:var(--gap-xs) 0}
@@ -2490,75 +2490,163 @@ body{background:var(--bg-page);color:var(--text-primary);font-family:var(--font-
     <div>
       <div class="room-header-eyebrow">The Room &amp; Options -- Deliberation Record</div>
       <div class="room-header-title">6 of 7 entered skeptical. All 7 left conditionally aligned.</div>
-      <div class="room-header-sub">CEO was the only voice for GO at Round 0. Every other role entered NOT YET with domain-specific blockers. Three rounds of structured deliberation produced unanimous conditional approval -- but with a HIGH groupthink flag and a confidence band of only 60-72%. The room moved. The questions did not.</div>
-      <div style="display:flex;gap:var(--gap-sm);flex-wrap:wrap;margin-top:var(--gap-md)">
-        <span class="chip chip-teal">7/7 Conditional</span>
-        <span class="chip chip-amber">Groupthink HIGH</span>
-        <span class="chip">3 Rounds</span>
-        <span class="chip">OPT-4 Chosen</span>
-      </div>
+      <div class="room-header-sub">CEO was the only voice for GO at Round 0. Every other role entered NOT YET with domain-specific blockers. Three rounds produced unanimous conditional approval -- but with a HIGH groupthink flag and 60-72% confidence band.</div>
+      <div style="display:flex;gap:var(--gap-sm);flex-wrap:wrap;margin-top:var(--gap-md)"><span class="chip chip-teal">7/7 Conditional</span><span class="chip chip-amber">Groupthink HIGH</span><span class="chip">3 Rounds</span><span class="chip">OPT-4 Chosen</span></div>
     </div>
-    <div class="room-verdict-stat">
-      <div class="room-verdict-val" id="room-conf-val">67%</div>
-      <div class="room-verdict-label">Avg Confidence<br>All Conditional</div>
-    </div>
+    <div class="room-verdict-stat"><div class="room-verdict-val" id="room-conf-val">67%</div><div class="room-verdict-label">Avg Confidence<br>All Conditional</div></div>
   </div>
 
   <div class="section-label">How the Room Moved -- 3-Round Arc</div>
   <div class="room-arc-row">
-    <div class="room-arc-card r0">
-      <div class="room-arc-round r0">Round 0 -- Entry</div>
-      <div class="room-arc-headline">1 GO, 6 NOT YET</div>
-      <div style="display:flex;gap:var(--gap-sm);flex-wrap:wrap;margin:var(--gap-xs) 0"><span class="chip chip-teal">CEO: GO</span><span class="chip chip-red">6 Others: NOT YET</span></div>
-      <div class="room-arc-desc">CEO cited strategic urgency and board mandate. All others surfaced domain-specific blockers: unvalidated FTE costs, GDPR scope undefined, no legal counsel, no comp benchmarks, no engineering capacity model.</div>
-    </div>
-    <div class="room-arc-card r1">
-      <div class="room-arc-round r1">Round 1 -- Convergence</div>
-      <div class="room-arc-headline">7/7 Conditional -- OPT-5</div>
-      <div style="display:flex;gap:var(--gap-sm);flex-wrap:wrap;margin:var(--gap-xs) 0"><span class="chip chip-amber">All 7: CONDITIONAL</span><span class="chip">OPT-5 Unanimous</span></div>
-      <div class="room-arc-desc">Every role moved to CONDITIONAL_SUPPORT around OPT-5 with 6 gates. CEO confidence dropped as execution gaps became visible. LEGAL hit 46% -- lowest point in the deliberation.</div>
-    </div>
-    <div class="room-arc-card r2">
-      <div class="room-arc-round r2">Round 2 -- Resolution</div>
-      <div class="room-arc-headline">7/7 Conditional -- OPT-4</div>
-      <div style="display:flex;gap:var(--gap-sm);flex-wrap:wrap;margin:var(--gap-xs) 0"><span class="chip chip-teal">OPT-4 Chosen</span><span class="chip">Single Hard Gate</span></div>
-      <div class="room-arc-desc">OPT-5 simplified to OPT-4: 6 conditions collapsed into one -- validated $500K line-item budget. Each role distilled to their single non-negotiable. CHRO dropped to 60%.</div>
-    </div>
+    <div class="room-arc-card r0"><div class="room-arc-round r0">Round 0 -- Entry</div><div class="room-arc-headline">1 GO, 6 NOT YET</div><div style="display:flex;gap:var(--gap-sm);flex-wrap:wrap;margin:var(--gap-xs) 0"><span class="chip chip-teal">CEO: GO</span><span class="chip chip-red">6 Others: NOT YET</span></div><div class="room-arc-desc">CEO cited strategic urgency and board mandate. All others surfaced domain-specific blockers: unvalidated FTE costs, GDPR undefined, no legal counsel, no comp benchmarks, no engineering capacity model.</div></div>
+    <div class="room-arc-card r1"><div class="room-arc-round r1">Round 1 -- Convergence</div><div class="room-arc-headline">7/7 Conditional -- OPT-5</div><div style="display:flex;gap:var(--gap-sm);flex-wrap:wrap;margin:var(--gap-xs) 0"><span class="chip chip-amber">All 7: CONDITIONAL</span><span class="chip">OPT-5 Unanimous</span></div><div class="room-arc-desc">Every role moved to CONDITIONAL_SUPPORT around OPT-5 with 6 gates. LEGAL hit 46% confidence -- the lowest point in the deliberation. The room agreed on direction but conditions were complex.</div></div>
+    <div class="room-arc-card r2"><div class="room-arc-round r2">Round 2 -- Resolution</div><div class="room-arc-headline">7/7 Conditional -- OPT-4</div><div style="display:flex;gap:var(--gap-sm);flex-wrap:wrap;margin:var(--gap-xs) 0"><span class="chip chip-teal">OPT-4 Chosen</span><span class="chip">Single Hard Gate</span></div><div class="room-arc-desc">OPT-5 simplified to OPT-4: 6 conditions collapsed into one -- validated $500K line-item budget. Each role distilled to their single non-negotiable. CHRO dropped to 60%.</div></div>
   </div>
 
-  <div class="section-label">Confidence Trajectory -- Per Role, 3 Rounds <button class="info-btn" data-title="Confidence Trajectory" data-body="Each line shows one role's confidence across R0, R1, R2. LEGAL dropped to 46% in R1 before recovering. CTO held flat at 62% all 3 rounds.">i</button></div>
-  <div class="card">
-    <div class="card-body" style="padding-bottom:var(--gap-2xl)">
-      <canvas id="room-traj-canvas" class="room-traj-canvas"></canvas>
-    </div>
-  </div>
+  <div class="section-label">Confidence Trajectory -- Per Role, 3 Rounds <button class="info-btn" data-title="Confidence Trajectory" data-body="Each line shows one role's confidence across R0, R1, R2. LEGAL dropped to 46% in R1 before recovering. CTO held flat at 62%.">i</button></div>
+  <div class="card"><div class="card-body" style="padding-bottom:var(--gap-2xl)"><canvas id="room-traj-canvas" class="room-traj-canvas"></canvas></div></div>
 
-  <div class="room-gt-flag" id="room-gt-body">
-    <div class="room-gt-icon">&#x26A0;</div>
-    <div class="room-gt-text">Loading deliberation signal...</div>
-  </div>
+  <div class="room-gt-flag" id="room-gt-body"><div class="room-gt-icon">&#x26A0;</div><div class="room-gt-text">Loading deliberation signal...</div></div>
 
-  <div class="section-label">Member Breakdown -- Click Any Row to Expand <button class="info-btn" data-title="Member Breakdown" data-body="Final confidence, stance across all 3 rounds, and the single hard gate condition each role required. Click any row to read their direct quote.">i</button></div>
+  <div class="section-label">Member Breakdown -- Click Any Row to Expand <button class="info-btn" data-title="Member Breakdown" data-body="Final confidence, stance across all 3 rounds, and the single hard gate condition each role required.">i</button></div>
   <div class="card" style="overflow:hidden">
     <div class="room-role-table">
-      <div class="room-role-header">
-        <div class="room-role-col-head">Member</div>
-        <div class="room-role-col-head">Final Conf</div>
-        <div class="room-role-col-head" style="text-align:center">R0</div>
-        <div class="room-role-col-head" style="text-align:center">R1</div>
-        <div class="room-role-col-head" style="text-align:center">R2</div>
-        <div class="room-role-col-head">Hard Gate Condition</div>
-      </div>
+      <div class="room-role-header"><div class="room-role-col-head">Member</div><div class="room-role-col-head">Final Conf</div><div class="room-role-col-head" style="text-align:center">R0</div><div class="room-role-col-head" style="text-align:center">R1</div><div class="room-role-col-head" style="text-align:center">R2</div><div class="room-role-col-head">Hard Gate Condition</div></div>
       <div id="room-role-table-body"></div>
     </div>
   </div>
 
   <div class="section-label">Options Evaluated -- What Was Considered &amp; Why OPT-4 Won</div>
+  <div class="card"><div class="card-body"><div class="room-opts-tabs" id="room-opts-tabs"></div></div><div style="padding:var(--gap-lg) var(--card-px)" id="room-opts-panels"></div></div>
+
+</div>
+  <div class="s-section" id="sec-financials">
+
+  <!-- HEADER -->
+  <div class="fin-header">
+    <div class="fin-header-narrative">
+      <div class="fin-header-eyebrow">Financial Overview &mdash; EU Market Entry</div>
+      <div class="fin-header-title">The strategic case is real. The execution case is unbuilt.</div>
+      <div class="fin-header-sub">$500K deploys against a $5M EU ARR target with 3.5&times; LTV/CAC unit economics &mdash; the numbers work if the unknowns resolve. GDPR scope, FTE costs, and legal counsel are unvalidated. A two-tranche structure gates $350K on March 15 confirmation. All seven roles approved conditionally; none with high confidence.</div>
+    </div>
+    <div class="fin-header-stat">
+      <div class="fin-header-conf" id="fin-conf-display">67%</div>
+      <div class="fin-header-conf-label">Avg Confidence<br>7/7 Conditional</div>
+    </div>
+  </div>
+
+  <!-- ROW 1: KPIs -->
+  <div class="section-label">Investment Structure &amp; Unit Economics <button class="info-btn" data-title="Unit Economics" data-body="CFO-validated metrics from the deliberation record. CAC ceiling and LTV/CAC ratio directly govern the Phase 2 GO/NO-GO gate.">i</button></div>
+  <div class="fin-kpi-row">
+    <div class="fin-kpi neutral"><div class="fin-kpi-label">Total Investment</div><div class="fin-kpi-value" id="fin-total">$500K</div><div class="fin-kpi-sub">0.95% of FY25 budget</div></div>
+    <div class="fin-kpi pos"><div class="fin-kpi-label">LTV / Customer</div><div class="fin-kpi-value pos" id="fin-ltv">$175K</div><div class="fin-kpi-sub">Per EU enterprise logo</div></div>
+    <div class="fin-kpi warn"><div class="fin-kpi-label">CAC Ceiling</div><div class="fin-kpi-value warn" id="fin-cac">$50K</div><div class="fin-kpi-sub">Kill trigger if exceeded 2 months</div></div>
+    <div class="fin-kpi pos"><div class="fin-kpi-label">LTV / CAC Ratio</div><div class="fin-kpi-value pos">3.5&times;</div><div class="fin-kpi-sub" id="fin-runway">14.3-month runway post-investment</div></div>
+  </div>
+
+  <!-- ROW 2: SCENARIO ANALYSIS -->
+  <div class="section-label">Scenario Analysis &mdash; Return Profile Across Outcomes <button class="info-btn" data-title="Scenario Analysis" data-body="Three scenarios modeled by CFO. Revenue = LTV x logos closed. Net return = revenue minus investment. Phase 1 ($150K) is maximum exposure if Phase 2 gate fails.">i</button></div>
+  <div class="card" style="overflow:hidden">
+    <div class="fin-scenario-wrap" id="fin-scenario-wrap">
+      <div class="fin-scenario-row is-header">
+        <div class="fin-col-head left">Scenario</div>
+        <div class="fin-col-head left">Revenue vs. Investment</div>
+        <div class="fin-col-head">Revenue</div>
+        <div class="fin-col-head">Net Return</div>
+        <div class="fin-col-head">Payback</div>
+      </div>
+      <!-- rows injected by buildFinancials -->
+    </div>
+  </div>
+
+  <div class="section-label">CAC Sensitivity &mdash; Where the Model Breaks <button class="info-btn" data-title="CAC Sensitivity" data-body="EU CAC expected 30-50% above US $35K baseline. Return profile changes materially at each threshold. Kill trigger at $80K halts Phase 2 regardless of revenue.">i</button></div>
+  <div class="card" style="overflow:hidden">
+    <div class="card-body">
+      <div class="fin-cac-track-wrap" id="fin-cac-track-wrap">
+        <div class="fin-cac-track" id="fin-cac-track">
+          <!-- markers injected by buildFinancials -->
+        </div>
+      </div>
+      <div class="fin-cac-rows" id="fin-cac-rows">
+        <!-- rows injected by buildFinancials -->
+      </div>
+    </div>
+  </div>
+
+  <div class="section-label">The Full Picture &mdash; Upside, Risk &amp; What We Don&rsquo;t Know</div>
+  <div class="fin-case-row">
+    <div class="fin-case-card">
+      <div class="fin-case-head pos"><span class="fin-case-title">The Upside</span><span class="chip chip-teal">4 DRIVERS</span></div>
+      <div class="fin-case-body">
+        <div class="fin-case-item"><span class="fin-case-num pos">$525K</span><span class="fin-case-desc">LTV pipeline from 3 confirmed EU prospects &mdash; immediate revenue catalyst</span></div>
+        <div class="fin-case-item"><span class="fin-case-num pos">$5M</span><span class="fin-case-desc">EU ARR target by 2026 &mdash; board-mandated North Star component</span></div>
+        <div class="fin-case-item"><span class="fin-case-num pos">16.4mo</span><span class="fin-case-desc">Post-investment runway &mdash; above 12-month CFO hard floor</span></div>
+        <div class="fin-case-item"><span class="fin-case-num pos">0.95%</span><span class="fin-case-desc">$500K as share of FY25 budget &mdash; not material if thesis holds</span></div>
+      </div>
+    </div>
+    <div class="fin-case-card">
+      <div class="fin-case-head neg"><span class="fin-case-title">The Risk</span><span class="chip chip-red">3 EXPOSURES</span></div>
+      <div class="fin-case-body">
+        <div class="fin-case-item"><span class="fin-case-num neg">$460K</span><span class="fin-case-desc">EU FTE costs upper bound &mdash; 3 hires fully loaded, before GTM spend</span></div>
+        <div class="fin-case-item"><span class="fin-case-num neg">$375K</span><span class="fin-case-desc">GDPR legal counsel upper bound &mdash; combined may breach $500K envelope</span></div>
+        <div class="fin-case-item"><span class="fin-case-num neg">25&ndash;35%</span><span class="fin-case-desc">Employer social charge in Germany/France &mdash; unvalidated in FTE model</span></div>
+      </div>
+    </div>
+    <div class="fin-case-card">
+      <div class="fin-case-head warn"><span class="fin-case-title">What We Don&rsquo;t Know</span><span class="chip chip-amber">4 GAPS</span></div>
+      <div class="fin-case-body">
+        <div class="fin-case-item"><span class="fin-case-num warn">FTE</span><span class="fin-case-desc">No validated line-item cost by role and country &mdash; Radford EMEA not applied</span></div>
+        <div class="fin-case-item"><span class="fin-case-num warn">GDPR</span><span class="fin-case-desc">No legal counsel quote obtained &mdash; estimate range $160K&ndash;$375K unconfirmed</span></div>
+        <div class="fin-case-item"><span class="fin-case-num warn">ENTITY</span><span class="fin-case-desc">No confirmed EU entity setup cost from local counsel &mdash; Ireland unverified</span></div>
+        <div class="fin-case-item"><span class="fin-case-num warn">ARCH</span><span class="fin-case-desc">No CTO data residency architecture decision or cost estimate yet</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROW 5: CAPITAL STRUCTURE -->
+  <div class="section-label">Capital Structure &mdash; Two-Tranche Deployment</div>
   <div class="card">
     <div class="card-body">
-      <div class="room-opts-tabs" id="room-opts-tabs"></div>
+      <div class="fin-tranche-row">
+        <div class="fin-tranche-track">
+          <div class="fin-tranche-seg p1">
+            <div class="fin-tranche-label">Phase 1 &mdash; Pre-Authorized</div>
+            <div class="fin-tranche-amount pos" id="fin-p1">$150K</div>
+            <div class="fin-tranche-desc">Releases immediately. GDPR compliance architecture, EU legal entity setup, external counsel engagement. No board vote required below threshold.</div>
+          </div>
+          <div class="fin-tranche-seg gate">
+            <div class="fin-tranche-gate-label">&#x25C6; GO / NO-GO</div>
+            <div class="fin-tranche-gate-date">Mar 15 hard gate</div>
+            <div class="fin-tranche-desc" style="margin-top:var(--gap-sm)">CFO + CHRO deliver validated $500K line-item budget</div>
+          </div>
+          <div class="fin-tranche-seg p2">
+            <div class="fin-tranche-label">Phase 2 &mdash; Gate-Contingent</div>
+            <div class="fin-tranche-amount" id="fin-p2">$350K</div>
+            <div class="fin-tranche-desc">Releases only if March 15 gate clears: validated FTE costs by role/country, GDPR counsel quote confirmed, entity setup cost confirmed, CTO architecture decision in writing.</div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div style="padding:var(--gap-lg) var(--card-px)" id="room-opts-panels"></div>
+  </div>
+
+  <!-- ROW 6: KILL CRITERIA -->
+  <div class="section-label">Financial Kill Criteria &mdash; What Stops the Clock</div>
+  <div class="fin-kill-row">
+    <div class="fin-kill-item">
+      <div class="fin-kill-trigger">CAC &gt; $50K</div>
+      <div class="fin-kill-desc">Two consecutive months after first EU customer close triggers immediate pause on Phase 2 remainder</div>
+      <div class="fin-kill-outcome">CFO recommendation &rarr; redirect to US GTM</div>
+    </div>
+    <div class="fin-kill-item">
+      <div class="fin-kill-trigger">EU ARR &lt; $62.5K by Q4 2025</div>
+      <div class="fin-kill-desc">25% of $250K FY25 EU ARR target &mdash; signals pipeline not converting at required velocity</div>
+      <div class="fin-kill-outcome">Triggers CFO review &rarr; revert to OPT-3 analysis</div>
+    </div>
+    <div class="fin-kill-item">
+      <div class="fin-kill-trigger">GDPR &gt; 14 eng-weeks</div>
+      <div class="fin-kill-desc">If CTO scope confirms Q3 delivery requires more than 14 engineering weeks, Phase 2 halts</div>
+      <div class="fin-kill-outcome">CEO notifies board &rarr; revert to OPT-2 ($250K phased)</div>
+    </div>
   </div>
 
 </div>

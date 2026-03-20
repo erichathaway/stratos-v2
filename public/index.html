@@ -1157,21 +1157,19 @@ body{background:var(--bg-page);color:var(--text-primary);font-family:var(--font-
 /* ── Risk right panel ───────────────────────────────────────────── */
 .risk-side-card{display:flex;flex-direction:column;overflow:hidden}
 .risk-panel{display:flex;flex-direction:column;flex:1;min-height:0}
-.risk-panel-bar{display:flex;align-items:stretch;border-bottom:2px solid var(--border);flex-shrink:0;background:var(--bg-card)}
-.risk-panel-bar-seg{display:flex;align-items:center;justify-content:space-between;gap:var(--gap-sm);padding:var(--gap-sm) var(--card-px);flex:1}
-.risk-panel-bar-seg+.risk-panel-bar-seg{border-left:1px solid var(--border)}
-.risk-panel-label{font-family:var(--font-mono);font-size:var(--font-9);font-weight:700;letter-spacing:var(--ls-lg);text-transform:uppercase}
-.risk-panel-label.is-red{color:var(--red)}
-.risk-panel-label.is-amber{color:var(--amber)}
 .risk-panel-scroll{overflow-y:auto;flex:1;padding:0 var(--card-px) var(--gap-sm)}
 .risk-panel-scroll::-webkit-scrollbar{width:var(--gap-3)}
 .risk-panel-scroll::-webkit-scrollbar-thumb{background:var(--border-hover);border-radius:var(--r-full)}
+.risk-section-label{display:flex;align-items:center;justify-content:space-between;padding:var(--gap-sm) 0 var(--gap-xs);margin-top:var(--gap-xs)}
+.risk-section-label:first-child{margin-top:var(--gap-sm)}
+.risk-section-name{font-family:var(--font-mono);font-size:var(--font-9);font-weight:700;letter-spacing:var(--ls-lg);text-transform:uppercase}
+.risk-section-name.is-red{color:var(--red)}
+.risk-section-name.is-amber{color:var(--amber)}
 .risk-panel-row{padding:var(--gap-sm) 0;border-bottom:1px solid var(--border)}
 .risk-panel-row:last-child{border-bottom:none}
 .risk-panel-row-text{font-size:var(--text-xs);color:var(--text-secondary);line-height:1.5}
 .risk-panel-row-meta{display:flex;align-items:center;gap:var(--gap-sm);margin-top:var(--gap-3)}
 .risk-panel-domain{font-family:var(--font-mono);font-size:var(--font-9);color:var(--text-muted);text-transform:uppercase;letter-spacing:var(--ls-md)}
-.risk-panel-divider{height:2px;background:var(--border);margin:var(--gap-sm) 0;flex-shrink:0}
 /* ── Risk impact rows (section 3) ───────────────────────────────── */
 .risk-row-list{display:flex;flex-direction:column;gap:0}
 .risk-impact-row{display:grid;grid-template-columns:4px 1fr;gap:var(--gap-lg);padding:var(--gap-xl) 0;border-bottom:1px solid var(--border);align-items:start}
@@ -1943,20 +1941,16 @@ body{background:var(--bg-page);color:var(--text-primary);font-family:var(--font-
       </div>
     </div>
     <div class="card risk-side-card" style="--ct-accent:var(--red)">
+    <div class="card-head">
+      <div class="card-title">Risk Exposure</div>
+      <button class="info-btn" data-title="Risk Exposure" data-body="2 critical risks require immediate action. 7 active risks require ongoing management. Scroll to see all.">i</button>
+    </div>
     <div class="risk-panel">
-      <!-- Single title bar: both labels side by side, fixed, never scrolls -->
-      <div class="risk-panel-bar">
-        <div class="risk-panel-bar-seg">
-          <span class="risk-panel-label is-red">Act Now</span>
+      <div class="risk-panel-scroll">
+        <div class="risk-section-label">
+          <span class="risk-section-name is-red">Act Now</span>
           <span class="chip chip-red">2 CRITICAL</span>
         </div>
-        <div class="risk-panel-bar-seg">
-          <span class="risk-panel-label is-amber">Manage</span>
-          <span class="chip chip-amber">7 ACTIVE</span>
-        </div>
-      </div>
-      <!-- Single scroll body: critical items, divider, manage items -->
-      <div class="risk-panel-scroll">
         <div class="risk-panel-row">
           <div class="risk-panel-row-text">GDPR scope exceeds 14 eng-weeks &mdash; Q3 launch infeasible</div>
           <div class="risk-panel-row-meta"><span class="risk-panel-domain">Technical</span><span class="chip chip-red">KILL GATE</span></div>
@@ -1965,7 +1959,10 @@ body{background:var(--bg-page);color:var(--text-primary);font-family:var(--font-
           <div class="risk-panel-row-text">$247K/month burn discrepancy &mdash; unreconciled against $500K envelope</div>
           <div class="risk-panel-row-meta"><span class="risk-panel-domain">Financial</span><span class="chip chip-red">HIGH</span></div>
         </div>
-        <div class="risk-panel-divider"></div>
+        <div class="risk-section-label">
+          <span class="risk-section-name is-amber">Manage</span>
+          <span class="chip chip-amber">7 ACTIVE</span>
+        </div>
         <div class="risk-panel-row">
           <div class="risk-panel-row-text">EU hiring cycle 8&ndash;12 weeks &mdash; offer must land by April 2025 for Q3</div>
           <div class="risk-panel-row-meta"><span class="risk-panel-domain">People</span><span class="chip chip-amber">HIGH</span></div>

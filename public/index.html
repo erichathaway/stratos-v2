@@ -929,7 +929,7 @@ body{background:var(--bg-page);color:var(--text-primary);font-family:var(--font-
   z-index:9000;
   opacity:0;
   pointer-events:none;
-  display:flex;flex-direction:column;gap:var(--gap-md);
+  display:flex;flex-direction:column;gap:var(--gap-xl);
   transition:opacity var(--t-base) var(--ease);
   cursor:grab;
 }
@@ -4124,7 +4124,7 @@ function setAudioPref(p) {
   if(a) a.classList.toggle('active', p==='auto');
   if(m) m.classList.toggle('active', p==='manual');
 }
-function openTour() { el('tour-overlay').classList.add('show'); }
+function openTour() { el('tour-overlay').classList.add('show'); tourStep(0); }
 function closeTour() { el('tour-overlay').classList.remove('show'); }
 el('tour-overlay').addEventListener('click', e => {
   if (e.target === el('tour-overlay')) closeTour();

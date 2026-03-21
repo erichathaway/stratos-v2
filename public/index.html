@@ -1756,8 +1756,10 @@ dep-item strong{display:block;font-family:var(--font-mono);font-size:var(--font-
         <div class="cmd-opp-eyebrow">The Opportunity</div>
         <button class="info-btn" data-title="The Opportunity" data-body="The Command Center hero summarizes why this decision is worth making. Benefits-first framing: market window, investment structure, and projected returns — all validated by the deliberation engine.">i</button>
       </div>
-      <div class="cmd-opp-title" id="cmd-q-short">EU Market Entry &mdash; First-Mover Window</div>
-      <div class="cmd-opp-sub" id="cmd-q-context">$28M ARR SaaS company with a 6-month window to establish EU beachhead before Competitor X closes the addressable pipeline. Phase-gated $500K investment limits downside to $150K while targeting $1.5M EU ARR and 3.5&times; LTV/CAC.</div>
+      <div class="cmd-opp-title" id="cmd-q-short">Should we expand to European market in Q3 2025?</div>
+      <div class="cmd-opp-sub" id="cmd-q-context" style="margin-bottom:var(--gap-sm)">Three EU prospects requested GDPR compliance. Competitor X just announced EU expansion. Board wants growth signal.</div>
+      <div class="cmd-opp-sub" id="cmd-q-full" style="font-size:var(--font-9);color:var(--text-muted);border-left:2px solid var(--border-hover);padding-left:var(--gap-sm);margin-bottom:var(--gap-sm)">EU Market Entry &mdash; $28M ARR SaaS company with a 6-month window to establish EU beachhead before Competitor X closes the addressable pipeline. Phase-gated $500K investment limits downside to $150K while targeting $1.5M EU ARR and 3.5&times; LTV/CAC.</div>
+      <div class="cmd-opp-sub" id="cmd-q-outcome" style="font-size:var(--text-xs);font-weight:600;color:var(--teal)">Approved with conditions &mdash; OPT-4 selected at 67% confidence across 3 rounds.</div>
       <div class="cmd-opp-verdict">
         <div class="cmd-opp-verdict-badge">
           <div class="cmd-opp-verdict-icon">&#x2713;</div>
@@ -3002,6 +3004,7 @@ function stanceLabel(s) {
 
 // \u2500\u2500 APPLY ALL LIVE DATA \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
 function applyLiveData(raw) {
+  window.__stratosRaw = raw;
   if (!raw) {
     // Render components with static fallback data
     buildRisk(null, { risks: STATIC_RISKS }, {});
@@ -3043,17 +3046,35 @@ function applyLiveData(raw) {
   const band = (dash.confidence_range?.max || 72) - (dash.confidence_range?.min || 62);
   set('v-chip-band', band + '% Conf Band');
 
-  // v-question (Command Center card + briefing "i" tooltip)
-  const q = dash.decision_question || raw.master?.question || '';
-  // Extract a short hero title: first clause before comma/dash, or first ~60 chars
-  const qParts = q.split(/\s*[—,]\s*/);
-  const qShort = qParts[0].length > 80 ? q.substring(0, q.indexOf(' ', 50)) + '...' : qParts[0];
-  const qCtx   = raw.master?.context || raw.master?.decision_context || q;
-  set('cmd-q-short',    qShort || q.substring(0,60));
-  set('cmd-q-internals', q);
-  set('cmd-q-context', qCtx || q);
+  // v-question: 4-part hero — original question, context, enriched question, outcome
+  // masterBlob has full input_data with _originals preserved by Q1.07
+  const mb = raw.masterBlob || {};
+  const masterInput = mb.input_data || raw.master?.input_data || raw.master || {};
+  const originals = masterInput._originals || {};
+  // Original question (short, from user)
+  const qOrig = originals.question || raw.master?.question || masterInput.question || '';
+  // User-provided context
+  const qCtx = originals.context || masterInput.context || raw.master?.context || '';
+  // Enriched question (facilitator-refined with company data) — only show if different from original
+  const qEnriched = dash.decision_question || masterInput.question || '';
+  const qFull = (originals.question && qEnriched !== originals.question) ? qEnriched : '';
+  // Outcome summary
+  const outcomeVerdict = voteKey.replace(/_/g,' ');
+  const heroOptId = dash.approved_option_id || '';
+  const outcomeText = (outcomeVerdict ? outcomeVerdict : 'Decision pending') +
+    (heroOptId ? ' \u2014 ' + heroOptId + ' selected' : '') +
+    (dash.decision_confidence ? ' at ' + Math.round(dash.decision_confidence > 1 ? dash.decision_confidence : dash.decision_confidence * 100) + '% confidence' : '') +
+    (maxRound ? ' across ' + maxRound + ' rounds' : '');
+
+  set('cmd-q-short', qOrig || qEnriched.substring(0,80) || 'Decision question pending');
+  set('cmd-q-context', qCtx || '');
+  set('cmd-q-full', qFull || '');
+  const qFullEl = el('cmd-q-full');
+  if (qFullEl) qFullEl.style.display = qFull ? '' : 'none';
+  set('cmd-q-outcome', outcomeText);
+  set('cmd-q-internals', qFull || qOrig);
   const infoBtnEl = el('v-decision-info-btn');
-  if (infoBtnEl && qShort) infoBtnEl.setAttribute('data-body', qShort);
+  if (infoBtnEl && qOrig) infoBtnEl.setAttribute('data-body', qOrig);
 
   // v-answer prose from bgp rationale
   const answerEl = el('v-answer-body');

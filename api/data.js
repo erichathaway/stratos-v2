@@ -92,14 +92,15 @@ export default async function handler(req, res) {
       safeFetch(`${SB_URL}/rest/v1/engine_blobs?run_id=eq.${enc}&blob_type=eq.GOV&order=created_at.desc&limit=1`, 'govBlob'),
       safeFetch(`${SB_URL}/rest/v1/engine_blobs?run_id=eq.${enc}&blob_type=eq.rx_auto&order=round.desc&limit=1`, 'rxAutoBlob'),
       safeFetch(`${SB_URL}/rest/v1/engine_stage_checkpoints?run_id=eq.${enc}&order=created_at.asc`, 'checkpoints'),
+      safeFetch(`${SB_URL}/rest/v1/engine_blobs?run_id=eq.${enc}&blob_type=eq.master_state&order=created_at.desc&limit=1`, 'masterBlob'),
     ]);
 
     // Extract settled values (safeFetch already returns null on failure, so all are fulfilled)
     const responses = results.map(r => r.status === 'fulfilled' ? r.value : null);
-    const [blobRes, stageRes, dpacketRes, f1Res, masterRes, optionsRes, govRes, rxAutoRes, checkpointsRes] = responses;
+    const [blobRes, stageRes, dpacketRes, f1Res, masterRes, optionsRes, govRes, rxAutoRes, checkpointsRes, masterBlobRes] = responses;
 
     // Parse all responses in parallel
-    const [outputBlob, stageOutputs, dPacket, f1Outputs, masterRows, optionsBlob, govBlob, rxAutoBlob, checkpoints] =
+    const [outputBlob, stageOutputs, dPacket, f1Outputs, masterRows, optionsBlob, govBlob, rxAutoBlob, checkpoints, masterBlob] =
       await Promise.all([
         unwrap(blobRes),
         safeJson(stageRes, []),
@@ -110,6 +111,7 @@ export default async function handler(req, res) {
         unwrap(govRes),
         unwrap(rxAutoRes),
         safeJson(checkpointsRes, []),
+        unwrap(masterBlobRes),
       ]);
 
     // Track which sources returned data for debugging
@@ -123,6 +125,7 @@ export default async function handler(req, res) {
       govBlob: !!govBlob,
       rxAutoBlob: !!rxAutoBlob,
       checkpoints: Array.isArray(checkpoints) && checkpoints.length > 0,
+      masterBlob: !!masterBlob,
     };
 
     res.status(200).json({
@@ -132,6 +135,7 @@ export default async function handler(req, res) {
       dPacket,
       f1Outputs: f1Outputs || [],
       master: masterRows?.[0] ?? null,
+      masterBlob,
       optionsBlob,
       govBlob,
       rxAutoBlob,

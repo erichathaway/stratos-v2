@@ -1,3 +1,10 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StratOS — Decision Engine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
 <style>
 /* STRATOS MASTER CSS v2.0
    Single source of truth. Change one token = changes everything globally.
@@ -102,7 +109,6 @@
   --gap-xl:   20px;
   --gap-2xl:  28px;
   --mt-xs:    4px;
-  --pt-sm:    12px;
   --pb-sm:    12px;    /* donut chart container size */
   --legend-dot: 10px;  /* legend color dot size */   /* default chart canvas height */
   --font-9:   9px;     /* smallest mono label — use sparingly */
@@ -121,8 +127,6 @@
   --ib-ul-h:   2px;
   --ib-ul-dur: 0.32s;
   --ib-ul-c:   var(--blue);
-  /* Tour card position */
-  --tour-card-w:     280px;
 
   /* Avatar sizes */
   --avatar-xs:  28px;
@@ -152,7 +156,6 @@
   --icon-sm: 22px;
 
   /* ── Letter spacing scale ── */
-  --ls-xxs:  .06em;
   --ls-xs:   .08em;
   --ls-sm:   .1em;
   --ls-md:   .12em;
@@ -188,6 +191,17 @@
 
   --room-traj-h: 160px;
   --room-expand-h: 300px;
+  --dr-role-col: 100px;
+  --conf-ring-sz: 72px;
+
+  /* Tour card audio */
+  --tc-audio-c: var(--teal);
+  --tc-audio-h: 30px;
+
+  /* Question bar */
+  --qbar-accent:  var(--text-muted);
+  --qbar-label-c: var(--text-muted);
+  --qbar-text-c:  var(--text-primary);
 }
 
 /* ── 2  RESET & BASE ──────────────────────────────────────────────────────── */
@@ -464,12 +478,6 @@ ks-dot{width:var(--dot-xs);height:var(--dot-xs);border-radius:var(--r-full)}
 .rzc-act{background:color-mix(in srgb,var(--red) 10%,transparent);color:color-mix(in srgb,var(--red) 60%,transparent)}
 .rzc-manage{background:color-mix(in srgb,var(--amber) 8%,transparent);color:color-mix(in srgb,var(--amber) 55%,transparent)}
 .rzc-monitor{background:color-mix(in srgb,var(--blue) 7%,transparent);color:color-mix(in srgb,var(--blue) 50%,transparent)}
-risk-dot-abs{position:absolute;width:var(--avatar-md);height:var(--avatar-md);border-radius:var(--r-full);overflow:hidden;cursor:pointer;transition:transform var(--t-fast),box-shadow var(--t-fast);box-shadow:0 2px 8px rgba(0,0,0,.6);z-index:5}
-risk-dot-abs:hover{transform:scale(1.3);z-index:10}
-risk-dot-abs img{width:100%;height:100%;object-fit:cover;filter:grayscale(25%) brightness(.8)}
-risk-dot-abs.act{border:2px solid var(--red)}
-risk-dot-abs.manage{border:2px solid var(--amber)}
-risk-dot-abs.monitor{border:2px solid var(--blue)}
 .risk-axes-row{display:flex;justify-content:space-between;padding: var(--gap-xs) 16px 0}
 .risk-axis-lbl{font-family:var(--font-mono);font-size:var(--font-9);color:var(--text-muted);letter-spacing:var(--ls-xxs);text-transform:uppercase}
 
@@ -556,10 +564,6 @@ mono-label{font-family:var(--font-mono);font-size:var(--text-xs);font-weight:700
 
 /* ══ QUESTION BAR — original decision question above verdict ════════
    One CSS class controls font, spacing, accent. Reusable on any tab. */
---qbar-accent:  var(--text-muted);  /* question bar left-border color */
---qbar-label-c: var(--text-muted);  /* "Decision Question" label color */
---qbar-text-c:  var(--text-primary); /* question text color */
---qbar-text-sz: var(--text-lg);     /* question text size */
 qbar{display:flex;flex-direction:column;gap:var(--gap-sm);padding: var(--gap-xl) var(--card-px);background:var(--bg-surface);border:1px solid var(--border);border-left: var(--r-xs) solid var(--qbar-accent);border-radius:var(--r-md);box-shadow:var(--shadow-sm)}
 qbar-label{font-family:var(--font-mono);font-size:var(--text-xs);font-weight:700;letter-spacing:var(--ls-lg);text-transform:uppercase;color:var(--qbar-label-c)}
 qbar-text{font-family:var(--font-display);font-size:var(--qbar-text-sz);font-weight:700;letter-spacing:var(--ls-neg-sm);line-height:1.35;color:var(--qbar-text-c)}
@@ -568,11 +572,6 @@ qbar-answer{font-size:var(--qbar-answer-sz);line-height:1.75;color:var(--qbar-an
 risk-alert{font-size:var(--text-sm);line-height:1.55;color:var(--text-secondary);padding:var(--gap-md);border-radius:var(--r-md)}
 risk-alert.act{background:color-mix(in srgb,var(--red) 7%,transparent);border:1px solid color-mix(in srgb,var(--red) 18%,transparent)}
 risk-alert.manage{background:color-mix(in srgb,var(--amber) 7%,transparent);border:1px solid color-mix(in srgb,var(--amber) 18%,transparent)}
-
-/* ══ SECTION HEADER ROWS ════════════════════════════════════
-   Label + info-btn on same line for top-level sections.    */
-.section-head{display:flex;align-items:center;gap:var(--gap-sm)}
-.section-head .section-label{margin:0}
 
 /* ══ INSIGHT BOX ACTION BAR ══════════════════════════════════ */
 .ib-wrap{display:flex;flex-direction:column;background:var(--bg-surface);border:1px solid var(--border);border-left: var(--r-xs) solid var(--tab-c,var(--blue));border-radius:var(--r-lg);box-shadow:var(--shadow-sm);transition:border-color var(--t-base),box-shadow var(--t-base),border-left-color var(--t-base)}
@@ -659,8 +658,6 @@ tcn-dot.active{background:var(--tour-c,var(--blue))}
 
 
 /* ── Tour card audio button — front and center on card */
---tc-audio-c: var(--teal);      /* tour card audio button color */
---tc-audio-h: 30px;             /* tour card audio button height */
 tcn-audio.playing{border-color:var(--tc-audio-c);animation:audio-pulse 2s ease-in-out infinite}
 tcn-audio-icon{width:18px;height:18px;border-radius:var(--r-full);background:color-mix(in srgb,var(--tc-audio-c) 18%,transparent);border:1px solid color-mix(in srgb,var(--tc-audio-c) 40%,transparent);display:grid;place-items:center;font-size:var(--text-7px);flex-shrink:0}
 tcn-audio-lbl{flex:1;text-align:left}
@@ -668,52 +665,6 @@ tcn-audio-lbl{flex:1;text-align:left}
 tcn-continue.show{display:block}
 tcn-exit.show{display:block}
 /* Divider line inside card */
-
-
-/* ── FINANCIALS phase timeline ─────────────────────────────────────── */
-.tl-nodes-row{display:flex;align-items:flex-start;gap:0;overflow-x:auto;padding:var(--gap-sm) 0}
-tl-node-box{display:flex;flex-direction:column;align-items:center;gap:var(--gap-xs);min-width:110px;text-align:center}
-tl-node-icon-box{width:44px;height:44px;border-radius:var(--r-full);background:color-mix(in srgb,var(--tab-c,var(--teal)) 14%,transparent);border:2px solid color-mix(in srgb,var(--tab-c,var(--teal)) 35%,transparent);display:grid;place-items:center;font-family:var(--font-mono);font-size:var(--text-xs);font-weight:700;color:var(--tab-c,var(--teal));line-height:1.2;padding:4px}
-tl-node-name{font-size:var(--text-xs);font-weight:600;color:var(--text-primary);line-height:1.3;margin-top:var(--gap-xs)}
-tl-node-meta{font-family:var(--font-mono);font-size:var(--font-9);color:var(--text-muted)}
-.tl-arrow{display:flex;align-items:center;padding:0 var(--gap-sm);color:var(--text-muted);font-size:var(--text-lg);padding-bottom: var(--gap-xl);flex-shrink:0}
-/* ── Management / Board oq list ─────────────────────────────────────── */
-.open-q-list{display:flex;flex-direction:column;gap:0}
-.oq-item{display:flex;align-items:flex-start;gap:var(--gap-lg);padding:var(--gap-md) 0;border-bottom:1px solid var(--border)}
-.oq-item:last-child{border-bottom:none}
-.oq-num{font-family:var(--font-display);font-size:var(--text-xl);font-weight:800;color:var(--tab-c,var(--blue));min-width:var(--avatar-xs);flex-shrink:0;padding-top:var(--pt-xs)}
-.oq-body{flex:1;display:flex;flex-direction:column;gap:var(--gap-xs)}
-.oq-q{font-size:var(--text-sm);color:var(--text-primary);line-height:1.55}
-.oq-meta{display:flex;align-items:center;gap:var(--gap-md)}
-.oq-owner{font-family:var(--font-mono);font-size:var(--font-9);font-weight:700;letter-spacing:var(--ls-sm);color:var(--text-muted);background:var(--bg-surface-2);border:1px solid var(--border);padding:1px var(--gap-xs);border-radius:var(--r-xs)}
-.oq-note{font-family:var(--font-mono);font-size:var(--font-9);color:var(--text-muted)}
-/* ── Tab accent scoping ──────────────────────────────────────────────── */
-#sec-financials{--tab-c:var(--teal)}
-#sec-management{--tab-c:var(--teal)}
-#sec-board{--tab-c:var(--red)}
-
-
-/* ── Financials phase timeline row ─── */
-.tl-nodes-row{display:flex;align-items:flex-start;gap:0;overflow-x:auto;padding:var(--gap-sm) 0;flex-wrap:nowrap}
-tl-node-box{display:flex;flex-direction:column;align-items:center;gap:var(--gap-xs);min-width:110px;text-align:center}
-tl-node-icon-box{width:44px;height:44px;border-radius:var(--r-full);background:color-mix(in srgb,var(--tab-c,var(--teal)) 14%,transparent);border:2px solid color-mix(in srgb,var(--tab-c,var(--teal)) 35%,transparent);display:grid;place-items:center;font-family:var(--font-mono);font-size:var(--text-xs);font-weight:700;color:var(--tab-c,var(--teal));line-height:1.2;padding:4px}
-tl-node-name{font-size:var(--text-xs);font-weight:600;color:var(--text-primary);line-height:1.3;margin-top:var(--gap-xs)}
-tl-node-meta{font-family:var(--font-mono);font-size:var(--font-9);color:var(--text-muted)}
-.tl-arrow{display:flex;align-items:center;padding:0 var(--gap-sm);color:var(--border-hover);font-size:var(--text-xl);padding-bottom:18px;flex-shrink:0}
-/* ── Management / Board list ─── */
-.open-q-list{display:flex;flex-direction:column;gap:0}
-.oq-item:last-child{border-bottom:none}
-.oq-num{font-family:var(--font-display);font-size:var(--text-xl);font-weight:800;color:var(--tab-c,var(--blue));min-width:var(--avatar-xs);flex-shrink:0;padding-top:var(--pt-xs)}
-.oq-body{flex:1;display:flex;flex-direction:column;gap:var(--gap-xs)}
-.oq-q{font-size:var(--text-sm);color:var(--text-primary);line-height:1.55}
-.oq-meta{display:flex;align-items:center;gap:var(--gap-md)}
-.oq-owner{font-family:var(--font-mono);font-size:var(--font-9);font-weight:700;letter-spacing:var(--ls-sm);color:var(--text-muted);background:var(--bg-surface-2);border:1px solid var(--border);padding:1px var(--gap-xs);border-radius:var(--r-xs)}
-.oq-note{font-family:var(--font-mono);font-size:var(--font-9);color:var(--text-muted)}
-/* ── Tab accent scoping ─── */
-@media(max-width:768px){
-  .tl-nodes-row{flex-wrap:wrap;justify-content:center}
-  .tl-arrow{transform:rotate(90deg);padding:var(--gap-xs) 0}
-}
 
 
 /* ══ TAB ACCENT SCOPING ═══════════════════════════════════════════════════════
@@ -724,7 +675,6 @@ tl-node-meta{font-family:var(--font-mono);font-size:var(--font-9);color:var(--te
 #sec-financials {--tab-c:var(--teal)}
 
 #sec-room       {--tab-c:var(--amber)}
-#sec-management {--tab-c:var(--teal)}
 #sec-management {--tab-c:var(--teal)}
 #sec-board      {--tab-c:var(--red)}
 
@@ -828,13 +778,6 @@ tl-node-meta{font-family:var(--font-mono);font-size:var(--font-9);color:var(--te
 .tc-continue.show{display:block}
 .tc-exit{display:none;width:100%;height: var(--gap-2xl);border-radius:var(--r-md);font-family:var(--font-mono);font-size:var(--text-xs);cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--text-muted);transition:all var(--t-fast)}
 .tc-exit.show{display:block}
-#tour-backdrop{display:none;position:fixed;inset:0;z-index:8000;cursor:pointer}
-.tour-running #tour-backdrop{display:block}
-/* Tour overlay audio preference buttons */
-.tour-aopt{height:26px;padding:0 var(--gap-md);border-radius:var(--r-md);font-family:var(--font-mono);font-size:var(--text-xs);font-weight:700;cursor:pointer;border:1px solid var(--border-hover);background:transparent;color:var(--text-muted);transition:all var(--t-fast)}
-.tour-aopt.active{background:color-mix(in srgb,var(--teal) 14%,transparent);border-color:color-mix(in srgb,var(--teal) 35%,transparent);color:var(--teal)}
-
-
 /* ══ RISK PANEL HEADERS ══════════════════════════════════════════════════════ */
 rph-eyebrow{font-family:var(--font-mono);font-size:var(--text-xs);font-weight:700;letter-spacing:var(--ls-md);text-transform:uppercase;color:var(--tab-c,var(--purple))}
 rph-count{font-family:var(--font-mono);font-size:var(--font-9);font-weight:700;padding:2px var(--gap-xs);border-radius:var(--r-xs);color:var(--amber);background:color-mix(in srgb,var(--amber) 12%,transparent);border:1px solid color-mix(in srgb,var(--amber) 25%,transparent)}
@@ -1195,57 +1138,6 @@ fin-cac-tick-bot{position:absolute;top:calc(100% + 6px);left:50%;transform:trans
 .fin-cac-bar-bg{flex:1;height:4px;background:var(--border);border-radius:var(--r-full);overflow:hidden}
 .fin-cac-bar-inner{height:4px;border-radius:var(--r-full)}
 .fin-cac-return{font-family:var(--font-mono);font-size:var(--text-sm);font-weight:700;text-align:right}
-/* ── Fin KPI row ─────────────────────────────────────────────────── */
-.fin-kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--gap-lg)}
-.fin-kpi{display:flex;flex-direction:column;gap:var(--gap-xs);padding:var(--gap-2xl) var(--gap-xl);background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--r-xl);position:relative;overflow:hidden}
-.fin-kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
-.fin-kpi.pos::before{background:var(--teal)}
-.fin-kpi.neg::before{background:var(--red)}
-.fin-kpi.warn::before{background:var(--amber)}
-.fin-kpi.neutral::before{background:var(--border-accent)}
-.fin-kpi-label{font-family:var(--font-mono);font-size:var(--font-9);font-weight:700;letter-spacing:var(--ls-lg);text-transform:uppercase;color:var(--text-muted)}
-.fin-kpi-value{font-size:var(--text-2xl);font-weight:700;color:var(--text-primary);letter-spacing:var(--ls-neg-sm);line-height:1}
-.fin-kpi-value.pos{color:var(--teal)}
-.fin-kpi-value.warn{color:var(--amber)}
-.fin-kpi-sub{font-size:var(--font-9);font-family:var(--font-mono);color:var(--text-muted);margin-top:var(--gap-xs)}
-/* ── Three-column case ───────────────────────────────────────────── */
-.fin-case-row{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--gap-lg)}
-.fin-case-card{display:flex;flex-direction:column;gap:0;border-radius:var(--r-xl);overflow:hidden;border:1px solid var(--border)}
-.fin-case-head{padding:var(--gap-md) var(--card-px);display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
-.fin-case-title{font-family:var(--font-mono);font-size:var(--font-9);font-weight:700;letter-spacing:var(--ls-lg);text-transform:uppercase}
-.fin-case-head.pos{background:color-mix(in srgb,var(--teal) 8%,transparent)}
-.fin-case-head.pos .fin-case-title{color:var(--teal)}
-.fin-case-head.neg{background:color-mix(in srgb,var(--red) 8%,transparent)}
-.fin-case-head.neg .fin-case-title{color:var(--red)}
-.fin-case-head.warn{background:color-mix(in srgb,var(--amber) 8%,transparent)}
-.fin-case-head.warn .fin-case-title{color:var(--amber)}
-.fin-case-body{padding:var(--gap-lg) var(--card-px);display:flex;flex-direction:column;gap:var(--gap-sm);flex:1;background:var(--bg-surface)}
-.fin-case-item{display:flex;align-items:baseline;gap:var(--gap-sm);padding:var(--gap-xs) 0;border-bottom:1px solid var(--border)}
-.fin-case-item:last-child{border-bottom:none}
-.fin-case-num{font-size:var(--text-sm);font-weight:700;color:var(--text-primary);font-family:var(--font-mono);white-space:nowrap;flex-shrink:0;min-width:52px}
-.fin-case-num.pos{color:var(--teal)}
-.fin-case-num.neg{color:var(--red)}
-.fin-case-num.warn{color:var(--amber)}
-.fin-case-desc{font-size:var(--text-xs);color:var(--text-secondary);line-height:1.45}
-/* ── Capital structure ───────────────────────────────────────────── */
-.fin-tranche-row{display:flex;flex-direction:column;gap:var(--gap-md)}
-.fin-tranche-track{display:flex;align-items:stretch;gap:0;border-radius:var(--r-lg);overflow:hidden;border:1px solid var(--border)}
-.fin-tranche-seg{display:flex;flex-direction:column;gap:var(--gap-xs);padding:var(--gap-xl) var(--gap-2xl)}
-.fin-tranche-seg.p1{background:color-mix(in srgb,var(--teal) 10%,var(--bg-surface));border-right:1px solid var(--border);flex:3}
-.fin-tranche-seg.gate{background:color-mix(in srgb,var(--amber) 10%,var(--bg-surface));border-right:1px solid var(--border);flex:2;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
-.fin-tranche-seg.p2{background:var(--bg-surface);flex:5}
-.fin-tranche-amount{font-size:var(--text-xl);font-weight:700;font-family:var(--font-mono);color:var(--text-primary)}
-.fin-tranche-amount.pos{color:var(--teal)}
-.fin-tranche-label{font-family:var(--font-mono);font-size:var(--font-9);font-weight:700;letter-spacing:var(--ls-lg);text-transform:uppercase;color:var(--text-muted)}
-.fin-tranche-desc{font-size:var(--text-xs);color:var(--text-secondary);line-height:1.4;margin-top:var(--gap-xs)}
-.fin-tranche-gate-label{font-family:var(--font-mono);font-size:var(--text-xs);font-weight:700;color:var(--amber)}
-.fin-tranche-gate-date{font-family:var(--font-mono);font-size:var(--font-9);color:var(--text-muted);margin-top:var(--gap-3)}
-/* ── Kill criteria ───────────────────────────────────────────────── */
-.fin-kill-row{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--gap-lg)}
-.fin-kill-item{display:flex;flex-direction:column;gap:var(--gap-xs);padding:var(--gap-lg) var(--card-px);background:color-mix(in srgb,var(--red) 6%,var(--bg-surface));border:1px solid color-mix(in srgb,var(--red) 20%,transparent);border-radius:var(--r-lg)}
-.fin-kill-trigger{font-size:var(--text-sm);font-weight:700;color:var(--red);font-family:var(--font-mono)}
-.fin-kill-desc{font-size:var(--text-xs);color:var(--text-secondary);line-height:1.45}
-.fin-kill-outcome{font-family:var(--font-mono);font-size:var(--font-9);color:var(--text-muted);text-transform:uppercase;letter-spacing:var(--ls-md);margin-top:var(--gap-xs)}
 
 /* -- Room & Options ---- */
 .room-header{display:grid;grid-template-columns:1fr auto;gap:var(--gap-2xl);align-items:start;padding:var(--gap-2xl) var(--card-px) var(--gap-2xl);border-bottom:1px solid var(--border)}
@@ -1379,10 +1271,125 @@ room-opt-item-text{font-size:var(--text-xs);color:var(--text-secondary);line-hei
 .cf-gate{display:flex;align-items:flex-start;gap:var(--gap-xs);font-family:var(--font-mono);font-size:var(--font-9);color:var(--text-muted);line-height:1.4;padding-top:var(--gap-sm);border-top:1px solid var(--border)}
 .cf-gate-dot{width: var(--gap-xs);height: var(--gap-xs);border-radius:var(--r-full);flex-shrink:0;margin-top: var(--r-xs)}
 .cf-gate-dot.kill{background:var(--red)}.cf-gate-dot.warn{background:var(--amber)}
+
+/* ══════════════════════════════════════════════════════════════════════
+   DECISION ROOM HERO — Convergence Map + Outcome Panel (g7030 layout)
+   ══════════════════════════════════════════════════════════════════════ */
+.dr-conv-card{position:relative;overflow:hidden}
+.dr-conv-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--red) 0%,var(--amber) 50%,var(--teal) 100%)}
+.dr-conv-grid{display:grid;grid-template-columns:var(--dr-role-col) repeat(3,1fr);gap:0}
+.dr-cg-h{padding:var(--gap-sm) var(--gap-md);background:var(--bg-surface-2);font-family:var(--font-mono);font-size:var(--font-9);font-weight:700;letter-spacing:var(--ls-md);text-transform:uppercase;color:var(--text-muted);border-bottom:2px solid var(--border)}
+.dr-cg-h.r0{color:var(--red)}.dr-cg-h.r1{color:var(--amber)}.dr-cg-h.r2{color:var(--teal)}
+.dr-cg-cell{padding:var(--gap-xs) var(--gap-md);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:var(--gap-sm);background:var(--bg-surface);transition:background var(--t-fast)}
+.dr-cg-row:hover .dr-cg-cell{background:var(--bg-hover)}
+.dr-cg-role{font-family:var(--font-mono);font-size:var(--font-9);font-weight:600;color:var(--text-primary);display:flex;align-items:center;gap:var(--gap-xs);white-space:nowrap}
+.dr-cg-photo{width:var(--avatar-xs);height:var(--avatar-xs);border-radius:50%;object-fit:cover;border:1px solid var(--border)}
+.dr-cg-dot{width:var(--dot-sm);height:var(--dot-sm);border-radius:50%;flex-shrink:0}
+.dr-cg-dot.go{background:var(--teal)}.dr-cg-dot.notyet{background:var(--red)}.dr-cg-dot.cond{background:var(--amber)}
+.dr-cg-lbl{font-family:var(--font-mono);font-size:var(--font-9);font-weight:600}
+.dr-cg-lbl.go{color:var(--teal)}.dr-cg-lbl.notyet{color:var(--red)}.dr-cg-lbl.cond{color:var(--amber)}
+.dr-cg-conf{font-family:var(--font-mono);font-size:var(--font-9);color:var(--text-muted);margin-left:auto}
+.dr-outcome{position:relative;overflow:hidden;display:flex;flex-direction:column}
+.dr-outcome::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--teal)}
+.dr-out-block{padding:var(--gap-lg) var(--card-px);border-bottom:1px solid var(--border)}
+.dr-out-block:last-child{border-bottom:none;flex:1}
+.dr-out-label{font-family:var(--font-mono);font-size:var(--font-9);font-weight:700;letter-spacing:var(--ls-lg);text-transform:uppercase;color:var(--text-muted);margin-bottom:var(--gap-xs)}
+.dr-out-val{font-size:var(--text-xl);font-weight:700;color:var(--text-primary);line-height:1.2}
+.dr-out-sub{font-size:var(--text-xs);color:var(--text-secondary);line-height:1.5;margin-top:var(--gap-xs)}
+.dr-conf-wrap{display:flex;align-items:center;gap:var(--gap-lg)}
+.dr-conf-ring{width:var(--conf-ring-sz);height:var(--conf-ring-sz);position:relative;flex-shrink:0}
+.dr-conf-ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.dr-conf-ring circle{fill:none;stroke-width:4}
+.dr-conf-ring .ring-bg{stroke:var(--border)}
+.dr-conf-ring .ring-fg{stroke:var(--teal);stroke-linecap:round;transition:stroke-dashoffset var(--t-slow)}
+.dr-conf-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:var(--text-lg);font-weight:700;color:var(--text-primary)}
+.dr-conf-meta{display:flex;flex-direction:column;gap:var(--gap-3)}
+.dr-stat-row{display:flex;justify-content:space-between;align-items:center;padding:var(--gap-sm) 0;border-top:1px solid var(--border)}
+.dr-stat-label{font-family:var(--font-mono);font-size:var(--font-9);color:var(--text-muted);text-transform:uppercase;letter-spacing:var(--ls-md)}
+.dr-stat-val{font-family:var(--font-mono);font-size:var(--text-sm);font-weight:700;color:var(--text-primary)}
+.dr-stat-val.warn{color:var(--amber)}.dr-stat-val.pos{color:var(--teal)}.dr-stat-val.neg{color:var(--red)}
+
+/* ── Facilitator Observations (Room tab) ── */
+.dr-facil-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:var(--gap-lg)}
+.dr-facil-card{background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:var(--gap-xl) var(--card-px);position:relative;overflow:hidden;transition:border-color var(--t-fast),box-shadow var(--t-fast)}
+.dr-facil-card:hover{border-color:var(--border-hover);box-shadow:var(--shadow-sm)}
+.dr-facil-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.dr-facil-card.r0::before{background:var(--red)}.dr-facil-card.r1::before{background:var(--amber)}.dr-facil-card.r2::before{background:var(--teal)}
+.dr-facil-round{font-family:var(--font-mono);font-size:var(--font-9);font-weight:700;letter-spacing:var(--ls-lg);text-transform:uppercase;margin-bottom:var(--gap-sm)}
+.dr-facil-round.r0{color:var(--red)}.dr-facil-round.r1{color:var(--amber)}.dr-facil-round.r2{color:var(--teal)}
+.dr-facil-text{font-size:var(--text-xs);color:var(--text-secondary);line-height:1.65;border-left:2px solid var(--border);padding-left:var(--gap-md)}
+.dr-facil-meta{display:flex;gap:var(--gap-sm);flex-wrap:wrap;margin-top:var(--gap-sm)}
+
+/* ══════════════════════════════════════════════════════════════════════
+   MANAGEMENT HANDOFF HERO — Execution Timeline Header
+   ══════════════════════════════════════════════════════════════════════ */
+.mh-hero{position:relative;overflow:hidden;padding:var(--gap-2xl) var(--card-px)}
+.mh-hero::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--teal) 0%,var(--teal) 30%,var(--amber) 50%,var(--red) 100%)}
+.mh-timeline{display:flex;align-items:stretch;gap:0;margin-bottom:var(--gap-xl);position:relative}
+.mh-tl-phase{flex:1;display:flex;flex-direction:column;position:relative;padding:var(--gap-lg) var(--gap-md);border:1px solid var(--border);background:var(--bg-surface);transition:background var(--t-fast)}
+.mh-tl-phase:first-child{border-radius:var(--r-lg) 0 0 var(--r-lg)}
+.mh-tl-phase:last-child{border-radius:0 var(--r-lg) var(--r-lg) 0}
+.mh-tl-phase:hover{background:var(--bg-hover)}
+.mh-tl-phase.active{border-color:color-mix(in srgb,var(--teal) 40%,var(--border));background:color-mix(in srgb,var(--teal) 4%,transparent)}
+.mh-tl-phase.gated{border-color:color-mix(in srgb,var(--amber) 40%,var(--border));background:color-mix(in srgb,var(--amber) 4%,transparent)}
+.mh-tl-tag{font-family:var(--font-mono);font-size:var(--font-9);font-weight:700;letter-spacing:var(--ls-lg);text-transform:uppercase;margin-bottom:var(--gap-xs)}
+.mh-tl-tag.live{color:var(--teal)}.mh-tl-tag.gate{color:var(--amber)}.mh-tl-tag.locked{color:var(--text-muted)}
+.mh-tl-amount{font-size:var(--text-lg);font-weight:700;color:var(--text-primary);line-height:1.2;margin-bottom:var(--gap-3)}
+.mh-tl-desc{font-size:var(--text-xs);color:var(--text-secondary);line-height:1.5}
+.mh-tl-date{font-family:var(--font-mono);font-size:var(--font-9);font-weight:700;color:var(--text-muted);margin-top:auto;padding-top:var(--gap-sm);border-top:1px solid var(--border)}
+.mh-tl-gate{flex:0 0 auto;width:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:color-mix(in srgb,var(--amber) 8%,transparent);border:1px solid color-mix(in srgb,var(--amber) 30%,transparent);position:relative}
+.mh-tl-gate-icon{font-size:var(--text-lg);color:var(--amber);margin-bottom:var(--gap-3)}
+.mh-tl-gate-lbl{font-family:var(--font-mono);font-size:7px;font-weight:700;letter-spacing:var(--ls-lg);text-transform:uppercase;color:var(--amber);text-align:center;line-height:1.3}
+.mh-hero-body{display:grid;grid-template-columns:1fr auto;gap:var(--gap-2xl);align-items:start}
+.mh-hero-narrative{display:flex;flex-direction:column;gap:var(--gap-sm)}
+.mh-hero-eyebrow{font-family:var(--font-mono);font-size:var(--font-9);font-weight:700;letter-spacing:var(--ls-lg);text-transform:uppercase;color:var(--teal)}
+.mh-hero-title{font-size:var(--text-xl);font-weight:700;color:var(--text-primary);line-height:1.35}
+.mh-hero-sub{font-size:var(--text-xs);color:var(--text-secondary);line-height:1.6;max-width:640px}
+.mh-hero-stat{display:flex;flex-direction:column;align-items:flex-end;gap:var(--gap-xs);flex-shrink:0}
+.mh-hero-stat-val{font-size:var(--text-2xl);font-weight:700;color:var(--amber);font-family:var(--font-mono);letter-spacing:var(--ls-neg-md);line-height:1}
+.mh-hero-stat-label{font-family:var(--font-mono);font-size:var(--font-9);color:var(--text-muted);text-transform:uppercase;letter-spacing:var(--ls-lg);text-align:right}
+
+/* ══════════════════════════════════════════════════════════════════════
+   BOARD BRIEF — Governance-grade header refinements
+   ══════════════════════════════════════════════════════════════════════ */
+.board-gov-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:var(--gap-lg)}
+.board-gov-card{background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:var(--gap-xl) var(--card-px);transition:border-color var(--t-fast),box-shadow var(--t-fast)}
+.board-gov-card:hover{border-color:var(--border-hover);box-shadow:var(--shadow-sm)}
+.board-gov-label{font-family:var(--font-mono);font-size:var(--font-9);font-weight:700;letter-spacing:var(--ls-lg);text-transform:uppercase;color:var(--red);margin-bottom:var(--gap-sm)}
+.board-gov-val{font-size:var(--text-sm);font-weight:600;color:var(--text-primary);line-height:1.4;margin-bottom:var(--gap-xs)}
+.board-gov-desc{font-size:var(--text-xs);color:var(--text-secondary);line-height:1.6}
+.board-rec-card{background:var(--bg-surface);border:1px solid var(--border);border-top:3px solid var(--red);border-radius:var(--r-xl);padding:var(--gap-2xl) var(--card-px);margin-bottom:var(--gap-lg)}
+.board-rec-label{font-family:var(--font-mono);font-size:var(--font-9);font-weight:700;letter-spacing:var(--ls-lg);text-transform:uppercase;color:var(--red);margin-bottom:var(--gap-sm)}
+.board-rec-text{font-size:var(--text-base);color:var(--text-primary);line-height:1.7;font-weight:500}
+.board-summary-row{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--gap-lg);margin-bottom:var(--gap-lg)}
+.board-sum-item{background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:var(--gap-lg) var(--card-px);text-align:center;transition:border-color var(--t-fast)}
+.board-sum-item:hover{border-color:var(--border-hover)}
+.board-sum-val{font-family:var(--font-mono);font-size:var(--text-xl);font-weight:700;color:var(--text-primary);line-height:1.2}
+.board-sum-label{font-family:var(--font-mono);font-size:var(--font-9);color:var(--text-muted);text-transform:uppercase;letter-spacing:var(--ls-md);margin-top:var(--gap-xs)}
+
+/* ── Board conditions list (overrides accordion oq-body max-height:0) ── */
+.open-q-list{display:flex;flex-direction:column;gap:var(--gap-sm)}
+.open-q-list .oq-item{display:flex;align-items:flex-start;gap:var(--gap-md);padding:var(--gap-md) var(--card-px)}
+.open-q-list .oq-body{max-height:none;overflow:visible;flex:1;display:flex;flex-direction:column;gap:var(--gap-xs)}
+.oq-q{font-size:var(--text-sm);color:var(--text-primary);line-height:1.5}
+.oq-meta{display:flex;gap:var(--gap-sm);align-items:center;margin-top:var(--gap-3)}
+.oq-owner{font-family:var(--font-mono);font-size:var(--font-9);font-weight:700;color:var(--tab-c,var(--red));text-transform:uppercase;letter-spacing:var(--ls-md)}
+.oq-note{font-family:var(--font-mono);font-size:var(--font-9);color:var(--red)}
+
+/* ── Shared utility classes (extracted from inline styles) ── */
+.chip-row{display:flex;gap:var(--gap-sm);flex-wrap:wrap;margin-top:var(--gap-md)}
+.eyebrow-label{font-family:var(--font-mono);font-size:var(--font-9);font-weight:700;letter-spacing:var(--ls-lg);text-transform:uppercase;color:var(--text-muted)}
+.prose-body{font-size:var(--text-sm);line-height:1.7;color:var(--text-secondary)}
+.legend-item{display:flex;align-items:center;gap:var(--gap-xs);font-family:var(--font-mono);font-size:var(--font-9)}
+.v-tag-board{border-color:color-mix(in srgb,var(--red) 40%,var(--border));color:var(--red)}
+.card-flush .card-body{padding:0}
+.card-overflow{overflow:hidden}
+.text-center{text-align:center}
+.card-section-bar{padding:var(--gap-md) var(--card-px);border-bottom:1px solid var(--border)}
 </style>
 </head>
 <body>
-</div><div class="tb-btns"><button class="tb-btn" onclick="tourPrev()">&#8592; Prev</button><button class="tb-btn tb-close" onclick="tourEnd()">&#x2715;</button></div></div>
+
 <!-- TOUR ELEMENTS: fog panels + ring + card + backdrop -->
 <div id="tour-backdrop" onclick="tourEnd()"></div>
 <div class="tour-fog" id="tour-fog-top"></div>
@@ -1390,10 +1397,6 @@ room-opt-item-text{font-size:var(--text-xs);color:var(--text-secondary);line-hei
 <div class="tour-fog" id="tour-fog-left"></div>
 <div class="tour-fog" id="tour-fog-right"></div>
 <div id="tour-ring"></div>
-
-
-<!-- TOUR ELEMENTS -->
-<div id="tour-backdrop" onclick="tourEnd()"></div>
 <div id="tour-card">
   <div class="tc-step" id="tc-step">BRIEFING &middot; 1 OF 4</div>
   <div class="tc-title" id="tc-title">&mdash;</div>
@@ -1416,7 +1419,6 @@ room-opt-item-text{font-size:var(--text-xs);color:var(--text-secondary);line-hei
   <button class="tc-exit" id="tc-exit" onclick="tourEnd()">Exit Tour</button>
 </div>
 
-<div id="tour-ring"></div>
 <!-- TOUR OVERLAY -->
 
 
@@ -1492,7 +1494,6 @@ room-opt-item-text{font-size:var(--text-xs);color:var(--text-secondary);line-hei
     <div class="ip-title" id="ip-title">&#8212;</div>
     <div class="ip-body" id="ip-body">Click any i button to learn about that section.</div>
   </div>
-</div></div></div>
 </div>
 
 <!-- PAGE -->
@@ -2402,12 +2403,12 @@ room-opt-item-text{font-size:var(--text-xs);color:var(--text-secondary);line-hei
   </div>
   <div class="ib-wrap">
     <div class="ib-cols">
-      <div class="insight-col"><div class="insight-q">Why the room moved</div><div class="insight-a">CEO entered alone. Every other role entered NOT YET -- not as obstruction, but because the execution case had not been made. The deliberation did not change the strategic direction. It changed the conditions under which that direction could be executed without destroying the team or triggering regulatory exposure.</div></div>
-      <div class="insight-col"><div class="insight-q">The decisive moment</div><div class="insight-a">R2 was not consensus by exhaustion. It was compression by clarity. Six separate conditions collapsed into one because the room agreed: every blocker traces back to the same unvalidated number -- the $500K line-item budget. Solve that, and the path clears. That is why OPT-4 won.</div></div>
-      <div class="insight-col"><div class="insight-q">What the room did not resolve</div><div class="insight-a">Five questions remained open at approval: GDPR technical scope, EU FTE composition, entity jurisdiction, comp benchmark data, and engineering capacity. The groupthink flag signals the room may have moved to conditional alignment before those were adequately stress-tested.</div></div>
+      <div class="insight-col"><div class="insight-q">Where the money goes</div><div class="insight-a" id="fin-insight-1">$500K deploys across two tranches. Phase 1 ($150K) is pre-authorized for GDPR and legal entity setup. Phase 2 ($350K) releases only on validated line-item budget. The two largest line items &mdash; EU FTE costs and GDPR counsel &mdash; are unvalidated estimates that together could breach the envelope.</div></div>
+      <div class="insight-col"><div class="insight-q">What breaks the model</div><div class="insight-a" id="fin-insight-2">CAC above $50K for two consecutive months kills Phase 2. EU FTE costs at upper bound ($460K) consume 92% of the envelope before GTM spend. GDPR counsel upper bound ($375K) combined with FTE makes the $500K envelope insufficient. The model works at base case. It breaks at any single stress point.</div></div>
+      <div class="insight-col"><div class="insight-q">What the Board needs to know</div><div class="insight-a" id="fin-insight-3">The strategic return is 3.5&times; LTV/CAC at base case with a $525K pipeline from 3 confirmed EU prospects. But the execution budget is built on assumptions. CFO has not validated a single line item against Radford EMEA benchmarks. The March 15 gate exists because the numbers are not yet real.</div></div>
     </div>
     <div class="ib-actions">
-      <button class="ib-audio" onclick="toggleAudio('audio-room')"><span class="ib-audio-icon">&#9654;</span>The Room &amp; Options &middot; 3 min</button>
+      <button class="ib-audio" onclick="toggleAudio('audio-fin')"><span class="ib-audio-icon">&#9654;</span>Financial Overview &middot; 3 min</button>
     </div>
   </div>
 
@@ -2423,7 +2424,7 @@ room-opt-item-text{font-size:var(--text-xs);color:var(--text-secondary);line-hei
 
   <!-- ROW 2: SCENARIO ANALYSIS -->
   <div class="section-label">Scenario Analysis &mdash; Return Profile Across Outcomes <button class="info-btn" data-title="Scenario Analysis" data-body="Three scenarios modeled by CFO. Revenue = LTV x logos closed. Net return = revenue minus investment. Phase 1 ($150K) is maximum exposure if Phase 2 gate fails.">i</button></div>
-  <div class="card" style="overflow:hidden">
+  <div class="card card-overflow">
     <div class="fin-scenario-wrap" id="fin-scenario-wrap">
       <div class="fin-scenario-row is-header">
         <div class="fin-col-head left">Scenario</div>
@@ -2437,7 +2438,7 @@ room-opt-item-text{font-size:var(--text-xs);color:var(--text-secondary);line-hei
   </div>
 
   <div class="section-label">CAC Sensitivity &mdash; Where the Model Breaks <button class="info-btn" data-title="CAC Sensitivity" data-body="EU CAC expected 30-50% above US $35K baseline. Return profile changes materially at each threshold. Kill trigger at $80K halts Phase 2 regardless of revenue.">i</button></div>
-  <div class="card" style="overflow:hidden">
+  <div class="card card-overflow">
     <div class="card-body">
       <div class="fin-cac-track-wrap" id="fin-cac-track-wrap">
         <div class="fin-cac-track" id="fin-cac-track">
@@ -2530,22 +2531,48 @@ room-opt-item-text{font-size:var(--text-xs);color:var(--text-secondary);line-hei
 
   <div class="s-section" id="sec-room">
 
-  <!-- HEADER: section intro like briefing/risk, NOT a card -->
-  <div class="room-header">
-    <div>
-      <div class="room-header-eyebrow">The Room &amp; Options -- Deliberation Record</div>
-      <div class="room-header-title" id="room-header-title">6 of 7 entered skeptical. All 7 left conditionally aligned.</div>
-      <div class="room-header-sub" id="room-header-sub">CEO was the only voice for GO at Round 0. Every other role entered NOT YET with domain-specific blockers. Three rounds of structured deliberation produced unanimous conditional approval -- but with a HIGH groupthink flag and a confidence band of only 60-72%.</div>
-      <div style="display:flex;gap:var(--gap-sm);flex-wrap:wrap;margin-top:var(--gap-md)" id="room-header-chips">
-        <span class="chip chip-teal">7/7 Conditional</span>
-        <span class="chip chip-amber">Groupthink HIGH</span>
-        <span class="chip">3 Rounds</span>
-        <span class="chip chip-teal">OPT-4 Chosen</span>
+  <!-- HERO: Convergence Map + Outcome Panel (mirrors Risk tab g7030 layout) -->
+  <div class="g7030">
+    <div class="card dr-conv-card">
+      <div class="card-head" style="--ct-accent:var(--amber)">
+        <div class="card-title">Deliberation Convergence</div>
+        <button class="info-btn" data-title="Deliberation Convergence" data-body="7 roles deliberated across 3 rounds. Each cell shows stance and confidence. Watch the room shift from fragmented (R0) to conditionally aligned (R2). Color = stance: red=NOT YET, amber=CONDITIONAL, teal=GO.">i</button>
+        <div class="u-flex u-items-ctr u-gap-lg">
+          <span class="legend-item" style="color:var(--teal)"><span class="u-legend-dot-round" style="background:var(--teal)"></span>GO</span>
+          <span class="legend-item" style="color:var(--amber)"><span class="u-legend-dot-round" style="background:var(--amber)"></span>Conditional</span>
+          <span class="legend-item" style="color:var(--red)"><span class="u-legend-dot-round" style="background:var(--red)"></span>Not Yet</span>
+        </div>
+      </div>
+      <div class="card-body card-flush">
+        <div class="dr-conv-grid" id="dr-conv-grid">
+          <!-- populated by buildRoom -->
+        </div>
       </div>
     </div>
-    <div class="room-verdict-stat">
-      <div class="room-verdict-val" id="room-conf-val">67%</div>
-      <div class="room-verdict-label">Avg Confidence<br>All Conditional</div>
+    <div class="card dr-outcome">
+      <div class="dr-out-block">
+        <div class="dr-out-label">Decision Outcome</div>
+        <div class="dr-out-val" id="dr-chosen-opt">OPT-4</div>
+        <div class="dr-out-sub" id="dr-chosen-name">Delay to Q1 2026 &mdash; Budget Validation First</div>
+      </div>
+      <div class="dr-out-block">
+        <div class="dr-out-label">Avg Confidence</div>
+        <div class="dr-conf-wrap">
+          <div class="dr-conf-ring">
+            <svg viewBox="0 0 72 72"><circle class="ring-bg" cx="36" cy="36" r="32"/><circle class="ring-fg" id="dr-conf-arc" cx="36" cy="36" r="32" stroke-dasharray="201" stroke-dashoffset="66"/></svg>
+            <div class="dr-conf-num" id="dr-conf-pct">67%</div>
+          </div>
+          <div class="dr-conf-meta">
+            <span class="eyebrow-label">All Conditional</span>
+            <span class="eyebrow-label">Range: <span id="dr-conf-range" style="color:var(--text-primary)">60&ndash;72%</span></span>
+          </div>
+        </div>
+      </div>
+      <div class="dr-out-block">
+        <div class="dr-stat-row"><span class="dr-stat-label">Vote</span><span class="dr-stat-val pos" id="dr-vote-val">7/7</span></div>
+        <div class="dr-stat-row"><span class="dr-stat-label">Rounds</span><span class="dr-stat-val" id="dr-rounds-val">3</span></div>
+        <div class="dr-stat-row"><span class="dr-stat-label">Groupthink</span><span class="dr-stat-val warn" id="dr-gt-val">HIGH</span></div>
+      </div>
     </div>
   </div>
 
@@ -2567,19 +2594,19 @@ room-opt-item-text{font-size:var(--text-xs);color:var(--text-secondary);line-hei
     <div class="room-arc-card r0">
       <div class="room-arc-round r0">Round 0 -- Entry</div>
       <div class="room-arc-headline" id="room-arc-r0-headline">1 GO, 6 NOT YET</div>
-      <div style="display:flex;gap:var(--gap-sm);flex-wrap:wrap;margin:var(--gap-xs) 0" id="room-arc-r0-chips"></div>
+      <div class="chip-row" style="margin-top:var(--gap-xs)" id="room-arc-r0-chips"></div>
       <div class="room-arc-desc" id="room-arc-r0-desc">CEO cited strategic urgency and board mandate. All others surfaced domain-specific blockers: unvalidated FTE costs, GDPR scope undefined, no legal counsel, no comp benchmarks, no engineering capacity model.</div>
     </div>
     <div class="room-arc-card r1">
       <div class="room-arc-round r1">Round 1 -- Convergence</div>
       <div class="room-arc-headline" id="room-arc-r1-headline">7/7 Conditional -- OPT-5</div>
-      <div style="display:flex;gap:var(--gap-sm);flex-wrap:wrap;margin:var(--gap-xs) 0" id="room-arc-r1-chips"></div>
+      <div class="chip-row" style="margin-top:var(--gap-xs)" id="room-arc-r1-chips"></div>
       <div class="room-arc-desc" id="room-arc-r1-desc">Every role moved to CONDITIONAL_SUPPORT around OPT-5 with 6 gates. LEGAL hit 46% confidence -- the lowest point in the deliberation. The room agreed on direction but the conditions were complex.</div>
     </div>
     <div class="room-arc-card r2">
       <div class="room-arc-round r2">Round 2 -- Resolution</div>
       <div class="room-arc-headline" id="room-arc-r2-headline">7/7 Conditional -- OPT-4</div>
-      <div style="display:flex;gap:var(--gap-sm);flex-wrap:wrap;margin:var(--gap-xs) 0" id="room-arc-r2-chips"></div>
+      <div class="chip-row" style="margin-top:var(--gap-xs)" id="room-arc-r2-chips"></div>
       <div class="room-arc-desc" id="room-arc-r2-desc">OPT-5 simplified to OPT-4: 6 conditions collapsed into one -- validated $500K line-item budget. Each role distilled to their single non-negotiable. Groupthink flag triggered at this stage.</div>
     </div>
   </div>
@@ -2612,42 +2639,71 @@ room-opt-item-text{font-size:var(--text-xs);color:var(--text-secondary);line-hei
 
   <!-- MEMBER BREAKDOWN -->
   <div class="section-label">Member Breakdown -- Click Any Row to Expand <button class="info-btn" data-title="Member Breakdown" data-body="Final confidence, stance across all 3 rounds, and the single hard gate condition each role required. Click any row to read their direct quote.">i</button></div>
-  <div class="card" style="overflow:hidden">
+  <div class="card card-overflow">
     <div class="room-role-table">
       <div class="room-role-header">
         <div class="room-role-col-head">Member</div>
         <div class="room-role-col-head">Final Conf</div>
-        <div class="room-role-col-head" style="text-align:center">R0</div>
-        <div class="room-role-col-head" style="text-align:center">R1</div>
-        <div class="room-role-col-head" style="text-align:center">R2</div>
+        <div class="room-role-col-head text-center">R0</div>
+        <div class="room-role-col-head text-center">R1</div>
+        <div class="room-role-col-head text-center">R2</div>
         <div class="room-role-col-head">Hard Gate Condition</div>
       </div>
       <div id="room-role-table-body"></div>
     </div>
   </div>
 
+  <!-- FACILITATOR OBSERVATIONS: color commentary from f1Outputs -->
+  <div class="section-label">Facilitator Observations &mdash; What the Moderator Saw <button class="info-btn" data-title="Facilitator Observations" data-body="The AI facilitator observed each round of deliberation and flagged key dynamics: coalition shifts, persuasion patterns, and unresolved tensions. These are the moments a human moderator would have noted.">i</button></div>
+  <div class="dr-facil-grid" id="dr-facil-grid">
+    <!-- populated by buildRoom -->
+  </div>
+
   <!-- OPTIONS: what was on the table -->
-  
+  <div class="section-label">Options on the Table &mdash; What the Room Evaluated <button class="info-btn" data-title="Options Evaluated" data-body="Five options were evaluated by all 7 roles. Each option was voted on in Round 2. Click any option tab to see the case for and against.">i</button></div>
+  <div class="room-opts-tabs" id="room-opts-tabs"></div>
+  <div id="room-opts-panels"></div>
 
 </div>
 
   <div class="s-section" id="sec-management">
 
-  <div class="room-header">
-    <div>
-      <div class="room-header-eyebrow">Management Handoff -- What Each Team Does Next</div>
-      <div class="room-header-title">The decision is made. Execution starts now.</div>
-      <div class="room-header-sub">OPT-4 approved conditionally. $150K Phase 1 deploys immediately. Phase 2 requires a validated $500K line-item budget by March 15. What follows is not a strategic plan -- it is a sequenced set of commitments each function owns, with kill gates that stop the clock if not met.</div>
-      <div style="display:flex;gap:var(--gap-sm);flex-wrap:wrap;margin-top:var(--gap-md)">
-        <span class="chip chip-red">3 Kill Gates</span>
-        <span class="chip chip-amber">Mar 15 Budget Gate</span>
-        <span class="chip chip-teal">$150K Phase 1 Live</span>
-        <span class="chip">7 Owners</span>
+  <!-- HERO: Execution Timeline -->
+  <div class="card mh-hero">
+    <div class="mh-timeline" id="mh-timeline">
+      <div class="mh-tl-phase active">
+        <div class="mh-tl-tag live">Phase 1 &mdash; Live</div>
+        <div class="mh-tl-amount" id="mh-p1-amount">$150K</div>
+        <div class="mh-tl-desc">GDPR architecture, legal entity setup, external counsel engagement. Pre-authorized &mdash; no board vote required.</div>
+        <div class="mh-tl-date" id="mh-p1-date">Deploys immediately</div>
+      </div>
+      <div class="mh-tl-gate">
+        <div class="mh-tl-gate-icon">&#x25C6;</div>
+        <div class="mh-tl-gate-lbl" id="mh-gate-date">GO/<br>NO-GO<br>Mar 15</div>
+      </div>
+      <div class="mh-tl-phase gated">
+        <div class="mh-tl-tag gate">Phase 2 &mdash; Gated</div>
+        <div class="mh-tl-amount" id="mh-p2-amount">$350K</div>
+        <div class="mh-tl-desc">EU FTE hiring, infrastructure deployment, GTM execution. Requires validated line-item budget from CFO + CHRO.</div>
+        <div class="mh-tl-date" id="mh-p2-date">Releases only on gate clearance</div>
       </div>
     </div>
-    <div class="room-verdict-stat">
-      <div class="room-verdict-val" style="color:var(--tab-c)">Mar 15</div>
-      <div class="room-verdict-label">Phase 2<br>Gate Date</div>
+    <div class="mh-hero-body">
+      <div class="mh-hero-narrative">
+        <div class="mh-hero-eyebrow">Execution Playbook &mdash; Management Handoff</div>
+        <div class="mh-hero-title" id="mh-hero-title">The decision is made. Execution starts now.</div>
+        <div class="mh-hero-sub" id="mh-hero-sub">OPT-4 approved conditionally. $150K Phase 1 deploys immediately. Phase 2 requires a validated $500K line-item budget by March 15. What follows is not a strategic plan &mdash; it is a sequenced set of commitments each function owns, with kill gates that stop the clock if not met.</div>
+        <div class="chip-row" id="mh-hero-chips">
+          <span class="chip chip-red">3 Kill Gates</span>
+          <span class="chip chip-amber">Mar 15 Budget Gate</span>
+          <span class="chip chip-teal">$150K Phase 1 Live</span>
+          <span class="chip">7 Owners</span>
+        </div>
+      </div>
+      <div class="mh-hero-stat">
+        <div class="mh-hero-stat-val" id="mh-gate-stat">Mar 15</div>
+        <div class="mh-hero-stat-label">Phase 2<br>Gate Date</div>
+      </div>
     </div>
   </div>
 
@@ -2670,8 +2726,8 @@ room-opt-item-text{font-size:var(--text-xs);color:var(--text-secondary);line-hei
   </div>
 
   <div class="section-label">Department Briefs -- Select a Role <button class="info-btn" data-title="Department Briefs" data-body="Each role's Phase 1 action plan, success metrics, approval condition, and Phase 2 commitments. Click any row to expand detail.">i</button></div>
-  <div class="card" style="overflow:hidden">
-    <div style="padding:var(--gap-md) var(--card-px);border-bottom:1px solid var(--border)">
+  <div class="card card-overflow">
+    <div class="card-section-bar">
       <div class="mh-pill-tabs" id="mgmt-pill-tabs"></div>
     </div>
     <div id="mgmt-panels"></div>
@@ -2684,24 +2740,25 @@ room-opt-item-text{font-size:var(--text-xs);color:var(--text-secondary);line-hei
 
   <div class="s-section" id="sec-board">
 
-  <div class="verdict-hero">
+  <!-- HERO: Board verdict (unique layout — not shared with Briefing) -->
+  <div class="verdict-hero" style="--v-hover-c:var(--red)">
     <div class="v-left">
-      <div class="v-tag">Board Action Requested</div>
-      <div class="v-word">Approve<br>With Conditions</div>
-      <div class="v-sub">ELT Unanimous &middot; 7&ndash;0</div>
-      <div class="v-chips">
+      <div class="v-tag v-tag-board">Board Action Requested</div>
+      <div class="v-word" id="board-action-word">Approve<br>With Conditions</div>
+      <div class="v-sub" id="board-vote-sub">ELT Unanimous &middot; 7&ndash;0</div>
+      <div class="v-chips" id="board-hero-chips">
         <span class="v-chip">7 Conditions</span>
         <span class="v-chip">4 Kill Gates</span>
         <span class="v-chip">3 Open Questions</span>
       </div>
     </div>
     <div class="v-right">
-      <p class="v-narrative">ELT deliberation complete. All 7 roles reached conditional approval on OPT-5 &mdash; Minimal Viable Entry. Board authorization required before any capital exceeding the FY25 Legal &amp; Compliance budget allocation is deployed.
+      <p class="v-narrative" id="board-narrative">ELT deliberation complete. All 7 roles reached conditional approval on OPT-5 &mdash; Minimal Viable Entry. Board authorization required before any capital exceeding the FY25 Legal &amp; Compliance budget allocation is deployed.
         <span class="cite strat" data-t="INTERNAL_STRATEGY" data-l="Board governance packet &mdash; ELT vote outcome">&#9670;</span>
         No EU hiring, infrastructure spend, or customer contracts will be executed until Board approves and CFO confirms burn rate reconciliation.
         <span class="cite doc" data-t="INTERNAL_DOCUMENT" data-l="Financial mechanics &mdash; phase-gated capital plan">&#9671;</span>
       </p>
-      <div style="display:flex;gap:var(--gap-sm);flex-wrap:wrap;margin-top:var(--gap-md)">
+      <div class="chip-row" id="board-hero-tags">
         <span class="chip chip-blue">7&ndash;0 Conditional</span>
         <span class="chip chip-red">HIGH Groupthink</span>
         <span class="chip chip-amber">Board Auth Required</span>
@@ -2709,11 +2766,19 @@ room-opt-item-text{font-size:var(--text-xs);color:var(--text-secondary);line-hei
     </div>
   </div>
 
+  <!-- BOARD SUMMARY METRICS -->
+  <div class="board-summary-row" id="board-summary-row">
+    <div class="board-sum-item"><div class="board-sum-val" id="board-sum-invest">$500K</div><div class="board-sum-label">Total Investment</div></div>
+    <div class="board-sum-item"><div class="board-sum-val" id="board-sum-conf">67%</div><div class="board-sum-label">Avg Confidence</div></div>
+    <div class="board-sum-item"><div class="board-sum-val" id="board-sum-conds">7</div><div class="board-sum-label">Conditions</div></div>
+    <div class="board-sum-item"><div class="board-sum-val" style="color:var(--red)" id="board-sum-kills">2</div><div class="board-sum-label">Kill Gates</div></div>
+  </div>
+
   <div class="ib-wrap">
     <div class="ib-cols">
-      <div class="insight-col"><div class="insight-q">Vote outcome</div><div class="insight-a">7 of 7 ELT roles voted APPROVE WITH CONDITIONS across 3 rounds. No dissent recorded. Unanimous conditional support for OPT-5 after structured evidence-based deliberation.</div></div>
-      <div class="insight-col"><div class="insight-q">Board ask</div><div class="insight-a">Formal authorization of the $500K EU expansion initiative before any capital exceeds the FY25 Legal &amp; Compliance budget allocation. Materials due Feb 7&ndash;8 for the Feb 15 deadline.</div></div>
-      <div class="insight-col"><div class="insight-q">Risk to flag</div><div class="insight-a">HIGH groupthink severity at unanimous R2 convergence. Independent GDPR scoping review recommended. Burn rate discrepancy ($1.25M vs $1.497M actual) must be reconciled in Board materials.</div></div>
+      <div class="insight-col"><div class="insight-q">What you are approving</div><div class="insight-a" id="board-vote">$500K EU market entry under a two-tranche structure. $150K releases immediately for GDPR and legal entity. $350K releases only upon validated budget by March 15. ELT voted 7&ndash;0 conditional approval across 3 rounds of structured deliberation. No dissent recorded.</div></div>
+      <div class="insight-col"><div class="insight-q">What you are risking</div><div class="insight-a" id="board-ask">Maximum downside is $150K if Phase 2 gate fails. Full $500K exposure only if all gates clear. Two kill criteria auto-halt the initiative: GDPR scope exceeding 14 eng-weeks, or post-investment runway falling below 12 months. Governance threshold of $250K is triggered.</div></div>
+      <div class="insight-col"><div class="insight-q">What you should challenge</div><div class="insight-a" id="board-risk">HIGH groupthink flag &mdash; all 7 roles converged with no recorded dissent. Request independent GDPR scoping review. Burn rate discrepancy ($1.25M budgeted vs $1.497M actual) must be reconciled before Board materials are finalized. Ask CFO for validated line-item breakdown.</div></div>
     </div>
     <div class="ib-actions">
       <button class="ib-audio" onclick="toggleAudio('audio-board')"><div class="ib-audio-icon">&#9654;</div>Board Overview &middot; 2 min</button>
@@ -2723,15 +2788,21 @@ room-opt-item-text{font-size:var(--text-xs);color:var(--text-secondary);line-hei
     </div>
   </div>
 
-  <div class="card">
-    <div class="card-head"><span class="card-title">STRATEGIC RATIONALE</span></div>
-    <div class="card-body" style="font-size:var(--text-sm);line-height:1.7;color:var(--text-secondary)">The Executive Leadership Team unanimously approved OPT-5 &mdash; Minimal Viable Entry via a land-and-expand model &mdash; as the only option that satisfies the company's $250K governance threshold, preserves a minimum 12-month runway floor pending burn rate reconciliation, and sequences GDPR compliance and EU legal entity establishment before any customer contracting or FTE commitment.</div>
+  <!-- BOARD RECOMMENDATION -->
+  <div class="board-rec-card" id="board-rec-card">
+    <div class="board-rec-label">Board Recommendation</div>
+    <div class="board-rec-text" id="board-action-text">Authorize the $500K EU market entry initiative under a two-tranche structure. Phase 1 ($150K) deploys immediately for GDPR and legal entity setup. Phase 2 ($350K) releases only upon CFO + CHRO delivery of a validated line-item budget by March 15.</div>
   </div>
 
+  <div class="section-label">Strategic Rationale <button class="info-btn" data-title="Strategic Rationale" data-body="Why the ELT recommends this path to the Board. This is the executive summary of the decision logic.">i</button></div>
   <div class="card">
-    <div class="card-head"><span class="card-title">CONDITIONS OF APPROVAL &mdash; 7 PLACED</span></div>
+    <div class="card-body prose-body" id="board-rationale-text">The Executive Leadership Team unanimously approved OPT-5 &mdash; Minimal Viable Entry via a land-and-expand model &mdash; as the only option that satisfies the company's $250K governance threshold, preserves a minimum 12-month runway floor pending burn rate reconciliation, and sequences GDPR compliance and EU legal entity establishment before any customer contracting or FTE commitment.</div>
+  </div>
+
+  <div class="section-label">Conditions of Approval &mdash; <span id="board-conds-count">7</span> Placed <button class="info-btn" data-title="Conditions" data-body="Each ELT member placed a condition on their approval. All conditions must be met before the decision is fully binding.">i</button></div>
+  <div class="card">
     <div class="card-body">
-      <div class="open-q-list">
+      <div class="open-q-list" id="board-conditions-wrap">
         <div class="oq-item"><div class="oq-num">1</div><div class="oq-body"><div class="oq-q">Board approval for full $500K before exceeding Legal &amp; Compliance FY25 budget</div><div class="oq-meta"><span class="oq-owner">CEO</span></div></div></div>
         <div class="oq-item"><div class="oq-num">2</div><div class="oq-body"><div class="oq-q">CFO confirmation of burn rate reconciliation to maintain 12-month runway floor</div><div class="oq-meta"><span class="oq-owner">CFO</span></div></div></div>
         <div class="oq-item"><div class="oq-num">3</div><div class="oq-body"><div class="oq-q">CTO delivery of GDPR engineering scope confirming no displacement of AI product development</div><div class="oq-meta"><span class="oq-owner">CTO</span></div></div></div>
@@ -2743,14 +2814,21 @@ room-opt-item-text{font-size:var(--text-xs);color:var(--text-secondary);line-hei
     </div>
   </div>
 
+  <div class="section-label">Kill Criteria &mdash; Hard Stop Conditions <button class="info-btn" data-title="Kill Criteria" data-body="If any kill criterion is triggered, the initiative halts. Phase 2 capital freezes immediately. These are not warnings — they are automatic stops.">i</button></div>
   <div class="card">
-    <div class="card-head" style="--ct-accent:var(--red)"><span class="card-title">KILL CRITERIA &mdash; HARD STOP CONDITIONS</span></div>
+    <div class="card-head" style="--ct-accent:var(--red)"><span class="card-title">HARD STOP CONDITIONS</span></div>
     <div class="card-body">
-      <div class="open-q-list">
+      <div class="open-q-list" id="board-kill-wrap">
         <div class="oq-item"><div class="oq-num" style="color:var(--red)">&#9632;</div><div class="oq-body"><div class="oq-q">GDPR scope exceeds 14 engineering weeks or $150K Phase 1 budget &mdash; Phase 2 capital frozen until re-scoped</div><div class="oq-meta"><span class="oq-owner">CTO + LEGAL</span><span class="oq-note">HIGHEST PROBABILITY</span></div></div></div>
         <div class="oq-item"><div class="oq-num" style="color:var(--red)">&#9632;</div><div class="oq-body"><div class="oq-q">CFO burn reconciliation reveals post-$500K runway below 12-month floor.</div><div class="oq-meta"><span class="oq-owner">CFO</span></div></div></div>
       </div>
     </div>
+  </div>
+
+  <!-- GOVERNANCE FRAMEWORK -->
+  <div class="section-label">Governance Framework <button class="info-btn" data-title="Governance Framework" data-body="Board oversight requirements, reporting cadence, and escalation triggers from the engine's governance packet.">i</button></div>
+  <div class="board-gov-grid" id="board-gov-grid">
+    <!-- populated by buildBoard -->
   </div>
 </div>
 
@@ -3293,14 +3371,75 @@ var rps=dp.role_packets_slim||[];
 var gtFlag=dp.groupthink_flag||{};
 var avgConf=Math.round((cs.avg||0.67)*100);
 var PH=window.PHOTOS||{};
+var f1=raw.f1Outputs||[];
 
 // -- Arc round data from stageOutputs
 var byRound={};
 so.forEach(function(s){if(!byRound[s.round])byRound[s.round]=[];byRound[s.round].push(s);});
 var r0rows=byRound[0]||[],r1rows=byRound[1]||[],r2rows=byRound[2]||[];
 
-// -- Confidence stat
-set("room-conf-val",avgConf+"%");
+// -- Decision outcome panel
+var chosenOpt="OPT-4";
+ot.forEach(function(t){if(t.vote_count===7)chosenOpt=t.option_id;});
+set("dr-chosen-opt",chosenOpt);
+set("dr-conf-pct",avgConf+"%");
+// Confidence ring arc (circumference = 2*PI*32 ≈ 201)
+var arcEl=document.getElementById("dr-conf-arc");
+if(arcEl){var offset=201-Math.round(201*(avgConf/100));arcEl.setAttribute("stroke-dashoffset",offset);}
+// Confidence range
+var confs=so.filter(function(s){return s.round===2;}).map(function(s){return Math.round((s.confidence_score||0.65)*100);});
+if(confs.length){var mn=Math.min.apply(null,confs),mx=Math.max.apply(null,confs);set("dr-conf-range",mn+"–"+mx+"%");}
+// Outcome stats
+var rounds=Object.keys(byRound).length;
+set("dr-rounds-val",rounds);
+set("dr-gt-val",(gtFlag.severity||gt.severity||"HIGH"));
+set("dr-vote-val","7/7");
+
+// -- Convergence grid (hero element)
+var convGrid=document.getElementById("dr-conv-grid");
+if(convGrid){
+  var ordRoles=["CEO","CFO","COO","LEGAL","CHRO","CSO","CTO"];
+  var byRoleAll={};
+  so.forEach(function(s){if(!byRoleAll[s.role_key])byRoleAll[s.role_key]={};byRoleAll[s.role_key][s.round]=s;});
+  var sClass=function(s){return s==="SUPPORT"?"go":(s==="NOT_YET"||s==="DEFER")?"notyet":"cond";};
+  var sLabel=function(s){return s==="SUPPORT"?"GO":(s==="NOT_YET"||s==="DEFER")?"NOT YET":"COND";};
+  var html='<div class="dr-cg-h">Role</div><div class="dr-cg-h r0">Round 0</div><div class="dr-cg-h r1">Round 1</div><div class="dr-cg-h r2">Round 2</div>';
+  ordRoles.forEach(function(rk){
+    var rows=byRoleAll[rk]||{};
+    var ph=PH[rk]?"<img class='dr-cg-photo' src='"+PH[rk]+"' alt='"+rk+"'>":"";
+    html+='<div class="dr-cg-cell" style="background:var(--bg-surface-2)"><div class="dr-cg-role">'+ph+rk+'</div></div>';
+    [0,1,2].forEach(function(rd){
+      var r=rows[rd]||{};
+      var st=r.stance||"NOT_YET";
+      var conf=Math.round((r.confidence_score||0.65)*100);
+      var sc=sClass(st);
+      html+='<div class="dr-cg-cell"><span class="dr-cg-dot '+sc+'"></span><span class="dr-cg-lbl '+sc+'">'+sLabel(st)+'</span><span class="dr-cg-conf">'+conf+'%</span></div>';
+    });
+  });
+  convGrid.innerHTML=html;
+}
+
+// -- Facilitator observations (f1Outputs)
+var facilGrid=document.getElementById("dr-facil-grid");
+if(facilGrid&&f1.length){
+  var byF1Round={};
+  f1.forEach(function(f){var r=f.round!=null?f.round:0;if(!byF1Round[r])byF1Round[r]=[];byF1Round[r].push(f);});
+  var roundKeys=Object.keys(byF1Round).sort();
+  var rcls=function(r){return r==0?"r0":r==1?"r1":"r2";};
+  var rlbl=function(r){return r==0?"Round 0 — Entry":r==1?"Round 1 — Convergence":"Round 2 — Resolution";};
+  facilGrid.innerHTML=roundKeys.map(function(rk){
+    var items=byF1Round[rk];
+    var obs=items.map(function(f){return f.facilitator_observation||f.observation||f.analysis||"";}).filter(function(t){return t;}).join(" ");
+    var tensions=(items[0]&&items[0].key_tensions)||[];
+    var chips=tensions.slice(0,3).map(function(t){return '<span class="chip">'+t+'</span>';}).join("");
+    if(!obs)return "";
+    return '<div class="dr-facil-card '+rcls(rk)+'">'+
+      '<div class="dr-facil-round '+rcls(rk)+'">'+rlbl(parseInt(rk))+'</div>'+
+      '<div class="dr-facil-text">'+obs.substring(0,400)+'</div>'+
+      (chips?'<div class="dr-facil-meta">'+chips+'</div>':'')+
+    '</div>';
+  }).join("");
+}
 
 // -- Arc chips
 function setChips(elId,rows){
@@ -3621,28 +3760,89 @@ if(cfEl){
 
 // \u2500\u2500 BOARD \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
 function buildBoard(raw, bgp, dash, gt) {
+  // Strategic rationale
   if (bgp.strategic_rationale) set('board-rationale-text', bgp.strategic_rationale);
 
-  const condsWrap = el('board-conditions-wrap');
-  if (condsWrap) {
-    const conds = bgp.conditions_for_approval || [];
-    condsWrap.innerHTML = conds.map(c =>
-      '<div class="conf-row" style="border-bottom:1px solid var(--border);padding:var(--gap-md) 0">' +
-        '<div class="conf-role" style="color:var(--tab-board-c)">' + (c.role || '') + '</div>' +
-        '<div style="flex:1;font-size:var(--text-sm);color:var(--text-secondary);line-height:1.6">' + (c.condition || '') + '</div>' +
-      '</div>'
-    ).join('');
-  }
-
+  // Board action requested
   const act = bgp.board_action_requested;
   if (act) set('board-action-text', typeof act === 'string' ? act : (act.action || JSON.stringify(act)));
 
+  // Vote outcome
   const vtSplit = bgp.elt_vote_outcome?.vote_split || dash.vote_split || {};
   const vtVal = Object.values(vtSplit)[0] || 7;
   const vtKey = Object.keys(vtSplit)[0] || 'APPROVE_WITH_CONDITIONS';
   set('board-vote', vtVal + ' of ' + vtVal + ' ELT roles: ' + vtKey.replace(/_/g,' ') + '. No dissent recorded.');
+  set('board-vote-sub', 'ELT Unanimous \u00b7 ' + vtVal + '\u2013' + '0');
   if (act) set('board-ask', (typeof act === 'string' ? act : act.action || '').substring(0,300));
   set('board-risk', 'Groupthink: ' + (gt.severity || 'HIGH') + '. ' + (dash.single_source_warning ? 'Single-source warning \u2014 all evidence from internal documents only. ' : '') + 'Burn rate discrepancy must be reconciled in board materials.');
+
+  // Summary metrics
+  var dp = raw.dPacket || {};
+  var cs = dp.confidence_summary || {};
+  var avgConf = Math.round((cs.avg || 0.67) * 100);
+  set('board-sum-conf', avgConf + '%');
+  var fo = raw.optionsBlob || {};
+  if (fo.total_budget) set('board-sum-invest', fo.total_budget);
+
+  // Conditions of approval (dynamic)
+  const condsWrap = el('board-conditions-wrap');
+  const conds = bgp.conditions_for_approval || [];
+  if (condsWrap && conds.length) {
+    set('board-conds-count', conds.length);
+    set('board-sum-conds', conds.length);
+    condsWrap.innerHTML = conds.map(function(c, i) {
+      return '<div class="oq-item"><div class="oq-num">' + (i + 1) + '</div><div class="oq-body"><div class="oq-q">' + (c.condition || '') + '</div><div class="oq-meta"><span class="oq-owner">' + (c.role || '') + '</span></div></div></div>';
+    }).join('');
+  }
+
+  // Kill criteria (dynamic)
+  const killWrap = el('board-kill-wrap');
+  const kills = bgp.kill_criteria || bgp.kill_gates || [];
+  if (killWrap && kills.length) {
+    set('board-sum-kills', kills.length);
+    killWrap.innerHTML = kills.map(function(k) {
+      var txt = typeof k === 'string' ? k : (k.criterion || k.condition || k.description || '');
+      var owner = typeof k === 'object' ? (k.owner || k.role || '') : '';
+      var note = typeof k === 'object' ? (k.note || k.probability || '') : '';
+      return '<div class="oq-item"><div class="oq-num" style="color:var(--red)">&#9632;</div><div class="oq-body"><div class="oq-q">' + txt + '</div>' +
+        (owner || note ? '<div class="oq-meta">' + (owner ? '<span class="oq-owner">' + owner + '</span>' : '') + (note ? '<span class="oq-note">' + note + '</span>' : '') + '</div>' : '') +
+      '</div></div>';
+    }).join('');
+  }
+
+  // Governance framework (from govBlob or bgp)
+  const govGrid = el('board-gov-grid');
+  const gov = raw.govBlob || {};
+  if (govGrid) {
+    var govItems = [];
+    if (bgp.oversight_requirements || gov.oversight_requirements) {
+      var ov = bgp.oversight_requirements || gov.oversight_requirements;
+      govItems.push({label: 'Oversight Requirements', val: typeof ov === 'string' ? ov : (Array.isArray(ov) ? ov.join('. ') : JSON.stringify(ov))});
+    }
+    if (bgp.reporting_cadence || gov.reporting_cadence) {
+      govItems.push({label: 'Reporting Cadence', val: bgp.reporting_cadence || gov.reporting_cadence});
+    }
+    if (bgp.escalation_triggers || gov.escalation_triggers) {
+      var et = bgp.escalation_triggers || gov.escalation_triggers;
+      govItems.push({label: 'Escalation Triggers', val: typeof et === 'string' ? et : (Array.isArray(et) ? et.join('. ') : JSON.stringify(et))});
+    }
+    if (bgp.compliance_requirements || gov.compliance_requirements) {
+      var cr = bgp.compliance_requirements || gov.compliance_requirements;
+      govItems.push({label: 'Compliance', val: typeof cr === 'string' ? cr : (Array.isArray(cr) ? cr.join('. ') : JSON.stringify(cr))});
+    }
+    if (bgp.governance_threshold || gov.governance_threshold) {
+      govItems.push({label: 'Governance Threshold', val: bgp.governance_threshold || gov.governance_threshold});
+    }
+    if (bgp.phase_gates || gov.phase_gates) {
+      var pg = bgp.phase_gates || gov.phase_gates;
+      govItems.push({label: 'Phase Gates', val: typeof pg === 'string' ? pg : (Array.isArray(pg) ? pg.map(function(g){return typeof g === 'string' ? g : (g.gate || g.description || JSON.stringify(g));}).join('. ') : JSON.stringify(pg))});
+    }
+    if (govItems.length) {
+      govGrid.innerHTML = govItems.map(function(g) {
+        return '<div class="board-gov-card"><div class="board-gov-label">' + g.label + '</div><div class="board-gov-desc">' + (typeof g.val === 'string' ? g.val : JSON.stringify(g.val)) + '</div></div>';
+      }).join('');
+    }
+  }
 }
 
 // \u2500\u2500 DOM INTERACTION \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
@@ -4042,29 +4242,6 @@ wireListeners();
   const raw = await fetchRunData();
   applyLiveData(raw);
 })();
-
-// ── TOUR CARD DRAGGABLE ─────────────────────────────────────────────────────
-(function(){
-  const card = document.getElementById('tour-card');
-  if (!card) return;
-  let on=false, sx=0, sy=0, sl=0, st=0;
-  card.addEventListener('mousedown', function(e){
-    if(e.target.tagName==='BUTTON') return;
-    on=true; e.preventDefault();
-    const r = card.getBoundingClientRect();
-    sx=e.clientX; sy=e.clientY;
-    sl=r.left; st=r.top;
-    card.style.right='auto'; card.style.bottom='auto';
-    card.style.left=sl+'px'; card.style.top=st+'px';
-  });
-  document.addEventListener('mousemove', function(e){
-    if(!on) return;
-    card.style.left = Math.max(0,Math.min(window.innerWidth-card.offsetWidth, sl+e.clientX-sx))+'px';
-    card.style.top  = Math.max(0,Math.min(window.innerHeight-card.offsetHeight, st+e.clientY-sy))+'px';
-  });
-  document.addEventListener('mouseup', function(){ on=false; });
-})();
-
 
 function switchOpt(id){document.querySelectorAll('.room-opt-panel').forEach(function(el){el.classList.remove('active');});document.querySelectorAll('.room-opt-tab').forEach(function(el){el.classList.remove('active');});var p=document.getElementById('room-opt-panel-'+id);var t=document.getElementById('room-opt-tab-'+id);if(p)p.classList.add('active');if(t)t.classList.add('active');}
 function toggleRoomRow(key){var exp=document.getElementById('room-expand-'+key);var row=document.getElementById('room-row-'+key);if(!exp)return;var isOpen=exp.classList.contains('open');document.querySelectorAll('.room-role-expand').forEach(function(el){el.classList.remove('open');});document.querySelectorAll('.room-role-row').forEach(function(el){el.classList.remove('expanded');});if(!isOpen){exp.classList.add('open');if(row)row.classList.add('expanded');}}

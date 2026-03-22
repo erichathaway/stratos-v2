@@ -4599,7 +4599,11 @@ function startTourFrom(sec) {
   _tIdx = 0;
   document.body.classList.add('tour-running');
   document.querySelector('.tab[data-sec="' + _tSec + '"]')?.click();
-  setTimeout(_renderStep, 100);
+  setTimeout(function() {
+    _renderStep();
+    // Auto-play audio if auto mode is on
+    if (_tAudio === 'auto' && !_tPlaying) tourToggleAudio();
+  }, 100);
 }
 
 function tourEnd() {
@@ -4624,8 +4628,23 @@ function tourNextTab() {
   if (!next) { tourEnd(); return; }
   _tSec = next; _tIdx = 0;
   document.querySelector('.tab[data-sec="' + _tSec + '"]')?.click();
-  setTimeout(_renderStep, 100);
+  setTimeout(function() {
+    _renderStep();
+    // Auto-play next section's audio if auto mode is on
+    if (_tAudio === 'auto' && !_tPlaying) tourToggleAudio();
+  }, 100);
 }
+
+// Map tour sections → audio IDs
+var TOUR_AUDIO_MAP = {
+  briefing:    'audio-brief',
+  command:     'audio-command',
+  risk:        'audio-risk',
+  financials:  'audio-fin',
+  room:        'audio-room',
+  management:  'audio-mgmt',
+  board:       'audio-board'
+};
 
 function tourToggleAudio() {
   _tPlaying = !_tPlaying;
@@ -4634,6 +4653,16 @@ function tourToggleAudio() {
   btn.classList.toggle('playing', _tPlaying);
   if (icon) icon.textContent = _tPlaying ? '\u25A0' : '\u25B6';
   if (lbl)  lbl.textContent  = _tPlaying ? 'Playing\u2026' : ((TOUR_STEPS[_tSec]||{}).audio || 'Play section audio');
+
+  // Actually play/stop the audio
+  var audioId = TOUR_AUDIO_MAP[_tSec];
+  if (audioId) {
+    if (_tPlaying) {
+      toggleAudio(audioId);
+    } else {
+      apClose();
+    }
+  }
 }
 
 function _renderStep() {

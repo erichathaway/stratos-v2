@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>StratOS — Decision Engine</title>
+<link rel="icon" type="image/svg+xml" href="/stratos-icon.svg" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <style>
 /* STRATOS MASTER CSS v2.0
@@ -302,11 +303,11 @@ audio-btn.playing .audio-icon{background:var(--teal);color:var(--bg-page);box-sh
 .cite.doc  {color:var(--blue);  background:color-mix(in srgb,var(--blue)   13%,transparent);border:1px solid color-mix(in srgb,var(--blue)   30%,transparent)}
 .cite.strat{color:var(--purple);background:color-mix(in srgb,var(--purple) 13%,transparent);border:1px solid color-mix(in srgb,var(--purple) 30%,transparent)}
 .cite.anal {color:var(--teal);  background:color-mix(in srgb,var(--teal)   13%,transparent);border:1px solid color-mix(in srgb,var(--teal)   30%,transparent)}
-#cite-tt{position:fixed;z-index:800;display:none;flex-direction:column;gap:var(--gap-sm);background:var(--bg-surface-3);border:1px solid var(--border-hover);border-radius:var(--r-lg);padding: var(--gap-lg);max-width:300px;box-shadow:var(--shadow-pop);pointer-events:none}
+#cite-tt{position:fixed;z-index:800;display:none;flex-direction:column;gap:var(--gap-sm);background:var(--bg-surface-3);border:1px solid var(--border-hover);border-radius:var(--r-lg);padding: var(--gap-lg);max-width:300px;box-shadow:var(--shadow-pop);pointer-events:none;overflow:hidden;word-wrap:break-word;overflow-wrap:break-word}
 #cite-tt.show{display:flex}
 .ct-type{font-family:var(--font-mono);font-size:var(--font-9);font-weight:700;letter-spacing:var(--ls-md);text-transform:uppercase;color:var(--text-muted);display:flex;align-items:center;gap:var(--gap-xs)}
 .ct-type::before{content:'';width:var(--dot-sm);height:var(--dot-sm);border-radius:var(--r-xxs);background:var(--ct-c,var(--blue))}
-.ct-label{font-size:var(--text-sm);font-weight:500;line-height:1.45;color:var(--text-light-2)}
+.ct-label{font-size:var(--text-sm);font-weight:500;line-height:1.45;color:var(--text-light-2);word-wrap:break-word;overflow-wrap:break-word;max-width:100%}
 .ct-note{font-family:var(--font-mono);font-size:var(--font-9);color:var(--text-muted);font-style:italic}
 
 /* ── 11  NUMBER CITATION TOOLTIP ─────────────────────────────────────────── */
@@ -316,7 +317,7 @@ audio-btn.playing .audio-icon{background:var(--teal);color:var(--bg-page);box-sh
 .num-cite:hover .nc-val{color:var(--blue)}
 .num-cite .nc-badge{display:inline-flex;align-items:center;justify-content:center;width: var(--text-sm);height: var(--text-sm);border-radius:var(--r-xxs);background:color-mix(in srgb,var(--blue) 18%,transparent);border:1px solid color-mix(in srgb,var(--blue) 35%,transparent);color:var(--blue);font-family:var(--font-mono);font-size:var(--font-9);font-weight:700;vertical-align:var(--nc-badge-va);position:relative;top:var(--nc-badge-top);margin-left:var(--nc-badge-ml);transition:transform var(--t-fast)}
 .num-cite:hover .nc-badge{transform:scale(1.15)}
-#num-tt{position:fixed;z-index:800;display:none;flex-direction:column;gap:var(--gap-sm);background:var(--bg-surface-3);border:1px solid var(--border-accent);border-radius:var(--r-lg);padding:var(--gap-lg) var(--gap-xl);max-width:280px;box-shadow:var(--shadow-pop);pointer-events:none}
+#num-tt{position:fixed;z-index:800;display:none;flex-direction:column;gap:var(--gap-sm);background:var(--bg-surface-3);border:1px solid var(--border-accent);border-radius:var(--r-lg);padding:var(--gap-lg) var(--gap-xl);max-width:280px;box-shadow:var(--shadow-pop);pointer-events:none;overflow:hidden;word-wrap:break-word;overflow-wrap:break-word}
 #num-tt.show{display:flex}
 .nt-label{font-family:var(--font-mono);font-size:var(--text-xs);font-weight:700;letter-spacing:var(--ls-sm);text-transform:uppercase;color:var(--blue)}
 .nt-val{font-family:var(--font-display);font-size:var(--text-xl);font-weight:800;letter-spacing:var(--ls-tight);color:var(--text-primary)}
@@ -3026,7 +3027,7 @@ function applyLiveData(raw) {
   const stages = raw.stageOutputs || [];
 
   // \u2500\u2500 Media assets (audio files, docs from Google Drive)
-  var mediaAssets = ob.media_assets || (raw.master && raw.master.media_assets) || null;
+  var mediaAssets = ob.media_assets || (raw.govBlob && raw.govBlob.media_assets) || (raw.master && raw.master.media_assets) || null;
   if (mediaAssets) applyMediaAssets(mediaAssets);
 
   // \u2500\u2500 Header
@@ -4465,7 +4466,15 @@ function toggleAudio(id) {
   _audId = id;
 
   // Use GDrive preview iframe — no CORS, plays inline
-  if (!af.id) { console.warn('[StratOS] No audio file ID for', id); return; }
+  if (!af.id) {
+    console.warn('[StratOS] No audio file ID for', id);
+    var apEl2 = document.getElementById('ap');
+    var apLabel2 = document.getElementById('ap-label');
+    if (apEl2) { apEl2.style.display = 'flex'; }
+    if (apLabel2) { apLabel2.textContent = af.label + ' — audio generating, check back soon'; }
+    setTimeout(function(){ if(apEl2) apEl2.style.display='none'; }, 4000);
+    return;
+  }
   const src = 'https://drive.google.com/file/d/' + af.id + '/preview';
 
   if (apEl)    { apEl.style.display = 'flex'; }
@@ -4762,6 +4771,7 @@ wireListeners();
   if (raw) {
     loadBanner.style.opacity = '0';
     setTimeout(function(){ loadBanner.remove(); }, 400);
+    window.__stratosData = raw;
     applyLiveData(raw);
   } else {
     loadBanner.style.background = 'color-mix(in srgb,var(--amber) 12%,var(--bg-page))';
@@ -4813,4 +4823,152 @@ function toggleMgmtExpand(trigger){
   <iframe id="ap-iframe" src="" allow="autoplay" style="width:100%;height:var(--avatar-lg);border:none;border-radius:var(--r-md);background:var(--bg-surface-2)" allowfullscreen></iframe>
   <div style="font-family:var(--font-mono);font-size:var(--font-9);color:var(--text-muted);letter-spacing:var(--ls-xxs)">PLAYING OVER DASHBOARD &middot; NAVIGATE FREELY</div>
 </div>
+
+<!-- StratOS Chat Widget -->
+<style>
+#strat-chat-fab{position:fixed;bottom:24px;left:24px;z-index:10001;width:44px;height:44px;border-radius:50%;background:rgba(20,24,33,.85);border:1px solid var(--border-hover);cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 12px rgba(0,0,0,.4);transition:transform .2s,box-shadow .2s,border-color .2s;backdrop-filter:blur(8px)}
+#strat-chat-fab:hover{transform:scale(1.08);box-shadow:0 4px 20px rgba(38,200,176,.3);border-color:var(--teal)}
+#strat-chat-fab svg{width:20px;height:20px}
+#strat-chat-panel{position:fixed;bottom:86px;left:24px;z-index:10001;width:420px;max-height:560px;background:var(--bg-surface);border:1px solid var(--border-hover);border-radius:var(--r-xl);box-shadow:0 8px 40px rgba(0,0,0,.5);display:none;flex-direction:column;overflow:hidden}
+#strat-chat-panel.open{display:flex}
+#sc-header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--border);background:var(--bg-surface-2)}
+#sc-header span{font-family:var(--font-display);font-size:13px;font-weight:600;color:var(--text-primary);letter-spacing:.02em}
+#sc-close{background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:18px;padding:4px 8px;border-radius:var(--r-md)}
+#sc-close:hover{color:var(--text-primary);background:var(--bg-surface-3)}
+#sc-messages{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px;min-height:200px;max-height:380px}
+.sc-msg{max-width:88%;padding:10px 14px;border-radius:14px;font-family:var(--font-body);font-size:13px;line-height:1.5;color:var(--text-primary);word-wrap:break-word}
+.sc-msg.user{align-self:flex-end;background:color-mix(in srgb,var(--blue) 20%,var(--bg-surface-3));border-bottom-right-radius:4px}
+.sc-msg.bot{align-self:flex-start;background:var(--bg-surface-2);border:1px solid var(--border);border-bottom-left-radius:4px}
+.sc-msg.bot strong{color:var(--teal)}
+.sc-msg.bot em{color:var(--amber)}
+.sc-tab-ref{display:inline-flex;align-items:center;gap:4px;margin:4px 2px;padding:4px 10px;border-radius:var(--r-xs);background:color-mix(in srgb,var(--teal) 12%,var(--bg-surface-3));border:1px solid color-mix(in srgb,var(--teal) 25%,var(--border));color:var(--teal);font-size:11px;font-weight:600;cursor:pointer;font-family:var(--font-mono);letter-spacing:.03em;transition:background .15s}
+.sc-tab-ref:hover{background:color-mix(in srgb,var(--teal) 22%,var(--bg-surface-3))}
+.sc-typing{align-self:flex-start;padding:10px 14px;background:var(--bg-surface-2);border:1px solid var(--border);border-radius:14px;border-bottom-left-radius:4px;font-size:12px;color:var(--text-muted);font-family:var(--font-mono)}
+#sc-input-wrap{display:flex;gap:8px;padding:12px 16px;border-top:1px solid var(--border);background:var(--bg-surface-2)}
+#sc-input{flex:1;background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:8px 14px;color:var(--text-primary);font-family:var(--font-body);font-size:13px;outline:none;resize:none;max-height:80px}
+#sc-input:focus{border-color:var(--border-accent)}
+#sc-input::placeholder{color:var(--text-muted)}
+#sc-send{background:linear-gradient(135deg,var(--teal),var(--blue));border:none;border-radius:var(--r-lg);padding:8px 16px;color:#fff;font-family:var(--font-mono);font-size:12px;font-weight:600;cursor:pointer;letter-spacing:.04em;white-space:nowrap}
+#sc-send:hover{opacity:.9}
+#sc-send:disabled{opacity:.4;cursor:not-allowed}
+@media(max-width:500px){#strat-chat-panel{left:8px;right:8px;width:auto;bottom:78px}}
+</style>
+
+<button id="strat-chat-fab" onclick="toggleChat()" title="Ask about this decision">
+<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9.5" stroke="rgba(255,255,255,.25)" stroke-width="1"/><circle cx="12" cy="12" r="2" fill="var(--teal)"/><path d="M12 2.5v4M12 17.5v4M2.5 12h4M17.5 12h4" stroke="rgba(255,255,255,.35)" stroke-width="1" stroke-linecap="round"/><path d="M12 4L14 10.5H12L14 12L12 20L10 12H12L10 10.5L12 4Z" fill="var(--teal)" opacity=".9"/><line x1="12" y1="4" x2="12" y2="20" stroke="rgba(255,255,255,.5)" stroke-width=".5"/></svg>
+</button>
+
+<div id="strat-chat-panel">
+<div id="sc-header">
+<span>StratOS Assistant</span>
+<button id="sc-close" onclick="toggleChat()">&times;</button>
+</div>
+<div id="sc-messages">
+<div class="sc-msg bot">Ask me anything about this decision analysis. I can explain the verdict, risks, financial impacts, role positions, and next steps.</div>
+</div>
+<div id="sc-input-wrap">
+<textarea id="sc-input" rows="1" placeholder="Ask about the decision..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChat()}"></textarea>
+<button id="sc-send" onclick="sendChat()">ASK</button>
+</div>
+</div>
+
+<script>
+(function(){
+var chatHistory = [];
+var SEC_MAP = {briefing:'briefing',command:'command',risk:'risk',financials:'financials',room:'room',options:'room',handoff:'board',management:'management',board:'board'};
+
+window.toggleChat = function(){
+  var p = document.getElementById('strat-chat-panel');
+  p.classList.toggle('open');
+  if(p.classList.contains('open')) document.getElementById('sc-input').focus();
+};
+
+function buildContext(){
+  var d = window.__stratosData;
+  if(!d) return 'No dashboard data loaded.';
+  var ctx = {run_id:d.run_id};
+  if(d.master){ctx.question=d.master.question;ctx.status=d.master.status;ctx.mode=d.master.mode;ctx.doc_url=d.master.doc_url}
+  if(d.outputBlob){
+    var o=d.outputBlob;
+    ctx.verdict={final_verdict:o.final_verdict,confidence_score:o.confidence_score,vote_summary:o.vote_summary};
+    if(o.executive_summary) ctx.executive_summary=o.executive_summary;
+    if(o.risk_assessment) ctx.risks=o.risk_assessment;
+    if(o.financial_impact) ctx.financials=o.financial_impact;
+    if(o.options_evaluated) ctx.options=o.options_evaluated;
+    if(o.conditions) ctx.conditions=o.conditions;
+    if(o.kill_criteria) ctx.kill_criteria=o.kill_criteria;
+    if(o.next_steps) ctx.next_steps=o.next_steps;
+  }
+  if(d.stageOutputs&&d.stageOutputs.length){
+    var lastRound=Math.max.apply(null,d.stageOutputs.map(function(r){return r.round||0}));
+    ctx.role_positions=d.stageOutputs.filter(function(r){return r.round===lastRound}).map(function(r){
+      return{role:r.role_key,stance:r.stance,vote:r.vote,confidence:r.confidence_score,rationale:(r.rationale||'').substring(0,200)}
+    });
+  }
+  if(d.optionsBlob) ctx.options_detail=d.optionsBlob;
+  var s=JSON.stringify(ctx);
+  if(s.length>60000) s=s.substring(0,60000)+'...(truncated)';
+  return s;
+}
+
+function addMsg(role,html){
+  var el=document.createElement('div');
+  el.className='sc-msg '+role;
+  el.innerHTML=html;
+  var c=document.getElementById('sc-messages');
+  c.appendChild(el);
+  c.scrollTop=c.scrollHeight;
+  return el;
+}
+
+function renderRefs(refs){
+  if(!refs||!refs.length) return '';
+  return '<div style="margin-top:8px">'+refs.map(function(r){
+    var secId=SEC_MAP[r.tab]||r.tab;
+    return '<span class="sc-tab-ref" onclick="goToTab(\''+secId+'\')">'+r.label+' &rarr;</span>';
+  }).join('')+'</div>';
+}
+
+window.goToTab = function(secId){
+  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active')});
+  document.querySelectorAll('.s-section').forEach(function(s){s.classList.remove('tab-active')});
+  var sec=document.getElementById('sec-'+secId);
+  if(sec){sec.classList.add('tab-active');sec.scrollIntoView({behavior:'smooth',block:'start'})}
+  var tab=document.querySelector('.tab[data-sec="'+secId+'"]');
+  if(tab) tab.classList.add('active');
+};
+
+window.sendChat = async function(){
+  var inp=document.getElementById('sc-input');
+  var btn=document.getElementById('sc-send');
+  var msg=inp.value.trim();
+  if(!msg) return;
+  inp.value='';
+  btn.disabled=true;
+  addMsg('user',msg.replace(/</g,'&lt;'));
+  chatHistory.push({role:'user',content:msg});
+  var typing=addMsg('bot','<div class="sc-typing">Thinking...</div>');
+  typing.querySelector('.sc-typing');
+  try{
+    var resp=await fetch('/api/chat',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({message:msg,context:buildContext(),history:chatHistory.slice(-6)})
+    });
+    var data=await resp.json();
+    if(!resp.ok) throw new Error(data.error||'API error');
+    var html=data.text.replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>').replace(/\*([^*]+)\*/g,'<em>$1</em>').replace(/\n/g,'<br>');
+    html+=renderRefs(data.references);
+    typing.innerHTML=html;
+    typing.className='sc-msg bot';
+    chatHistory.push({role:'assistant',content:data.text});
+  }catch(e){
+    typing.innerHTML='Sorry, I couldn\'t process that. '+(e.message||'');
+    typing.className='sc-msg bot';
+  }
+  btn.disabled=false;
+  inp.focus();
+};
+})();
+</script>
 </body></html>

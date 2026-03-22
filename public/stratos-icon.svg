@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <defs>
+    <!-- Neon glow filter -->
+    <filter id="neon" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blur1"/>
+      <feGaussianBlur in="SourceGraphic" stdDeviation="12" result="blur2"/>
+      <feGaussianBlur in="SourceGraphic" stdDeviation="20" result="blur3"/>
+      <feMerge>
+        <feMergeNode in="blur3"/>
+        <feMergeNode in="blur2"/>
+        <feMergeNode in="blur1"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <!-- Subtle inner glow -->
+    <filter id="innerGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <!-- Radial gradient for center jewel -->
+    <radialGradient id="centerGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#67e8f9"/>
+      <stop offset="60%" stop-color="#06b6d4"/>
+      <stop offset="100%" stop-color="#0891b2"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Black background circle -->
+  <circle cx="256" cy="256" r="250" fill="#070d1a"/>
+
+  <!-- Outer ring with neon glow -->
+  <circle cx="256" cy="256" r="230" stroke="#00e5ff" stroke-width="3" fill="none" filter="url(#neon)" opacity="0.7"/>
+  <circle cx="256" cy="256" r="230" stroke="#00e5ff" stroke-width="1.5" fill="none"/>
+
+  <!-- Inner ring -->
+  <circle cx="256" cy="256" r="200" stroke="#00e5ff" stroke-width="1" fill="none" opacity="0.3"/>
+
+  <!-- Degree tick marks (subtle) -->
+  <!-- N -->
+  <line x1="256" y1="30" x2="256" y2="60" stroke="#00e5ff" stroke-width="2.5" opacity="0.5"/>
+  <!-- E -->
+  <line x1="482" y1="256" x2="452" y2="256" stroke="#00e5ff" stroke-width="2.5" opacity="0.5"/>
+  <!-- S -->
+  <line x1="256" y1="482" x2="256" y2="452" stroke="#00e5ff" stroke-width="2.5" opacity="0.5"/>
+  <!-- W -->
+  <line x1="30" y1="256" x2="60" y2="256" stroke="#00e5ff" stroke-width="2.5" opacity="0.5"/>
+
+  <!-- Minor ticks NE, SE, SW, NW -->
+  <line x1="414" y1="98" x2="396" y2="116" stroke="#00e5ff" stroke-width="1.5" opacity="0.25"/>
+  <line x1="414" y1="414" x2="396" y2="396" stroke="#00e5ff" stroke-width="1.5" opacity="0.25"/>
+  <line x1="98" y1="414" x2="116" y2="396" stroke="#00e5ff" stroke-width="1.5" opacity="0.25"/>
+  <line x1="98" y1="98" x2="116" y2="116" stroke="#00e5ff" stroke-width="1.5" opacity="0.25"/>
+
+  <!-- NORTH needle (bright, main pointer) -->
+  <polygon points="256,50 240,220 272,220" fill="#00e5ff" filter="url(#neon)"/>
+  <polygon points="256,50 244,210 268,210" fill="#00e5ff"/>
+  <!-- Bright edge highlight -->
+  <polygon points="256,50 244,210 256,200" fill="#67e8f9" opacity="0.6"/>
+
+  <!-- SOUTH needle (dimmer) -->
+  <polygon points="256,462 240,292 272,292" fill="#00e5ff" opacity="0.2"/>
+  <polygon points="256,462 244,302 268,302" fill="#0e7490" opacity="0.5"/>
+
+  <!-- EAST needle (accent) -->
+  <polygon points="462,256 292,240 292,272" fill="#00e5ff" opacity="0.15"/>
+  <polygon points="440,256 302,244 302,268" fill="#0e7490" opacity="0.35"/>
+
+  <!-- WEST needle (accent) -->
+  <polygon points="50,256 220,240 220,272" fill="#00e5ff" opacity="0.15"/>
+  <polygon points="72,256 210,244 210,268" fill="#0e7490" opacity="0.35"/>
+
+  <!-- Center jewel with glow -->
+  <circle cx="256" cy="256" r="22" fill="url(#centerGlow)" filter="url(#neon)"/>
+  <circle cx="256" cy="256" r="16" fill="#070d1a"/>
+  <circle cx="256" cy="256" r="10" fill="#00e5ff" opacity="0.9"/>
+  <circle cx="256" cy="256" r="5" fill="#67e8f9"/>
+
+  <!-- Cardinal labels -->
+  <text x="256" y="95" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="28" font-weight="900" fill="#00e5ff" letter-spacing="2" filter="url(#innerGlow)">N</text>
+  <text x="256" y="445" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="22" font-weight="700" fill="#00e5ff" opacity="0.35">S</text>
+  <text x="430" y="264" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="22" font-weight="700" fill="#00e5ff" opacity="0.35">E</text>
+  <text x="82" y="264" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="22" font-weight="700" fill="#00e5ff" opacity="0.35">W</text>
+</svg>

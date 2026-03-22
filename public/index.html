@@ -232,7 +232,7 @@ body{background:var(--bg-page);color:var(--text-primary);font-family:var(--font-
 /* ── 4  HEADER ────────────────────────────────────────────────────────────── */
 .s-header{position:sticky;top:0;z-index:200;display:flex;align-items:center;justify-content:space-between;height: var(--ib-col-gap);padding:0 var(--page-pad-x);background:rgba(var(--bg-page-rgb),.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
 .logo{display:flex;align-items:center;gap:var(--card-head-py)}
-.logo-mark{width:var(--ib-icon-sz);height:var(--ib-icon-sz);border-radius:var(--r-sm);background:linear-gradient(135deg,var(--blue),var(--teal));display:grid;place-items:center;font-family:var(--font-display);font-size:var(--text-sm);font-weight:800;color:var(--white);box-shadow:0 0 18px color-mix(in srgb,var(--blue) 35%,transparent)}
+.logo-mark{width:var(--ib-icon-sz);height:var(--ib-icon-sz);border-radius:50%;overflow:hidden;display:grid;place-items:center;box-shadow:0 0 18px color-mix(in srgb,var(--blue) 35%,transparent)}
 .logo-name{font-family:var(--font-display);font-size:var(--text-md);font-weight:700;letter-spacing:var(--ls-neg-sm)}
 .logo-pipe{width:1px;height:18px;background:var(--border-hover);margin:0 14px}
 .logo-tag{font-family:var(--font-mono);font-size:var(--text-xs);color:var(--text-muted);letter-spacing:var(--ls-xs);text-transform:uppercase}
@@ -1511,10 +1511,10 @@ dep-item strong{display:block;font-family:var(--font-mono);font-size:var(--font-
 <!-- HEADER -->
 <header class="s-header">
   <div class="logo">
-    <div class="logo-mark">S</div>
+    <div class="logo-mark"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none" width="100%" height="100%"><defs><filter id="hn" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur in="SourceGraphic" stdDeviation="6" result="b1"/><feGaussianBlur in="SourceGraphic" stdDeviation="12" result="b2"/><feMerge><feMergeNode in="b2"/><feMergeNode in="b1"/><feMergeNode in="SourceGraphic"/></feMerge></filter><radialGradient id="hcg" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#67e8f9"/><stop offset="100%" stop-color="#06b6d4"/></radialGradient></defs><circle cx="256" cy="256" r="250" fill="#070d1a"/><circle cx="256" cy="256" r="220" stroke="#00e5ff" stroke-width="3" fill="none" opacity="0.5"/><polygon points="256,60 242,220 270,220" fill="#00e5ff" filter="url(#hn)"/><polygon points="256,452 242,292 270,292" fill="#00e5ff" opacity="0.2"/><polygon points="452,256 292,242 292,270" fill="#00e5ff" opacity="0.15"/><polygon points="60,256 220,242 220,270" fill="#00e5ff" opacity="0.15"/><circle cx="256" cy="256" r="18" fill="url(#hcg)" filter="url(#hn)"/><circle cx="256" cy="256" r="12" fill="#070d1a"/><circle cx="256" cy="256" r="7" fill="#00e5ff"/></svg></div>
     <span class="logo-name">StratOS</span>
     <div class="logo-pipe"></div>
-    <span class="logo-tag">Master CSS v2.0</span>
+    <span class="logo-tag">Decision Engine</span>
   </div>
   <div class="run-meta">
     <span>RUN-20260316175326</span><span class="dot">&middot;</span>

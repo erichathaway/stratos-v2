@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StratOS Report</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<style>
+:root {
+  --bg-page:#08080e; --bg-surface:#0f1118; --bg-surface-2:#141820; --bg-surface-3:#1a1f2c;
+  --border:#1c2232; --border-hover:#28305a;
+  --blue:#5b9cf6; --amber:#f0a030; --teal:#26c8b0; --purple:#9b78f0; --red:#e86060; --green:#38cc70;
+  --text-primary:#edf1fa; --text-secondary:#7a8aa8; --text-muted:#404e68;
+  --font-display:'Sora',system-ui,sans-serif; --font-body:'Inter',system-ui,sans-serif; --font-mono:'DM Mono',monospace;
+  --shadow-sm:0 2px 8px rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.027);
+  --shadow-md:0 4px 20px rgba(0,0,0,.65),0 0 0 1px rgba(255,255,255,.037);
+  --r-sm:5px; --r-md:8px; --r-lg:12px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg-page);color:var(--text-primary);font-family:var(--font-body);font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased}
+
+/* ── Layout ─── */
+.report{max-width:900px;margin:0 auto;padding:40px 48px}
+
+/* ── Header ─── */
+.rpt-header{display:flex;align-items:center;justify-content:space-between;padding-bottom:20px;border-bottom:1px solid var(--border);margin-bottom:28px}
+.rpt-brand{font-family:var(--font-display);font-size:20px;font-weight:700;letter-spacing:-.5px}
+.rpt-brand span{color:var(--blue)}
+.rpt-meta{display:flex;gap:14px;align-items:center;font-family:var(--font-mono);font-size:11px;color:var(--text-muted)}
+.rpt-badge{padding:3px 10px;border-radius:var(--r-sm);font-weight:600;font-size:10px;letter-spacing:.5px;text-transform:uppercase}
+.badge-blue{background:color-mix(in srgb,var(--blue) 15%,transparent);color:var(--blue);border:1px solid color-mix(in srgb,var(--blue) 30%,transparent)}
+.badge-teal{background:color-mix(in srgb,var(--teal) 15%,transparent);color:var(--teal);border:1px solid color-mix(in srgb,var(--teal) 30%,transparent)}
+
+/* ── Toolbar ─── */
+.rpt-toolbar{display:flex;align-items:center;gap:8px;margin-bottom:28px;flex-wrap:wrap}
+.rpt-view-btn{padding:6px 14px;border-radius:var(--r-sm);border:1px solid var(--border);background:transparent;color:var(--text-secondary);font-family:var(--font-mono);font-size:11px;font-weight:600;cursor:pointer;transition:all .2s;letter-spacing:.3px}
+.rpt-view-btn:hover{border-color:var(--border-hover);color:var(--text-primary)}
+.rpt-view-btn.active{border-color:var(--blue);color:var(--blue);background:color-mix(in srgb,var(--blue) 8%,transparent)}
+.rpt-export-btn{margin-left:auto;padding:6px 16px;border-radius:var(--r-sm);border:1px solid color-mix(in srgb,var(--teal) 40%,transparent);background:color-mix(in srgb,var(--teal) 10%,transparent);color:var(--teal);font-family:var(--font-mono);font-size:11px;font-weight:700;cursor:pointer;transition:all .2s}
+.rpt-export-btn:hover{background:color-mix(in srgb,var(--teal) 18%,transparent);border-color:var(--teal)}
+
+/* ── Page marker ─── */
+.page-break{page-break-before:always;break-before:page;padding-top:8px}
+.page-label{font-family:var(--font-mono);font-size:9px;color:var(--text-muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:16px;padding-bottom:6px;border-bottom:1px solid color-mix(in srgb,var(--border) 50%,transparent)}
+
+/* ── Verdict hero ─── */
+.rpt-verdict{background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:28px 32px;margin-bottom:24px;position:relative;overflow:hidden}
+.rpt-verdict::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--teal),var(--blue),var(--purple))}
+.rpt-v-label{font-family:var(--font-mono);font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);margin-bottom:6px}
+.rpt-v-word{font-family:var(--font-display);font-size:30px;font-weight:700;letter-spacing:-1px;margin-bottom:4px}
+.rpt-v-sub{font-size:14px;color:var(--text-secondary);margin-bottom:12px}
+.rpt-q{font-size:13px;color:var(--text-secondary);line-height:1.7;padding:10px 14px;background:var(--bg-surface-2);border-radius:var(--r-md);margin-top:10px}
+.rpt-q strong{color:var(--text-primary);font-weight:600}
+.rpt-q-accent{border-left:3px solid var(--blue)}
+.rpt-q-purple{border-left:3px solid var(--purple)}
+
+/* ── Metrics ─── */
+.rpt-metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:24px}
+.rpt-m{background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--r-md);padding:14px 16px;text-align:center}
+.rpt-m-val{font-family:var(--font-display);font-size:24px;font-weight:700;letter-spacing:-.5px;margin-bottom:2px}
+.rpt-m-label{font-family:var(--font-mono);font-size:9px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:var(--text-muted)}
+
+/* ── Section ─── */
+.rpt-sec{margin-bottom:24px;page-break-inside:avoid}
+.rpt-sec-head{display:flex;align-items:center;gap:8px;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.rpt-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.rpt-sec-title{font-family:var(--font-display);font-size:15px;font-weight:700;letter-spacing:-.3px}
+
+/* ── Card ─── */
+.rpt-card{background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--r-md);margin-bottom:10px;overflow:hidden;page-break-inside:avoid}
+.rpt-card-h{padding:9px 16px;font-family:var(--font-mono);font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--text-secondary);background:var(--bg-surface-2);border-bottom:1px solid var(--border)}
+.rpt-card-b{padding:14px 16px}
+
+/* ── Items ─── */
+.rpt-item{display:flex;gap:10px;padding:7px 0;border-bottom:1px solid color-mix(in srgb,var(--border) 50%,transparent);font-size:13px;line-height:1.6}
+.rpt-item:last-child{border-bottom:none}
+.rpt-icon{width:20px;height:20px;border-radius:var(--r-sm);display:grid;place-items:center;font-size:9px;font-weight:700;flex-shrink:0;margin-top:2px}
+.ic-amber{background:color-mix(in srgb,var(--amber) 15%,transparent);color:var(--amber)}
+.ic-red{background:color-mix(in srgb,var(--red) 15%,transparent);color:var(--red)}
+.ic-teal{background:color-mix(in srgb,var(--teal) 15%,transparent);color:var(--teal)}
+.ic-blue{background:color-mix(in srgb,var(--blue) 15%,transparent);color:var(--blue)}
+.ic-purple{background:color-mix(in srgb,var(--purple) 15%,transparent);color:var(--purple)}
+.ic-green{background:color-mix(in srgb,var(--green) 15%,transparent);color:var(--green)}
+
+/* ── Table ─── */
+.rpt-tbl{width:100%;border-collapse:collapse;font-size:12px}
+.rpt-tbl th{text-align:left;padding:7px 10px;font-family:var(--font-mono);font-size:9px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--text-muted);border-bottom:1px solid var(--border)}
+.rpt-tbl td{padding:7px 10px;border-bottom:1px solid color-mix(in srgb,var(--border) 50%,transparent);vertical-align:top}
+.rpt-tbl tr:last-child td{border-bottom:none}
+
+/* ── Vote bars ─── */
+.v-row{display:flex;align-items:center;gap:8px;padding:5px 0}
+.v-role{width:55px;font-family:var(--font-mono);font-size:10px;font-weight:600;color:var(--text-secondary)}
+.v-track{flex:1;height:5px;background:var(--bg-surface-2);border-radius:3px;overflow:hidden}
+.v-fill{height:100%;border-radius:3px}
+.v-stance{width:75px;font-family:var(--font-mono);font-size:9px;font-weight:700;letter-spacing:.4px}
+.v-conf{width:32px;text-align:right;font-family:var(--font-mono);font-size:11px;font-weight:600}
+
+/* ── Links ─── */
+.rpt-audio{display:inline-flex;align-items:center;gap:7px;padding:5px 12px;border-radius:var(--r-md);background:color-mix(in srgb,var(--teal) 10%,transparent);border:1px solid color-mix(in srgb,var(--teal) 30%,transparent);color:var(--teal);font-family:var(--font-mono);font-size:10px;font-weight:700;text-decoration:none;cursor:pointer;transition:all .2s;margin:3px 3px 3px 0}
+.rpt-audio:hover{background:color-mix(in srgb,var(--teal) 18%,transparent);border-color:var(--teal)}
+.rpt-audio-ic{width:16px;height:16px;border-radius:50%;background:color-mix(in srgb,var(--teal) 20%,transparent);border:1px solid color-mix(in srgb,var(--teal) 45%,transparent);display:grid;place-items:center;font-size:7px}
+.rpt-doc{display:inline-flex;align-items:center;gap:7px;padding:5px 12px;border-radius:var(--r-md);background:color-mix(in srgb,var(--blue) 10%,transparent);border:1px solid color-mix(in srgb,var(--blue) 30%,transparent);color:var(--blue);font-family:var(--font-mono);font-size:10px;font-weight:700;text-decoration:none;transition:all .2s;margin:3px 3px 3px 0}
+.rpt-doc:hover{background:color-mix(in srgb,var(--blue) 18%,transparent);border-color:var(--blue)}
+
+/* ── Chip ─── */
+.chip{display:inline-block;padding:2px 7px;border-radius:var(--r-sm);font-family:var(--font-mono);font-size:9px;font-weight:700;letter-spacing:.3px}
+.ch-amber{background:color-mix(in srgb,var(--amber) 15%,transparent);color:var(--amber)}
+.ch-red{background:color-mix(in srgb,var(--red) 15%,transparent);color:var(--red)}
+.ch-teal{background:color-mix(in srgb,var(--teal) 15%,transparent);color:var(--teal)}
+.ch-blue{background:color-mix(in srgb,var(--blue) 15%,transparent);color:var(--blue)}
+.ch-green{background:color-mix(in srgb,var(--green) 15%,transparent);color:var(--green)}
+.ch-purple{background:color-mix(in srgb,var(--purple) 15%,transparent);color:var(--purple)}
+
+/* ── Grid ─── */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+
+/* ── Tier gate ─── */
+.rpt-gate{background:var(--bg-surface);border:1px dashed var(--border);border-radius:var(--r-md);padding:20px;text-align:center;margin-bottom:10px}
+.rpt-gate h4{font-family:var(--font-display);font-size:14px;font-weight:600;color:var(--text-secondary);margin-bottom:4px}
+.rpt-gate p{font-size:11px;color:var(--text-muted)}
+.rpt-gate a{display:inline-block;margin-top:10px;padding:5px 18px;border-radius:var(--r-sm);border:1px solid var(--blue);background:color-mix(in srgb,var(--blue) 12%,transparent);color:var(--blue);font-family:var(--font-mono);font-size:10px;font-weight:700;text-decoration:none}
+
+/* ── Narrative block ─── */
+.rpt-narrative{font-size:13px;line-height:1.8;color:var(--text-secondary)}
+.rpt-narrative strong{color:var(--text-primary)}
+
+/* ── Gov doc embed ─── */
+.rpt-gov-hero{background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:24px 28px;text-align:center;margin-bottom:16px}
+.rpt-gov-hero h3{font-family:var(--font-display);font-size:18px;font-weight:700;margin-bottom:6px}
+.rpt-gov-hero p{font-size:12px;color:var(--text-secondary);margin-bottom:14px}
+.rpt-gov-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 24px;border-radius:var(--r-md);border:1px solid var(--blue);background:color-mix(in srgb,var(--blue) 12%,transparent);color:var(--blue);font-family:var(--font-mono);font-size:12px;font-weight:700;text-decoration:none;transition:all .2s;margin:0 6px}
+.rpt-gov-btn:hover{background:color-mix(in srgb,var(--blue) 22%,transparent)}
+.rpt-gov-btn-pdf{border-color:var(--teal);color:var(--teal);background:color-mix(in srgb,var(--teal) 12%,transparent)}
+.rpt-gov-btn-pdf:hover{background:color-mix(in srgb,var(--teal) 22%,transparent)}
+
+/* ── Footer ─── */
+.rpt-footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--border);display:flex;justify-content:space-between;font-family:var(--font-mono);font-size:9px;color:var(--text-muted)}
+
+/* ── Loading ─── */
+.rpt-loading{text-align:center;padding:80px 0;color:var(--text-muted);font-family:var(--font-mono);font-size:13px}
+.rpt-spinner{width:32px;height:32px;border:2px solid var(--border);border-top-color:var(--blue);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 16px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── Color helpers ─── */
+.c-blue{color:var(--blue)}.c-teal{color:var(--teal)}.c-amber{color:var(--amber)}.c-purple{color:var(--purple)}.c-red{color:var(--red)}.c-green{color:var(--green)}
+
+/* ── Print ─── */
+@media print{
+  body{background:#fff;color:#1a1a1a;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .report{max-width:100%;padding:16px 20px}
+  .rpt-toolbar{display:none!important}
+  .rpt-card,.rpt-verdict,.rpt-m,.rpt-gov-hero{border-color:#ddd;break-inside:avoid}
+  .rpt-sec{break-inside:avoid}
+  .page-break{break-before:page}
+}
+</style>
+</head>
+<body>
+<div class="report" id="report-root">
+  <div class="rpt-loading" id="loading"><div class="rpt-spinner"></div>Loading decision data...</div>
+</div>
+<script>
+(function(){
+var params = new URLSearchParams(location.search);
+var runId = params.get('run_id') || '';
+var view  = params.get('view') || 'full';
+var tier  = params.get('tier') || 'paid';
+
+var VIEWS = {
+  executive:  { label:'Executive Brief',  pages:['exec1','exec2'] },
+  detailed:   { label:'Detailed Analysis', pages:['brief','command','risk','financials','room','handoff'] },
+  governance: { label:'Board Governance',  pages:['gov_summary','gov_doc'] },
+  full:       { label:'Full Report',       pages:['exec1','exec2','brief','command','risk','financials','room','handoff','gov_summary','gov_doc'] }
+};
+
+function has(page){ return (VIEWS[view]||VIEWS.full).pages.indexOf(page) !== -1; }
+function gated(t){ return tier === 'free' && t === 'paid'; }
+function esc(s){ var d=document.createElement('div');d.textContent=s||'';return d.innerHTML; }
+function pct(v){ if(v==null)return '—';return (v>1?Math.round(v):Math.round(v*100))+'%'; }
+function safe(v,fb){ return v!=null&&v!==''?v:(fb||'—'); }
+function driveUrl(id){ return id?(id.startsWith('http')?id:'https://drive.google.com/file/d/'+id+'/view'):'#'; }
+function stanceColor(s){ if(!s)return 'var(--text-muted)';s=s.toUpperCase();if(s.includes('APPROVE')||s==='GO')return'var(--teal)';if(s.includes('REJECT')||s==='NO')return'var(--red)';if(s.includes('DEFER')||s==='NOT YET'||s.includes('CONDITIONAL')||s==='COND')return'var(--amber)';return'var(--blue)'; }
+function stanceLabel(s){ if(!s)return'—';s=s.toUpperCase();if(s.includes('APPROVE_WITH'))return'CONDITIONAL';if(s.includes('APPROVE'))return'APPROVE';if(s.includes('REJECT'))return'REJECT';if(s==='DEFER'||s==='NOT YET')return'DEFER';return s; }
+
+function gate(title){ return '<div class="rpt-gate"><h4>'+esc(title)+'</h4><p>Available with full analysis package</p><a href="#">Unlock Full Report</a></div>'; }
+
+var apiUrl = '/api/data' + (runId ? '?run_id='+encodeURIComponent(runId) : '');
+fetch(apiUrl).then(function(r){return r.json()}).then(render).catch(function(e){
+  document.getElementById('loading').innerHTML='<div style="color:var(--red)">Failed: '+esc(e.message)+'</div>';
+});
+
+function render(raw){
+  var ob=raw.outputBlob||{}, dash=ob.dashboard||{}, exec=ob.executive_summary||{}, dir=ob.direction_package||{};
+  var bgp=ob.board_governance_packet||{}, fm=dash.financial_mechanics||{}, mso=ob.machine_strategy_object||{};
+  var tl=ob.timeline_visualization||{}, gov=raw.govBlob||{}, stages=raw.stageOutputs||[];
+  var media = ob.media_assets||(raw.govBlob&&raw.govBlob.media_assets)||(raw.master&&raw.master.media_assets)||{};
+  var docUrl = (raw.master&&raw.master.doc_url)||'';
+  var docTitle = (raw.master&&raw.master.doc_title)||'';
+
+  // Derived
+  var maxRound = stages.reduce(function(mx,s){return Math.max(mx,s.round||0)},0)+1;
+  var roles=[], roleSet={};
+  stages.forEach(function(s){if(s.role_key&&!roleSet[s.role_key]){roleSet[s.role_key]=true;roles.push(s.role_key)}});
+  var voteKey=Object.keys(dash.vote_split||{})[0]||'';
+  var optId=dash.approved_option_id||'', optName=dash.approved_option_label||optId;
+  var conf=dash.decision_confidence||0, confPct=pct(conf);
+  var verdictWord=voteKey.includes('APPROVE')?'Approved':voteKey.includes('REJECT')?'Rejected':'Approved';
+  var verdictSub=voteKey.includes('CONDITIONS')?'With Conditions':'';
+  var question=dash.decision_question||(raw.master&&raw.master.question)||'';
+  var mb=raw.masterBlob||{}, mi=mb.input_data||(raw.master||{}), originals=mi._originals||{};
+  var origQ=(originals.question&&originals.question!==question)?originals.question:'';
+  var context=originals.context||mi.context||(raw.master&&raw.master.context)||'';
+  var runDate='';
+  if(raw.master&&raw.master.created_at){var d=new Date(raw.master.created_at);runDate=d.toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'})}
+  var viewLabel=(VIEWS[view]||VIEWS.full).label;
+  var finalRound=maxRound-1;
+  var citCount=(dash.all_citations||[]).length||0;
+  var conditions=exec.top_conditions||[];
+  var killCriteria=bgp.kill_criteria||bgp.kill_gates||[];
+  if(typeof bgp.kill_criteria_summary==='string'&&!killCriteria.length)killCriteria=bgp.kill_criteria_summary.split(/[;\n]/).filter(Boolean).map(function(s){return s.trim()});
+  var actions=exec.top_3_actions||[];
+  var risks=Array.isArray(mso.risks)?mso.risks:Object.values(mso.risks||{});
+  var candidates=dir.decision_candidates||[];
+  var strategic=dir.strategic_narrative||bgp.strategic_rationale||'';
+
+  var h = '';
+
+  // ══════════════════════════════════════════════════════════════════════
+  // HEADER + TOOLBAR
+  // ══════════════════════════════════════════════════════════════════════
+  h+='<div class="rpt-header"><div class="rpt-brand">Strat<span>OS</span></div><div class="rpt-meta">';
+  h+='<span class="rpt-badge badge-blue">'+esc(viewLabel)+'</span>';
+  h+='<span>'+esc(raw.run_id||'')+'</span>';
+  if(runDate)h+='<span>'+esc(runDate)+'</span>';
+  h+='</div></div>';
+
+  h+='<div class="rpt-toolbar">';
+  ['executive','detailed','governance','full'].forEach(function(v){
+    h+='<button class="rpt-view-btn'+(v===view?' active':'')+'" onclick="switchView(\''+v+'\')">'+VIEWS[v].label+'</button>';
+  });
+  h+='<button class="rpt-export-btn" onclick="exportPDF()">Export PDF</button></div>';
+
+  // ══════════════════════════════════════════════════════════════════════
+  // EXECUTIVE PAGE 1: What Happened + Why It's Good
+  // ══════════════════════════════════════════════════════════════════════
+  if(has('exec1')){
+    if(view==='executive'||view==='full')h+='<div class="page-label">Page 1 &mdash; Decision Overview</div>';
+
+    // Verdict hero
+    h+='<div class="rpt-verdict"><div class="rpt-v-label">Decision Outcome</div>';
+    h+='<div class="rpt-v-word">'+esc(verdictWord)+(verdictSub?' <span style="font-size:18px;color:var(--amber)">'+esc(verdictSub)+'</span>':'')+'</div>';
+    h+='<div class="rpt-v-sub">'+esc(optId)+(optName&&optName!==optId?': '+esc(optName):'')+' &mdash; '+roles.length+' roles, '+maxRound+' rounds, '+confPct+' confidence</div>';
+    if(origQ)h+='<div class="rpt-q rpt-q-accent"><strong>Original Question:</strong> '+esc(origQ)+'</div>';
+    if(question)h+='<div class="rpt-q rpt-q-purple"><strong>'+(origQ?'Enriched ':'')+'Decision Question:</strong> '+esc(question)+'</div>';
+    if(context)h+='<div class="rpt-q" style="border-left:3px solid var(--text-muted)"><strong>Context:</strong> '+esc(context)+'</div>';
+    h+='</div>';
+
+    // Key metrics
+    h+='<div class="rpt-metrics">';
+    h+='<div class="rpt-m"><div class="rpt-m-val c-teal">'+confPct+'</div><div class="rpt-m-label">Confidence</div></div>';
+    h+='<div class="rpt-m"><div class="rpt-m-val c-blue">'+roles.length+'/'+roles.length+'</div><div class="rpt-m-label">Votes</div></div>';
+    h+='<div class="rpt-m"><div class="rpt-m-val c-purple">'+maxRound+'</div><div class="rpt-m-label">Rounds</div></div>';
+    h+='<div class="rpt-m"><div class="rpt-m-val c-amber">'+(citCount||'—')+'</div><div class="rpt-m-label">Sources</div></div>';
+    h+='</div>';
+
+    // Strategic value / why it's good
+    if(strategic){
+      h+='<div class="rpt-sec"><div class="rpt-sec-head"><div class="rpt-dot" style="background:var(--teal)"></div><div class="rpt-sec-title">Strategic Value</div></div>';
+      h+='<div class="rpt-card"><div class="rpt-card-b"><p class="rpt-narrative">'+esc(strategic)+'</p></div></div></div>';
+    }
+
+    // Investment snapshot
+    if(fm.total_investment||fm.phase_1_immediate){
+      h+='<div class="rpt-sec"><div class="rpt-sec-head"><div class="rpt-dot" style="background:var(--green)"></div><div class="rpt-sec-title">Investment</div></div>';
+      h+='<div class="g3">';
+      h+='<div class="rpt-card"><div class="rpt-card-b" style="text-align:center"><div style="font-family:var(--font-display);font-size:20px;font-weight:700;color:var(--teal)">'+esc(safe(fm.phase_1_immediate,'—'))+'</div><div class="rpt-m-label">Phase 1 (Live)</div></div></div>';
+      h+='<div class="rpt-card"><div class="rpt-card-b" style="text-align:center"><div style="font-family:var(--font-display);font-size:20px;font-weight:700;color:var(--amber)">'+esc(safe(fm.phase_2_gated,'—'))+'</div><div class="rpt-m-label">Phase 2 (Gated)</div></div></div>';
+      h+='<div class="rpt-card"><div class="rpt-card-b" style="text-align:center"><div style="font-family:var(--font-display);font-size:20px;font-weight:700;color:var(--blue)">'+esc(safe(fm.total_investment,'—'))+'</div><div class="rpt-m-label">Total</div></div></div>';
+      h+='</div></div>';
+    }
+
+    // Audio briefings
+    if(media&&Object.keys(media).length){
+      h+='<div class="rpt-sec"><div class="rpt-sec-head"><div class="rpt-dot" style="background:var(--teal)"></div><div class="rpt-sec-title">Audio Briefings</div></div>';
+      h+='<div style="display:flex;flex-wrap:wrap;gap:4px">';
+      var am={'board_brief':'Executive Brief','narrative':'Deep Narrative','walkthrough_S1':'Command Center','walkthrough_S2':'Risk Intelligence','walkthrough_S3':'Financial Overview','walkthrough_S4':'The Room','walkthrough_S5':'Management Handoff','walkthrough_S6':'Board Report'};
+      Object.keys(am).forEach(function(k){if(media[k])h+='<a class="rpt-audio" href="'+driveUrl(media[k])+'" target="_blank"><div class="rpt-audio-ic">&#9654;</div>'+esc(am[k])+'</a>'});
+      if(media.GOV_Overview)h+='<a class="rpt-doc" href="'+driveUrl(media.GOV_Overview)+'" target="_blank">&#128196; Executive Summary</a>';
+      if(docUrl)h+='<a class="rpt-doc" href="'+esc(docUrl)+'" target="_blank">&#128196; Governance Doc</a>';
+      h+='</div></div>';
+    }
+  }
+
+  // ══════════════════════════════════════════════════════════════════════
+  // EXECUTIVE PAGE 2: Risks + Next Steps
+  // ══════════════════════════════════════════════════════════════════════
+  if(has('exec2')){
+    h+='<div class="page-break"></div>';
+    if(view==='executive'||view==='full')h+='<div class="page-label">Page 2 &mdash; Risks &amp; Next Steps</div>';
+
+    // Priority actions
+    if(actions.length){
+      h+='<div class="rpt-sec"><div class="rpt-sec-head"><div class="rpt-dot" style="background:var(--green)"></div><div class="rpt-sec-title">Priority Actions</div></div>';
+      h+='<div class="rpt-card"><div class="rpt-card-b">';
+      actions.forEach(function(a,i){var t=typeof a==='string'?a:(a.action||a.text||a.name||'');h+='<div class="rpt-item"><div class="rpt-icon ic-green">'+(i+1)+'</div><div>'+esc(t)+'</div></div>'});
+      h+='</div></div></div>';
+    }
+
+    // Conditions + Kill criteria side by side
+    if(conditions.length||killCriteria.length){
+      h+='<div class="rpt-sec"><div class="rpt-sec-head"><div class="rpt-dot" style="background:var(--amber)"></div><div class="rpt-sec-title">Conditions &amp; Kill Criteria</div></div>';
+      h+='<div class="g2">';
+      h+='<div class="rpt-card"><div class="rpt-card-h">'+conditions.length+' Condition'+(conditions.length!==1?'s':'')+'</div><div class="rpt-card-b">';
+      conditions.forEach(function(c,i){var t=typeof c==='string'?c:(c.condition||c.text||'');h+='<div class="rpt-item"><div class="rpt-icon ic-amber">'+String(i+1).padStart(2,'0')+'</div><div>'+esc(t)+'</div></div>'});
+      if(!conditions.length)h+='<div style="color:var(--text-muted);font-size:11px">None specified</div>';
+      h+='</div></div>';
+      h+='<div class="rpt-card"><div class="rpt-card-h">'+killCriteria.length+' Kill Criteri'+(killCriteria.length===1?'on':'a')+'</div><div class="rpt-card-b">';
+      killCriteria.forEach(function(k){var t=typeof k==='string'?k:(k.criterion||k.condition||k.text||'');h+='<div class="rpt-item"><div class="rpt-icon ic-red">&#10005;</div><div>'+esc(t)+'</div></div>'});
+      if(!killCriteria.length)h+='<div style="color:var(--text-muted);font-size:11px">None specified</div>';
+      h+='</div></div></div></div>';
+    }
+
+    // Top risks
+    if(risks.length){
+      h+='<div class="rpt-sec"><div class="rpt-sec-head"><div class="rpt-dot" style="background:var(--red)"></div><div class="rpt-sec-title">Key Risks</div></div>';
+      h+='<div class="rpt-card"><div class="rpt-card-b">';
+      risks.slice(0,5).forEach(function(r){
+        if(typeof r==='string'){h+='<div class="rpt-item"><div class="rpt-icon ic-red">!</div><div>'+esc(r)+'</div></div>'}
+        else{h+='<div class="rpt-item"><div class="rpt-icon ic-red">!</div><div><strong>'+esc(r.risk||r.description||'')+'</strong>'+(r.mitigation?' <span style="color:var(--text-secondary);font-size:12px">&mdash; '+esc(r.mitigation)+'</span>':'')+'</div></div>'}
+      });
+      h+='</div></div></div>';
+    }
+  }
+
+  // ══════════════════════════════════════════════════════════════════════
+  // DETAILED PAGE 1: Briefing (Decision Context)
+  // ══════════════════════════════════════════════════════════════════════
+  if(has('brief')){
+    if(gated('paid')){h+=gate('Briefing & Decision Context')}
+    else{
+      h+='<div class="page-break"></div><div class="page-label">Briefing &mdash; Decision Context</div>';
+      // Same verdict but compact
+      h+='<div class="rpt-verdict" style="padding:20px 24px"><div class="rpt-v-label">Decision</div>';
+      h+='<div class="rpt-v-word" style="font-size:24px">'+esc(verdictWord)+(verdictSub?' <span style="font-size:15px;color:var(--amber)">'+esc(verdictSub)+'</span>':'')+'</div>';
+      h+='<div class="rpt-v-sub" style="font-size:13px">'+esc(optId+(optName&&optName!==optId?': '+optName:''))+' &mdash; '+confPct+' confidence across '+maxRound+' rounds</div>';
+      if(question)h+='<div class="rpt-q rpt-q-purple" style="font-size:12px"><strong>Question:</strong> '+esc(question)+'</div>';
+      h+='</div>';
+      h+='<div class="rpt-metrics">';
+      h+='<div class="rpt-m"><div class="rpt-m-val c-teal">'+confPct+'</div><div class="rpt-m-label">Confidence</div></div>';
+      h+='<div class="rpt-m"><div class="rpt-m-val c-blue">'+roles.length+'</div><div class="rpt-m-label">Roles</div></div>';
+      h+='<div class="rpt-m"><div class="rpt-m-val c-purple">'+maxRound+'</div><div class="rpt-m-label">Rounds</div></div>';
+      h+='<div class="rpt-m"><div class="rpt-m-val c-amber">'+(citCount||'—')+'</div><div class="rpt-m-label">Sources</div></div>';
+      h+='</div>';
+      // Options evaluated
+      if(candidates.length){
+        h+='<div class="rpt-sec"><div class="rpt-sec-head"><div class="rpt-dot" style="background:var(--blue)"></div><div class="rpt-sec-title">Options Evaluated</div></div>';
+        h+='<div class="rpt-card"><div class="rpt-card-b">';
+        candidates.forEach(function(c){
+          var cId=c.option_id||c.id||'';var cName=c.option_name||c.name||'';var isWin=cId===optId;
+          h+='<div class="rpt-item"><div class="rpt-icon '+(isWin?'ic-teal':'ic-blue')+'">'+esc(cId)+'</div><div><strong>'+esc(cName)+'</strong>'+(isWin?' <span class="chip ch-teal">SELECTED</span>':'')+(c.rejection_reason?' <span style="color:var(--text-muted);font-size:11px">&mdash; '+esc(c.rejection_reason)+'</span>':'')+'</div></div>';
+        });
+        h+='</div></div></div>';
+      }
+    }
+  }
+
+  // ══════════════════════════════════════════════════════════════════════
+  // DETAILED PAGE 2: Command Center (Strategic Wins)
+  // ══════════════════════════════════════════════════════════════════════
+  if(has('command')){
+    if(gated('paid')){h+=gate('Command Center')}
+    else{
+      h+='<div class="page-break"></div><div class="page-label">Command Center &mdash; Strategic Wins</div>';
+      if(strategic){h+='<div class="rpt-card"><div class="rpt-card-h">Strategic Narrative</div><div class="rpt-card-b"><p class="rpt-narrative">'+esc(strategic)+'</p></div></div>';}
+      if(actions.length){
+        h+='<div class="rpt-sec"><div class="rpt-sec-head"><div class="rpt-dot" style="background:var(--green)"></div><div class="rpt-sec-title">Priority Actions</div></div>';
+        h+='<div class="rpt-card"><div class="rpt-card-b">';
+        actions.forEach(function(a,i){var t=typeof a==='string'?a:(a.action||a.text||'');h+='<div class="rpt-item"><div class="rpt-icon ic-green">'+(i+1)+'</div><div>'+esc(t)+'</div></div>'});
+        h+='</div></div></div>';
+      }
+      // Unknowns
+      var unknowns=Array.isArray(mso.unknowns)?mso.unknowns:Object.values(mso.unknowns||{});
+      if(unknowns.length){
+        h+='<div class="rpt-sec"><div class="rpt-sec-head"><div class="rpt-dot" style="background:var(--amber)"></div><div class="rpt-sec-title">Open Unknowns</div></div>';
+        h+='<div class="rpt-card"><div class="rpt-card-b">';
+        unknowns.slice(0,6).forEach(function(u){var t=typeof u==='string'?u:(u.unknown||u.text||u.description||'');h+='<div class="rpt-item"><div class="rpt-icon ic-amber">?</div><div style="font-size:12px">'+esc(t)+'</div></div>'});
+        h+='</div></div></div>';
+      }
+    }
+  }
+
+  // ══════════════════════════════════════════════════════════════════════
+  // DETAILED PAGE 3: Risk Intelligence
+  // ══════════════════════════════════════════════════════════════════════
+  if(has('risk')){
+    if(gated('paid')){h+=gate('Risk Intelligence')}
+    else{
+      h+='<div class="page-break"></div><div class="page-label">Risk &amp; Intelligence</div>';
+      if(risks.length){
+        h+='<div class="rpt-sec"><div class="rpt-sec-head"><div class="rpt-dot" style="background:var(--red)"></div><div class="rpt-sec-title">Risk Register</div></div>';
+        h+='<div class="rpt-card"><div class="rpt-card-b"><table class="rpt-tbl"><thead><tr><th>Risk</th><th>Prob</th><th>Impact</th><th>Mitigation</th></tr></thead><tbody>';
+        risks.forEach(function(r){
+          if(typeof r==='string'){h+='<tr><td colspan="4">'+esc(r)+'</td></tr>'}
+          else{h+='<tr><td>'+esc(r.risk||r.description||'')+'</td><td><span class="chip ch-'+(r.probability==='HIGH'?'red':r.probability==='MEDIUM'?'amber':'teal')+'">'+esc(safe(r.probability))+'</span></td><td><span class="chip ch-'+(r.impact==='HIGH'?'red':r.impact==='MEDIUM'?'amber':'teal')+'">'+esc(safe(r.impact))+'</span></td><td style="font-size:11px">'+esc(r.mitigation||r.response||'')+'</td></tr>'}
+        });
+        h+='</tbody></table></div></div></div>';
+      }
+      if(killCriteria.length){
+        h+='<div class="rpt-sec"><div class="rpt-sec-head"><div class="rpt-dot" style="background:var(--red)"></div><div class="rpt-sec-title">Kill Criteria</div></div>';
+        h+='<div class="rpt-card"><div class="rpt-card-b">';
+        killCriteria.forEach(function(k){var t=typeof k==='string'?k:(k.criterion||k.condition||k.text||'');h+='<div class="rpt-item"><div class="rpt-icon ic-red">&#10005;</div><div>'+esc(t)+'</div></div>'});
+        h+='</div></div></div>';
+      }
+    }
+  }
+
+  // ══════════════════════════════════════════════════════════════════════
+  // DETAILED PAGE 4: Financials
+  // ══════════════════════════════════════════════════════════════════════
+  if(has('financials')){
+    if(gated('paid')){h+=gate('Financial Analysis')}
+    else{
+      h+='<div class="page-break"></div><div class="page-label">Financial Overview</div>';
+      h+='<div class="g2">';
+      h+='<div class="rpt-card"><div class="rpt-card-h">Investment Structure</div><div class="rpt-card-b">';
+      h+='<div class="rpt-item"><div class="rpt-icon ic-teal">1</div><div><strong>Phase 1:</strong> '+esc(safe(fm.phase_1_immediate))+'</div></div>';
+      h+='<div class="rpt-item"><div class="rpt-icon ic-blue">2</div><div><strong>Phase 2:</strong> '+esc(safe(fm.phase_2_gated))+'</div></div>';
+      h+='<div class="rpt-item"><div class="rpt-icon ic-purple">&Sigma;</div><div><strong>Total:</strong> '+esc(safe(fm.total_investment))+'</div></div>';
+      h+='</div></div>';
+      var ue=fm.unit_economics||{};
+      h+='<div class="rpt-card"><div class="rpt-card-h">Unit Economics</div><div class="rpt-card-b">';
+      h+='<div class="rpt-item"><div class="rpt-icon ic-teal">$</div><div><strong>LTV:</strong> '+esc(safe(ue.ltv_per_customer||fm.ltv_per_customer||fm.ltv_target))+'</div></div>';
+      h+='<div class="rpt-item"><div class="rpt-icon ic-amber">$</div><div><strong>CAC:</strong> '+esc(safe(ue.cac_threshold||fm.cac_threshold))+'</div></div>';
+      h+='<div class="rpt-item"><div class="rpt-icon ic-green">&times;</div><div><strong>LTV/CAC:</strong> '+esc(safe(ue.ltv_cac_ratio||fm.ltv_cac_ratio))+'</div></div>';
+      h+='</div></div></div>';
+      var sc=fm.scenarios||{};
+      if(sc.base_case||sc.bull_case||sc.bear_case){
+        h+='<div class="rpt-card"><div class="rpt-card-h">Scenario Analysis</div><div class="rpt-card-b"><table class="rpt-tbl"><thead><tr><th>Scenario</th><th>Revenue</th><th>Assumption</th></tr></thead><tbody>';
+        if(sc.bull_case)h+='<tr><td><span class="chip ch-green">Bull</span></td><td>'+esc(safe(sc.bull_revenue||(typeof sc.bull_case==='object'?sc.bull_case.revenue:'')))+'</td><td style="font-size:11px">'+esc(typeof sc.bull_case==='string'?sc.bull_case:(sc.bull_case.assumption||''))+'</td></tr>';
+        if(sc.base_case)h+='<tr><td><span class="chip ch-blue">Base</span></td><td>'+esc(safe(sc.base_revenue||(typeof sc.base_case==='object'?sc.base_case.revenue:'')))+'</td><td style="font-size:11px">'+esc(typeof sc.base_case==='string'?sc.base_case:(sc.base_case.assumption||''))+'</td></tr>';
+        if(sc.bear_case)h+='<tr><td><span class="chip ch-red">Bear</span></td><td>'+esc(safe(sc.bear_revenue||(typeof sc.bear_case==='object'?sc.bear_case.revenue:'')))+'</td><td style="font-size:11px">'+esc(typeof sc.bear_case==='string'?sc.bear_case:(sc.bear_case.assumption||''))+'</td></tr>';
+        h+='</tbody></table></div></div>';
+      }
+    }
+  }
+
+  // ══════════════════════════════════════════════════════════════════════
+  // DETAILED PAGE 5: The Room (Votes + Deliberation)
+  // ══════════════════════════════════════════════════════════════════════
+  if(has('room')){
+    if(gated('paid')){h+=gate('The Room & Deliberation')}
+    else{
+      h+='<div class="page-break"></div><div class="page-label">The Room &mdash; Votes &amp; Deliberation</div>';
+      // Final round votes
+      h+='<div class="rpt-sec"><div class="rpt-sec-head"><div class="rpt-dot" style="background:var(--blue)"></div><div class="rpt-sec-title">Final Round Votes</div></div>';
+      h+='<div class="rpt-card"><div class="rpt-card-b">';
+      roles.forEach(function(role){
+        var rs=stages.find(function(s){return s.role_key===role&&s.section==='D'&&s.round===finalRound})||{};
+        var stance=rs.vote||rs.stance||'—';var cs=rs.confidence_score||0;var cv=cs>1?cs:Math.round(cs*100);var sc=stanceColor(stance);
+        h+='<div class="v-row"><div class="v-role">'+esc(role)+'</div><div class="v-track"><div class="v-fill" style="width:'+cv+'%;background:'+sc+'"></div></div><div class="v-stance" style="color:'+sc+'">'+stanceLabel(stance)+'</div><div class="v-conf">'+cv+'%</div></div>';
+      });
+      h+='</div></div></div>';
+      // Convergence
+      if(maxRound>1){
+        h+='<div class="rpt-sec"><div class="rpt-sec-head"><div class="rpt-dot" style="background:var(--purple)"></div><div class="rpt-sec-title">Convergence Across Rounds</div></div>';
+        h+='<div class="rpt-card"><div class="rpt-card-b"><table class="rpt-tbl"><thead><tr><th>Role</th>';
+        for(var r=0;r<maxRound;r++)h+='<th>R'+r+'</th>';
+        h+='</tr></thead><tbody>';
+        roles.forEach(function(role){
+          h+='<tr><td style="font-weight:600">'+esc(role)+'</td>';
+          for(var r=0;r<maxRound;r++){
+            var rs=stages.find(function(s){return s.role_key===role&&s.section==='D'&&s.round===r})||{};
+            var stance=rs.vote||rs.stance||'—';var c=rs.confidence_score||0;var cv=c>1?c:Math.round(c*100);
+            h+='<td><span style="color:'+stanceColor(stance)+'">'+stanceLabel(stance)+'</span> <span style="color:var(--text-muted);font-size:10px">'+cv+'%</span></td>';
+          }
+          h+='</tr>';
+        });
+        h+='</tbody></table></div></div></div>';
+      }
+      // Groupthink
+      var gt=raw.dPacket&&raw.dPacket.groupthink_flag;
+      if(gt&&gt.severity){
+        h+='<div class="rpt-card"><div class="rpt-card-h">Groupthink Assessment</div><div class="rpt-card-b">';
+        h+='<div class="rpt-item"><div class="rpt-icon ic-'+(gt.severity==='HIGH'?'red':gt.severity==='MEDIUM'?'amber':'teal')+'">!</div><div><strong>'+esc(gt.severity)+'</strong>'+(gt.explanation?' &mdash; <span style="font-size:12px;color:var(--text-secondary)">'+esc(gt.explanation)+'</span>':'')+'</div></div>';
+        h+='</div></div>';
+      }
+    }
+  }
+
+  // ══════════════════════════════════════════════════════════════════════
+  // DETAILED PAGE 6: Management Handoff
+  // ══════════════════════════════════════════════════════════════════════
+  if(has('handoff')){
+    if(gated('paid')){h+=gate('Management Handoff')}
+    else{
+      h+='<div class="page-break"></div><div class="page-label">Management Handoff &mdash; Timeline &amp; Mandates</div>';
+      var phases=tl.phases||[];var milestones=tl.milestones||dir.strategic_milestones||[];
+      if(phases.length){
+        h+='<div class="rpt-sec"><div class="rpt-sec-head"><div class="rpt-dot" style="background:var(--blue)"></div><div class="rpt-sec-title">Implementation Phases</div></div>';
+        h+='<div class="rpt-card"><div class="rpt-card-b">';
+        phases.forEach(function(p,i){var name=typeof p==='string'?p:(p.phase||p.name||'Phase '+(i+1));var desc=typeof p==='object'?(p.description||p.duration||''):'';
+          h+='<div class="rpt-item"><div class="rpt-icon ic-blue">'+(i+1)+'</div><div><strong>'+esc(name)+'</strong>'+(desc?'<br><span style="font-size:11px;color:var(--text-secondary)">'+esc(desc)+'</span>':'')+'</div></div>'});
+        h+='</div></div></div>';
+      }
+      if(milestones.length){
+        h+='<div class="rpt-sec"><div class="rpt-sec-head"><div class="rpt-dot" style="background:var(--teal)"></div><div class="rpt-sec-title">Key Milestones</div></div>';
+        h+='<div class="rpt-card"><div class="rpt-card-b">';
+        milestones.forEach(function(m,i){var t=typeof m==='string'?m:((m.milestone||m.name||'')+(m.deadline?' &mdash; '+m.deadline:'')+(m.owner?' ('+m.owner+')':''));
+          h+='<div class="rpt-item"><div class="rpt-icon ic-teal">'+(i+1)+'</div><div style="font-size:12px">'+esc(t)+'</div></div>'});
+        h+='</div></div></div>';
+      }
+      if(conditions.length){
+        h+='<div class="rpt-sec"><div class="rpt-sec-head"><div class="rpt-dot" style="background:var(--amber)"></div><div class="rpt-sec-title">Conditions to Track</div></div>';
+        h+='<div class="rpt-card"><div class="rpt-card-b">';
+        conditions.forEach(function(c,i){var t=typeof c==='string'?c:(c.condition||c.text||'');h+='<div class="rpt-item"><div class="rpt-icon ic-amber">'+(i+1)+'</div><div style="font-size:12px">'+esc(t)+'</div></div>'});
+        h+='</div></div></div>';
+      }
+    }
+  }
+
+  // ══════════════════════════════════════════════════════════════════════
+  // GOVERNANCE: Summary + Link to Full Google Doc
+  // ══════════════════════════════════════════════════════════════════════
+  if(has('gov_summary')){
+    h+='<div class="page-break"></div><div class="page-label">Board Governance</div>';
+
+    // Governance doc hero — link to Google Doc + PDF export
+    if(docUrl){
+      var docId='';
+      var match=docUrl.match(/\/d\/([a-zA-Z0-9_-]+)/);
+      if(match)docId=match[1];
+      var pdfUrl=docId?'https://docs.google.com/document/d/'+docId+'/export?mimeType=application/pdf':'';
+      h+='<div class="rpt-gov-hero">';
+      h+='<h3>Full Governance Report</h3>';
+      h+='<p>Detailed round-by-round analysis, per-role deliberation record, options evaluated, and audit appendix</p>';
+      h+='<a class="rpt-gov-btn" href="'+esc(docUrl)+'" target="_blank">&#128196; Open Google Doc</a>';
+      if(pdfUrl)h+='<a class="rpt-gov-btn rpt-gov-btn-pdf" href="'+esc(pdfUrl)+'" target="_blank">&#128196; Download as PDF</a>';
+      h+='</div>';
+    }
+
+    // Board recommendation
+    if(bgp.strategic_rationale){
+      h+='<div class="rpt-sec"><div class="rpt-sec-head"><div class="rpt-dot" style="background:var(--blue)"></div><div class="rpt-sec-title">Board Recommendation</div></div>';
+      h+='<div class="rpt-card"><div class="rpt-card-b"><p class="rpt-narrative">'+esc(bgp.strategic_rationale)+'</p></div></div></div>';
+    }
+
+    // Conditions for approval
+    var condApp=bgp.conditions_for_approval||[];
+    if(condApp.length){
+      h+='<div class="rpt-sec"><div class="rpt-sec-head"><div class="rpt-dot" style="background:var(--amber)"></div><div class="rpt-sec-title">Conditions for Approval</div></div>';
+      h+='<div class="rpt-card"><div class="rpt-card-b">';
+      condApp.forEach(function(c,i){var t=typeof c==='string'?c:(c.condition||c.text||'');var owner=typeof c==='object'?(c.owner||c.role||''):'';
+        h+='<div class="rpt-item"><div class="rpt-icon ic-amber">'+(i+1)+'</div><div>'+esc(t)+(owner?' <span style="color:var(--text-muted);font-size:10px">&mdash; '+esc(owner)+'</span>':'')+'</div></div>'});
+      h+='</div></div></div>';
+    }
+
+    // Vote summary for board
+    h+='<div class="rpt-sec"><div class="rpt-sec-head"><div class="rpt-dot" style="background:var(--blue)"></div><div class="rpt-sec-title">Vote Summary</div></div>';
+    h+='<div class="rpt-card"><div class="rpt-card-b">';
+    roles.forEach(function(role){
+      var rs=stages.find(function(s){return s.role_key===role&&s.section==='D'&&s.round===finalRound})||{};
+      var stance=rs.vote||rs.stance||'—';var cs=rs.confidence_score||0;var cv=cs>1?cs:Math.round(cs*100);var sc=stanceColor(stance);
+      h+='<div class="v-row"><div class="v-role">'+esc(role)+'</div><div class="v-track"><div class="v-fill" style="width:'+cv+'%;background:'+sc+'"></div></div><div class="v-stance" style="color:'+sc+'">'+stanceLabel(stance)+'</div><div class="v-conf">'+cv+'%</div></div>';
+    });
+    h+='</div></div></div>';
+
+    // Governance framework
+    if(bgp.governance_framework||bgp.reporting_cadence||bgp.escalation_triggers){
+      h+='<div class="rpt-sec"><div class="rpt-sec-head"><div class="rpt-dot" style="background:var(--purple)"></div><div class="rpt-sec-title">Governance Framework</div></div>';
+      h+='<div class="rpt-card"><div class="rpt-card-b">';
+      if(bgp.reporting_cadence)h+='<div class="rpt-item"><div class="rpt-icon ic-blue">&#128197;</div><div><strong>Reporting:</strong> '+esc(typeof bgp.reporting_cadence==='string'?bgp.reporting_cadence:JSON.stringify(bgp.reporting_cadence))+'</div></div>';
+      if(bgp.board_oversight)h+='<div class="rpt-item"><div class="rpt-icon ic-purple">&#128101;</div><div><strong>Board Oversight:</strong> '+esc(typeof bgp.board_oversight==='string'?bgp.board_oversight:JSON.stringify(bgp.board_oversight))+'</div></div>';
+      var triggers=bgp.escalation_triggers;
+      if(triggers){(Array.isArray(triggers)?triggers:[triggers]).forEach(function(t){var txt=typeof t==='string'?t:(t.trigger||t.text||JSON.stringify(t));h+='<div class="rpt-item"><div class="rpt-icon ic-red">&#9888;</div><div>'+esc(txt)+'</div></div>'})}
+      h+='</div></div></div>';
+    }
+  }
+
+  if(has('gov_doc')&&!docUrl){
+    // If we expect gov_doc but no doc URL, show placeholder
+    h+='<div class="rpt-gov-hero"><h3>Governance Report</h3><p>The full governance document will be available when the run completes through the GOV stage.</p></div>';
+  }
+
+  // ══════════════════════════════════════════════════════════════════════
+  // FOOTER
+  // ══════════════════════════════════════════════════════════════════════
+  h+='<div class="rpt-footer"><div>Generated by StratOS Decision Engine</div><div>'+(runDate||new Date().toLocaleDateString())+'</div></div>';
+
+  document.getElementById('report-root').innerHTML=h;
+  document.title='StratOS — '+viewLabel+' — '+(raw.run_id||'Report');
+}
+
+window.switchView=function(v){var u=new URL(location);u.searchParams.set('view',v);location=u.toString()};
+
+window.exportPDF=function(){
+  var root=document.getElementById('report-root');if(!root)return;
+  var tb=root.querySelector('.rpt-toolbar');if(tb)tb.style.display='none';
+  var opt={
+    margin:[8,10,8,10],
+    filename:'stratos-'+view+'-'+(params.get('run_id')||'report')+'.pdf',
+    image:{type:'jpeg',quality:0.98},
+    html2canvas:{scale:2,useCORS:true,backgroundColor:'#08080e'},
+    jsPDF:{unit:'mm',format:'a4',orientation:'portrait'},
+    pagebreak:{mode:['css','legacy'],before:'.page-break'}
+  };
+  html2pdf().set(opt).from(root).save().then(function(){if(tb)tb.style.display=''});
+};
+})();
+</script>
+</body>
+</html>

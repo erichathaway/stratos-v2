@@ -3030,6 +3030,19 @@ function applyLiveData(raw) {
   var mediaAssets = ob.media_assets || (raw.govBlob && raw.govBlob.media_assets) || (raw.master && raw.master.media_assets) || null;
   if (mediaAssets) applyMediaAssets(mediaAssets);
 
+  // \u2500\u2500 Walkthrough audio from GOV blob walkthrough_sections
+  var govWS = (raw.govBlob && raw.govBlob.walkthrough_sections) || [];
+  govWS.forEach(function(sec) {
+    if (!sec.view_link || sec.status !== 'UPLOADED') return;
+    var fileId = (sec.view_link.match(/\/d\/([^/]+)/) || [])[1];
+    if (!fileId) return;
+    var assetKey = 'walkthrough_' + sec.section_id;
+    var audioKey = ASSET_TO_AUDIO[assetKey];
+    if (audioKey) {
+      AUDIO_FILES[audioKey] = { id: fileId, label: AUDIO_DEFAULTS[audioKey]?.label || sec.section_name };
+    }
+  });
+
   // \u2500\u2500 Header
   set('run-id-display', raw.run_id || 'RUN-...');
   set('mode-badge', dash.mode || 'ELT');

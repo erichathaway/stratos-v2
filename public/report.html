@@ -378,7 +378,7 @@ function render(raw){
     if(gated('paid')){h+=gate('Command Center')}
     else{
       h+='<div class="page-break"></div><div class="page-label">Command Center &mdash; Strategic Wins</div>';
-      if(strategic){h+='<div class="rpt-card"><div class="rpt-card-h">Strategic Narrative</div><div class="rpt-card-b"><p class="rpt-narrative">'+esc(strategic)+'</p></div></div>';}
+      if(strategic&&!has('exec1')){h+='<div class="rpt-card"><div class="rpt-card-h">Strategic Narrative</div><div class="rpt-card-b"><p class="rpt-narrative">'+esc(strategic)+'</p></div></div>';}
       if(actions.length){
         h+='<div class="rpt-sec"><div class="rpt-sec-head"><div class="rpt-dot" style="background:var(--green)"></div><div class="rpt-sec-title">Priority Actions</div></div>';
         h+='<div class="rpt-card"><div class="rpt-card-b">';
@@ -600,25 +600,7 @@ function render(raw){
 window.switchView=function(v){var u=new URL(location);u.searchParams.set('view',v);location=u.toString()};
 
 window.exportPDF=function(){
-  var root=document.getElementById('report-root');if(!root)return;
-  var tb=root.querySelector('.rpt-toolbar');if(tb)tb.style.display='none';
-  var clone=root.cloneNode(true);
-  var cloneTb=clone.querySelector('.rpt-toolbar');if(cloneTb)cloneTb.remove();
-  var opt={
-    margin:[8,10,8,10],
-    filename:'stratos-'+view+'-'+(params.get('run_id')||'report')+'.pdf',
-    image:{type:'jpeg',quality:0.98},
-    html2canvas:{scale:2,useCORS:true,backgroundColor:'#08080e',logging:false},
-    jsPDF:{unit:'mm',format:'a4',orientation:'portrait'},
-    pagebreak:{mode:['css','legacy'],before:'.page-break'}
-  };
-  html2pdf().set(opt).from(clone).save().then(function(){
-    if(tb)tb.style.display='';
-  }).catch(function(e){
-    console.error('[StratOS] PDF export failed:', e);
-    if(tb)tb.style.display='';
-    alert('PDF export failed. Try using Print > Save as PDF instead.');
-  });
+  window.print();
 };
 })();
 </script>

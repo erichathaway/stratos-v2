@@ -2971,20 +2971,7 @@ dep-item strong{display:block;font-family:var(--font-mono);font-size:var(--font-
 // \u2500\u2500 UTILITIES \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
 // ── PDF EXPORT ────────────────────────────────────────────────────────────
 function exportPDF() {
-  var activeTab = document.querySelector('.s-section.tab-active');
-  if (!activeTab) return;
-  var clone = activeTab.cloneNode(true);
-  var opt = {
-    margin: [10, 10],
-    filename: 'stratos-report-' + (window.__RUN_ID || 'export') + '.pdf',
-    image: { type: 'jpeg', quality: 0.95 },
-    html2canvas: { scale: 2, useCORS: true, logging: false },
-    jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
-  };
-  html2pdf().set(opt).from(clone).save().catch(function(e){
-    console.error('[StratOS] PDF export failed:', e);
-    alert('PDF export failed. Try using Print > Save as PDF instead.');
-  });
+  window.print();
 }
 
 function el(id) { return document.getElementById(id); }

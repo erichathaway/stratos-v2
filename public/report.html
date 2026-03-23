@@ -344,18 +344,20 @@ function render(raw){
     if(gated('paid')){h+=gate('Briefing & Decision Context')}
     else{
       h+='<div class="page-break"></div><div class="page-label">Briefing &mdash; Decision Context</div>';
-      // Same verdict but compact
-      h+='<div class="rpt-verdict" style="padding:20px 24px"><div class="rpt-v-label">Decision</div>';
-      h+='<div class="rpt-v-word" style="font-size:24px">'+esc(verdictWord)+(verdictSub?' <span style="font-size:15px;color:var(--amber)">'+esc(verdictSub)+'</span>':'')+'</div>';
-      h+='<div class="rpt-v-sub" style="font-size:13px">'+esc(optId+(optName&&optName!==optId?': '+optName:''))+' &mdash; '+confPct+' confidence across '+maxRound+' rounds</div>';
-      if(question)h+='<div class="rpt-q rpt-q-purple" style="font-size:12px"><strong>Question:</strong> '+esc(question)+'</div>';
-      h+='</div>';
-      h+='<div class="rpt-metrics">';
-      h+='<div class="rpt-m"><div class="rpt-m-val c-teal">'+confPct+'</div><div class="rpt-m-label">Confidence</div></div>';
-      h+='<div class="rpt-m"><div class="rpt-m-val c-blue">'+roles.length+'</div><div class="rpt-m-label">Roles</div></div>';
-      h+='<div class="rpt-m"><div class="rpt-m-val c-purple">'+maxRound+'</div><div class="rpt-m-label">Rounds</div></div>';
-      h+='<div class="rpt-m"><div class="rpt-m-val c-amber">'+(citCount||'—')+'</div><div class="rpt-m-label">Sources</div></div>';
-      h+='</div>';
+      // Only show verdict hero if exec1 isn't already showing it (avoids duplication in full view)
+      if(!has('exec1')){
+        h+='<div class="rpt-verdict" style="padding:20px 24px"><div class="rpt-v-label">Decision</div>';
+        h+='<div class="rpt-v-word" style="font-size:24px">'+esc(verdictWord)+(verdictSub?' <span style="font-size:15px;color:var(--amber)">'+esc(verdictSub)+'</span>':'')+'</div>';
+        h+='<div class="rpt-v-sub" style="font-size:13px">'+esc(optId+(optName&&optName!==optId?': '+optName:''))+' &mdash; '+confPct+' confidence across '+maxRound+' rounds</div>';
+        if(question)h+='<div class="rpt-q rpt-q-purple" style="font-size:12px"><strong>Question:</strong> '+esc(question)+'</div>';
+        h+='</div>';
+        h+='<div class="rpt-metrics">';
+        h+='<div class="rpt-m"><div class="rpt-m-val c-teal">'+confPct+'</div><div class="rpt-m-label">Confidence</div></div>';
+        h+='<div class="rpt-m"><div class="rpt-m-val c-blue">'+roles.length+'</div><div class="rpt-m-label">Roles</div></div>';
+        h+='<div class="rpt-m"><div class="rpt-m-val c-purple">'+maxRound+'</div><div class="rpt-m-label">Rounds</div></div>';
+        h+='<div class="rpt-m"><div class="rpt-m-val c-amber">'+(citCount||'—')+'</div><div class="rpt-m-label">Sources</div></div>';
+        h+='</div>';
+      }
       // Options evaluated
       if(candidates.length){
         h+='<div class="rpt-sec"><div class="rpt-sec-head"><div class="rpt-dot" style="background:var(--blue)"></div><div class="rpt-sec-title">Options Evaluated</div></div>';

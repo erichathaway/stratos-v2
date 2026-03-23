@@ -220,12 +220,13 @@ function render(raw){
   var viewLabel=(VIEWS[view]||VIEWS.full).label;
   var finalRound=maxRound-1;
   var citCount=(dash.all_citations||[]).length||0;
-  var conditions=exec.top_conditions||[];
+  var conditions=exec.top_conditions||bgp.conditions_for_approval||dash.all_conditions||[];
   var killCriteria=bgp.kill_criteria||bgp.kill_gates||[];
+  if(Array.isArray(bgp.kill_criteria_summary)&&!killCriteria.length)killCriteria=bgp.kill_criteria_summary;
   if(typeof bgp.kill_criteria_summary==='string'&&!killCriteria.length)killCriteria=bgp.kill_criteria_summary.split(/[;\n]/).filter(Boolean).map(function(s){return s.trim()});
   var actions=exec.top_3_actions||[];
   var risks=Array.isArray(mso.risks)?mso.risks:Object.values(mso.risks||{});
-  var candidates=dir.decision_candidates||[];
+  var candidates=dir.decision_candidates||mso.decision_candidates||[];
   var strategic=dir.strategic_narrative||bgp.strategic_rationale||'';
 
   var h = '';

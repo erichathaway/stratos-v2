@@ -4417,14 +4417,14 @@ document.addEventListener('click', e => {
 // ── AUDIO PLAYBACK ─────────────────────────────────────────────────────────
 // Default audio file IDs (Google Drive) — overridden by live data from API
 const AUDIO_DEFAULTS = {
-  'audio-brief':   { id: '14yIbmcRwmGVAEkvRAchMoRkym3AgDq_I', label: 'Executive Brief \u00b7 2 min' },
-  'audio-deep':    { id: '1_0OugCktqJXy6gu2LkJ-lNyKHzUm0ILo', label: 'Deep Dive \u00b7 8 min' },
-  'audio-command': { id: null, label: 'Command Center Brief' },      // walkthrough_S1
-  'audio-risk':    { id: null, label: 'Risk & Intel Brief' },        // walkthrough_S2
-  'audio-fin':     { id: null, label: 'Financial Overview' },        // walkthrough_S3
-  'audio-room':    { id: null, label: 'The Room & Options' },        // walkthrough_S4
-  'audio-mgmt':    { id: null, label: 'Management Handoff' },        // walkthrough_S5
-  'audio-board':   { id: null, label: 'Board Report' },              // walkthrough_S6
+  'audio-brief':   { id: '1dY2IdvWA1ChXXVao7pH51RtoEPdDdSxY', label: 'Executive Brief \u00b7 2 min' },
+  'audio-deep':    { id: '1qBlI3Thg8XFGRhKjNWsvprCuNufI8UXp', label: 'Deep Dive \u00b7 8 min' },
+  'audio-command': { id: '1QGPAmBYnn-ZSwyA2xLbHeyZaWoWrPL7Q', label: 'Command Center Brief' },      // walkthrough_S1
+  'audio-risk':    { id: '1p9yeP_v2rAJxzCq66AMqFMC3t85tduWB', label: 'Risk & Intel Brief' },        // walkthrough_S2
+  'audio-fin':     { id: '1iKooBY06Jr6kB81Sq9UqNk2SJs3abVj-', label: 'Financial Overview' },        // walkthrough_S3
+  'audio-room':    { id: '1WLX03kpdPzHq2bUP-gW_yShZgRw6aZY9', label: 'The Room & Options' },        // walkthrough_S4
+  'audio-mgmt':    { id: '1imHKqkIhy3yFhC1oxudALP5I82U12tC3', label: 'Management Handoff' },        // walkthrough_S5
+  'audio-board':   { id: '1RLGjGhvwLTcdVP49ouy6Pq-g0M4GxGJn', label: 'Board Report' },              // walkthrough_S6
 };
 // Mutable — populated by applyLiveData when API returns media_assets
 var AUDIO_FILES = Object.assign({}, AUDIO_DEFAULTS);

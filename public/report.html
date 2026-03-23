@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>StratOS Report</title>
+<link rel="icon" type="image/svg+xml" href="/stratos-icon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
@@ -232,7 +233,7 @@ function render(raw){
   // ══════════════════════════════════════════════════════════════════════
   // HEADER + TOOLBAR
   // ══════════════════════════════════════════════════════════════════════
-  h+='<div class="rpt-header"><div class="rpt-brand">Strat<span>OS</span></div><div class="rpt-meta">';
+  h+='<div class="rpt-header"><div class="rpt-brand"><img src="/stratos-icon.svg" alt="StratOS" style="width:28px;height:28px;vertical-align:middle;margin-right:8px">Strat<span>OS</span></div><div class="rpt-meta">';
   h+='<span class="rpt-badge badge-blue">'+esc(viewLabel)+'</span>';
   h+='<span>'+esc(raw.run_id||'')+'</span>';
   if(runDate)h+='<span>'+esc(runDate)+'</span>';
@@ -599,15 +600,23 @@ window.switchView=function(v){var u=new URL(location);u.searchParams.set('view',
 window.exportPDF=function(){
   var root=document.getElementById('report-root');if(!root)return;
   var tb=root.querySelector('.rpt-toolbar');if(tb)tb.style.display='none';
+  var clone=root.cloneNode(true);
+  var cloneTb=clone.querySelector('.rpt-toolbar');if(cloneTb)cloneTb.remove();
   var opt={
     margin:[8,10,8,10],
     filename:'stratos-'+view+'-'+(params.get('run_id')||'report')+'.pdf',
     image:{type:'jpeg',quality:0.98},
-    html2canvas:{scale:2,useCORS:true,backgroundColor:'#08080e'},
+    html2canvas:{scale:2,useCORS:true,backgroundColor:'#08080e',logging:false},
     jsPDF:{unit:'mm',format:'a4',orientation:'portrait'},
     pagebreak:{mode:['css','legacy'],before:'.page-break'}
   };
-  html2pdf().set(opt).from(root).save().then(function(){if(tb)tb.style.display=''});
+  html2pdf().set(opt).from(clone).save().then(function(){
+    if(tb)tb.style.display='';
+  }).catch(function(e){
+    console.error('[StratOS] PDF export failed:', e);
+    if(tb)tb.style.display='';
+    alert('PDF export failed. Try using Print > Save as PDF instead.');
+  });
 };
 })();
 </script>

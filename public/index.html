@@ -632,6 +632,7 @@ tcn-exit.show{display:block}
 #sec-room       {--tab-c:var(--amber)}
 #sec-management {--tab-c:var(--teal)}
 #sec-board      {--tab-c:var(--red)}
+#sec-market     {--tab-c:var(--teal)}
 
 /* ib-wrap left border always reads --tab-c */
 .ib-wrap{display:flex;flex-direction:column;background:var(--bg-surface);border:1px solid var(--border);border-left: var(--r-xs) solid var(--tab-c,var(--blue));border-radius:var(--r-lg);box-shadow:var(--shadow-sm);transition:border-color var(--t-base),box-shadow var(--t-base),border-left-color var(--t-base)}
@@ -1537,6 +1538,7 @@ dep-item strong{display:block;font-family:var(--font-mono);font-size:var(--font-
   
   <div class="tab" data-sec="management"><span class="tab-pip"></span>Management Handoff</div>
   <div class="tab" data-sec="board"><span class="tab-pip"></span>Board Report</div>
+  <div class="tab" data-sec="market" id="tab-market" style="display:none"><span class="tab-pip"></span>Market Intel</div>
 </nav>
 
 <!-- FLOATING PANELS -->
@@ -2965,6 +2967,14 @@ dep-item strong{display:block;font-family:var(--font-mono);font-size:var(--font-
   </div>
 </div>
 
+  <!-- MARKET INTELLIGENCE -->
+  <div class="s-section" id="sec-market" style="display:none">
+    <div style="text-align:center;padding:40px 20px;color:var(--text-muted)">
+      <div style="font-size:32px;margin-bottom:8px">📊</div>
+      <div style="font-size:14px">Market Intelligence loading...</div>
+    </div>
+  </div>
+
 </div>
 
 <script>
@@ -3021,7 +3031,36 @@ function applyLiveData(raw) {
   var mediaAssets = ob.media_assets || (raw.govBlob && raw.govBlob.media_assets) || (raw.master && raw.master.media_assets) || null;
   if (mediaAssets) applyMediaAssets(mediaAssets);
 
-  // \u2500\u2500 Walkthrough audio from GOV blob walkthrough_sections
+  // Market Intelligence tab
+  var mi = raw.marketIntelBlob || null;
+  if (mi) {
+    var miData = typeof mi === 'string' ? JSON.parse(mi) : mi;
+    var miSections = miData.sections || {};
+    var tabMarket = document.getElementById('tab-market');
+    if (tabMarket) tabMarket.style.display = '';
+    var secMarket = document.getElementById('sec-market');
+    if (secMarket) {
+      var miHtml = '<div class="section-label" style="color:var(--teal)">Market Intelligence <span style="font-size:11px;color:var(--text-muted);font-weight:400">powered by external research</span></div>';
+      miHtml += '<div style="background:rgba(245,158,11,0.15);border:1px solid rgba(245,158,11,0.3);color:var(--amber);padding:10px 14px;border-radius:8px;font-size:11px;margin-bottom:16px;font-weight:500;line-height:1.5">This intelligence is sourced from publicly available data. Validate with primary research before making material decisions.</div>';
+      var miOrder = [
+        { key: 'market_landscape', title: 'Market Landscape', color: 'var(--teal)' },
+        { key: 'competitive_positioning', title: 'Competitive Positioning', color: 'var(--blue)' },
+        { key: 'market_dynamics', title: 'Market Dynamics', color: 'var(--amber)' },
+        { key: 'opportunity_map', title: 'Opportunity Map', color: 'var(--purple)' }
+      ];
+      miOrder.forEach(function(sec) {
+        var content = miSections[sec.key] || 'Data not available for this section.';
+        miHtml += '<div class="stat-card" style="margin-bottom:12px;border-left:3px solid ' + sec.color + '">';
+        miHtml += '<div style="font-size:14px;font-weight:700;color:' + sec.color + ';margin-bottom:8px">' + sec.title + '</div>';
+        miHtml += '<div style="font-size:12px;color:var(--text-dim);line-height:1.8;white-space:pre-wrap">' + (content||'').replace(/</g,'&lt;').replace(/>/g,'&gt;') + '</div>';
+        miHtml += '</div>';
+      });
+      if (miData.search_date) miHtml += '<div style="font-size:10px;color:var(--text-muted);margin-top:12px">Research date: ' + miData.search_date + '</div>';
+      secMarket.innerHTML = miHtml;
+    }
+  }
+
+  // Walkthrough audio from GOV blob walkthrough_sections
   var govWS = (raw.govBlob && raw.govBlob.walkthrough_sections) || [];
   govWS.forEach(function(sec) {
     if (!sec.view_link || sec.status !== 'UPLOADED') return;

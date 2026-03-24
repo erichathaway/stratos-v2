@@ -3177,6 +3177,15 @@ function applyLiveData(raw) {
   var topConds = Array.isArray(exec.top_conditions) ? exec.top_conditions : (typeof exec.top_conditions === 'string' && exec.top_conditions ? exec.top_conditions.split(/[;\n]/).filter(Boolean) : []);
   set('brief-insight-3', (fm.phase_1_immediate || p1) + ' releases now for initial workstreams. ' + (fm.phase_2_gated || p2) + ' gated on first milestone. ' + topConds.length + ' open questions must resolve before execution begins.');
 
+  // Populate briefing stat cards dynamically
+  set('brief-vote-num', voteTotal);
+  set('brief-vote-denom', '/' + voteTotal);
+  set('brief-conf-num', conf);
+  var fmTotal = fm.total_investment || fm.capital_required || '';
+  var briefCapEl = el('brief-capital-chip');
+  if (briefCapEl && fmTotal) briefCapEl.textContent = fmTotal;
+
+
   // \u2500\u2500 Bucket decision areas
   // Briefing intel panels (dynamic)
   const optId = dash.approved_option_id || 'OPT-5';

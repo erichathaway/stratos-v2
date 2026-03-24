@@ -2181,14 +2181,14 @@ dep-item strong{display:block;font-family:var(--font-mono);font-size:var(--font-
 
   <!-- Outside Signals -->
   <div class="section-label">Outside Signals &mdash; Evidence &amp; External Intelligence <button class="info-btn" data-title="Evidence Sources" data-body="Sources cited by the room across all three rounds. H = high relevance (directly shaped the approved option). M = medium relevance (framed context or risk).">i</button></div>
-  <div class="g2">
-    <div class="card">
+  <div class="g2" id="evidence-cards-wrap">
+    <div class="card" id="evidence-high-card">
       <div class="card-head" style="--ct-accent:var(--teal)">
         <div class="card-title">High Relevance</div>
-        <span class="chip chip-teal">3 SOURCES</span>
+        <span class="chip chip-teal" id="evidence-high-count">3 SOURCES</span>
       </div>
       <div class="card-body">
-        <div class="ev-list">
+        <div class="ev-list" id="evidence-high-list">
           <div class="ev-card">
             <div class="ev-badge ev-badge-h">H</div>
             <div class="ev-card-content">
@@ -2200,13 +2200,13 @@ dep-item strong{display:block;font-family:var(--font-mono);font-size:var(--font-
         </div>
       </div>
     </div>
-    <div class="card">
+    <div class="card" id="evidence-med-card">
       <div class="card-head" style="--ct-accent:var(--amber)">
         <div class="card-title">Medium Relevance</div>
-        <span class="chip chip-amber">SOURCES</span>
+        <span class="chip chip-amber" id="evidence-med-count">SOURCES</span>
       </div>
       <div class="card-body">
-        <div class="ev-list">
+        <div class="ev-list" id="evidence-med-list">
           <div class="ev-card">
             <div class="ev-badge ev-badge-m">M</div>
             <div class="ev-card-content">
@@ -2274,7 +2274,7 @@ dep-item strong{display:block;font-family:var(--font-mono);font-size:var(--font-
   <div class="card">
     <div class="card-head" style="--ct-accent:var(--teal)"><div class="card-title">PHASE-GATED EXECUTION &middot; 2 KILL GATES &middot; 1 GO/NO-GO &middot; Q3 TARGET</div></div>
     <div class="card-body">
-      <div class="risk-timeline">
+      <div class="risk-timeline" id="risk-timeline">
         <div class="rt-row"><div class="rt-date">TBD</div><div class="rt-dot rt-dot-now"></div><div><div class="rt-label">Phase 1 Start</div><div class="rt-detail">Timeline loading from live engine output.</div></div></div>
         <div class="rt-row"><div class="rt-date" style="color:var(--amber);font-weight:700">TBD</div><div class="rt-dot rt-dot-gate"></div><div><div class="rt-label">GO / NO-GO Gate</div><div class="rt-detail">Milestone gate details pending.</div></div></div>
         <div class="rt-row"><div class="rt-date" style="color:var(--green);font-weight:700">TBD</div><div class="rt-dot rt-dot-target"></div><div><div class="rt-label">Target Launch</div><div class="rt-detail">Launch details pending.</div></div></div>
@@ -2476,9 +2476,9 @@ dep-item strong{display:block;font-family:var(--font-mono);font-size:var(--font-
   <!-- INSIGHT BLOCK (section 2) -->
   <div class="ib-wrap">
     <div class="ib-cols">
-      <div class="insight-col"><div class="insight-q">Why the room moved</div><div class="insight-a">Pending data</div></div>
-      <div class="insight-col"><div class="insight-q">The decisive moment</div><div class="insight-a">Pending data</div></div>
-      <div class="insight-col"><div class="insight-q">What the room did not resolve</div><div class="insight-a">Pending data</div></div>
+      <div class="insight-col"><div class="insight-q">Why the room moved</div><div class="insight-a" id="room-insight-why">Pending data</div></div>
+      <div class="insight-col"><div class="insight-q">The decisive moment</div><div class="insight-a" id="room-insight-decisive">Pending data</div></div>
+      <div class="insight-col"><div class="insight-q">What the room did not resolve</div><div class="insight-a" id="room-insight-unresolved">Pending data</div></div>
     </div>
     <div class="ib-actions">
       <button class="ib-audio" onclick="toggleAudio('audio-room')"><span class="ib-audio-icon">&#9654;</span>The Room &amp; Options &middot; 3 min</button>
@@ -2609,9 +2609,9 @@ dep-item strong{display:block;font-family:var(--font-mono);font-size:var(--font-
 
   <div class="ib-wrap">
     <div class="ib-cols">
-      <div class="insight-col"><div class="insight-q">What must happen first</div><div class="insight-a">Pending data</div></div>
-      <div class="insight-col"><div class="insight-q">Who owns the critical path</div><div class="insight-a">Pending data</div></div>
-      <div class="insight-col"><div class="insight-q">What failure looks like</div><div class="insight-a">Pending data</div></div>
+      <div class="insight-col"><div class="insight-q">What must happen first</div><div class="insight-a" id="mgmt-insight-first">Pending data</div></div>
+      <div class="insight-col"><div class="insight-q">Who owns the critical path</div><div class="insight-a" id="mgmt-insight-owner">Pending data</div></div>
+      <div class="insight-col"><div class="insight-q">What failure looks like</div><div class="insight-a" id="mgmt-insight-failure">Pending data</div></div>
     </div>
     <div class="ib-actions">
       <button class="ib-audio" onclick="toggleAudio('audio-mgmt')"><span class="ib-audio-icon">&#9654;</span>Management Handoff &middot; 3 min</button>
@@ -3206,6 +3206,41 @@ function applyLiveData(raw) {
   // \u2500\u2500 RISK \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
   buildRisk(raw, mso, dash);
 
+  // -- TIMELINE: populate from milestones or phases fallback
+  var tlEl = document.getElementById('risk-timeline');
+  if (tlEl && tl) {
+    var tlMilestones = tl.milestones || [];
+    var tlPhases2 = tl.phases || [];
+    var tlGates2 = Array.isArray(tl.hard_gates) ? tl.hard_gates : Object.values(tl.hard_gates || {});
+    var tlRows = [];
+
+    if (tlMilestones.length) {
+      tlMilestones.forEach(function(m) {
+        var isGate = !!(m.kill_gate || m.is_gate || (m.type || '').match(/gate|kill/i));
+        var dotCls = isGate ? 'rt-dot-gate' : (m.type === 'target' ? 'rt-dot-target' : 'rt-dot-now');
+        var dateStyle = isGate ? ' style="color:var(--amber);font-weight:700"' : (m.type === 'target' ? ' style="color:var(--green);font-weight:700"' : '');
+        tlRows.push('<div class="rt-row"><div class="rt-date"' + dateStyle + '>' + (m.date || m.timing || 'TBD') + '</div><div class="rt-dot ' + dotCls + '"></div><div><div class="rt-label">' + (m.milestone || m.name || m.label || '') + (isGate ? ' <span class="chip chip-red" style="font-size:var(--font-9)">KILL GATE</span>' : '') + '</div><div class="rt-detail">' + (m.description || m.detail || '') + '</div></div></div>');
+      });
+    } else if (tlPhases2.length) {
+      tlPhases2.forEach(function(phase, idx) {
+        var isFirst = idx === 0;
+        var isLast = idx === tlPhases2.length - 1;
+        var dotCls = isFirst ? 'rt-dot-now' : (isLast ? 'rt-dot-target' : 'rt-dot-gate');
+        var dateStyle = isFirst ? '' : (isLast ? ' style="color:var(--green);font-weight:700"' : ' style="color:var(--amber);font-weight:700"');
+        var date = phase.start_date || phase.estimated_duration || 'TBD';
+        tlRows.push('<div class="rt-row"><div class="rt-date"' + dateStyle + '>' + date + '</div><div class="rt-dot ' + dotCls + '"></div><div><div class="rt-label">' + (phase.phase_name || phase.name || 'Phase ' + (idx + 1)) + '</div><div class="rt-detail">' + (phase.description || phase.key_activities || (phase.estimated_duration ? 'Duration: ' + phase.estimated_duration : '')) + '</div></div></div>');
+      });
+    }
+
+    if (tlGates2.length) {
+      tlGates2.forEach(function(g) {
+        tlRows.push('<div class="rt-row"><div class="rt-date" style="color:var(--red);font-weight:700">' + (g.date || g.timing || 'TBD') + '</div><div class="rt-dot rt-dot-gate"></div><div><div class="rt-label">' + (g.gate_id || '') + ': ' + (g.gate_name || g.description || 'Hard Gate') + ' <span class="chip chip-red" style="font-size:var(--font-9)">HARD GATE</span></div><div class="rt-detail">' + (g.description || g.consequence || '') + '</div></div></div>');
+      });
+    }
+
+    if (tlRows.length) tlEl.innerHTML = tlRows.join('');
+  }
+
 
   // \u2500\u2500 THE ROOM \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
   buildRoom(raw, stages, gt);
@@ -3363,6 +3398,57 @@ function buildCommandCenter(raw, tl, dir, exec, fm, mso) {
   const g1 = tlGates.find(g => g.gate_id==='G1');
   if (g1) set('cmd-insight-2', (g1.description||'').substring(0,200));
   if (actions[2]) set('cmd-insight-3', (actions[2].action||actions[2]||'').substring(0,180));
+
+  // ── Command Center Right-Side Metrics (from financial_mechanics + dashboard) ──
+  var cmdMetrics = document.querySelectorAll('.cmd-opp-right .cmd-opp-metric');
+  if (cmdMetrics.length >= 4 && fm) {
+    // Metric 0: Revenue Target — from capital_required or year1_burn
+    var capReq = fm.capital_required || fm.revenue_target || fm.year1_burn || '';
+    var metVal0 = cmdMetrics[0].querySelector('.cmd-opp-metric-val');
+    var metSub0 = cmdMetrics[0].querySelector('.cmd-opp-metric-sub');
+    if (metVal0 && capReq) { metVal0.textContent = capReq; metVal0.dataset.val = capReq; }
+    if (metSub0 && fm.key_constraint) metSub0.textContent = fm.key_constraint;
+
+    // Metric 1: LTV/CAC Ratio
+    var cacSig = fm.cac_signal || fm.ltv_cac_ratio || '';
+    var metVal1 = cmdMetrics[1].querySelector('.cmd-opp-metric-val');
+    var metSub1 = cmdMetrics[1].querySelector('.cmd-opp-metric-sub');
+    if (metVal1 && cacSig) { metVal1.textContent = cacSig; metVal1.dataset.val = cacSig; }
+    if (metSub1 && fm.cfo_confidence) metSub1.textContent = 'CFO confidence: ' + fm.cfo_confidence;
+
+    // Metric 2: Total Investment — capital_required
+    var totInvest = fm.capital_required || fm.total_investment || '';
+    var metVal2 = cmdMetrics[2].querySelector('.cmd-opp-metric-val');
+    var metSub2 = cmdMetrics[2].querySelector('.cmd-opp-metric-sub');
+    if (metVal2 && totInvest) { metVal2.textContent = totInvest; metVal2.dataset.val = totInvest; }
+    if (metSub2 && fm.runway_floor) metSub2.textContent = 'Runway floor: ' + fm.runway_floor;
+
+    // Metric 3: Pipeline/Confidence
+    var confPctStr = dash.decision_confidence ? Math.round(dash.decision_confidence > 1 ? dash.decision_confidence : dash.decision_confidence * 100) + '%' : '';
+    var metVal3 = cmdMetrics[3].querySelector('.cmd-opp-metric-val');
+    var metSub3 = cmdMetrics[3].querySelector('.cmd-opp-metric-sub');
+    if (metVal3 && confPctStr) { metVal3.textContent = confPctStr; metVal3.dataset.val = confPctStr; }
+    if (metSub3) metSub3.textContent = (stages.filter(function(s){return s.round===2&&s.role_key!=='SYSTEM';}).length || 7) + ' roles, ' + ((ob.executive_summary||{}).top_conditions||[]).length + ' conditions';
+  }
+
+  // ── Capital Structure (Phase 1 / Phase 2 amounts + metrics) ──
+  var p1Amt = fm.phase_1_immediate || fm.capital_required || '';
+  var p2Amt = fm.phase_2_gated || '';
+  var capP1Els = document.querySelectorAll('.cmd-capital-amount.pos');
+  var capP2Els = document.querySelectorAll('.cmd-capital-amount:not(.pos)');
+  if (capP1Els.length && p1Amt) { capP1Els[0].textContent = p1Amt; capP1Els[0].dataset.val = p1Amt; capP1Els[0].dataset.note = 'Pre-authorized initial workstreams'; }
+  if (capP2Els.length && p2Amt) { capP2Els[0].textContent = p2Amt; capP2Els[0].dataset.val = p2Amt; capP2Els[0].dataset.note = 'Gated on milestone completion'; }
+
+  // Capital metrics row
+  var capNums = document.querySelectorAll('.cmd-capital-num');
+  if (capNums.length >= 3 && fm) {
+    var ltvVal = fm.ltv_target || fm.npv_condition || '';
+    var runwayVal = fm.runway_floor || fm.fcf_breakeven || '';
+    var budgetVal = fm.key_blocker || fm.key_constraint || '';
+    if (ltvVal) { capNums[0].textContent = ltvVal; capNums[0].dataset.val = ltvVal; }
+    if (runwayVal) { capNums[1].textContent = runwayVal; capNums[1].dataset.val = runwayVal; }
+    if (budgetVal) { capNums[2].textContent = budgetVal; capNums[2].dataset.val = budgetVal; }
+  }
 }
 
 
@@ -3596,6 +3682,57 @@ function buildRisk(raw, mso, dash) {
         window._eiTotal = sorted.length;
         window._eiInitial = INITIAL_SHOW;
       }
+    }
+  }
+
+  // ── Evidence Cards from citation_registry ──
+  var citReg = raw && raw.outputBlob && raw.outputBlob.citation_registry ? raw.outputBlob.citation_registry : null;
+  if (citReg && typeof citReg === 'object') {
+    var highList = document.getElementById('evidence-high-list');
+    var medList = document.getElementById('evidence-med-list');
+    var highCountEl = document.getElementById('evidence-high-count');
+    var medCountEl = document.getElementById('evidence-med-count');
+    if (highList && medList) {
+      var highCards = [];
+      var medCards = [];
+      var citKeys = Object.keys(citReg);
+      citKeys.forEach(function(key) {
+        var cit = citReg[key];
+        if (!cit) return;
+        var src = cit.source || key;
+        var round = cit.round != null ? 'R' + cit.round : '';
+        var ctx = cit.context || '';
+        var keyLower = (key + ' ' + ctx).toLowerCase();
+        var isHigh = /risk|failure|penalty|kill|critical|fatal|breach|halt/i.test(keyLower);
+        var card = { key: key, source: src, round: round, context: ctx };
+        if (isHigh) highCards.push(card);
+        else medCards.push(card);
+      });
+      // Render up to 3 high, 3 medium (6 total)
+      function renderEvCards(cards, listEl, badgeCls, badgeLetter) {
+        listEl.innerHTML = '';
+        cards.slice(0, 3).forEach(function(c) {
+          var div = document.createElement('div');
+          div.className = 'ev-card';
+          div.innerHTML =
+            '<div class="ev-badge ' + badgeCls + '">' + badgeLetter + '</div>' +
+            '<div class="ev-card-content">' +
+              '<div class="ev-card-source">' + esc(c.source) + '</div>' +
+              '<div class="ev-card-desc">' + esc(c.context || c.key) + '</div>' +
+              '<div class="ev-card-chips">' +
+                (c.round ? '<span class="chip">' + c.round + '</span>' : '') +
+              '</div>' +
+            '</div>';
+          listEl.appendChild(div);
+        });
+        if (!cards.length) {
+          listEl.innerHTML = '<div class="ev-card"><div class="ev-badge ' + badgeCls + '">' + badgeLetter + '</div><div class="ev-card-content"><div class="ev-card-source">No citations at this level</div><div class="ev-card-desc">All citations classified at other severity.</div></div></div>';
+        }
+      }
+      renderEvCards(highCards, highList, 'ev-badge-h', 'H');
+      renderEvCards(medCards, medList, 'ev-badge-m', 'M');
+      if (highCountEl) highCountEl.textContent = highCards.length + ' SOURCE' + (highCards.length !== 1 ? 'S' : '');
+      if (medCountEl) medCountEl.textContent = medCards.length + ' SOURCE' + (medCards.length !== 1 ? 'S' : '');
     }
   }
 }
@@ -4013,14 +4150,51 @@ if(table){
   });
 }
 
+// -- Room Insights (from dPacket)
+var riWhy = document.getElementById('room-insight-why');
+var riDecisive = document.getElementById('room-insight-decisive');
+var riUnresolved = document.getElementById('room-insight-unresolved');
+if (riWhy && dp.persuadability_analysis) {
+  var pa = dp.persuadability_analysis;
+  var paText = '';
+  if (typeof pa === 'string') paText = pa;
+  else if (pa.summary) paText = pa.summary;
+  else if (pa.key_shifts) paText = (Array.isArray(pa.key_shifts) ? pa.key_shifts.join('. ') : String(pa.key_shifts));
+  else paText = JSON.stringify(pa).substring(0, 300);
+  if (paText) riWhy.textContent = paText.substring(0, 300);
+}
+if (riDecisive && dp.convergence_flag) {
+  var cf = dp.convergence_flag;
+  var cfText = '';
+  if (typeof cf === 'string') cfText = cf;
+  else if (typeof cf === 'boolean') cfText = cf ? 'Full convergence achieved — all roles aligned by final round.' : 'Convergence not achieved — positions remain fragmented.';
+  else if (cf.description) cfText = cf.description;
+  else if (cf.round != null) cfText = 'Convergence at Round ' + cf.round + (cf.trigger ? ' — ' + cf.trigger : '');
+  else cfText = JSON.stringify(cf).substring(0, 200);
+  if (cfText) riDecisive.textContent = cfText.substring(0, 300);
+}
+if (riUnresolved) {
+  var gtWarn = dp.groupthink_flag || gtFlag || {};
+  var gtText = '';
+  if (gtWarn.triggered || gtWarn.severity) {
+    gtText = 'Groupthink flag: ' + (gtWarn.severity || 'FLAGGED') + '. ';
+    if (gtWarn.description) gtText += gtWarn.description;
+    else if (gtWarn.trigger) gtText += gtWarn.trigger;
+    else gtText += 'All roles converged with no recorded dissent — structural optimism risk.';
+  } else {
+    gtText = 'No groupthink flag triggered. Positions showed healthy divergence before convergence.';
+  }
+  riUnresolved.textContent = gtText.substring(0, 300);
+}
+
 // -- Options tabs (reuses buildOptions which is called separately)
 buildOptions(raw,stages,gt);
 }
 
 // \u2500\u2500 FINANCIALS \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
 function buildFinancials(raw, fm, fo, bgp, mso, dash) {
-  var tot   = (fo&&fo.total_budget)||(fm&&fm.total_investment)||'$500K';
-  var cac   = (fm&&fm.cac_threshold)||'$50K';
+  var tot   = (fo&&fo.total_budget)||(fm&&fm.capital_required)||(fm&&fm.total_investment)||'$500K';
+  var cac   = (fm&&fm.cac_signal)||(fm&&fm.cac_threshold)||'$50K';
   var ltv   = (fo&&fo.ltv_per_customer)||(fm&&fm.ltv_target)||'$175K';
   var conf  = (dash&&dash.decision_confidence)||67;
   var tgt   = (fo&&fo.target_customers)||3;
@@ -4088,6 +4262,38 @@ function buildFinancials(raw, fm, fo, bgp, mso, dash) {
     return '<div class="fin-cac-row '+p.rc+'">'+'<div class="fin-cac-label">CAC = $'+p.v+'K '+tg+'</div>'+
       '<div style="display:flex;align-items:center;gap:var(--gap-sm)"><div class="fin-cac-bar-bg"><div class="fin-cac-bar-inner" style="width:'+p.bp+'%;background:'+p.col+'"></div></div></div>'+rt+'</div>';
   }).join('');
+
+  // ── Financial Insights from fm keys ──
+  var fmP1 = fm.phase_1_immediate || fm.capital_required || '$150K';
+  var fmP2 = fm.phase_2_gated || '';
+  var fmBurn = fm.year1_burn || '';
+  var fmFcf = fm.fcf_breakeven || '';
+  var fmNpv = fm.npv_condition || '';
+  var fmRunway = fm.runway_floor || '';
+  var fmBlocker = fm.key_blocker || '';
+  var fmConstraint = fm.key_constraint || '';
+  var fmCfo = fm.cfo_confidence || '';
+
+  // Insight 1: Where the money goes
+  var finI1 = fmP1 + ' deploys immediately for initial workstreams.';
+  if (fmP2) finI1 += ' ' + fmP2 + ' gated on milestone completion.';
+  if (fmBurn) finI1 += ' Year 1 burn: ' + fmBurn + '.';
+  set('fin-insight-1', finI1);
+
+  // Insight 2: What breaks the model
+  var finI2Parts = [];
+  if (fmBlocker) finI2Parts.push(fmBlocker);
+  if (fmConstraint) finI2Parts.push(fmConstraint);
+  if (fmRunway) finI2Parts.push('Runway floor: ' + fmRunway);
+  if (fmFcf) finI2Parts.push('FCF breakeven: ' + fmFcf);
+  set('fin-insight-2', finI2Parts.length ? finI2Parts.join('. ') : 'Financial model constraints pending analysis.');
+
+  // Insight 3: What the Board needs to know
+  var finI3Parts = [];
+  if (fmNpv) finI3Parts.push('NPV condition: ' + fmNpv);
+  if (fmCfo) finI3Parts.push('CFO confidence: ' + fmCfo);
+  if (tot) finI3Parts.push('Total capital: ' + tot);
+  set('fin-insight-3', finI3Parts.length ? finI3Parts.join('. ') : 'Board financial briefing pending.');
 }
 
 // \u2500\u2500 MANAGEMENT \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
@@ -4107,7 +4313,7 @@ var bgpM=(raw.outputBlob||{}).board_governance_packet||{};
 var fmRaw=dir.functional_mandates||{};
 var fmArr=Array.isArray(fmRaw)?fmRaw:Object.entries(fmRaw).map(function(e){return Object.assign({role:e[0]},typeof e[1]==='string'?{mandate:e[1]}:e[1]);});
 var condMap={};(bgpM.conditions_for_approval||[]).forEach(function(c){if(c.role)condMap[c.role]=c.condition||c;});
-var killMap={};(bgpM.kill_criteria||bgpM.kill_gates||bgpM.kill_criteria_summary||[]).forEach(function(k){if(k.role||k.owner){var rk=k.role||k.owner;if(!killMap[rk])killMap[rk]=[];killMap[rk].push(k);}});
+var killMapSrc=bgpM.kill_criteria||bgpM.kill_gates||(Array.isArray(bgpM.kill_criteria_summary)?bgpM.kill_criteria_summary:[]); var killMap={};killMapSrc.forEach(function(k){if(k.role||k.owner){var rk=k.role||k.owner;if(!killMap[rk])killMap[rk]=[];killMap[rk].push(k);}});
 var mileMap={};(dir.strategic_milestones||[]).forEach(function(m){var own=m.owner||m.role||'';if(!mileMap[own])mileMap[own]=[];mileMap[own].push(m);});
 var TITLE_MAP={CEO:'Chief Executive Officer',CFO:'Chief Financial Officer',CTO:'Chief Technology Officer',COO:'Chief Operating Officer',CSO:'Chief Strategy Officer',CHRO:'Chief People Officer',LEGAL:'Chief Legal Officer'};
 var roleKeys=Object.keys(byRoleR2);
@@ -4222,8 +4428,15 @@ if(cfEl){
 
 // \u2500\u2500 BOARD \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
 function buildBoard(raw, bgp, dash, gt) {
-  // Strategic rationale
-  if (bgp.strategic_rationale) set('board-rationale-text', bgp.strategic_rationale);
+  // Strategic rationale — both hero narrative and detail card
+  if (bgp.strategic_rationale) {
+    set('board-rationale-text', bgp.strategic_rationale);
+    var boardNarrEl = el('board-narrative');
+    if (boardNarrEl) {
+      boardNarrEl.innerHTML = esc(bgp.strategic_rationale) +
+        ' <span class="cite strat" data-t="INTERNAL_STRATEGY" data-l="Board governance packet">&#9670;</span>';
+    }
+  }
 
   // Board action requested
   const act = bgp.board_action_requested;
@@ -4257,9 +4470,18 @@ function buildBoard(raw, bgp, dash, gt) {
     }).join('');
   }
 
-  // Kill criteria (dynamic)
+  // Kill criteria (dynamic) — handle both array and string forms
   const killWrap = el('board-kill-wrap');
-  const kills = bgp.kill_criteria || bgp.kill_gates || [];
+  var kills = bgp.kill_criteria || bgp.kill_gates || [];
+  // kill_criteria_summary may be a string — parse into array
+  if (!kills.length && bgp.kill_criteria_summary) {
+    var kcs = bgp.kill_criteria_summary;
+    if (typeof kcs === 'string') {
+      kills = kcs.split(/[;\n]/).filter(Boolean).map(function(s) { return s.trim(); });
+    } else if (Array.isArray(kcs)) {
+      kills = kcs;
+    }
+  }
   if (killWrap && kills.length) {
     set('board-sum-kills', kills.length);
     killWrap.innerHTML = kills.map(function(k) {
@@ -4315,11 +4537,17 @@ function buildBoard(raw, bgp, dash, gt) {
       }
       if (bgp.financial_overview) govItems.push({label: 'Financial Overview', val: govStr(bgp.financial_overview)});
       if (bgp.risk_overview) govItems.push({label: 'Risk Overview', val: govStr(bgp.risk_overview)});
-      if (bgp.dissent_record) {
-        var dr = bgp.dissent_record;
-        var drText = Array.isArray(dr) ? (dr.length ? dr.map(function(d){return typeof d==='string'?d:(d.role||'')+': '+(d.dissent||d.text||'');}).join('. ') : 'No dissent recorded') : govStr(dr);
-        govItems.push({label: 'Dissent Record', val: drText});
+      // Always show dissent record — default to "no dissent" message
+      var dr = bgp.dissent_record;
+      var drText = '';
+      if (dr && Array.isArray(dr) && dr.length) {
+        drText = dr.map(function(d){return typeof d==='string'?d:(d.role||'')+': '+(d.dissent||d.text||'');}).join('. ');
+      } else if (dr && typeof dr === 'string' && dr.trim()) {
+        drText = dr;
+      } else {
+        drText = 'No formal dissent recorded \u2014 unanimous with conditions';
       }
+      govItems.push({label: 'Dissent Record', val: drText});
     }
     if (govItems.length) {
       govGrid.innerHTML = govItems.map(function(g) {

@@ -4435,17 +4435,29 @@ var ASSET_TO_AUDIO = {
 
 function applyMediaAssets(assets) {
   if (!assets || typeof assets !== 'object') return;
-  // assets = { board_brief: 'GDRIVE_FILE_ID', walkthrough_S1: 'GDRIVE_FILE_ID', ... }
+  // New format: assets = { 'audio-brief': { url: 'https://...mp3', duration_sec: 130, label: '...' }, ... }
+  // Legacy format: assets = { board_brief: 'GDRIVE_FILE_ID', ... }
   Object.keys(assets).forEach(function(key) {
-    var audioKey = ASSET_TO_AUDIO[key];
-    if (audioKey && assets[key]) {
-      AUDIO_FILES[audioKey] = { id: assets[key], label: AUDIO_DEFAULTS[audioKey]?.label || key };
+    var val = assets[key];
+    // New Supabase Storage format — object with url property
+    if (val && typeof val === 'object' && val.url) {
+      var audioKey = ASSET_TO_AUDIO[key] || key;
+      AUDIO_FILES[audioKey] = { url: val.url, label: val.label || AUDIO_DEFAULTS[audioKey]?.label || key };
+      return;
+    }
+    // Legacy Google Drive format — string file ID
+    if (typeof val === 'string' && val) {
+      var audioKey2 = ASSET_TO_AUDIO[key];
+      if (audioKey2) {
+        AUDIO_FILES[audioKey2] = { id: val, label: AUDIO_DEFAULTS[audioKey2]?.label || key };
+      }
     }
   });
   // GOV_Overview → update the executive doc link
   if (assets.GOV_Overview) {
+    var link = typeof assets.GOV_Overview === 'object' ? assets.GOV_Overview.url : ('https://drive.google.com/file/d/' + assets.GOV_Overview + '/view');
     var docLink = document.querySelector('.ib-doc[title="View Executive Summary"]');
-    if (docLink) docLink.href = 'https://drive.google.com/file/d/' + assets.GOV_Overview + '/view';
+    if (docLink) docLink.href = link;
   }
 }
 
@@ -4469,9 +4481,9 @@ function toggleAudio(id) {
   _syncBtns(_audId, false);
   _audId = id;
 
-  // Use GDrive preview iframe — no CORS, plays inline
-  if (!af.id) {
-    console.warn('[StratOS] No audio file ID for', id);
+  // No audio source available
+  if (!af.id && !af.url) {
+    console.warn('[StratOS] No audio source for', id);
     var apEl2 = document.getElementById('ap');
     var apLabel2 = document.getElementById('ap-label');
     if (apEl2) { apEl2.style.display = 'flex'; }
@@ -4479,12 +4491,28 @@ function toggleAudio(id) {
     setTimeout(function(){ if(apEl2) apEl2.style.display='none'; }, 4000);
     return;
   }
-  const src = 'https://drive.google.com/file/d/' + af.id + '/preview';
 
   if (apEl)    { apEl.style.display = 'flex'; }
   if (apLabel) { apLabel.textContent = af.label; }
+
+  // Supabase Storage URL — use native <audio> element (better UX)
+  if (af.url) {
+    const apIframe = document.getElementById('ap-iframe');
+    if (apIframe) { apIframe.style.display = 'none'; apIframe.src = ''; }
+    if (apAudio) {
+      apAudio.style.display = 'block';
+      apAudio.src = af.url;
+      apAudio.play().catch(function(){});
+    }
+    _syncBtns(id, true);
+    return;
+  }
+
+  // Legacy Google Drive — use iframe
+  const src = 'https://drive.google.com/file/d/' + af.id + '/preview';
+  if (apAudio) { apAudio.style.display = 'none'; apAudio.pause(); apAudio.src = ''; }
   const apIframe = document.getElementById('ap-iframe');
-  if (apIframe) { apIframe.src = src; }
+  if (apIframe) { apIframe.style.display = 'block'; apIframe.src = src; }
   _syncBtns(id, true);
 }
 

@@ -1764,8 +1764,8 @@ dep-item strong{display:block;font-family:var(--font-mono);font-size:var(--font-
           </div>
         </div>
         <div class="cmd-opp-verdict-stats">
-          <span class="cmd-opp-stat"><span class="cmd-opp-stat-val num-cite" id="cmd-vote" data-label="Votes to Approve" data-val="7/7" data-source="dPacket.counts.roles_returned = 7" data-note="All 7 roles voted APPROVE_WITH_CONDITIONS.">7/7</span> Vote</span>
-          <span class="cmd-opp-stat"><span class="cmd-opp-stat-val num-cite" id="cmd-confidence2" data-label="Avg Confidence" data-val="67%" data-source="dPacket.confidence_summary.avg = 0.67" data-note="Range 62-72%. CTO lowest at 62%.">67%</span> Confidence</span>
+          <span class="cmd-opp-stat"><span class="cmd-opp-stat-val num-cite" id="cmd-vote" data-label="Votes to Approve" data-val="—" data-source="dPacket.counts" data-note="Pending">—</span> Vote</span>
+          <span class="cmd-opp-stat"><span class="cmd-opp-stat-val num-cite" id="cmd-confidence2" data-label="Avg Confidence" data-val="—" data-source="dPacket.confidence_summary" data-note="Pending">—</span> Confidence</span>
           <span class="cmd-opp-stat"><span class="cmd-opp-stat-val">3</span> Rounds</span>
         </div>
       </div>
@@ -1867,7 +1867,7 @@ dep-item strong{display:block;font-family:var(--font-mono);font-size:var(--font-
         </div>
         <div class="cmd-dash-footer">
           <span class="cmd-dash-meta">7 Roles &middot; 3 Rounds &middot; 0 Dissents</span>
-          <span id="cmd-confidence" class="cmd-conf-val teal">67%</span>
+          <span id="cmd-confidence" class="cmd-conf-val teal">—</span>
         </div>
       </div>
     </div>
@@ -2286,7 +2286,7 @@ dep-item strong{display:block;font-family:var(--font-mono);font-size:var(--font-
       <div class="fin-header-sub">Financial analysis pending live data from the decision engine.</div>
     </div>
     <div class="fin-header-stat">
-      <div class="fin-header-conf num-cite" id="fin-conf-display" data-label="Avg Confidence" data-val="67%" data-source="dPacket.confidence_summary.avg = 0.67" data-note="Range 62-72%. All 7 roles conditional. None with high confidence.">67%</div>
+      <div class="fin-header-conf num-cite" id="fin-conf-display" data-label="Avg Confidence" data-val="—" data-source="dPacket.confidence_summary" data-note="Pending" id="fin-conf-val">—</div>
       <div class="fin-header-conf-label" id="fin-conf-label">Avg Confidence<br>Conditional</div>
     </div>
   </div>
@@ -2417,7 +2417,7 @@ dep-item strong{display:block;font-family:var(--font-mono);font-size:var(--font-
     <div class="card dr-conv-card">
       <div class="card-head" style="--ct-accent:var(--amber)">
         <div class="card-title">Deliberation Convergence</div>
-        <button class="info-btn" data-title="Deliberation Convergence" data-body="7 roles deliberated across 3 rounds. Each cell shows stance and confidence. Watch the room shift from fragmented (R0) to conditionally aligned (R2). Color = stance: red=NOT YET, amber=CONDITIONAL, teal=GO.">i</button>
+        <button class="info-btn" data-title="Deliberation Convergence" data-body="Roles deliberated across multiple rounds. Each cell shows stance and confidence. Watch the room shift from fragmented (R0) to conditionally aligned (R2). Color = stance: red=NOT YET, amber=CONDITIONAL, teal=GO.">i</button>
         <div class="u-flex u-items-ctr u-gap-lg">
           <span class="legend-item" style="color:var(--teal)"><span class="u-legend-dot-round" style="background:var(--teal)"></span>GO</span>
           <span class="legend-item" style="color:var(--amber)"><span class="u-legend-dot-round" style="background:var(--amber)"></span>Conditional</span>
@@ -2441,14 +2441,14 @@ dep-item strong{display:block;font-family:var(--font-mono);font-size:var(--font-
       <div class="dr-out-block">
         <div class="dr-out-label">Decision Outcome</div>
         <div class="dr-out-val" id="dr-chosen-opt">&mdash;</div>
-        <div class="dr-out-sub" id="dr-chosen-name">Delay to Q1 2026 &mdash; Budget Validation First</div>
+        <div class="dr-out-sub" id="dr-chosen-name">Pending &mdash; Budget Validation First</div>
       </div>
       <div class="dr-out-block">
         <div class="dr-out-label">Avg Confidence</div>
         <div class="dr-conf-wrap">
           <div class="dr-conf-ring">
             <svg viewBox="0 0 72 72"><circle class="ring-bg" cx="36" cy="36" r="32"/><circle class="ring-fg" id="dr-conf-arc" cx="36" cy="36" r="32" stroke-dasharray="201" stroke-dashoffset="66"/></svg>
-            <div class="dr-conf-num num-cite" id="dr-conf-pct" data-label="Avg Confidence" data-val="67%" data-source="dPacket.confidence_summary.avg = 0.67" data-note="Range 62-72% across 7 roles over 3 rounds.">67%</div>
+            <div class="dr-conf-num num-cite" id="dr-conf-pct" data-label="Avg Confidence" data-val="—" data-source="dPacket.confidence_summary" data-note="Pending">—</div>
           </div>
           <div class="dr-conf-meta">
             <span class="eyebrow-label">All Conditional</span>
@@ -2457,9 +2457,9 @@ dep-item strong{display:block;font-family:var(--font-mono);font-size:var(--font-
         </div>
       </div>
       <div class="dr-out-block">
-        <div class="dr-stat-row"><span class="dr-stat-label">Vote</span><span class="dr-stat-val pos num-cite" id="dr-vote-val" data-label="Vote" data-val="7/7" data-source="dPacket.counts.roles_returned = 7" data-note="All 7 roles voted APPROVE_WITH_CONDITIONS.">7/7</span></div>
+        <div class="dr-stat-row"><span class="dr-stat-label">Vote</span><span class="dr-stat-val pos num-cite" id="dr-vote-val" data-label="Vote" data-val="—" data-source="dPacket.counts" data-note="Pending">—</span></div>
         <div class="dr-stat-row"><span class="dr-stat-label">Rounds</span><span class="dr-stat-val" id="dr-rounds-val">3</span></div>
-        <div class="dr-stat-row"><span class="dr-stat-label">Groupthink</span><span class="dr-stat-val warn num-cite" id="dr-gt-val" data-label="Groupthink Flag" data-val="HIGH" data-source="dPacket.groupthink_flag.severity = HIGH" data-note="All 7 roles converged to CONDITIONAL_SUPPORT with no recorded dissent. Structural optimism risk.">HIGH</span></div>
+        <div class="dr-stat-row"><span class="dr-stat-label">Groupthink</span><span class="dr-stat-val warn num-cite" id="dr-gt-val" data-label="Groupthink Flag" data-val="—" data-source="dPacket.groupthink_flag" data-note="Pending">—</span></div>
       </div>
     </div>
   </div>
@@ -2487,13 +2487,13 @@ dep-item strong{display:block;font-family:var(--font-mono);font-size:var(--font-
     </div>
     <div class="room-arc-card r1">
       <div class="room-arc-round r1">Round 1 -- Convergence</div>
-      <div class="room-arc-headline" id="room-arc-r1-headline">7/7 Conditional</div>
+      <div class="room-arc-headline" id="room-arc-r1-headline">—</div>
       <div class="chip-row" style="margin-top:var(--gap-xs)" id="room-arc-r1-chips"></div>
       <div class="room-arc-desc" id="room-arc-r1-desc">All roles moved to conditional support. Conditions were placed but alignment increased. Loading details...</div>
     </div>
     <div class="room-arc-card r2">
       <div class="room-arc-round r2">Round 2 -- Resolution</div>
-      <div class="room-arc-headline" id="room-arc-r2-headline">7/7 Conditional</div>
+      <div class="room-arc-headline" id="room-arc-r2-headline">—</div>
       <div class="chip-row" style="margin-top:var(--gap-xs)" id="room-arc-r2-chips"></div>
       <div class="room-arc-desc" id="room-arc-r2-desc">Conditions collapsed into key gates. Each role distilled to their single non-negotiable. Loading details...</div>
     </div>
@@ -2510,7 +2510,7 @@ dep-item strong{display:block;font-family:var(--font-mono);font-size:var(--font-
       </div>
     </div>
     <div>
-      <div class="section-label">The Vote <button class="info-btn" data-title="The Vote" data-body="Each option's vote count across all 7 roles in Round 2.">i</button></div>
+      <div class="section-label">The Vote <button class="info-btn" data-title="The Vote" data-body="Each option's vote count across all roles in the final round.">i</button></div>
       <div class="card" id="room-vote-card" style="height:calc(100% - 32px)">
         <div class="card-body">
           <div id="room-vote-bars"></div>
@@ -2550,7 +2550,7 @@ dep-item strong{display:block;font-family:var(--font-mono);font-size:var(--font-
   <div class="dr-facil-grid" id="dr-facil-grid"></div>
 
   <!-- OPTIONS: what was on the table -->
-  <div class="section-label">Options on the Table &mdash; What the Room Evaluated <button class="info-btn" data-title="Options Evaluated" data-body="Five options were evaluated by all 7 roles. Each option was voted on in Round 2. Click any option tab to see the case for and against.">i</button></div>
+  <div class="section-label">Options on the Table &mdash; What the Room Evaluated <button class="info-btn" data-title="Options Evaluated" data-body="Five options were evaluated by all roles in the room. Each option was voted on in Round 2. Click any option tab to see the case for and against.">i</button></div>
   <div class="room-opts-tabs" id="room-opts-tabs"></div>
   <div id="room-opts-panels"></div>
 
@@ -2751,7 +2751,7 @@ dep-item strong{display:block;font-family:var(--font-mono);font-size:var(--font-
   <!-- BOARD SUMMARY METRICS -->
   <div class="board-summary-row" id="board-summary-row">
     <div class="board-sum-item"><div class="board-sum-val num-cite" id="board-sum-invest" data-label="Total Investment" data-val="—" data-source="financial_mechanics.total_investment" data-note="Pending data">&mdash;</div><div class="board-sum-label">Total Investment</div></div>
-    <div class="board-sum-item"><div class="board-sum-val num-cite" id="board-sum-conf" data-label="Avg Confidence" data-val="67%" data-source="dPacket.confidence_summary.avg = 0.67" data-note="Range 62-72%. CTO lowest at 62%, CSO highest at 78%.">67%</div><div class="board-sum-label">Avg Confidence</div></div>
+    <div class="board-sum-item"><div class="board-sum-val num-cite" id="board-sum-conf" data-label="Avg Confidence" data-val="—" data-source="dPacket.confidence_summary" data-note="Pending">—</div><div class="board-sum-label">Avg Confidence</div></div>
     <div class="board-sum-item"><div class="board-sum-val num-cite" id="board-sum-conds" data-label="Conditions" data-val="7" data-source="dPacket.approval_conditions" data-note="Each ELT role placed one non-negotiable condition on their approval.">7</div><div class="board-sum-label">Conditions</div></div>
     <div class="board-sum-item"><div class="board-sum-val num-cite" style="color:var(--red)" id="board-sum-kills" data-label="Kill Gates" data-val="2" data-source="board_governance_packet.kill_criteria_summary" data-note="Hard stop conditions that automatically halt the initiative.">2</div><div class="board-sum-label">Kill Gates</div></div>
   </div>
@@ -4104,7 +4104,7 @@ if(gtEl&&gtFlag.detected){
   var sc3=sv==="HIGH"?"chip-red":sv==="MEDIUM"?"chip-amber":"chip";
   gtEl.innerHTML='<div class="room-gt-icon">&#x26A0;</div><div class="room-gt-text">'+
     '<div><span class="chip '+sc3+'">GROUPTHINK '+sv+'</span></div>'+
-    '<div style="margin-top:var(--gap-xs)">'+(gtFlag.warning||"All 7 roles converged on CONDITIONAL_SUPPORT. No meaningful dissent was recorded. Probe for unvoiced concerns before committing.")+'</div>'+
+    '<div style="margin-top:var(--gap-xs)">'+(gtFlag.warning||"Roles converged with limited dissent. Probe for unvoiced concerns before committing.")+'</div>'+
     '</div>';
 }
 
@@ -4826,7 +4826,7 @@ function closeInfo() {
 // \u2500\u2500 TOUR \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
 const TOUR_STEPS = {
   briefing: { audio: 'Briefing overview -- 2 min', steps: [
-    { el:'#sec-briefing .verdict-hero',        title:'Decision Verdict',            body:'The final ruling from a 3-round governed deliberation. 7 roles voted unanimously for conditional approval. Board authorization is the <strong>binding next step</strong> before any spend is committed.' },
+    { el:'#sec-briefing .verdict-hero',        title:'Decision Verdict',            body:'The final ruling from a 3-round governed deliberation. Roles voted for conditional approval. Board authorization is the <strong>binding next step</strong> before any spend is committed.' },
     { el:'#sec-briefing .ib-wrap',             title:'Executive Brief',             body:'Three lenses on this decision: what it means for the business, what needs to be true, and what the Board specifically owns in this outcome.' },
     { el:'#sec-briefing .g5.dim-group',        title:'Key Metrics',                 body:'The five headline numbers from the decision engine output. Every number is cited \u2014 hover the value to see the source.' },
     { el:'#sec-briefing .g3.dim-group',        title:'Decision Areas',              body:'Six functional domains each summarizing a key dimension. Hover any card to expand the full analysis. Cards dim neighbors to direct focus.' }
@@ -4850,9 +4850,9 @@ const TOUR_STEPS = {
     { el:'#sec-financials .fin-scenario-wrap',  title:'Scenario Analysis',          body:'Three cases modeled by CFO across scenarios. Phase 1 is maximum exposure if Phase 2 gate fails.' }
   ]},
   room: { audio: 'The Room -- 3 min', steps: [
-    { el:'#sec-room .g7030',                   title:'Convergence & Outcome',       body:'The deliberation convergence grid shows 7 roles across 3 rounds. Watch the room shift from fragmented (R0) to conditionally aligned (R2). The outcome panel shows the final decision.' },
+    { el:'#sec-room .g7030',                   title:'Convergence & Outcome',       body:'The deliberation convergence grid shows roles across rounds. Watch the room shift from fragmented (R0) to conditionally aligned (R2). The outcome panel shows the final decision.' },
     { el:'#sec-room .room-arc-row',            title:'3-Round Deliberation Arc',    body:'1 GO and 6 NOT YET in Round 0. Unanimous conditional by Round 2. Each card captures the key shift that round produced.' },
-    { el:'#sec-room .room-commit-grid',        title:'Hard Commitments',            body:'What each of the 7 roles requires to approve. These are non-negotiable gate conditions backed by the R2 deliberation record.' },
+    { el:'#sec-room .room-commit-grid',        title:'Hard Commitments',            body:'What each role requires to approve. These are non-negotiable gate conditions backed by the R2 deliberation record.' },
     { el:'#sec-room .room-role-table',         title:'Member Breakdown',            body:'Final confidence, stance across all 3 rounds, and each role\'s hard gate condition. Click any row to read their direct quote.' },
     { el:'#sec-room .dr-facil-grid',           title:'Facilitator Observations',    body:'The AI facilitator flagged key dynamics each round: coalition shifts, persuasion patterns, and unresolved tensions. The moments a human moderator would have noted.' },
     { el:'#sec-room .room-opts-tabs',          title:'Options Evaluated',           body:'Options evaluated by all roles. The selected option satisfied governance thresholds and runway covenants.' }

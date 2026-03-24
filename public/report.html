@@ -183,7 +183,7 @@ function gated(t){ return tier === 'free' && t === 'paid'; }
 function esc(s){ var d=document.createElement('div');d.textContent=s||'';return d.innerHTML; }
 function pct(v){ if(v==null)return '—';return (v>1?Math.round(v):Math.round(v*100))+'%'; }
 function safe(v,fb){ return v!=null&&v!==''?v:(fb||'—'); }
-function driveUrl(id){ return id?(id.startsWith('http')?id:'https://drive.google.com/file/d/'+id+'/view'):'#'; }
+function driveUrl(id){ if(!id)return '#'; if(typeof id==='object')return id.url||id.view_link||'#'; if(typeof id==='string')return id.startsWith('http')?id:'https://drive.google.com/file/d/'+id+'/view'; return '#'; }
 function stanceColor(s){ if(!s)return 'var(--text-muted)';s=s.toUpperCase();if(s.includes('APPROVE')||s==='GO')return'var(--teal)';if(s.includes('REJECT')||s==='NO')return'var(--red)';if(s.includes('DEFER')||s==='NOT YET'||s.includes('CONDITIONAL')||s==='COND')return'var(--amber)';return'var(--blue)'; }
 function stanceLabel(s){ if(!s)return'—';s=s.toUpperCase();if(s.includes('APPROVE_WITH'))return'CONDITIONAL';if(s.includes('APPROVE'))return'APPROVE';if(s.includes('REJECT'))return'REJECT';if(s==='DEFER'||s==='NOT YET')return'DEFER';return s; }
 

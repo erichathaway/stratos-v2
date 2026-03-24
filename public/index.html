@@ -2889,22 +2889,53 @@ function applyLiveData(raw) {
     if (tabMarket) tabMarket.style.display = '';
     var secMarket = document.getElementById('sec-market');
     if (secMarket) {
-      var miHtml = '<div class="section-label" style="color:var(--teal)">Market Intelligence <span style="font-size:11px;color:var(--text-muted);font-weight:400">powered by external research</span></div>';
-      miHtml += '<div style="background:rgba(245,158,11,0.15);border:1px solid rgba(245,158,11,0.3);color:var(--amber);padding:10px 14px;border-radius:8px;font-size:11px;margin-bottom:16px;font-weight:500;line-height:1.5">This intelligence is sourced from publicly available data. Validate with primary research before making material decisions.</div>';
+      // Simple markdown to HTML converter for Perplexity output
+      function miMarkdown(text) {
+        if (!text) return '';
+        return text
+          .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+          .replace(/\*\*(.+?)\*\*/g,'<strong style="color:var(--text-bright)">$1</strong>')
+          .replace(/\*(.+?)\*/g,'<em>$1</em>')
+          .replace(/^### (.+)$/gm,'<div style="font-size:13px;font-weight:700;color:var(--text-bright);margin:14px 0 6px;border-bottom:1px solid var(--border);padding-bottom:4px">$1</div>')
+          .replace(/^## (.+)$/gm,'<div style="font-size:14px;font-weight:800;color:var(--text-bright);margin:16px 0 8px">$1</div>')
+          .replace(/^- (.+)$/gm,'<div style="padding-left:12px;position:relative;margin:3px 0"><span style="position:absolute;left:0;color:var(--teal)">&#8226;</span>$1</div>')
+          .replace(/^\d+\. (.+)$/gm,'<div style="padding-left:16px;margin:3px 0">$1</div>')
+          .replace(/\[(\d+)\]/g,'<sup style="color:var(--teal);font-size:9px;cursor:help" title="Source citation">[$1]</sup>')
+          .replace(/\n\n/g,'<div style="height:10px"></div>')
+          .replace(/\n/g,'<br>');
+      }
+
+      var miHtml = '';
+      // Header with company context
+      miHtml += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">';
+      miHtml += '<div><div class="section-label" style="color:var(--teal);margin-bottom:4px">Market Intelligence</div>';
+      miHtml += '<div style="font-size:11px;color:var(--text-muted)">' + (miData.company_name || '') + ' &middot; ' + (miData.industry || '') + ' &middot; ' + (miData.stage || '') + '</div></div>';
+      miHtml += '<div style="font-size:10px;color:var(--text-muted);text-align:right">Research: ' + (miData.search_date || '') + '<br>Source: Perplexity sonar-pro</div>';
+      miHtml += '</div>';
+
+      // Disclaimer
+      miHtml += '<div style="background:rgba(6,182,212,0.08);border:1px solid rgba(6,182,212,0.2);color:var(--teal);padding:10px 14px;border-radius:8px;font-size:11px;margin-bottom:20px;line-height:1.5">';
+      miHtml += '<strong>Research Advisory:</strong> Intelligence sourced from analyst reports, financial filings, and industry databases. Tier 1 sources (McKinsey, Gartner, PitchBook) prioritized. Validate with primary research before material decisions.';
+      miHtml += '</div>';
+
       var miOrder = [
-        { key: 'market_landscape', title: 'Market Landscape', color: 'var(--teal)' },
-        { key: 'competitive_positioning', title: 'Competitive Positioning', color: 'var(--blue)' },
-        { key: 'market_dynamics', title: 'Market Dynamics', color: 'var(--amber)' },
-        { key: 'opportunity_map', title: 'Opportunity Map', color: 'var(--purple)' }
+        { key: 'market_landscape', title: 'Market Landscape & TAM', icon: '\uD83C\uDF0D', color: 'var(--teal)', desc: 'Market size, growth, segments, and key drivers' },
+        { key: 'competitive_positioning', title: 'Competitive Intelligence', icon: '\u2694\uFE0F', color: 'var(--blue)', desc: 'Key players, funding, positioning, and gaps' },
+        { key: 'market_dynamics', title: 'Market Dynamics & M&A', icon: '\uD83D\uDCC8', color: 'var(--amber)', desc: 'Transactions, new entrants, regulatory shifts' },
+        { key: 'opportunity_map', title: 'Strategic Opportunities', icon: '\uD83C\uDFAF', color: 'var(--purple)', desc: 'White space, adjacent markets, untapped segments' }
       ];
       miOrder.forEach(function(sec) {
-        var content = miSections[sec.key] || 'Data not available for this section.';
-        miHtml += '<div class="stat-card" style="margin-bottom:12px;border-left:3px solid ' + sec.color + '">';
-        miHtml += '<div style="font-size:14px;font-weight:700;color:' + sec.color + ';margin-bottom:8px">' + sec.title + '</div>';
-        miHtml += '<div style="font-size:12px;color:var(--text-dim);line-height:1.8;white-space:pre-wrap">' + (content||'').replace(/</g,'&lt;').replace(/>/g,'&gt;') + '</div>';
+        var content = miSections[sec.key] || '';
+        if (!content || content === 'Data not available' || content === 'Data unavailable') return;
+        miHtml += '<div style="background:var(--card-bg);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:16px;border-left:3px solid ' + sec.color + '">';
+        miHtml += '<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">';
+        miHtml += '<span style="font-size:18px">' + sec.icon + '</span>';
+        miHtml += '<div><div style="font-size:14px;font-weight:700;color:' + sec.color + '">' + sec.title + '</div>';
+        miHtml += '<div style="font-size:10px;color:var(--text-muted)">' + sec.desc + '</div></div>';
+        miHtml += '</div>';
+        miHtml += '<div style="font-size:12px;color:var(--text-dim);line-height:1.8">' + miMarkdown(content) + '</div>';
         miHtml += '</div>';
       });
-      if (miData.search_date) miHtml += '<div style="font-size:10px;color:var(--text-muted);margin-top:12px">Research date: ' + miData.search_date + '</div>';
       secMarket.innerHTML = miHtml;
     }
   }

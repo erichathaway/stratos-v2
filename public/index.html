@@ -3258,9 +3258,265 @@ function applyLiveData(raw) {
   // Re-wire citation listeners after innerHTML updates
   wireListeners();
 
+  // ── ADAPTIVE CLEANUP: hide sections with no real data ───────────────────
+  hideEmptySections();
+
 }
 
 // \u2500\u2500 BUCKET CARD LIVE DATA \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+// ── ADAPTIVE LAYOUT: Hide empty sections so dashboard looks complete ──────────────
+function hideEmptySections() {
+  function hideIf(el, condition) {
+    if (el && condition) el.style.display = 'none';
+  }
+  function isEmpty(text) {
+    if (!text) return true;
+    var t = text.trim();
+    return !t || t === '\u2014' || t === '—' || t === '-' || t === '--' ||
+           t === '$\u2014' || t === '$—' ||
+           t.startsWith('Loading') || t.startsWith('Pending') ||
+           t === 'Detail loading from live data.' ||
+           t === 'Evidence sources loading from live engine output.' ||
+           t === 'Critical risk data loading from live engine output' ||
+           t === 'Risk data loading from live engine output' ||
+           t === 'Cross-functional dependencies loading from live engine output.' ||
+           t === 'Kill criteria loading from live engine output' ||
+           t === 'Key dates loading from live engine output' ||
+           t === 'Deliberation data loading from live engine output.' ||
+           t === 'Financial analysis pending live data from the decision engine.' ||
+           t === 'Details loading...' || t === 'Loading deliberation summary...' ||
+           t === 'Loading confidence analysis...' ||
+           t === 'Market Intelligence loading...' ||
+           t === 'No conditions specified' || t === 'No kill criteria specified';
+  }
+  function isEmptyVal(text) {
+    if (!text) return true;
+    var t = text.trim();
+    return !t || t === '\u2014' || t === '—' || t === '-' || t === '$\u2014' || t === '$—';
+  }
+
+  // A. Briefing stat-cards: hide if .nc-val is empty
+  document.querySelectorAll('.stat-card').forEach(function(card) {
+    var valEl = card.querySelector('.nc-val');
+    if (valEl && isEmptyVal(valEl.textContent)) hideIf(card, true);
+  });
+
+  // B. Bucket-cards: hide if .bc-text is empty/placeholder
+  document.querySelectorAll('.bucket-card').forEach(function(card) {
+    var textEl = card.querySelector('.bc-text');
+    if (textEl && isEmpty(textEl.textContent)) hideIf(card, true);
+  });
+
+  // C. Command Center metrics: hide if value is empty
+  document.querySelectorAll('.cmd-opp-metric').forEach(function(metric) {
+    var valEl = metric.querySelector('.cmd-opp-metric-val');
+    if (valEl && isEmptyVal(valEl.textContent)) hideIf(metric, true);
+  });
+
+  // D. Capital structure grid: hide parent card if all amounts empty
+  document.querySelectorAll('.cmd-capital-grid').forEach(function(grid) {
+    var amounts = grid.querySelectorAll('.cmd-capital-amount');
+    var allEmpty = true;
+    amounts.forEach(function(a) { if (!isEmptyVal(a.textContent)) allEmpty = false; });
+    if (allEmpty && amounts.length) hideIf(grid.closest('.card'), true);
+  });
+
+  // E. Insight columns: hide if .insight-a text is placeholder
+  document.querySelectorAll('.insight-col').forEach(function(col) {
+    var ansEl = col.querySelector('.insight-a');
+    if (ansEl && isEmpty(ansEl.textContent)) hideIf(col, true);
+  });
+  document.querySelectorAll('.ib-cols').forEach(function(wrap) {
+    var cols = wrap.querySelectorAll('.insight-col');
+    var allHidden = true;
+    cols.forEach(function(c) { if (c.style.display !== 'none') allHidden = false; });
+    if (allHidden && cols.length) hideIf(wrap.closest('.ib-wrap'), true);
+  });
+
+  // F. Evidence cards: hide if source text is placeholder
+  document.querySelectorAll('.ev-card').forEach(function(card) {
+    var src = card.querySelector('.ev-card-source');
+    if (src && isEmpty(src.textContent)) hideIf(card, true);
+  });
+
+  // G. Risk panel rows: hide if risk text is placeholder
+  document.querySelectorAll('.risk-panel-row').forEach(function(row) {
+    var textEl = row.querySelector('.risk-panel-row-text');
+    if (textEl && isEmpty(textEl.textContent)) hideIf(row, true);
+  });
+
+  // H. Financial KPI cards: hide if value is placeholder
+  document.querySelectorAll('.fin-kpi').forEach(function(card) {
+    var valEl = card.querySelector('.fin-kpi-value');
+    if (valEl && isEmptyVal(valEl.textContent)) hideIf(card, true);
+  });
+  document.querySelectorAll('.fin-kpi-row').forEach(function(row) {
+    var cards = row.querySelectorAll('.fin-kpi');
+    var allHidden = true;
+    cards.forEach(function(c) { if (c.style.display !== 'none') allHidden = false; });
+    if (allHidden && cards.length) hideIf(row, true);
+  });
+
+  // I. Scenario analysis: hide if no data rows
+  document.querySelectorAll('.fin-scenario-wrap').forEach(function(wrap) {
+    var rows = wrap.querySelectorAll('.fin-scenario-row:not(.is-header)');
+    if (!rows.length) hideIf(wrap.closest('.card'), true);
+  });
+
+  // J. Tranche segments: hide card if all amounts empty
+  document.querySelectorAll('.fin-tranche-row').forEach(function(row) {
+    var amounts = row.querySelectorAll('.fin-tranche-amount');
+    var allEmpty = true;
+    amounts.forEach(function(a) { if (!isEmptyVal(a.textContent)) allEmpty = false; });
+    if (allEmpty && amounts.length) hideIf(row.closest('.card'), true);
+  });
+
+  // K. Financial kill criteria items
+  document.querySelectorAll('.fin-kill-item').forEach(function(item) {
+    var trigger = item.querySelector('.fin-kill-trigger');
+    if (trigger && isEmpty(trigger.textContent)) hideIf(item, true);
+  });
+  document.querySelectorAll('.fin-kill-row').forEach(function(row) {
+    var items = row.querySelectorAll('.fin-kill-item');
+    var allHidden = true;
+    items.forEach(function(i) { if (i.style.display !== 'none') allHidden = false; });
+    if (allHidden && items.length) hideIf(row, true);
+  });
+
+  // L. Management mandate cards
+  document.querySelectorAll('.mh-mandate-list').forEach(function(list) {
+    var items = list.querySelectorAll('.mh-mandate-item span:last-child');
+    var allEmpty = true;
+    items.forEach(function(s) { if (!isEmpty(s.textContent)) allEmpty = false; });
+    if (allEmpty && items.length) hideIf(list.closest('.card'), true);
+  });
+
+  // M. Board conditions/kill lists
+  document.querySelectorAll('#board-conditions-wrap, #board-kill-wrap').forEach(function(wrap) {
+    var questions = wrap.querySelectorAll('.oq-q');
+    var allEmpty = true;
+    questions.forEach(function(q) { if (!isEmpty(q.textContent)) allEmpty = false; });
+    if (allEmpty && questions.length) hideIf(wrap.closest('.card'), true);
+  });
+
+  // N. Timeline nodes
+  document.querySelectorAll('.rt-row').forEach(function(row) {
+    var detail = row.querySelector('.rt-detail');
+    if (detail && isEmpty(detail.textContent)) hideIf(row, true);
+  });
+
+  // Management priority items
+  document.querySelectorAll('.mh-priority-item').forEach(function(item) {
+    var textEl = item.querySelector('.mh-priority-text');
+    if (textEl && isEmpty(textEl.textContent)) hideIf(item, true);
+  });
+
+  // Management cross-function cards
+  document.querySelectorAll('.cf-card').forEach(function(card) {
+    var title = card.querySelector('.cf-title');
+    if (title && isEmpty(title.textContent)) hideIf(card, true);
+  });
+
+  // Management escalation items
+  document.querySelectorAll('.mh-escalation-item').forEach(function(item) {
+    var trigger = item.querySelector('.mh-esc-trigger');
+    if (trigger && isEmpty(trigger.textContent)) hideIf(item, true);
+  });
+  document.querySelectorAll('#sec-management .g3 .card').forEach(function(card) {
+    var items = card.querySelectorAll('.mh-escalation-item');
+    if (!items.length) return;
+    var allHidden = true;
+    items.forEach(function(i) { if (i.style.display !== 'none') allHidden = false; });
+    if (allHidden) hideIf(card, true);
+  });
+
+  // Management key dates
+  document.querySelectorAll('.mh-date-row').forEach(function(row) {
+    var what = row.querySelector('.mh-date-what');
+    if (what && isEmpty(what.textContent)) hideIf(row, true);
+  });
+
+  // Financial case items
+  document.querySelectorAll('.fin-case-item').forEach(function(item) {
+    var desc = item.querySelector('.fin-case-desc');
+    if (desc && isEmpty(desc.textContent)) hideIf(item, true);
+  });
+  document.querySelectorAll('.fin-case-card').forEach(function(card) {
+    var items = card.querySelectorAll('.fin-case-item');
+    if (!items.length) return;
+    var allHidden = true;
+    items.forEach(function(i) { if (i.style.display !== 'none') allHidden = false; });
+    if (allHidden) hideIf(card, true);
+  });
+
+  // CAC sensitivity: hide if no rows
+  var cacRows = document.getElementById('fin-cac-rows');
+  if (cacRows && !cacRows.children.length) hideIf(cacRows.closest('.card'), true);
+
+  // Board governance grid
+  var govGrid = document.getElementById('board-gov-grid');
+  if (govGrid && !govGrid.children.length) hideIf(govGrid, true);
+
+  // Board recommendation
+  var boardRecText = document.getElementById('board-action-text');
+  if (boardRecText && isEmpty(boardRecText.textContent)) {
+    hideIf(document.getElementById('board-rec-card'), true);
+  }
+
+  // Board rationale
+  var boardRat = document.getElementById('board-rationale-text');
+  if (boardRat && isEmpty(boardRat.textContent)) {
+    hideIf(boardRat.closest('.card'), true);
+  }
+
+  // Board summary metrics
+  document.querySelectorAll('.board-sum-item').forEach(function(item) {
+    var valEl = item.querySelector('.board-sum-val');
+    if (valEl && isEmptyVal(valEl.textContent)) hideIf(item, true);
+  });
+
+  // Command center narrative
+  var cmdNarrative = document.getElementById('cmd-narrative');
+  if (cmdNarrative && isEmpty(cmdNarrative.textContent)) {
+    hideIf(cmdNarrative.closest('.card'), true);
+  }
+
+  // Command benefit/risk items
+  document.querySelectorAll('.cmd-br-item').forEach(function(item) {
+    if (isEmpty(item.textContent)) hideIf(item, true);
+  });
+
+  // Facilitator observations
+  document.querySelectorAll('.dr-facil-card').forEach(function(card) {
+    var text = card.querySelector('.dr-facil-text');
+    if (text && isEmpty(text.textContent)) hideIf(card, true);
+  });
+
+  // Section labels: hide if next sibling is hidden
+  document.querySelectorAll('.section-label').forEach(function(label) {
+    var next = label.nextElementSibling;
+    if (next && next.style.display === 'none') {
+      hideIf(label, true);
+    }
+  });
+
+  // P. Entire tab sections: hide tab button if section has no visible content
+  var tabSections = ['command', 'risk', 'financials', 'room', 'management', 'board'];
+  tabSections.forEach(function(secKey) {
+    var sec = document.getElementById('sec-' + secKey);
+    if (!sec) return;
+    var children = sec.querySelectorAll('.card, .verdict-hero, .g2, .g3, .g7030, .fin-kpi-row, .fin-case-row, .fin-kill-row, .fin-tranche-row, .bucket-card, .room-arc-row, .board-rec-card, .board-summary-row, .board-gov-grid, .mh-hero, .mh-priority-grid, .cf-grid');
+    var hasVisible = false;
+    children.forEach(function(child) {
+      if (child.style.display !== 'none') hasVisible = true;
+    });
+    if (!hasVisible) {
+      var tabBtn = document.querySelector('.tab[data-sec="' + secKey + '"]');
+      hideIf(tabBtn, true);
+    }
+  });
+}
+
 function buildBriefingPanels(exec,dir,dash,bgp,fm,mso,stages,voteTotal,maxRound,optId,optName,raw){var conditions=exec.top_conditions||[];var killCriteria=bgp.kill_criteria||bgp.kill_gates||(Array.isArray(bgp.kill_criteria_summary)?bgp.kill_criteria_summary:[]); if(!killCriteria.length&&typeof bgp.kill_criteria_summary==='string'&&bgp.kill_criteria_summary){killCriteria=bgp.kill_criteria_summary.split(/[;\n]/).filter(Boolean).map(function(s){return s.trim();});}var candidates=dir.decision_candidates||[];var milestones=dir.strategic_milestones||[];var risksList=Array.isArray(mso.risks)?mso.risks:Object.values(mso.risks||{});var conf=dash.decision_confidence||67;var p1=fm.phase_1_immediate||'—';var p2=fm.phase_2_gated||'—';var dp=document.getElementById('brief-panel-decision');if(dp){var leadText='The ELT approved '+optId+': '+optName;if(p1)leadText+=' \u2014 '+p1+' phases immediately.';if(p2)leadText+=' The remaining '+p2+' is gated on milestone completion.';var condRows=conditions.map(function(c,i){var txt=typeof c==='string'?c:(c.condition||c.text||c.name||'');return'<div class="bit-row"><span class="bit-row-icon" data-c="amber">'+String(i+1).padStart(2,'0')+'</span>'+txt+'</div>';}).join('');var killRows=killCriteria.map(function(k){var txt=typeof k==='string'?k:(k.criterion||k.condition||k.description||k.text||k.name||'');var owner=typeof k==='object'?(k.role||k.owner||''):'';var short=txt.length>90?txt.substring(0,87)+'\u2026':txt;return'<div class="bit-row"><span class="bit-row-icon" data-c="red">\u2715</span>'+short+(owner?' <span style="color:var(--text-muted);font-size:var(--font-9)">\u2014 '+owner+'</span>':'')+'</div>';}).join('');dp.innerHTML='<p class="bit-lead">'+leadText+'</p><div class="bit-grid"><div><div class="bit-col-head" data-c="amber"><span class="bit-col-head-bar"></span>'+conditions.length+' Condition'+(conditions.length!==1?'s':'')+'</div><div class="bit-rows">'+(condRows||'<div class="bit-row">No conditions specified</div>')+'</div></div><div><div class="bit-col-head" data-c="red"><span class="bit-col-head-bar"></span>'+killCriteria.length+' Kill Criteri'+(killCriteria.length===1?'on':'a')+'</div><div class="bit-rows">'+(killRows||'<div class="bit-row">No kill criteria specified</div>')+'</div></div></div><div class="bit-chips">'+(bgp.requires_board_approval!==false?'<span class="chip chip-amber">Board Auth. Required</span>':'')+'<span class="chip chip-blue">'+optId+': '+optName+'</span></div>';}var up=document.getElementById('brief-panel-upside');if(up){var topActions=exec.top_actions||exec.top_3_actions||[];var chosenOpt=null;var ob=raw&&raw.outputBlob||{};var osData=ob.option_set||ob.option_set_thin||{};var osArr=osData.option_set||osData;if(Array.isArray(osArr)){chosenOpt=osArr.find(function(o){return o.option_id===optId;})||null;}if(!chosenOpt){var dcArr=dir.decision_candidates||[];chosenOpt=dcArr.find(function(c){return(c.option_id||c.id)===optId;})||null;}var chosenBenefits=(chosenOpt&&chosenOpt.benefits)||[];var finRows='';var fmScens=fm.scenarios||{};var ltvN=parseFloat((fm.ltv_target||fm.ltv_per_customer||'175').toString().replace(/[^0-9.]/g,''))||175;var tgtLogos=(fm.target_customers||fmScens.base_logos||3);var baseRev=fmScens.base_revenue||Math.round(ltvN*tgtLogos);if(baseRev)finRows+='<div class="bit-row"><span class="bit-row-icon" data-c="teal">+</span>$'+baseRev+'K base-case revenue ('+tgtLogos+' logos at $'+Math.round(ltvN)+'K LTV)</div>';if(fm.revenue_target)finRows+='<div class="bit-row"><span class="bit-row-icon" data-c="teal">+</span>'+fm.revenue_target+'</div>';var ratio=fm.ltv_cac_ratio;if(!ratio&&ltvN){var cacN=parseFloat((fm.cac_threshold||'50').toString().replace(/[^0-9.]/g,''))||50;if(cacN>0)ratio=(ltvN/cacN).toFixed(1)+'x';}if(ratio)finRows+='<div class="bit-row"><span class="bit-row-icon" data-c="teal">+</span>LTV/CAC: '+ratio+'</div>';if(fm.total_investment)finRows+='<div class="bit-row"><span class="bit-row-icon" data-c="teal">+</span>Total investment: '+fm.total_investment+' ('+p1+' Phase 1, '+p2+' gated)</div>';if(!finRows){if(p1)finRows+='<div class="bit-row"><span class="bit-row-icon" data-c="teal">+</span>'+p1+' Phase 1 limits downside, '+p2+' gated on milestones</div>';else finRows='<div class="bit-row"><span class="bit-row-icon" data-c="teal">+</span>Financial details pending</div>';}var growthRows='';if(chosenBenefits.length){growthRows=chosenBenefits.slice(0,4).map(function(b){var txt=typeof b==='string'?b:(b.benefit||b.description||b.text||'');return'<div class="bit-row"><span class="bit-row-icon" data-c="purple">+</span>'+txt+'</div>';}).join('');}if(!growthRows&&topActions.length){growthRows=topActions.slice(0,4).map(function(a){var txt=typeof a==='string'?a:(a.action||a.text||a.name||'');return'<div class="bit-row"><span class="bit-row-icon" data-c="purple">+</span>'+txt+'</div>';}).join('');}if(!growthRows&&risksList.length){growthRows=risksList.slice(0,4).map(function(r){var txt=typeof r==='string'?r:(r.risk||r.description||r.text||'');return'<div class="bit-row"><span class="bit-row-icon" data-c="purple">+</span>Mitigating: '+txt+'</div>';}).join('');}if(!growthRows)growthRows='<div class="bit-row"><span class="bit-row-icon" data-c="purple">+</span>Strategic growth drivers pending analysis</div>';var upsideLead=(dir.strategic_narrative||bgp.strategic_rationale||fm.mechanics_summary||'Approved option unlocks phased execution with controlled downside.').substring(0,200);up.innerHTML='<p class="bit-lead">'+upsideLead+'</p><div class="bit-grid"><div><div class="bit-col-head" data-c="teal"><span class="bit-col-head-bar"></span>Revenue Opportunity</div><div class="bit-rows">'+finRows+'</div></div><div><div class="bit-col-head" data-c="purple"><span class="bit-col-head-bar"></span>Strategic Value</div><div class="bit-rows">'+growthRows+'</div></div></div>';}var wp=document.getElementById('brief-panel-why');if(wp){var approvedId=dash.approved_option_id||optId;var optRows=candidates.map(function(c){var cId=c.option_id||c.id||'';var cName=c.option_name||c.name||'';var isApproved=cId===approvedId;var rowClass=isApproved?'':' muted';var iconC=isApproved?'teal-strike':'muted-strike';var label=cName;if(isApproved)label+=' \u2014 approved '+voteTotal+'/'+voteTotal;else if(c.rejection_reason)label+=' \u2014 '+c.rejection_reason;return'<div class="bit-row'+rowClass+'"><span class="bit-row-icon" data-c="'+iconC+'">'+cId+'</span>'+label+'</div>';}).join('');if(!optRows)optRows='<div class="bit-row"><span class="bit-row-icon" data-c="teal-strike">'+optId+'</span>'+optName+' \u2014 approved '+voteTotal+'/'+voteTotal+'</div>';var mileRows=milestones.slice(0,5).map(function(m,i){var txt=(m.milestone||m.name||m.text||'')+(m.owner?' \u2014 '+m.owner:'')+(m.deadline?' by '+m.deadline:'');return'<div class="bit-row"><span class="bit-row-icon" data-c="blue">'+(i+1)+'</span>'+txt+'</div>';}).join('');if(!mileRows)mileRows='<div class="bit-row"><span class="bit-row-icon" data-c="blue">1</span>Next milestones pending definition</div>';var whyLead=optId+' was selected at '+conf+'% confidence across '+maxRound+' rounds \u2014 voted '+voteTotal+'/'+voteTotal+'.';if(bgp.strategic_rationale)whyLead=bgp.strategic_rationale.substring(0,200);wp.innerHTML='<p class="bit-lead">'+whyLead+'</p><div class="bit-grid"><div><div class="bit-col-head" data-c="muted"><span class="bit-col-head-bar"></span>Options Weighed</div><div class="bit-rows">'+optRows+'</div></div><div><div class="bit-col-head" data-c="blue"><span class="bit-col-head-bar"></span>Next Milestones</div><div class="bit-rows">'+mileRows+'</div></div></div>';}}
 
 function buildBucketData(raw) {

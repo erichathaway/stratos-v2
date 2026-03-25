@@ -1442,6 +1442,24 @@ dep-item strong{display:block;font-family:var(--font-mono);font-size:var(--font-
   .s-section { display: block !important; page-break-inside: avoid; }
   body { background: white; color: black; }
 }
+/* PDF Export Light Mode */
+.pdf-mode { background: #fff !important; }
+.pdf-mode, .pdf-mode * { color: #1a1a2e !important; }
+.pdf-mode .card { background: #f8f9fa !important; border-color: #e0e0e0 !important; }
+.pdf-mode .section-label { color: #0a0d14 !important; }
+.pdf-mode .stat-value, .pdf-mode .nc-val { color: #0a0d14 !important; }
+.pdf-mode .stat-sub, .pdf-mode .stat-chip { color: #555 !important; background: #eee !important; border-color: #ccc !important; }
+.pdf-mode .insight-q { color: #0a0d14 !important; }
+.pdf-mode .insight-a { color: #333 !important; }
+.pdf-mode .verdict-hero { background: #f0f4ff !important; }
+.pdf-mode .bucket-card { background: #f8f9fa !important; border-color: #ddd !important; }
+.pdf-mode .risk-panel-row { border-color: #eee !important; }
+.pdf-mode .fin-kpi { background: #f8f9fa !important; border-color: #e0e0e0 !important; }
+.pdf-mode .ev-card { background: #f8f9fa !important; border-color: #e0e0e0 !important; }
+.pdf-mode .board-sum-item { background: #f8f9fa !important; }
+.pdf-mode .mh-mandate-item { border-color: #eee !important; }
+.pdf-mode .tour-btn, .pdf-mode .info-btn { display: none !important; }
+.pdf-mode a { color: #0066cc !important; }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
@@ -2831,14 +2849,19 @@ function exportPDF() {
   if (tour) tour.style.display = 'none';
   var runId = new URLSearchParams(location.search).get('run_id') || 'export';
   var tabName = activeSection.id.replace('sec-','') || 'dashboard';
+  // Add light mode for PDF
+  activeSection.classList.add('pdf-mode');
+  document.body.classList.add('pdf-mode');
   html2pdf().set({
     margin: [10, 10, 14, 10],
     filename: 'StratOS-' + tabName + '-' + runId + '.pdf',
-    image: { type: 'jpeg', quality: 0.95 },
-    html2canvas: { scale: 2, useCORS: true, backgroundColor: '#0a0d14' },
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { scale: 2.5, useCORS: true, backgroundColor: '#ffffff' },
     jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
     pagebreak: { mode: ['avoid-all', 'css'] }
   }).from(activeSection).save().then(function(){
+    activeSection.classList.remove('pdf-mode');
+    document.body.classList.remove('pdf-mode');
     if (toolbar) toolbar.style.display = '';
     if (tour) tour.style.display = '';
   });

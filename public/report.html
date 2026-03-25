@@ -158,6 +158,29 @@ body{background:var(--bg-page);color:var(--text-primary);font-family:var(--font-
   .rpt-sec{break-inside:avoid}
   .page-break{break-before:page}
 }
+/* PDF Export Light Mode */
+.pdf-export-mode { background: #fff !important; color: #1a1a2e !important; }
+.pdf-export-mode * { color: #1a1a2e !important; border-color: #ddd !important; }
+.pdf-export-mode .rpt-header { background: #f8f9fa !important; border-bottom: 2px solid #0a0d14 !important; }
+.pdf-export-mode .rpt-header * { color: #0a0d14 !important; }
+.pdf-export-mode .rpt-logo-text { color: #0a0d14 !important; }
+.pdf-export-mode .page-label { color: #0a0d14 !important; border-color: #0a0d14 !important; }
+.pdf-export-mode .rpt-verdict-hero { background: #f0f4ff !important; }
+.pdf-export-mode .rpt-verdict-hero h2 { color: #0a0d14 !important; }
+.pdf-export-mode .rpt-stat-card { background: #f8f9fa !important; border: 1px solid #e0e0e0 !important; }
+.pdf-export-mode .rpt-stat-val { color: #0a0d14 !important; }
+.pdf-export-mode .rpt-section { background: #fff !important; border: 1px solid #e8e8e8 !important; }
+.pdf-export-mode .rpt-section h3 { color: #0a0d14 !important; }
+.pdf-export-mode .rpt-row { border-color: #eee !important; }
+.pdf-export-mode .rpt-badge { background: #e8f4f8 !important; color: #0a6b7c !important; }
+.pdf-export-mode .rpt-risk-high { color: #c0392b !important; }
+.pdf-export-mode .rpt-risk-med { color: #e67e22 !important; }
+.pdf-export-mode .rpt-cond-item { background: #fffbf0 !important; border-color: #f0d080 !important; }
+.pdf-export-mode .rpt-kill-item { background: #fff0f0 !important; border-color: #f0a0a0 !important; }
+.pdf-export-mode a { color: #0066cc !important; }
+.pdf-export-mode .rpt-gov-btn { display: none !important; }
+.pdf-export-mode .rpt-footer { background: #f8f9fa !important; }
+.pdf-export-mode .rpt-footer * { color: #666 !important; }
 </style>
 </head>
 <body>
@@ -625,18 +648,23 @@ window.exportPDF=function(){
   var el = document.getElementById('report-root');
   if (!el) { window.print(); return; }
 
-  // Temporarily adjust styles for PDF
+  // Temporarily adjust styles for PDF — white background, dark text
   var toolbar = document.querySelector('.rpt-toolbar');
   if (toolbar) toolbar.style.display = 'none';
+  var audioBar = el.querySelector('[style*="audio"]');
+  if (audioBar) audioBar.style.display = 'none';
+
+  // Add PDF-mode class for light styling
+  el.classList.add('pdf-export-mode');
 
   var opt = {
-    margin: [12, 12, 16, 12],
+    margin: [10, 10, 14, 10],
     filename: 'StratOS-Decision-Report-' + (runId || 'export') + '.pdf',
-    image: { type: 'jpeg', quality: 0.95 },
+    image: { type: 'jpeg', quality: 0.98 },
     html2canvas: {
-      scale: 2,
+      scale: 2.5,
       useCORS: true,
-      backgroundColor: '#0a0d14',
+      backgroundColor: '#ffffff',
       letterRendering: true
     },
     jsPDF: {
@@ -648,7 +676,9 @@ window.exportPDF=function(){
   };
 
   html2pdf().set(opt).from(el).save().then(function(){
+    el.classList.remove('pdf-export-mode');
     if (toolbar) toolbar.style.display = '';
+    if (audioBar) audioBar.style.display = '';
   });
 };
 })();

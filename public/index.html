@@ -2823,7 +2823,25 @@ dep-item strong{display:block;font-family:var(--font-mono);font-size:var(--font-
 // \u2500\u2500 UTILITIES \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
 // ── PDF EXPORT ────────────────────────────────────────────────────────────
 function exportPDF() {
-  window.print();
+  var activeSection = document.querySelector('.s-section.tab-active');
+  if (!activeSection) { window.print(); return; }
+  var toolbar = document.querySelector('.tabs');
+  var tour = document.getElementById('ap');
+  if (toolbar) toolbar.style.display = 'none';
+  if (tour) tour.style.display = 'none';
+  var runId = new URLSearchParams(location.search).get('run_id') || 'export';
+  var tabName = activeSection.id.replace('sec-','') || 'dashboard';
+  html2pdf().set({
+    margin: [10, 10, 14, 10],
+    filename: 'StratOS-' + tabName + '-' + runId + '.pdf',
+    image: { type: 'jpeg', quality: 0.95 },
+    html2canvas: { scale: 2, useCORS: true, backgroundColor: '#0a0d14' },
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+    pagebreak: { mode: ['avoid-all', 'css'] }
+  }).from(activeSection).save().then(function(){
+    if (toolbar) toolbar.style.display = '';
+    if (tour) tour.style.display = '';
+  });
 }
 
 function el(id) { return document.getElementById(id); }

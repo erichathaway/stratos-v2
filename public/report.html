@@ -622,7 +622,34 @@ function render(raw){
 window.switchView=function(v){var u=new URL(location);u.searchParams.set('view',v);location=u.toString()};
 
 window.exportPDF=function(){
-  window.print();
+  var el = document.getElementById('report-root');
+  if (!el) { window.print(); return; }
+
+  // Temporarily adjust styles for PDF
+  var toolbar = document.querySelector('.rpt-toolbar');
+  if (toolbar) toolbar.style.display = 'none';
+
+  var opt = {
+    margin: [12, 12, 16, 12],
+    filename: 'StratOS-Decision-Report-' + (runId || 'export') + '.pdf',
+    image: { type: 'jpeg', quality: 0.95 },
+    html2canvas: {
+      scale: 2,
+      useCORS: true,
+      backgroundColor: '#0a0d14',
+      letterRendering: true
+    },
+    jsPDF: {
+      unit: 'mm',
+      format: 'a4',
+      orientation: 'portrait'
+    },
+    pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+  };
+
+  html2pdf().set(opt).from(el).save().then(function(){
+    if (toolbar) toolbar.style.display = '';
+  });
 };
 })();
 </script>

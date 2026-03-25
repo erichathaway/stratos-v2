@@ -2832,8 +2832,21 @@ function switchBriefTab(btn, panelId) {
   const panel = document.getElementById(panelId);
   if (panel) panel.classList.add('active');
 }
-function set(id, text) { const e = el(id); if (e) e.textContent = text; }
-function esc(s) { if (typeof s !== 'string') return s == null ? '' : String(s); return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function cleanText(text) {
+  if (!text) return '';
+  if (typeof text !== 'string') return String(text);
+  return text
+    .replace(/\[SOURCE:[^\]]*\]/g, '')
+    .replace(/\[SECTION:[^\]]*\]/g, '')
+    .replace(/\[COMPANY:[^\]]*\]/g, '')
+    .replace(/\[TYPE:[^\]]*\]/g, '')
+    .replace(/\[CATEGORY:[^\]]*\]/g, '')
+    .replace(/\{[^}]*\}/g, '')
+    .replace(/\s{2,}/g, ' ')
+    .trim();
+}
+function set(id, text) { const e = el(id); if (e) e.textContent = cleanText(text); }
+function esc(s) { if (typeof s !== 'string') return s == null ? '' : String(s); return cleanText(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 function safeImgUrl(u) { if (typeof u !== 'string' || !u) return ''; try { var p = new URL(u, window.location.origin); if (p.protocol === 'https:' || p.protocol === 'http:') return u; } catch(e) {} return ''; }
 
 function chipColor(level) {
@@ -2883,7 +2896,7 @@ function applyLiveData(raw) {
     if (secMarket) {
       function miMarkdown(text) {
         if (!text) return '';
-        return text
+        return cleanText(text)
           .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
           .replace(/\*\*(.+?)\*\*/g,'<strong style="color:var(--text-bright)">$1</strong>')
           .replace(/\*(.+?)\*/g,'<em>$1</em>')
@@ -3132,31 +3145,28 @@ function applyLiveData(raw) {
   const confMax = dash.confidence_range?.max || 72;
 
   document.querySelectorAll('.nc-group').forEach(g => {
-    const lbl = g.dataset.label || '';
+    const nc = g.querySelector('.num-cite');
+    const lbl = (nc && nc.dataset.label) || g.dataset.label || '';
     const valEl = g.querySelector('.nc-val');
+    function syncDataset(attrs) {
+      Object.keys(attrs).forEach(function(k) { g.dataset[k] = attrs[k]; if (nc) nc.dataset[k] = attrs[k]; });
+    }
     if (lbl === 'Votes to Approve') {
       if (valEl) valEl.textContent = voteTotal;
-      g.dataset.val = voteTotal + '/' + voteTotal;
-      g.dataset.source = 'dashboard.vote_split';
-      g.dataset.note = 'All ' + voteTotal + ' roles voted ' + voteKey.replace(/_/g,' ') + '.';
+      syncDataset({ val: voteTotal + '/' + voteTotal, source: 'dashboard.vote_split', note: 'All ' + voteTotal + ' roles voted ' + voteKey.replace(/_/g,' ') + '.' });
     } else if (lbl === 'Avg Confidence') {
       if (valEl) valEl.textContent = conf;
-      g.dataset.val = conf + '%';
-      g.dataset.source = 'dashboard.decision_confidence';
-      g.dataset.note = 'Range ' + confMin + '\u2013' + confMax + '%. Groupthink: ' + (gt.severity || 'HIGH') + '.';
+      syncDataset({ val: conf + '%', source: 'dashboard.decision_confidence', note: 'Range ' + confMin + '\u2013' + confMax + '%. Groupthink: ' + (gt.severity || 'HIGH') + '.' });
     } else if (lbl === 'Total Capital') {
       if (valEl) valEl.textContent = (fm.total_investment || '—').replace(/[^0-9]/g, '') || '—';
-      g.dataset.val = fm.total_investment || '—';
-      g.dataset.source = 'financial_mechanics.total_investment';
-      g.dataset.note = fm.mechanics_summary || 'Phase-gated. Board approval required.';
+      syncDataset({ val: fm.total_investment || '—', source: 'financial_mechanics.total_investment', note: fm.mechanics_summary || 'Phase-gated. Board approval required.' });
     } else if (lbl === 'Kill Gates') {
       const killTxt = typeof bgp.kill_criteria_summary === 'string' ? bgp.kill_criteria_summary : '';
-      g.dataset.note = killTxt.substring(0, 160) || 'Board-enforced stop points.';
+      syncDataset({ note: killTxt.substring(0, 160) || 'Board-enforced stop points.' });
     } else if (lbl === 'Open Questions') {
       const oqCount = (exec.top_conditions || []).length || 3;
       if (valEl) valEl.textContent = oqCount;
-      g.dataset.val = String(oqCount);
-      g.dataset.note = (exec.top_conditions || []).slice(0,2).map(c => typeof c==='string'?c:(c.condition||'')).filter(Boolean).join(' | ') || 'Conditions pending';
+      syncDataset({ val: String(oqCount), note: (exec.top_conditions || []).slice(0,2).map(c => typeof c==='string'?c:(c.condition||'')).filter(Boolean).join(' | ') || 'Conditions pending' });
     }
   });
 
@@ -3181,6 +3191,11 @@ function applyLiveData(raw) {
   set('brief-vote-num', voteTotal);
   set('brief-vote-denom', '/' + voteTotal);
   set('brief-conf-num', conf);
+  // Also update the parent num-cite data-val/data-note for tooltip display
+  var bvEl = el('brief-vote-num');
+  if (bvEl) { var ncP = bvEl.closest('.num-cite'); if (ncP) { ncP.dataset.val = voteTotal + '/' + voteTotal; ncP.dataset.note = 'All ' + voteTotal + ' roles voted ' + voteKey.replace(/_/g,' ') + '.'; } }
+  var bcEl = el('brief-conf-num');
+  if (bcEl) { var ncP2 = bcEl.closest('.num-cite'); if (ncP2) { ncP2.dataset.val = conf + '%'; ncP2.dataset.note = 'Range ' + confMin + '\u2013' + confMax + '%. Groupthink: ' + (gt.severity || 'HIGH') + '.'; } }
   var fmTotal = fm.total_investment || fm.capital_required || '';
   var briefCapEl = el('brief-capital-chip');
   if (briefCapEl && fmTotal) briefCapEl.textContent = fmTotal;
@@ -3254,6 +3269,33 @@ function applyLiveData(raw) {
 
   // \u2500\u2500 BOARD \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
   buildBoard(raw, bgp, dash, gt);
+
+  // ── Strip bracketed metadata tags from all rendered text nodes ───────────
+  var metaTagRe = /\[(?:SOURCE|SECTION|COMPANY|TYPE|CATEGORY):[^\]]*\]/g;
+  var braceRe = /\{[^}]*\}/g;
+  function cleanRenderedText(root) {
+    var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null, false);
+    var node;
+    while (node = walker.nextNode()) {
+      if (metaTagRe.test(node.nodeValue) || braceRe.test(node.nodeValue)) {
+        node.nodeValue = node.nodeValue.replace(metaTagRe, '').replace(braceRe, '').replace(/\s{2,}/g, ' ').trim();
+      }
+    }
+  }
+  ['sec-briefing','sec-command','sec-risk','sec-financials','sec-room','sec-management','sec-board'].forEach(function(secId) {
+    var secEl = document.getElementById(secId);
+    if (secEl) cleanRenderedText(secEl);
+  });
+
+  // ── Update all remaining num-cite tooltip data from rendered values ──────
+  document.querySelectorAll('.num-cite').forEach(function(nc) {
+    if (nc.dataset.note && nc.dataset.note !== 'Pending' && nc.dataset.note !== 'Pending data') return;
+    var val = nc.textContent.trim();
+    if (val && val !== '—' && val !== '\u2014') {
+      nc.dataset.val = val;
+      nc.dataset.note = nc.dataset.label ? nc.dataset.label + ': ' + val : val;
+    }
+  });
 
   // Re-wire citation listeners after innerHTML updates
   wireListeners();

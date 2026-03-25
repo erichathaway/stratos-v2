@@ -243,7 +243,28 @@ function render(raw){
   ['executive','detailed','governance','full'].forEach(function(v){
     h+='<button class="rpt-view-btn'+(v===view?' active':'')+'" onclick="switchView(\''+v+'\')">'+VIEWS[v].label+'</button>';
   });
+  h+='<a href="/?run_id='+encodeURIComponent(runId)+'" class="rpt-view-btn" style="text-decoration:none;background:var(--teal);color:#fff;border-color:var(--teal)">Full Dashboard &amp; Audio</a>';
   h+='<button class="rpt-export-btn" onclick="exportPDF()">Export PDF</button></div>';
+
+  // Audio briefs bar
+  var audioBrief = gov.audio_brief_url || (gov.media_assets && gov.media_assets['audio-brief'] && gov.media_assets['audio-brief'].url) || '';
+  var audioDeep = gov.audio_deep_url || (gov.media_assets && gov.media_assets['audio-deep'] && gov.media_assets['audio-deep'].url) || '';
+  if (audioBrief || audioDeep) {
+    h+='<div style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap">';
+    if (audioBrief) {
+      h+='<div style="flex:1;min-width:200px;background:var(--card-bg);border:1px solid var(--border);border-radius:8px;padding:12px 16px">';
+      h+='<div style="font-size:10px;color:var(--teal);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Executive Audio Brief</div>';
+      h+='<audio controls preload="none" style="width:100%;height:32px" src="'+esc(audioBrief)+'"></audio>';
+      h+='<div style="font-size:9px;color:var(--text-muted);margin-top:4px">~2 min strategic narrative</div></div>';
+    }
+    if (audioDeep) {
+      h+='<div style="flex:1;min-width:200px;background:var(--card-bg);border:1px solid var(--border);border-radius:8px;padding:12px 16px">';
+      h+='<div style="font-size:10px;color:var(--purple);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Board Deep Dive</div>';
+      h+='<audio controls preload="none" style="width:100%;height:32px" src="'+esc(audioDeep)+'"></audio>';
+      h+='<div style="font-size:9px;color:var(--text-muted);margin-top:4px">~8 min detailed analysis</div></div>';
+    }
+    h+='</div>';
+  }
 
   // ══════════════════════════════════════════════════════════════════════
   // EXECUTIVE PAGE 1: What Happened + Why It's Good

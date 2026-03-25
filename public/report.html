@@ -198,7 +198,7 @@ var VIEWS = {
   executive:  { label:'Executive Brief',  pages:['exec1','exec2'] },
   detailed:   { label:'Detailed Analysis', pages:['brief','command','risk','financials','room','handoff'] },
   governance: { label:'Board Governance',  pages:['gov_summary','gov_doc'] },
-  full:       { label:'Full Report',       pages:['exec1','exec2','brief','command','risk','financials','room','handoff','gov_summary','gov_doc'] }
+  full:       { label:'Full Report',       pages:['exec1','brief','command','risk','financials','room','handoff','gov_summary','gov_doc'] }
 };
 
 function has(page){ return (VIEWS[view]||VIEWS.full).pages.indexOf(page) !== -1; }

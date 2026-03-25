@@ -1989,6 +1989,8 @@ dep-item strong{display:block;font-family:var(--font-mono);font-size:var(--font-
 <!-- SECTION 3: RISK -->
 <div class="s-section" id="sec-risk">
 
+  <div class="section-label" id="sec-risk-header">Risk &amp; Intelligence <button class="info-btn" data-title="Risk & Intelligence" data-body="Risk exposure matrix, top decision-breaking risks, confidence timeline, and external intelligence sources. This section maps every identified risk by impact and probability.">i</button></div>
+
   <div class="g7030">
     <div class="card">
       <div class="card-head" style="--ct-accent:var(--red)">
@@ -3562,6 +3564,8 @@ function hideEmptySections() {
   document.querySelectorAll('.card').forEach(function(card) {
     // Skip cards that are already hidden
     if (card.style.display === 'none') return;
+    // Skip cards inside sec-risk that contain the risk matrix or risk table (always show these)
+    if (card.closest('#sec-risk') && (card.querySelector('.risk-matrix-outer') || card.querySelector('.risk-table') || card.querySelector('.risk-dot-abs'))) return;
     // Get all text content in the card
     var allText = card.textContent.replace(/\s+/g, ' ').trim();
     // If the card only has labels and dashes, hide it
@@ -4492,8 +4496,8 @@ if (riWhy && dp.persuadability_analysis) {
   if (typeof pa === 'string') paText = pa;
   else if (pa.summary) paText = pa.summary;
   else if (pa.key_shifts) paText = (Array.isArray(pa.key_shifts) ? pa.key_shifts.join('. ') : String(pa.key_shifts));
-  else paText = JSON.stringify(pa).substring(0, 300);
-  if (paText) riWhy.textContent = paText.substring(0, 300);
+  else { var paVals = Object.values(pa).filter(function(v){ return typeof v === 'string'; }); paText = paVals.length ? paVals.join('. ') : 'Persuadability analysis completed.'; }
+  if (paText) riWhy.textContent = cleanText(paText.substring(0, 300));
 }
 if (riDecisive && dp.convergence_flag) {
   var cf = dp.convergence_flag;
@@ -4502,8 +4506,8 @@ if (riDecisive && dp.convergence_flag) {
   else if (typeof cf === 'boolean') cfText = cf ? 'Full convergence achieved — all roles aligned by final round.' : 'Convergence not achieved — positions remain fragmented.';
   else if (cf.description) cfText = cf.description;
   else if (cf.round != null) cfText = 'Convergence at Round ' + cf.round + (cf.trigger ? ' — ' + cf.trigger : '');
-  else cfText = JSON.stringify(cf).substring(0, 200);
-  if (cfText) riDecisive.textContent = cfText.substring(0, 300);
+  else { var cfVals = Object.values(cf).filter(function(v){ return typeof v === 'string'; }); cfText = cfVals.length ? cfVals.join('. ') : 'Convergence analysis completed.'; }
+  if (cfText) riDecisive.textContent = cleanText(cfText.substring(0, 300));
 }
 if (riUnresolved) {
   var gtWarn = dp.groupthink_flag || gtFlag || {};
@@ -4663,7 +4667,7 @@ var ROLES=roleKeys.map(function(key){
   }
   if(!actions.length)actions=[{t:'—',a:live.recommendation||'See live rationale below',m:'—',k:false}];
   var cond=condMap[key]||live.conditions||live.top_conditions||'';
-  if(typeof cond==='object')cond=cond.condition||JSON.stringify(cond);
+  if(typeof cond==='object')cond=cond.condition||cond.text||cond.description||Object.values(cond).filter(function(v){return typeof v==='string';}).join('. ')||'Condition specified';
   var gap=live.blockers||live.risks||fm.gap||'';
   if(gap.length>200)gap=gap.substring(0,200)+'...';
   var p2raw=fm.phase_2||fm.phase2||fm.next_steps||[];
@@ -4772,7 +4776,7 @@ function buildBoard(raw, bgp, dash, gt) {
 
   // Board action requested
   const act = bgp.board_action_requested;
-  if (act) set('board-action-text', typeof act === 'string' ? act : (act.action || JSON.stringify(act)));
+  if (act) set('board-action-text', typeof act === 'string' ? act : (act.action || act.description || act.text || Object.values(act).filter(function(v){return typeof v==='string';}).join('. ') || 'Board action requested'));
 
   // Vote outcome
   const vtSplit = bgp.elt_vote_outcome?.vote_split || dash.vote_split || {};
@@ -4834,17 +4838,17 @@ function buildBoard(raw, bgp, dash, gt) {
     // Try dedicated governance fields first
     if (bgp.oversight_requirements || gov.oversight_requirements) {
       var ov = bgp.oversight_requirements || gov.oversight_requirements;
-      govItems.push({label: 'Oversight', val: typeof ov === 'string' ? ov : (Array.isArray(ov) ? ov.join('. ') : JSON.stringify(ov))});
+      govItems.push({label: 'Oversight', val: typeof ov === 'string' ? ov : (Array.isArray(ov) ? ov.join('. ') : Object.values(ov).filter(function(v){return typeof v==='string';}).join('. ') || 'Oversight requirements defined')});
     }
     if (bgp.reporting_cadence || gov.reporting_cadence)
       govItems.push({label: 'Reporting Cadence', val: bgp.reporting_cadence || gov.reporting_cadence});
     if (bgp.escalation_triggers || gov.escalation_triggers) {
       var et = bgp.escalation_triggers || gov.escalation_triggers;
-      govItems.push({label: 'Escalation Triggers', val: typeof et === 'string' ? et : (Array.isArray(et) ? et.join('. ') : JSON.stringify(et))});
+      govItems.push({label: 'Escalation Triggers', val: typeof et === 'string' ? et : (Array.isArray(et) ? et.join('. ') : Object.values(et).filter(function(v){return typeof v==='string';}).join('. ') || 'Escalation triggers defined')});
     }
     if (bgp.phase_gates || gov.phase_gates) {
       var pg = bgp.phase_gates || gov.phase_gates;
-      govItems.push({label: 'Phase Gates', val: typeof pg === 'string' ? pg : (Array.isArray(pg) ? pg.map(function(g){return typeof g === 'string' ? g : (g.gate || g.description || JSON.stringify(g));}).join('. ') : JSON.stringify(pg))});
+      govItems.push({label: 'Phase Gates', val: typeof pg === 'string' ? pg : (Array.isArray(pg) ? pg.map(function(g){return typeof g === 'string' ? g : (g.gate || g.description || g.text || Object.values(g).filter(function(v){return typeof v==='string';}).join(' — ') || 'Phase gate');}).join('. ') : Object.values(pg).filter(function(v){return typeof v==='string';}).join('. ') || 'Phase gates defined')});
     }
     // Fallback: synthesize governance framework from available bgp data
     var govStr = function(v) {
@@ -4853,7 +4857,7 @@ function buildBoard(raw, bgp, dash, gt) {
       if (v && typeof v === 'object') {
         // Extract first meaningful string value
         var vals = Object.entries(v).map(function(e){return typeof e[1]==='string'?e[0]+': '+e[1]:typeof e[1]==='number'?e[0]+': '+e[1]:'';}).filter(Boolean);
-        return vals.join('. ').substring(0,220) || JSON.stringify(v).substring(0,220);
+        return vals.join('. ').substring(0,220) || 'Details available in governance packet';
       }
       return String(v);
     };
@@ -4883,7 +4887,7 @@ function buildBoard(raw, bgp, dash, gt) {
     }
     if (govItems.length) {
       govGrid.innerHTML = govItems.map(function(g) {
-        return '<div class="board-gov-card"><div class="board-gov-label">' + g.label + '</div><div class="board-gov-desc">' + (typeof g.val === 'string' ? g.val : JSON.stringify(g.val)) + '</div></div>';
+        return '<div class="board-gov-card"><div class="board-gov-label">' + g.label + '</div><div class="board-gov-desc">' + (typeof g.val === 'string' ? cleanText(g.val) : (Array.isArray(g.val) ? g.val.join('. ') : cleanText(Object.values(g.val||{}).filter(function(v){return typeof v==='string';}).join('. ') || g.label))) + '</div></div>';
       }).join('');
     }
   }

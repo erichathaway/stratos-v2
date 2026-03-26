@@ -1460,6 +1460,178 @@ dep-item strong{display:block;font-family:var(--font-mono);font-size:var(--font-
 .pdf-mode .mh-mandate-item { border-color: #eee !important; }
 .pdf-mode .tour-btn, .pdf-mode .info-btn { display: none !important; }
 .pdf-mode a { color: #0066cc !important; }
+
+/* ── 33  ENHANCED MOBILE RESPONSIVE ────────────────────────────────────────── */
+
+/* ── TABLET (max-width: 1024px) ── */
+@media(max-width:1024px){
+  /* Nav: ensure horizontal scroll, no wrap */
+  .s-nav{-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity}
+  .tab{flex-shrink:0;scroll-snap-align:start}
+
+  /* Command Center hero */
+  .cmd-opp-hero{grid-template-columns:1fr}
+  .cmd-opp-left{border-right:none;border-bottom:1px solid var(--border)}
+  .cmd-opp-right{grid-template-columns:1fr 1fr}
+
+  /* Room role table: horizontal scroll */
+  .room-role-table{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .room-role-header,.room-role-row{min-width:640px}
+
+  /* Decision Room convergence grid */
+  .dr-conv-grid{overflow-x:auto;-webkit-overflow-scrolling:touch}
+
+  /* Board summary row */
+  .board-summary-row{grid-template-columns:1fr 1fr;gap:var(--gap-md)}
+
+  /* Room arc row */
+  .room-arc-row{grid-template-columns:1fr 1fr}
+}
+
+/* ── MOBILE (max-width: 768px) ── */
+@media(max-width:768px){
+  /* -- 1. Top nav bar: horizontal scroll, no wrap -- */
+  .s-nav{position:sticky;top:56px;z-index:199;gap:0;padding:0 var(--gap-sm)}
+  .tab{flex-shrink:0;padding:0 var(--gap-md);font-size:var(--text-xs);height:40px;scroll-snap-align:start}
+
+  /* -- 2. Grid layouts -- */
+  .g5{grid-template-columns:1fr}
+  .g7030{grid-template-columns:1fr}
+
+  /* -- 3. Card sizing: full width handled by g2/g3 → 1fr above -- */
+
+  /* -- 4. Font sizes -- */
+  .section-label{font-size:var(--font-9)}
+  .cmd-opp-title{font-size:var(--text-xl)}
+  .mh-hero-title{font-size:var(--text-lg)}
+  .fin-kpi-value{font-size:var(--text-xl)}
+  .stat-value{font-size:var(--text-2xl)}
+  .v-word{font-size:var(--text-xl)}
+
+  /* -- 5. Risk matrix: scrollable on small screens -- */
+  .risk-matrix-outer{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .risk-matrix-outer>*{min-width:480px}
+
+  /* -- 6. Financial tables: horizontal scroll -- */
+  .fin-scenario-row{grid-template-columns:1fr;gap:var(--gap-sm)}
+  .fin-scenario-row.is-header{display:none}
+  .fin-cac-row{grid-template-columns:1fr;gap:var(--gap-xs)}
+  .fin-kpi-row{grid-template-columns:1fr}
+  ev-grid{overflow-x:auto;-webkit-overflow-scrolling:touch}
+
+  /* -- 7. Audio player / Insight bar: stack vertically -- */
+  .ib-actions{flex-direction:column;align-items:stretch;gap:var(--gap-sm)}
+  .ib-audio,.ib-tour,.ib-doc{width:100%;justify-content:center}
+  .ib-divider{width:100%;height:1px}
+  .ib-label{margin-left:0;text-align:center}
+
+  /* -- 8. PDF export button: accessible on mobile -- */
+  .header-right{gap:var(--gap-xs)}
+  .header-right .tour-btn{font-size:var(--font-9);padding:var(--gap-xxs) var(--gap-sm);white-space:nowrap}
+
+  /* -- 9. Info panel (citation popover): full width on mobile -- */
+  #info-panel{width:calc(100vw - var(--gap-lg) * 2);left:var(--gap-lg);right:var(--gap-lg)}
+
+  /* -- 10. Header bar: run meta wraps gracefully -- */
+  .s-header{height:auto;min-height:48px;padding:var(--gap-sm) var(--gap-lg);flex-wrap:wrap;gap:var(--gap-sm)}
+  .logo{flex-shrink:0}
+  .run-meta{display:flex;flex-wrap:wrap;gap:var(--gap-xs);font-size:var(--font-9);order:3;width:100%;justify-content:center;padding-bottom:var(--gap-xs)}
+  .header-right{flex-shrink:0}
+
+  /* Command Center hero: single column */
+  .cmd-opp-hero{grid-template-columns:1fr}
+  .cmd-opp-left{border-right:none;border-bottom:1px solid var(--border);padding:var(--card-py) var(--card-px)}
+  .cmd-opp-right{grid-template-columns:1fr;padding:var(--card-py) var(--card-px)}
+  .cmd-opp-verdict{flex-direction:column;align-items:flex-start;gap:var(--gap-md)}
+  .cmd-opp-verdict-stats{flex-wrap:wrap}
+
+  /* Verdict hero: tighter padding */
+  .verdict-hero{padding:var(--card-py) var(--card-px);gap:var(--gap-lg)}
+
+  /* Room role table: horizontal scroll */
+  .room-role-table{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .room-role-header,.room-role-row{min-width:580px}
+  .room-arc-row{grid-template-columns:1fr}
+
+  /* Decision Room convergence grid: scroll */
+  .dr-conv-grid{overflow-x:auto;-webkit-overflow-scrolling:touch;min-width:0}
+  .dr-conv-grid>*{min-width:420px}
+
+  /* Options matrix: scroll */
+  opt-matrix-hdr,opt-row{grid-template-columns:90px 1fr 1fr 1fr}
+  opt-matrix-hdr div:last-child,opt-row div:last-child{display:none}
+
+  /* Board summary: stack */
+  .board-summary-row{grid-template-columns:1fr 1fr;gap:var(--gap-sm)}
+
+  /* Management Handoff hero body */
+  .mh-hero-body{grid-template-columns:1fr;gap:var(--gap-lg)}
+  .mh-hero-stat{align-items:flex-start}
+
+  /* Timeline: already handled, reinforce */
+  .mh-timeline{flex-direction:column;min-width:0;width:100%}
+
+  /* Tour modal: full width */
+  .tour-modal{max-width:calc(100vw - var(--gap-lg) * 2);padding:var(--card-py) var(--card-px)}
+
+  /* Stat cards: reduce large numbers */
+  .stat-card{padding:var(--gap-lg) var(--card-px)}
+  .bucket-card{padding:var(--gap-lg) var(--card-px)}
+  .bc-val{font-size:var(--text-xl)}
+
+  /* Confidence ring: smaller on mobile */
+  .conf-ring-sz{--conf-ring-sz:56px}
+
+  /* Evidence cards: tighter */
+  .ev-card{grid-template-columns:var(--gap-2xl) 1fr;gap:var(--gap-md);padding:var(--gap-md)}
+
+  /* Executive Insight Layer: tighter padding */
+  .ib-wrap{border-radius:var(--r-md)}
+  .ib-cols{padding:var(--card-py) var(--card-px);gap:var(--gap-lg)}
+
+  /* Page padding: tighter */
+  .page{padding:var(--page-pad-top) var(--gap-lg) var(--page-pad-y)}
+}
+
+/* ── SMALL MOBILE (max-width: 480px) ── */
+@media(max-width:480px){
+  :root{--page-pad-x:var(--gap-md);--card-px:var(--gap-md);--card-py:var(--gap-md)}
+
+  /* Header: minimal */
+  .s-header{padding:var(--gap-xs) var(--gap-md)}
+  .logo-pipe,.logo-tag{display:none}
+  .run-meta{display:none}
+
+  /* Nav tabs: smaller */
+  .s-nav{top:42px;padding:0 var(--gap-xs)}
+  .tab{padding:0 var(--gap-sm);font-size:var(--font-9);height:36px;gap:var(--gap-3)}
+
+  /* Stat values: scale down */
+  .stat-value{font-size:var(--text-xl)}
+  .fin-kpi-value{font-size:var(--text-lg)}
+  .bc-val{font-size:var(--text-lg)}
+
+  /* Board summary: single column */
+  .board-summary-row{grid-template-columns:1fr}
+
+  /* g5: single column */
+  .g5{grid-template-columns:1fr}
+
+  /* Options matrix: tighter */
+  opt-matrix-hdr,opt-row{grid-template-columns:80px 1fr 1fr}
+  opt-matrix-hdr div:nth-child(n+4),opt-row div:nth-child(n+4){display:none}
+
+  /* Risk matrix: even smaller min-width */
+  .risk-matrix-outer>*{min-width:360px}
+
+  /* Verdict hero */
+  .verdict-hero{padding:var(--gap-lg)}
+  .v-word{font-size:var(--text-lg)}
+
+  /* Full-bleed cards */
+  .card-body{padding:var(--gap-md)}
+  .card-head{padding:var(--gap-sm) var(--gap-md)}
+}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>

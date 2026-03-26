@@ -1591,9 +1591,9 @@ dep-item strong{display:block;font-family:var(--font-mono);font-size:var(--font-
         <button class="info-btn" id="v-decision-info-btn" data-title="Original Question" data-body="Decision question pending">i</button>
       </div>
       <div class="v-chips">
-        <span class="v-chip">70 Sources Cited</span>
-        <span class="v-chip">Gap Score 8/10</span>
-        <span class="v-chip">10% Conf Band</span>
+        <span class="v-chip" id="v-chip-sources">70 Sources Cited</span>
+        <span class="v-chip" id="v-chip-gap">Gap Score 8/10</span>
+        <span class="v-chip" id="v-chip-band">10% Conf Band</span>
       </div>
     </div>
     <div class="v-right">
@@ -1680,19 +1680,19 @@ dep-item strong{display:block;font-family:var(--font-mono);font-size:var(--font-
     <div class="stat-card" style="--sa-c:var(--blue)">
       <div class="stat-label">Votes to Approve</div>
       <div class="stat-value"><span class="nc-group"><span class="num-cite" data-label="Votes to Approve" data-val="—" data-source="dPacket.counts" data-note="Pending"><span class="nc-val" id="brief-vote-num">&mdash;</span></span><sup class="u-sup" id="brief-vote-denom"></sup></span></div>
-      <div class="stat-sub">All roles</div>
+      <div class="stat-sub" id="stat-sub-votes">All roles</div>
       <span class="stat-chip chip-blue">Unanimous</span>
     </div>
     <div class="stat-card" style="--sa-c:var(--amber)">
       <div class="stat-label">Avg Confidence</div>
       <div class="stat-value"><span class="nc-group"><span class="num-cite" data-label="Avg Confidence" data-val="—" data-source="dPacket.confidence_summary" data-note="Pending"><span class="nc-val" id="brief-conf-num">&mdash;</span></span><sup class="u-sup">%</sup></span></div>
-      <div class="stat-sub">Range 62&ndash;72%</div>
+      <div class="stat-sub" id="stat-sub-conf">Range 62&ndash;72%</div>
       <span class="stat-chip chip-amber">Conditional</span>
     </div>
     <div class="stat-card" style="--sa-c:var(--teal)">
       <div class="stat-label">Capital Approved</div>
       <div class="stat-value"><span class="nc-group"><span class="num-cite" data-label="Total Capital" data-val="—" data-source="financial_mechanics.total_investment" data-note="Pending data"><span class="nc-val">&mdash;</span></span></span></div>
-      <div class="stat-sub">Pending analysis</div>
+      <div class="stat-sub" id="stat-sub-cap">Pending analysis</div>
       <span class="stat-chip chip-teal" id="brief-capital-chip">Pending</span>
     </div>
     <div class="stat-card" style="--sa-c:var(--red)">
@@ -2091,17 +2091,17 @@ dep-item strong{display:block;font-family:var(--font-mono);font-size:var(--font-
   <div class="g3 dim-group">
     <div class="bucket-card lift" style="--bc-c:var(--red)">
       <div class="bc-eyebrow">Exposure Profile</div>
-      <div class="bc-text">Pending data</div>
-      <div style="margin-top:auto;padding-top:var(--gap-md)"><span class="chip chip-red">HIGH EXPOSURE</span></div>
+      <div class="bc-text" id="risk-profile-exposure">Pending data</div>
+      <div style="margin-top:auto;padding-top:var(--gap-md)"><span class="chip chip-red" id="risk-profile-exposure-chip">HIGH EXPOSURE</span></div>
     </div>
     <div class="bucket-card lift" style="--bc-c:var(--amber)">
       <div class="bc-eyebrow">Why It Matters</div>
-      <div class="bc-text">Pending data</div>
-      <div style="margin-top:auto;padding-top:var(--gap-md)"><span class="chip chip-amber">3 PRE-CONDITIONS OPEN</span></div>
+      <div class="bc-text" id="risk-profile-why">Pending data</div>
+      <div style="margin-top:auto;padding-top:var(--gap-md)"><span class="chip chip-amber" id="risk-profile-why-chip">3 PRE-CONDITIONS OPEN</span></div>
     </div>
     <div class="bucket-card lift" style="--bc-c:var(--green)">
       <div class="bc-eyebrow">Mitigation by Design</div>
-      <div class="bc-text">Pending data</div>
+      <div class="bc-text" id="risk-profile-mitigation">Pending data</div>
       <div style="margin-top:auto;padding-top:var(--gap-md)"><span class="chip chip-green">PHASE-GATED</span></div>
     </div>
   </div>
@@ -2302,11 +2302,11 @@ dep-item strong{display:block;font-family:var(--font-mono);font-size:var(--font-
   <div class="fin-header">
     <div class="fin-header-narrative">
       <div class="fin-header-eyebrow">Financial Overview</div>
-      <div class="fin-header-title">The strategic case is real. The execution case is unbuilt.</div>
-      <div class="fin-header-sub">Financial analysis pending live data from the decision engine.</div>
+      <div class="fin-header-title" id="fin-header-title">The strategic case is real. The execution case is unbuilt.</div>
+      <div class="fin-header-sub" id="fin-header-sub">Financial analysis pending live data from the decision engine.</div>
     </div>
     <div class="fin-header-stat">
-      <div class="fin-header-conf num-cite" id="fin-conf-display" data-label="Avg Confidence" data-val="—" data-source="dPacket.confidence_summary" data-note="Pending" id="fin-conf-val">—</div>
+      <div class="fin-header-conf num-cite" id="fin-conf-display" data-label="Avg Confidence" data-val="—" data-source="dPacket.confidence_summary" data-note="Pending">—</div>
       <div class="fin-header-conf-label" id="fin-conf-label">Avg Confidence<br>Conditional</div>
     </div>
   </div>
@@ -2325,10 +2325,10 @@ dep-item strong{display:block;font-family:var(--font-mono);font-size:var(--font-
   <!-- ROW 1: KPIs -->
   <div class="section-label">Investment Structure &amp; Unit Economics <button class="info-btn" data-title="Unit Economics" data-body="CFO-validated metrics from the deliberation record. CAC ceiling and LTV/CAC ratio directly govern the Phase 2 GO/NO-GO gate.">i</button></div>
   <div class="fin-kpi-row">
-    <div class="fin-kpi neutral"><div class="fin-kpi-label">Total Investment</div><div class="fin-kpi-value num-cite" id="fin-total" data-label="Total Investment" data-val="—" data-source="financial_mechanics.total_investment" data-note="Pending data">&mdash;</div><div class="fin-kpi-sub">Pending data</div></div>
-    <div class="fin-kpi pos"><div class="fin-kpi-label">LTV / Customer</div><div class="fin-kpi-value pos num-cite" id="fin-ltv" data-label="LTV per Customer" data-val="—" data-source="financial_mechanics.unit_economics.ltv_per_customer" data-note="Pending data">&mdash;</div><div class="fin-kpi-sub">Pending data</div></div>
-    <div class="fin-kpi warn"><div class="fin-kpi-label">CAC Ceiling</div><div class="fin-kpi-value warn num-cite" id="fin-cac" data-label="CAC Ceiling" data-val="—" data-source="financial_mechanics.unit_economics.cac_threshold" data-note="Pending data">&mdash;</div><div class="fin-kpi-sub">Pending data</div></div>
-    <div class="fin-kpi pos"><div class="fin-kpi-label">LTV / CAC Ratio</div><div class="fin-kpi-value pos num-cite" data-label="LTV/CAC Ratio" data-val="—" data-source="financial_mechanics.unit_economics.ltv_cac_ratio" data-note="Pending data">&mdash;</div><div class="fin-kpi-sub" id="fin-runway">Pending data</div></div>
+    <div class="fin-kpi neutral"><div class="fin-kpi-label">Total Investment</div><div class="fin-kpi-value num-cite" id="fin-total" data-label="Total Investment" data-val="—" data-source="financial_mechanics.total_investment" data-note="Pending data">&mdash;</div><div class="fin-kpi-sub" id="fin-total-sub">Pending data</div></div>
+    <div class="fin-kpi pos"><div class="fin-kpi-label">LTV / Customer</div><div class="fin-kpi-value pos num-cite" id="fin-ltv" data-label="LTV per Customer" data-val="—" data-source="financial_mechanics.unit_economics.ltv_per_customer" data-note="Pending data">&mdash;</div><div class="fin-kpi-sub" id="fin-ltv-sub">Pending data</div></div>
+    <div class="fin-kpi warn"><div class="fin-kpi-label">CAC Ceiling</div><div class="fin-kpi-value warn num-cite" id="fin-cac" data-label="CAC Ceiling" data-val="—" data-source="financial_mechanics.unit_economics.cac_threshold" data-note="Pending data">&mdash;</div><div class="fin-kpi-sub" id="fin-cac-sub">Pending data</div></div>
+    <div class="fin-kpi pos"><div class="fin-kpi-label">LTV / CAC Ratio</div><div class="fin-kpi-value pos num-cite" id="fin-ratio" data-label="LTV/CAC Ratio" data-val="—" data-source="financial_mechanics.unit_economics.ltv_cac_ratio" data-note="Pending data">&mdash;</div><div class="fin-kpi-sub" id="fin-runway">Pending data</div></div>
   </div>
 
   <!-- ROW 2: SCENARIO ANALYSIS -->
@@ -2362,21 +2362,21 @@ dep-item strong{display:block;font-family:var(--font-mono);font-size:var(--font-
 
   <div class="section-label">The Full Picture &mdash; Upside, Risk &amp; What We Don&rsquo;t Know <button class="info-btn" data-title="The Full Picture" data-body="Three financial cases (base, bull, bear) showing revenue, cost, and net return. This is the CFO's range-of-outcomes model.">i</button></div>
   <div class="fin-case-row">
-    <div class="fin-case-card">
-      <div class="fin-case-head pos"><span class="fin-case-title">The Upside</span><span class="chip chip-teal">4 DRIVERS</span></div>
-      <div class="fin-case-body">
+    <div class="fin-case-card" id="fin-case-upside">
+      <div class="fin-case-head pos"><span class="fin-case-title">The Upside</span><span class="chip chip-teal" id="fin-case-upside-chip">4 DRIVERS</span></div>
+      <div class="fin-case-body" id="fin-case-upside-body">
         <div class="fin-case-item"><span class="fin-case-num pos">&mdash;</span><span class="fin-case-desc">Pending data</span></div>
       </div>
     </div>
-    <div class="fin-case-card">
-      <div class="fin-case-head neg"><span class="fin-case-title">The Risk</span><span class="chip chip-red">3 EXPOSURES</span></div>
-      <div class="fin-case-body">
+    <div class="fin-case-card" id="fin-case-risk">
+      <div class="fin-case-head neg"><span class="fin-case-title">The Risk</span><span class="chip chip-red" id="fin-case-risk-chip">3 EXPOSURES</span></div>
+      <div class="fin-case-body" id="fin-case-risk-body">
         <div class="fin-case-item"><span class="fin-case-num neg">&mdash;</span><span class="fin-case-desc">Pending data</span></div>
       </div>
     </div>
-    <div class="fin-case-card">
-      <div class="fin-case-head warn"><span class="fin-case-title">What We Don&rsquo;t Know</span><span class="chip chip-amber">4 GAPS</span></div>
-      <div class="fin-case-body">
+    <div class="fin-case-card" id="fin-case-unknown">
+      <div class="fin-case-head warn"><span class="fin-case-title">What We Don&rsquo;t Know</span><span class="chip chip-amber" id="fin-case-unknown-chip">4 GAPS</span></div>
+      <div class="fin-case-body" id="fin-case-unknown-body">
         <div class="fin-case-item"><span class="fin-case-num warn">&mdash;</span><span class="fin-case-desc">Pending data</span></div>
       </div>
     </div>
@@ -3251,9 +3251,12 @@ function applyLiveData(raw) {
   buildBriefingPanels(exec, dir, dash, bgp, fm, mso, stages, voteTotal, maxRound, optId, optName, raw);
 
   const bucketData = buildBucketData(raw);
+  const briefingBuckets = document.querySelectorAll('#sec-briefing .g3.dim-group .bucket-card');
   bucketData.forEach((b, i) => {
-    const valEl = document.querySelector('.bucket-card:nth-child(' + (i+1) + ') .bc-value');
-    const textEl = document.querySelector('.bucket-card:nth-child(' + (i+1) + ') .bc-text');
+    const card = briefingBuckets[i];
+    if (!card) return;
+    const valEl = card.querySelector('.bc-value');
+    const textEl = card.querySelector('.bc-text');
     if (valEl && b.val) valEl.innerHTML = b.val;
     if (textEl && b.text) textEl.textContent = b.text;
   });
@@ -3586,15 +3589,23 @@ function hideEmptySections() {
   });
 
   // P. Entire tab sections: hide tab button if section has no visible content
+  // NOTE: Be conservative — only hide a tab if the section truly has ZERO content
   var tabSections = ['command', 'risk', 'financials', 'room', 'management', 'board'];
   tabSections.forEach(function(secKey) {
     var sec = document.getElementById('sec-' + secKey);
     if (!sec) return;
-    var children = sec.querySelectorAll('.card, .verdict-hero, .g2, .g3, .g7030, .fin-kpi-row, .fin-case-row, .fin-kill-row, .fin-tranche-row, .bucket-card, .room-arc-row, .board-rec-card, .board-summary-row, .board-gov-grid, .mh-hero, .mh-priority-grid, .cf-grid');
+    // Check ALL direct children and key structural elements
+    var children = sec.querySelectorAll('.card, .verdict-hero, .g2, .g3, .g7030, .fin-kpi-row, .fin-case-row, .fin-kill-row, .fin-tranche-row, .bucket-card, .room-arc-row, .board-rec-card, .board-summary-row, .board-gov-grid, .mh-hero, .mh-priority-grid, .cf-grid, .fin-header, .ib-wrap, .room-gt-flag, .room-commit-grid, .dr-facil-grid, .room-opts-tabs, .fin-scenario-wrap');
     var hasVisible = false;
     children.forEach(function(child) {
       if (child.style.display !== 'none') hasVisible = true;
     });
+    // Also check if the section has any meaningful text content at all
+    if (!hasVisible) {
+      var secText = sec.textContent.replace(/\s+/g, ' ').trim();
+      var stripped = secText.replace(/[—\-\s]/g, '').replace(/Pending[\s\w]*/gi, '').replace(/Loading[\s\w]*/gi, '').trim();
+      if (stripped.length > 30) hasVisible = true;
+    }
     if (!hasVisible) {
       var tabBtn = document.querySelector('.tab[data-sec="' + secKey + '"]');
       hideIf(tabBtn, true);
@@ -3602,16 +3613,20 @@ function hideEmptySections() {
   });
 
   // AGGRESSIVE CLEANUP: Cards with partial data that's all dashes
+  // NOTE: Reduced aggressiveness — only hide cards that are TRULY empty (< 5 chars of real content)
+  // and NOT inside key sections that have structured layouts worth preserving
   document.querySelectorAll('.card').forEach(function(card) {
     // Skip cards that are already hidden
     if (card.style.display === 'none') return;
-    // Skip cards inside sec-risk that contain the risk matrix or risk table (always show these)
-    if (card.closest('#sec-risk') && (card.querySelector('.risk-matrix-outer') || card.querySelector('.risk-table') || card.querySelector('.risk-dot-abs'))) return;
+    // Skip cards inside key structural sections — these have layouts worth showing even with partial data
+    if (card.closest('#sec-risk') || card.closest('#sec-room') || card.closest('#sec-financials') || card.closest('#sec-command') || card.closest('#sec-board')) return;
+    // Skip cards that contain interactive/structural elements
+    if (card.querySelector('canvas') || card.querySelector('table') || card.querySelector('.dr-conv-grid') || card.querySelector('.risk-matrix-outer') || card.querySelector('.risk-table') || card.querySelector('.risk-dot-abs')) return;
     // Get all text content in the card
     var allText = card.textContent.replace(/\s+/g, ' ').trim();
-    // If the card only has labels and dashes, hide it
+    // If the card only has labels and dashes, hide it — but use a much lower threshold
     var stripped = allText.replace(/[—\-\s]/g, '').replace(/Pending[\s\w]*/gi, '').replace(/Loading[\s\w]*/gi, '').trim();
-    if (stripped.length < 15) hideIf(card, true);
+    if (stripped.length < 5) hideIf(card, true);
   });
 
   // Hide section-labels that have NO visible sibling after them
@@ -3959,19 +3974,24 @@ function buildRisk(raw, mso, dash) {
     });
   }
 
-  // Top 3 risk cards
-  const topWrap = el('risk-top-cards');
+  // Top 3 risk cards — populate risk-row-list (the actual HTML element)
+  const topWrap = document.querySelector('.risk-row-list');
   if (topWrap) {
     topWrap.innerHTML = '';
     risks.slice(0, 3).forEach((r, i) => {
       const c = r.impact === 'HIGH' ? 'var(--red)' : r.impact === 'MEDIUM' ? 'var(--amber)' : 'var(--blue)';
+      const barCls = r.impact === 'HIGH' ? 'red' : r.impact === 'MEDIUM' ? 'amber' : 'blue';
       const div = document.createElement('div');
-      div.className = 'bucket-card';
-      div.style.setProperty('--bc-c', c);
+      div.className = 'risk-impact-row';
       div.innerHTML =
-        '<div class="bc-eyebrow">' + (r.domain || 'Risk ' + (i+1)) + '</div>' +
-        '<div class="bc-text" style="margin-top:var(--gap-sm)">' + (r.risk || '').substring(0, 200) + '</div>' +
-        '<div class="bc-foot"><span class="chip" style="color:' + c + ';background:color-mix(in srgb,' + c + ' 13%,transparent);border:1px solid color-mix(in srgb,' + c + ' 28%,transparent)">' + (r.impact || 'HIGH') + ' IMPACT</span></div>';
+        '<div class="risk-impact-bar ' + barCls + '"></div>' +
+        '<div class="risk-impact-content">' +
+          '<div class="risk-impact-title">' + (r.domain || 'Risk ' + (i+1)) + '</div>' +
+          '<div class="risk-impact-desc">' + (r.risk || '').substring(0, 200) + '</div>' +
+          '<div class="risk-impact-chips"><span class="chip" style="color:' + c + ';background:color-mix(in srgb,' + c + ' 13%,transparent);border:1px solid color-mix(in srgb,' + c + ' 28%,transparent)">' + (r.impact || 'HIGH') + ' IMPACT</span>' +
+          (r.probability || r.prob ? ' <span class="chip" style="color:var(--text-muted);background:rgba(255,255,255,0.04);border:1px solid var(--border)">' + (r.probability || r.prob) + ' PROB</span>' : '') +
+          '</div>' +
+        '</div>';
       topWrap.appendChild(div);
     });
   }
@@ -3992,9 +4012,42 @@ function buildRisk(raw, mso, dash) {
     });
   }
 
+  // ── Populate risk side panel (risk exposure list) ──
+  const riskPanelScroll = document.querySelector('.risk-panel-scroll');
+  if (riskPanelScroll && risks.length) {
+    const actNow = risks.filter(r => (r.impact === 'HIGH' && (r.probability === 'HIGH' || r.prob === 'HIGH')) || r.impact === 'CRITICAL');
+    const manage = risks.filter(r => !actNow.includes(r) && (r.impact === 'HIGH' || r.impact === 'MEDIUM'));
+    const monitor = risks.filter(r => !actNow.includes(r) && !manage.includes(r));
+    let panelHtml = '';
+    function riskPanelRows(arr, sectionName, chipCls, chipLabel) {
+      if (!arr.length) return '';
+      let h = '<div class="risk-section-label"><span class="risk-section-name ' + (chipCls === 'chip-red' ? 'is-red' : chipCls === 'chip-amber' ? 'is-amber' : '') + '">' + sectionName + '</span><span class="chip ' + chipCls + '">' + arr.length + ' ' + chipLabel + '</span></div>';
+      arr.forEach(function(r) {
+        h += '<div class="risk-panel-row"><div class="risk-panel-row-text">' + (r.risk || '').substring(0, 160) + '</div><div class="risk-panel-row-meta"><span class="risk-panel-domain">' + (r.domain || r.role_key || '') + '</span></div></div>';
+      });
+      return h;
+    }
+    panelHtml += riskPanelRows(actNow, 'Act Now', 'chip-red', 'CRITICAL');
+    panelHtml += riskPanelRows(manage, 'Manage', 'chip-amber', 'ACTIVE');
+    if (monitor.length) panelHtml += riskPanelRows(monitor, 'Monitor', 'chip-blue', 'TRACKED');
+    riskPanelScroll.innerHTML = panelHtml;
+  }
+
   // Risk insights
   set('risk-insight-1', (dash.risk_exposure || 'HIGH') + ' risk exposure, ' + (dash.execution_complexity || 'HIGH') + ' execution complexity, feasibility: ' + (dash.strategic_feasibility || 'LOW') + '. See risk matrix for the most likely phase-halt triggers.');
   if (risks[0]) set('risk-insight-2', (risks[0].risk || '').substring(0, 180));
+
+  // ── Risk Profile bucket-cards ──
+  const highRisks = risks.filter(r => r.impact === 'HIGH');
+  const medRisks = risks.filter(r => r.impact === 'MEDIUM');
+  const riskDomains = [...new Set(risks.map(r => r.domain).filter(Boolean))];
+  set('risk-profile-exposure', highRisks.length + ' HIGH-impact risks across ' + riskDomains.length + ' domains. ' + (highRisks[0] ? highRisks[0].risk.substring(0, 100) : 'Risk concentration requires active management.'));
+  var expChip = el('risk-profile-exposure-chip');
+  if (expChip) expChip.textContent = (dash.risk_exposure || 'HIGH') + ' EXPOSURE';
+  set('risk-profile-why', risks.length + ' risks identified. ' + (risks[1] ? risks[1].risk.substring(0, 120) : 'Binary outcome stakes mean partial success is not viable.'));
+  var whyChip = el('risk-profile-why-chip');
+  if (whyChip) whyChip.textContent = highRisks.length + ' HIGH-IMPACT RISKS';
+  set('risk-profile-mitigation', 'Phase-gated deployment contains downside. ' + (risks[2] ? risks[2].risk.substring(0, 100) : 'Each phase has explicit kill criteria to halt if conditions deteriorate.'));
 
   // ── Time to Decision (from raw.checkpoints) ──
   if (raw && Array.isArray(raw.checkpoints) && raw.checkpoints.length >= 2) {
@@ -4582,9 +4635,19 @@ function buildFinancials(raw, fm, fo, bgp, mso, dash) {
   set('fin-p1',fm.phase_1_immediate||fo.phase_1||'—');
   set('fin-p2',fm.phase_2_gated||fo.phase_2||'—');
   set('fin-cac',cac); set('fin-ltv',ltv);
+  set('fin-ratio', ratio + 'x');
   var runway=fm&&fm.runway_months?fm.runway_months+'-month runway post-investment':(dash&&dash.runway?dash.runway:'Post-investment runway');
   set('fin-runway',runway);
   set('fin-conf-display',conf+'%');
+  // Financial header narrative
+  if (tot && tot !== '—') {
+    set('fin-header-title', tot + ' total investment — ' + (fm.phase_1_immediate || 'Phase 1') + ' now, ' + (fm.phase_2_gated || 'Phase 2') + ' gated on milestones.');
+    set('fin-header-sub', 'LTV/CAC ' + ratio + 'x at base case. ' + conf + '% average confidence across all roles.');
+  }
+  // KPI sub-lines
+  set('fin-total-sub', fm.phase_1_immediate ? fm.phase_1_immediate + ' Phase 1, ' + (fm.phase_2_gated||'—') + ' gated' : 'Phase-gated capital deployment');
+  set('fin-ltv-sub', fm.ltv_target ? 'Target: ' + fm.ltv_target : 'Per enterprise customer');
+  set('fin-cac-sub', fm.cac_threshold ? 'Threshold: ' + fm.cac_threshold : 'Acquisition cost ceiling');
   var r2Count=raw.stageOutputs?raw.stageOutputs.filter(function(s){return s.round===2&&s.role_key!=='SYSTEM';}).length:7;
   var fcl=el('fin-conf-label');if(fcl)fcl.innerHTML='Avg Confidence<br>'+r2Count+'/'+r2Count+' Conditional';
   var inv=500, maxR=Math.max(ltvN*1,ltvN*tgt,ltvN*5);
@@ -4671,6 +4734,45 @@ function buildFinancials(raw, fm, fo, bgp, mso, dash) {
   if (fmCfo) finI3Parts.push('CFO confidence: ' + fmCfo);
   if (tot) finI3Parts.push('Total capital: ' + tot);
   set('fin-insight-3', finI3Parts.length ? finI3Parts.join('. ') : 'Board financial briefing pending.');
+
+  // ── Populate "The Full Picture" case cards ──
+  var risksList = Array.isArray(mso.risks) ? mso.risks : Object.values(mso.risks || {});
+  var topConds = (raw.outputBlob || {}).executive_summary?.top_conditions || [];
+  var bgpConds = bgp.conditions_for_approval || [];
+  // Upside card
+  var uBody = el('fin-case-upside-body');
+  if (uBody) {
+    var uItems = [];
+    if (fm.revenue_target) uItems.push({ n: '+', d: fm.revenue_target });
+    if (fm.total_investment) uItems.push({ n: '+', d: 'Phase-gated investment: ' + fm.total_investment });
+    if (fm.ltv_target) uItems.push({ n: '+', d: 'LTV target: ' + fm.ltv_target + ' per customer' });
+    if (ratio) uItems.push({ n: '+', d: 'LTV/CAC ratio: ' + ratio + 'x at base case' });
+    if (!uItems.length) uItems.push({ n: '+', d: 'Revenue model pending detailed financial data' });
+    var uChip = el('fin-case-upside-chip');
+    if (uChip) uChip.textContent = uItems.length + ' DRIVER' + (uItems.length !== 1 ? 'S' : '');
+    uBody.innerHTML = uItems.map(function(i) { return '<div class="fin-case-item"><span class="fin-case-num pos">' + i.n + '</span><span class="fin-case-desc">' + i.d + '</span></div>'; }).join('');
+  }
+  // Risk card
+  var rBody = el('fin-case-risk-body');
+  if (rBody) {
+    var rItems = [];
+    risksList.slice(0, 4).forEach(function(r) { var txt = typeof r === 'string' ? r : (r.risk || r.description || ''); if (txt) rItems.push({ n: '!', d: txt.substring(0, 120) }); });
+    if (!rItems.length) rItems.push({ n: '!', d: 'Risk exposures pending analysis' });
+    var rChip = el('fin-case-risk-chip');
+    if (rChip) rChip.textContent = rItems.length + ' EXPOSURE' + (rItems.length !== 1 ? 'S' : '');
+    rBody.innerHTML = rItems.map(function(i) { return '<div class="fin-case-item"><span class="fin-case-num neg">' + i.n + '</span><span class="fin-case-desc">' + i.d + '</span></div>'; }).join('');
+  }
+  // Unknown card
+  var gBody = el('fin-case-unknown-body');
+  if (gBody) {
+    var gItems = [];
+    topConds.forEach(function(c) { var txt = typeof c === 'string' ? c : (c.condition || c.text || ''); if (txt) gItems.push({ n: '?', d: txt.substring(0, 120) }); });
+    bgpConds.slice(0, 2).forEach(function(c) { var txt = typeof c === 'string' ? c : (c.condition || ''); if (txt && gItems.length < 5) gItems.push({ n: '?', d: txt.substring(0, 120) }); });
+    if (!gItems.length) gItems.push({ n: '?', d: 'Open questions pending analysis' });
+    var gChip = el('fin-case-unknown-chip');
+    if (gChip) gChip.textContent = gItems.length + ' GAP' + (gItems.length !== 1 ? 'S' : '');
+    gBody.innerHTML = gItems.map(function(i) { return '<div class="fin-case-item"><span class="fin-case-num warn">' + i.n + '</span><span class="fin-case-desc">' + i.d + '</span></div>'; }).join('');
+  }
 }
 
 // \u2500\u2500 MANAGEMENT \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500

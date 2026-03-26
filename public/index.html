@@ -5412,7 +5412,7 @@ window.__RUN_ID = SB_RUN;
 
 async function fetchRunData() {
   // Try local API first (works on Vercel), fall back to production
-  var urls = ['/api/data?run_id=' + SB_RUN, 'https://stratos-v2.vercel.app/api/data?run_id=' + SB_RUN];
+  var urls = ['/api/data?run_id=' + SB_RUN, 'https://results.stratos.lucidorg.com/api/data?run_id=' + SB_RUN];
   for (var i = 0; i < urls.length; i++) {
     try {
       var ac = new AbortController();

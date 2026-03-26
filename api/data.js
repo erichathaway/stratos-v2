@@ -15,7 +15,7 @@ export default async function handler(req, res) {
   const SB_KEY = process.env.SUPABASE_ANON_KEY;
 
   if (!SB_URL || !SB_KEY) {
-    res.status(500).json({ error: 'Env vars not set' });
+    res.status(500).json({ error: 'Server configuration error. Please contact support.' });
     return;
   }
 

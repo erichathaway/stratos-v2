@@ -6,7 +6,7 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') { res.status(405).json({ error: 'POST only' }); return; }
 
   const ANTHROPIC_KEY = process.env.ANTHROPIC_API_KEY;
-  if (!ANTHROPIC_KEY) { res.status(500).json({ error: 'ANTHROPIC_API_KEY not configured' }); return; }
+  if (!ANTHROPIC_KEY) { res.status(500).json({ error: 'Chat service not configured. Please contact support.' }); return; }
 
   const { message, context, history } = req.body || {};
   if (!message) { res.status(400).json({ error: 'message required' }); return; }
@@ -91,6 +91,6 @@ ${typeof context === 'string' ? context : JSON.stringify(context, null, 1)}`;
     });
   } catch (err) {
     console.error('[chat.js] Error:', err.message);
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: 'Something went wrong processing your question. Please try again.' });
   }
 }

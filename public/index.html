@@ -2077,7 +2077,7 @@ dep-item strong{display:block;font-family:var(--font-mono);font-size:var(--font-
       </div>
       <div class="insight-col">
         <div class="insight-q">The Board&rsquo;s Role</div>
-        <div class="insight-a">Pending data</div>
+        <div class="insight-a" id="risk-insight-3">Pending data</div>
       </div>
     </div>
     <div class="ib-actions">
@@ -2651,8 +2651,8 @@ dep-item strong{display:block;font-family:var(--font-mono);font-size:var(--font-
 
   <!-- FUNCTIONAL MANDATES — what each role must deliver (from v1) -->
   <div class="section-label">Functional Mandates -- What Each Role Must Deliver <button class="info-btn" data-title="Functional Mandates" data-body="Non-negotiable deliverables from each functional area. These are not suggestions — they are binding commitments with deadlines and kill conditions.">i</button></div>
-  <div class="g2">
-    <div class="card">
+  <div class="g2" id="mgmt-mandates-grid">
+    <div class="card" data-mandate-role="CEO">
       <div class="card-head" style="--ct-accent:var(--red)"><div class="card-title">CEO &mdash; Governance &amp; Board</div></div>
       <div class="card-body">
         <div class="mh-mandate-list">
@@ -2660,7 +2660,7 @@ dep-item strong{display:block;font-family:var(--font-mono);font-size:var(--font-
         </div>
       </div>
     </div>
-    <div class="card">
+    <div class="card" data-mandate-role="CFO">
       <div class="card-head" style="--ct-accent:var(--red)"><div class="card-title">CFO &mdash; Financial Controls</div></div>
       <div class="card-body">
         <div class="mh-mandate-list">
@@ -2668,7 +2668,7 @@ dep-item strong{display:block;font-family:var(--font-mono);font-size:var(--font-
         </div>
       </div>
     </div>
-    <div class="card">
+    <div class="card" data-mandate-role="CTO">
       <div class="card-head" style="--ct-accent:var(--amber)"><div class="card-title">CTO &mdash; Technical Infrastructure</div></div>
       <div class="card-body">
         <div class="mh-mandate-list">
@@ -2676,7 +2676,7 @@ dep-item strong{display:block;font-family:var(--font-mono);font-size:var(--font-
         </div>
       </div>
     </div>
-    <div class="card">
+    <div class="card" data-mandate-role="LEGAL">
       <div class="card-head" style="--ct-accent:var(--amber)"><div class="card-title">LEGAL &mdash; Compliance &amp; Entity</div></div>
       <div class="card-body">
         <div class="mh-mandate-list">
@@ -2684,7 +2684,7 @@ dep-item strong{display:block;font-family:var(--font-mono);font-size:var(--font-
         </div>
       </div>
     </div>
-    <div class="card">
+    <div class="card" data-mandate-role="CHRO">
       <div class="card-head" style="--ct-accent:var(--blue)"><div class="card-title">CHRO &mdash; People &amp; Hiring</div></div>
       <div class="card-body">
         <div class="mh-mandate-list">
@@ -2692,7 +2692,7 @@ dep-item strong{display:block;font-family:var(--font-mono);font-size:var(--font-
         </div>
       </div>
     </div>
-    <div class="card">
+    <div class="card" data-mandate-role="CSO,COO">
       <div class="card-head" style="--ct-accent:var(--blue)"><div class="card-title">CSO &amp; COO &mdash; Market &amp; Operations</div></div>
       <div class="card-body">
         <div class="mh-mandate-list">
@@ -3390,7 +3390,9 @@ function hideEmptySections() {
   });
 
   // B. Bucket-cards: hide if .bc-text is empty/placeholder
+  // Skip bucket-cards inside #sec-risk — these are structural Risk Profile cards
   document.querySelectorAll('.bucket-card').forEach(function(card) {
+    if (card.closest('#sec-risk')) return;
     var textEl = card.querySelector('.bc-text');
     if (textEl && isEmpty(textEl.textContent)) hideIf(card, true);
   });
@@ -3410,11 +3412,15 @@ function hideEmptySections() {
   });
 
   // E. Insight columns: hide if .insight-a text is placeholder
+  // Skip insight columns in management/board — these are structural and
+  // are populated late; hiding them cascades to hiding the entire ib-wrap.
   document.querySelectorAll('.insight-col').forEach(function(col) {
+    if (col.closest('#sec-management') || col.closest('#sec-board')) return;
     var ansEl = col.querySelector('.insight-a');
     if (ansEl && isEmpty(ansEl.textContent)) hideIf(col, true);
   });
   document.querySelectorAll('.ib-cols').forEach(function(wrap) {
+    if (wrap.closest('#sec-management') || wrap.closest('#sec-board')) return;
     var cols = wrap.querySelectorAll('.insight-col');
     var allHidden = true;
     cols.forEach(function(c) { if (c.style.display !== 'none') allHidden = false; });
@@ -3471,21 +3477,14 @@ function hideEmptySections() {
     if (allHidden && items.length) hideIf(row, true);
   });
 
-  // L. Management mandate cards
-  document.querySelectorAll('.mh-mandate-list').forEach(function(list) {
-    var items = list.querySelectorAll('.mh-mandate-item span:last-child');
-    var allEmpty = true;
-    items.forEach(function(s) { if (!isEmpty(s.textContent)) allEmpty = false; });
-    if (allEmpty && items.length) hideIf(list.closest('.card'), true);
-  });
+  // L. Management mandate cards — NEVER hide these; they are structural
+  // The mandate grid defines the section layout. Hiding individual cards
+  // causes cascading section-label and grid hiding.
+  // (Previously these got hidden because "Pending data" matched isEmpty(),
+  //  but they should always be visible as scaffolding.)
 
-  // M. Board conditions/kill lists
-  document.querySelectorAll('#board-conditions-wrap, #board-kill-wrap').forEach(function(wrap) {
-    var questions = wrap.querySelectorAll('.oq-q');
-    var allEmpty = true;
-    questions.forEach(function(q) { if (!isEmpty(q.textContent)) allEmpty = false; });
-    if (allEmpty && questions.length) hideIf(wrap.closest('.card'), true);
-  });
+  // M. Board conditions/kill lists — NEVER hide these; they are structural
+  // Board sections define the governance framework layout and should always show.
 
   // N. Timeline nodes
   document.querySelectorAll('.rt-row').forEach(function(row) {
@@ -3493,33 +3492,27 @@ function hideEmptySections() {
     if (detail && isEmpty(detail.textContent)) hideIf(row, true);
   });
 
-  // Management priority items
+  // Management priority items — don't hide in management section (structural)
   document.querySelectorAll('.mh-priority-item').forEach(function(item) {
+    if (item.closest('#sec-management')) return;
     var textEl = item.querySelector('.mh-priority-text');
     if (textEl && isEmpty(textEl.textContent)) hideIf(item, true);
   });
 
-  // Management cross-function cards
+  // Management cross-function cards — don't hide in management section
   document.querySelectorAll('.cf-card').forEach(function(card) {
+    if (card.closest('#sec-management')) return;
     var title = card.querySelector('.cf-title');
     if (title && isEmpty(title.textContent)) hideIf(card, true);
   });
 
-  // Management escalation items
-  document.querySelectorAll('.mh-escalation-item').forEach(function(item) {
-    var trigger = item.querySelector('.mh-esc-trigger');
-    if (trigger && isEmpty(trigger.textContent)) hideIf(item, true);
-  });
-  document.querySelectorAll('#sec-management .g3 .card').forEach(function(card) {
-    var items = card.querySelectorAll('.mh-escalation-item');
-    if (!items.length) return;
-    var allHidden = true;
-    items.forEach(function(i) { if (i.style.display !== 'none') allHidden = false; });
-    if (allHidden) hideIf(card, true);
-  });
+  // Management escalation items — NEVER hide these; they are structural
+  // The escalation grid is part of the management section layout.
+  // Hiding items cascades to hiding cards, grids, and section-labels.
 
-  // Management key dates
+  // Management key dates — don't hide in management section (structural)
   document.querySelectorAll('.mh-date-row').forEach(function(row) {
+    if (row.closest('#sec-management')) return;
     var what = row.querySelector('.mh-date-what');
     if (what && isEmpty(what.textContent)) hideIf(row, true);
   });
@@ -3541,27 +3534,16 @@ function hideEmptySections() {
   var cacRows = document.getElementById('fin-cac-rows');
   if (cacRows && !cacRows.children.length) hideIf(cacRows.closest('.card'), true);
 
-  // Board governance grid
-  var govGrid = document.getElementById('board-gov-grid');
-  if (govGrid && !govGrid.children.length) hideIf(govGrid, true);
+  // Board governance grid — NEVER hide; it's populated by buildBoard()
+  // and even empty it shows the section structure.
 
-  // Board recommendation
-  var boardRecText = document.getElementById('board-action-text');
-  if (boardRecText && isEmpty(boardRecText.textContent)) {
-    hideIf(document.getElementById('board-rec-card'), true);
-  }
+  // Board recommendation — NEVER hide; it's structural.
+  // buildBoard() populates it. If empty, showing "Pending data" is correct.
 
-  // Board rationale
-  var boardRat = document.getElementById('board-rationale-text');
-  if (boardRat && isEmpty(boardRat.textContent)) {
-    hideIf(boardRat.closest('.card'), true);
-  }
+  // Board rationale — NEVER hide; it has a default narrative that should show.
 
-  // Board summary metrics
-  document.querySelectorAll('.board-sum-item').forEach(function(item) {
-    var valEl = item.querySelector('.board-sum-val');
-    if (valEl && isEmptyVal(valEl.textContent)) hideIf(item, true);
-  });
+  // Board summary metrics — NEVER hide individual items.
+  // They have numeric values populated by buildBoard().
 
   // Command center narrative
   var cmdNarrative = document.getElementById('cmd-narrative');
@@ -3580,12 +3562,25 @@ function hideEmptySections() {
     if (text && isEmpty(text.textContent)) hideIf(card, true);
   });
 
-  // Section labels: hide if next sibling is hidden
+  // Section labels: hide if ALL siblings up to the next section-label are hidden
+  // (not just the immediate next sibling — that was too aggressive)
   document.querySelectorAll('.section-label').forEach(function(label) {
-    var next = label.nextElementSibling;
-    if (next && next.style.display === 'none') {
-      hideIf(label, true);
+    // Never hide section labels in Management or Board tabs — they define structure
+    if (label.closest('#sec-management') || label.closest('#sec-board')) return;
+    var sib = label.nextElementSibling;
+    var hasVisibleContent = false;
+    var hasSiblings = false;
+    while (sib) {
+      if (sib.classList && sib.classList.contains('section-label')) break;
+      hasSiblings = true;
+      if (sib.style.display !== 'none') {
+        hasVisibleContent = true;
+        break;
+      }
+      sib = sib.nextElementSibling;
     }
+    // Only hide if there ARE siblings and they're ALL hidden
+    if (hasSiblings && !hasVisibleContent) hideIf(label, true);
   });
 
   // P. Entire tab sections: hide tab button if section has no visible content
@@ -3619,7 +3614,7 @@ function hideEmptySections() {
     // Skip cards that are already hidden
     if (card.style.display === 'none') return;
     // Skip cards inside key structural sections — these have layouts worth showing even with partial data
-    if (card.closest('#sec-risk') || card.closest('#sec-room') || card.closest('#sec-financials') || card.closest('#sec-command') || card.closest('#sec-board')) return;
+    if (card.closest('#sec-risk') || card.closest('#sec-room') || card.closest('#sec-financials') || card.closest('#sec-command') || card.closest('#sec-board') || card.closest('#sec-management')) return;
     // Skip cards that contain interactive/structural elements
     if (card.querySelector('canvas') || card.querySelector('table') || card.querySelector('.dr-conv-grid') || card.querySelector('.risk-matrix-outer') || card.querySelector('.risk-table') || card.querySelector('.risk-dot-abs')) return;
     // Get all text content in the card
@@ -3630,12 +3625,17 @@ function hideEmptySections() {
   });
 
   // Hide section-labels that have NO visible sibling after them
+  // IMPORTANT: Do NOT use offsetHeight — it's 0 for elements in inactive tabs,
+  // which causes ALL headers in Management/Board tabs to be hidden incorrectly.
+  // Only check style.display to determine visibility.
   document.querySelectorAll('.section-label').forEach(function(label) {
+    // Never hide section labels inside Management or Board — they are structural
+    if (label.closest('#sec-management') || label.closest('#sec-board')) return;
     var hasVisibleSibling = false;
     var sib = label.nextElementSibling;
     while (sib) {
       if (sib.classList && sib.classList.contains('section-label')) break;
-      if (sib.style.display !== 'none' && sib.offsetHeight > 0) {
+      if (sib.style.display !== 'none') {
         hasVisibleSibling = true;
         break;
       }
@@ -3645,9 +3645,12 @@ function hideEmptySections() {
   });
 
   // Hide entire sub-grids (g2, g3, g7030) if all children hidden
+  // IMPORTANT: Do NOT use offsetHeight — it's 0 for elements in inactive tabs.
+  // Skip grids in key sections — these are structural even with pending data.
   document.querySelectorAll('.g2, .g3, .g7030').forEach(function(grid) {
+    if (grid.closest('#sec-management') || grid.closest('#sec-board') || grid.closest('#sec-risk')) return;
     var children = Array.from(grid.children);
-    var allHidden = children.every(function(c) { return c.style.display === 'none' || c.offsetHeight === 0; });
+    var allHidden = children.every(function(c) { return c.style.display === 'none'; });
     if (allHidden && children.length) hideIf(grid, true);
   });
 
@@ -4036,6 +4039,8 @@ function buildRisk(raw, mso, dash) {
   // Risk insights
   set('risk-insight-1', (dash.risk_exposure || 'HIGH') + ' risk exposure, ' + (dash.execution_complexity || 'HIGH') + ' execution complexity, feasibility: ' + (dash.strategic_feasibility || 'LOW') + '. See risk matrix for the most likely phase-halt triggers.');
   if (risks[0]) set('risk-insight-2', (risks[0].risk || '').substring(0, 180));
+  var highCount = risks.filter(function(r) { return r.impact === 'HIGH'; }).length;
+  set('risk-insight-3', 'Board owns ' + highCount + ' HIGH-impact risk exposures. Phase 2 capital remains frozen until all kill gate conditions clear. Governance framework requires Board sign-off before any capital releases.');
 
   // ── Risk Profile bucket-cards ──
   const highRisks = risks.filter(r => r.impact === 'HIGH');
@@ -4902,6 +4907,46 @@ if(cfEl){
       +"<div class='cf-body'><div class='cf-title'>"+c.t+"</div><div class='cf-desc'>"+c.d+"</div>"
       +"<div class='cf-gate'><div class='cf-gate-dot "+c.gc+"'></div><span>"+c.g+"</span></div></div></div>";
   }).join("");
+}
+// ── Management insight bar ──
+var killGates=CF?CF.filter(function(c){return c.gc==='kill';}):[];
+var firstAction=ROLES[0]&&ROLES[0].actions[0]?ROLES[0].actions[0].a:'Execute Phase 1 workstreams immediately';
+set('mgmt-insight-first', firstAction.substring(0,200) + (ROLES.length>1?' — plus '+(ROLES.length-1)+' parallel workstreams across all functions.':''));
+var critPathOwners=killGates.length?killGates.map(function(c){return c.r;}).join(', '):'CEO + CFO';
+set('mgmt-insight-owner', critPathOwners + ' own the critical path. Phase 2 capital is frozen until all kill gate conditions clear.');
+set('mgmt-insight-failure', 'Miss any kill gate deadline and Phase 2 freezes. ' + (killGates.length?killGates.length+' kill-gate dependencies':'Multiple dependencies') + ' must close simultaneously — one miss cascades.');
+// ── Populate Functional Mandates grid ──
+var mandatesGrid = document.getElementById('mgmt-mandates-grid');
+if (mandatesGrid && fmArr.length) {
+  mandatesGrid.querySelectorAll('.card[data-mandate-role]').forEach(function(card) {
+    var roleAttr = card.getAttribute('data-mandate-role');
+    var roleKeys = roleAttr.split(',');
+    var mandates = [];
+    roleKeys.forEach(function(rk) {
+      var fm = fmArr.find(function(f) { return f.role === rk; });
+      if (fm) {
+        var txt = fm.mandate || fm.description || '';
+        if (txt) mandates.push(txt);
+        var items = fm.items || fm.deliverables || fm.actions || [];
+        if (Array.isArray(items)) items.forEach(function(it) {
+          var s = typeof it === 'string' ? it : (it.item || it.action || it.description || '');
+          if (s) mandates.push(s);
+        });
+      }
+      // Also pull from the ROLES array if we have live data
+      var roleObj = ROLES.find(function(r) { return r.key === rk; });
+      if (roleObj && roleObj.mandate && !mandates.length) mandates.push(roleObj.mandate);
+      if (roleObj && roleObj.cond && mandates.length < 3) mandates.push('Condition: ' + roleObj.cond);
+    });
+    if (mandates.length) {
+      var listEl = card.querySelector('.mh-mandate-list');
+      if (listEl) {
+        listEl.innerHTML = mandates.slice(0, 5).map(function(m) {
+          return '<div class="mh-mandate-item"><span class="mh-mandate-dot"></span><span>' + m.substring(0, 200) + '</span></div>';
+        }).join('');
+      }
+    }
+  });
 }
 }
 

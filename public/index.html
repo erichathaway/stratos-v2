@@ -298,20 +298,20 @@ body{background:var(--bg-page);color:var(--text-primary);font-family:var(--font-
 .s-sidebar.collapsed .sb-tab[data-sec="management"].active{border-bottom-color:#3b82f6}
 .s-sidebar.collapsed .sb-tab[data-sec="board"].active{border-bottom-color:#7c3aed}
 .s-sidebar.collapsed .sb-tab[data-sec="market"].active{border-bottom-color:#14b8a6}
-.sb-section-head{font-family:var(--font-mono);font-size:var(--text-xs);font-weight:700;letter-spacing:var(--ls-lg);text-transform:uppercase;color:rgba(0,229,255,0.5);padding:var(--gap-lg) 14px var(--gap-xs);white-space:nowrap}
+.sb-section-head{font-family:var(--font-mono);font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:rgba(0,229,255,0.5);padding:var(--gap-lg) 14px var(--gap-xs);white-space:nowrap}
 .sb-meta-block{padding:var(--gap-sm) 14px;display:flex;flex-direction:column;gap:var(--gap-xs)}
 .sb-meta-row{display:flex;align-items:center;gap:var(--gap-sm);font-family:var(--font-mono);font-size:var(--font-10);color:var(--text-secondary);letter-spacing:var(--ls-xxs)}
 .sb-meta-val{color:var(--text-secondary);font-weight:600}
 .sb-audio-row,.sb-export-row{padding:var(--gap-xs) 14px;display:flex;flex-direction:column;gap:var(--gap-xs)}
-.sb-audio-link,.sb-export-link{display:flex;align-items:center;gap:var(--gap-sm);padding:6px 10px;border-radius:var(--r-md);font-family:var(--font-mono);font-size:var(--text-xs);font-weight:600;cursor:pointer;transition:color 200ms ease,background 200ms ease,text-shadow 200ms ease;background:none;border:none;text-align:left;white-space:nowrap}
+.sb-audio-link,.sb-export-link{display:flex;align-items:center;gap:var(--gap-sm);padding:6px 10px;border-radius:var(--r-md);font-family:var(--font-body);font-size:12px;font-weight:500;letter-spacing:0.02em;cursor:pointer;transition:color 200ms ease,background 200ms ease,text-shadow 200ms ease;background:none;border:none;text-align:left;white-space:nowrap}
 .sb-audio-link{color:rgba(16,185,129,0.6)}
 .sb-audio-link:hover{color:#10b981;background:rgba(16,185,129,0.08);text-shadow:0 0 6px rgba(16,185,129,0.25)}
 .sb-audio-link.playing{color:#10b981;background:rgba(16,185,129,0.1);text-shadow:0 0 8px rgba(16,185,129,0.3)}
 .sb-export-link{color:rgba(0,229,255,0.55)}
 .sb-export-link:hover{color:#00e5ff;background:rgba(0,229,255,0.08);text-shadow:0 0 6px rgba(0,229,255,0.2)}
-.sb-portal-link{display:flex;align-items:center;gap:var(--gap-sm);padding:8px 10px;border-radius:var(--r-md);font-family:var(--font-mono);font-size:var(--text-xs);font-weight:700;color:rgba(124,58,237,0.6);cursor:pointer;transition:color 200ms ease,background 200ms ease,text-shadow 200ms ease;text-decoration:none;letter-spacing:var(--ls-xs)}
+.sb-portal-link{display:flex;align-items:center;gap:var(--gap-sm);padding:8px 10px;border-radius:var(--r-md);font-family:var(--font-body);font-size:13px;font-weight:500;letter-spacing:0.02em;color:rgba(124,58,237,0.6);cursor:pointer;transition:color 200ms ease,background 200ms ease,text-shadow 200ms ease;text-decoration:none}
 .sb-portal-link:hover{color:rgba(124,58,237,0.95);background:rgba(124,58,237,0.06);text-shadow:0 0 8px rgba(124,58,237,0.25)}
-.sb-chat-link{display:flex;align-items:center;gap:var(--gap-sm);padding:8px 10px;border-radius:var(--r-md);font-family:var(--font-mono);font-size:var(--text-xs);font-weight:700;color:rgba(0,229,255,0.6);cursor:pointer;transition:color 200ms ease,background 200ms ease,text-shadow 200ms ease;background:none;border:none;text-align:left;letter-spacing:var(--ls-xs);white-space:nowrap}
+.sb-chat-link{display:flex;align-items:center;gap:var(--gap-sm);padding:8px 10px;border-radius:var(--r-md);font-family:var(--font-body);font-size:13px;font-weight:500;letter-spacing:0.02em;color:rgba(0,229,255,0.6);cursor:pointer;transition:color 200ms ease,background 200ms ease,text-shadow 200ms ease;background:none;border:none;text-align:left;white-space:nowrap}
 .sb-chat-link:hover{color:rgba(0,229,255,0.95);background:rgba(0,229,255,0.06);text-shadow:0 0 8px rgba(0,229,255,0.25)}
 .sb-bottom-section{margin-top:auto;padding-bottom:var(--gap-sm);flex-shrink:0}
 .sb-bottom-divider{height:1px;background:linear-gradient(90deg,transparent,var(--border-hover),transparent);margin:var(--gap-sm) 14px}
@@ -737,8 +737,8 @@ tcn-exit.show{display:block}
 #sec-financials {--tab-c:var(--teal)}
 
 #sec-room       {--tab-c:var(--amber)}
-#sec-management {--tab-c:var(--teal)}
-#sec-board      {--tab-c:var(--red)}
+#sec-management {--tab-c:#3b82f6}
+#sec-board      {--tab-c:#7c3aed}
 #sec-market     {--tab-c:var(--teal)}
 
 /* ib-wrap left border always reads --tab-c */
@@ -2517,7 +2517,7 @@ dep-item strong{display:block;font-family:var(--font-mono);font-size:var(--text-
     <div class="sb-tab" data-sec="room" onclick="switchTab(this)"><span class="sb-tab-icon">&#9673;</span><span class="sb-label">The Room &amp; Options</span></div>
     <div class="sb-tab" data-sec="management" onclick="switchTab(this)"><span class="sb-tab-icon">&#9654;</span><span class="sb-label">Management Handoff</span></div>
     <div class="sb-tab" data-sec="board" onclick="switchTab(this)"><span class="sb-tab-icon">&#9635;</span><span class="sb-label">Board Report</span></div>
-    <div class="sb-tab" data-sec="market" id="sb-tab-market" onclick="switchTab(this)" style="display:none"><span class="sb-tab-icon">&#128202;</span><span class="sb-label">Market Intel</span></div>
+    <div class="sb-tab" data-sec="market" id="sb-tab-market" onclick="switchTab(this)"><span class="sb-tab-icon">&#128202;</span><span class="sb-label">Market Intel</span></div>
   </nav>
   <div class="sb-divider"></div>
   <div class="sb-section-head">Audio</div>
@@ -2640,7 +2640,7 @@ dep-item strong{display:block;font-family:var(--font-mono);font-size:var(--text-
   <div class="tab" data-sec="room"><span class="tab-pip"></span>The Room &amp; Options</div>
   <div class="tab" data-sec="management"><span class="tab-pip"></span>Management Handoff</div>
   <div class="tab" data-sec="board"><span class="tab-pip"></span>Board Report</div>
-  <div class="tab" data-sec="market" id="tab-market" style="display:none"><span class="tab-pip"></span>Market Intel</div>
+  <div class="tab" data-sec="market" id="tab-market"><span class="tab-pip"></span>Market Intel</div>
 </nav>
 
 <!-- FLOATING PANELS -->
@@ -3910,7 +3910,7 @@ dep-item strong{display:block;font-family:var(--font-mono);font-size:var(--text-
 </div>
 
   <!-- MARKET INTELLIGENCE -->
-  <div class="s-section" id="sec-market" style="display:none">
+  <div class="s-section" id="sec-market" data-empty="1">
     <div style="text-align:center;padding:40px 20px;color:var(--text-muted)">
       <div style="font-size:32px;margin-bottom:8px">📊</div>
       <div style="font-size:14px">Market Intelligence loading...</div>
@@ -4378,9 +4378,9 @@ function applyDashboardConfig(roomType, hasMarketIntel) {
   var tabBar = document.querySelector('.tabs');
   if (!tabBar) return;
 
-  // Build ordered tab list — add market tab if data is present
+  // Build ordered tab list — always include market tab
   var orderedTabs = config.tabs.slice();
-  if (hasMarketIntel && orderedTabs.indexOf('market') === -1) {
+  if (orderedTabs.indexOf('market') === -1) {
     orderedTabs.push('market');
   }
 
@@ -4395,11 +4395,6 @@ function applyDashboardConfig(roomType, hasMarketIntel) {
   orderedTabs.forEach(function(secName) {
     var tabEl = tabEls[secName];
     if (tabEl) {
-      if (secName === 'market' && hasMarketIntel) {
-        tabEl.style.display = '';
-        var sbTabMarket = document.getElementById('sb-tab-market');
-        if (sbTabMarket) sbTabMarket.style.display = '';
-      }
       fragment.appendChild(tabEl);
       delete tabEls[secName];
     }
@@ -4464,8 +4459,7 @@ function applyLiveData(raw) {
     var miData = typeof mi === 'string' ? JSON.parse(mi) : mi;
     var miSections = miData.sections || {};
     var s = miData.structured || {};
-    var tabMarket = document.getElementById('tab-market');
-    if (tabMarket) tabMarket.style.display = '';
+    // Market tab is always visible; data population handles content
     var secMarket = document.getElementById('sec-market');
     if (secMarket) {
       function miMarkdown(text) {
@@ -4708,6 +4702,7 @@ function applyLiveData(raw) {
       if (miData.disclaimer) h += '<div style="font-size:9px;color:var(--text-muted);margin-top:16px;opacity:0.5">'+miData.disclaimer+'</div>';
 
       secMarket.innerHTML = h;
+      delete secMarket.dataset.empty;
     }
   }
 
@@ -5038,10 +5033,9 @@ function showUpsellCards(raw, bgp, dash) {
       row.appendChild(makeUpsell('\uD83D\uDD12', 'Audio Walkthroughs', 'Narrated section overviews available in Professional plan.', 'Learn more', 'https://stratos.lucidorg.com/pricing'));
     });
   }
-  // Market Intelligence: check if section has data
+  // Market Intelligence: show upsell if section has no real data
   var marketSec = document.getElementById('sec-market');
-  if (marketSec && marketSec.style.display === 'none') {
-    marketSec.style.display = '';
+  if (marketSec && marketSec.dataset.empty === '1') {
     marketSec.innerHTML = '';
     marketSec.appendChild(makeUpsell('\uD83D\uDCCA', 'Market Intelligence', 'Add competitive analysis, market signals, and regulatory tracking.', 'Add for $50', 'https://stratos.lucidorg.com/pricing'));
     marketSec.style.padding = '0 var(--page-pad-x)';

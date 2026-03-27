@@ -4343,7 +4343,14 @@ function applyLiveData(raw) {
   const bgp   = ob.board_governance_packet || {};
   const exec  = ob.executive_summary || {};
   const fm    = dash.financial_mechanics || {};
-  const gt    = dash.groupthink_flag || {};
+  // Groupthink: use dashboard flag, or infer from vote_split unanimity
+  var gt    = dash.groupthink_flag || {};
+  if (!gt.triggered && dash.vote_split) {
+    var vsKeys = Object.keys(dash.vote_split);
+    if (vsKeys.length === 1) {
+      gt = { triggered: true, severity: gt.severity || 'HIGH', reason: gt.reason || 'All roles voted unanimously (' + vsKeys[0].replace(/_/g,' ') + ') — potential groupthink' };
+    }
+  }
   const mso   = ob.machine_strategy_object || {};
   const dir   = ob.direction_package || {};
   const tl    = ob.timeline_visualization || {};
@@ -4627,7 +4634,8 @@ function applyLiveData(raw) {
   // \u2500\u2500 Header
   set('run-id-display', raw.run_id || 'RUN-...');
   set('mode-badge', dash.mode || 'ELT');
-  const maxRound = stages.reduce((mx,s) => Math.max(mx, s.round || 0), 0) + 1;
+  const dPkt = raw.dPacket || {};
+  const maxRound = dPkt.rounds_completed || (stages.reduce((mx,s) => Math.max(mx, s.round || 0), 0) + 1);
   const roleCount = [...new Set(stages.map(s => s.role_key).filter(Boolean))].length;
   set('rounds-display', maxRound + (maxRound === 1 ? ' ROUND' : ' ROUNDS'));
   set('roles-display', roleCount + ' ROLES');
@@ -4636,9 +4644,22 @@ function applyLiveData(raw) {
   const voteKey = Object.keys(dash.vote_split || {})[0] || '';
   set('v-word', voteKey.includes('APPROVE') ? 'Approved' : voteKey.includes('REJECT') ? 'Rejected' : 'Approved');
   set('v-sub', voteKey.includes('CONDITIONS') ? 'With Conditions' : '');
-  const citCount = (dash.all_citations || []).length;
+  const allCitations = dash.all_citations || [];
+  const citCount = allCitations.length;
   set('v-chip-sources', (citCount || 70) + ' Sources Cited');
-  set('v-chip-gap', 'Gap Score ' + (dash.research_gap_score || 8) + '/10');
+  // Evidence summary: populate cmd-insight-3 fallback if no conditions data
+  if (citCount && !exec.top_conditions?.length && !dash.all_conditions?.length) {
+    var evidSnippets = allCitations.slice(0,3).map(function(c) { return typeof c === 'string' ? c : (c.text || c.title || c.source || ''); }).filter(Boolean);
+    if (evidSnippets.length) set('cmd-insight-3', citCount + ' sources cited. Top evidence: ' + evidSnippets.join('; ').substring(0, 200));
+  }
+  // Gap score: prefer dashboard value, else compute completeness from section data presence
+  var gapScore = dash.research_gap_score;
+  if (gapScore == null) {
+    var gapSections = [ob.executive_summary, ob.board_governance_packet, ob.machine_strategy_object, ob.direction_package, ob.timeline_visualization, dash.financial_mechanics, ob.option_set || ob.option_set_thin, dash.vote_split, dash.all_citations, dash.role_assessment_preview];
+    var gapFilled = gapSections.filter(function(s) { return s && (Array.isArray(s) ? s.length > 0 : Object.keys(s).length > 0); }).length;
+    gapScore = gapFilled;
+  }
+  set('v-chip-gap', 'Gap Score ' + gapScore + '/10');
   const band = (dash.confidence_range?.max || 72) - (dash.confidence_range?.min || 62);
   set('v-chip-band', band + '% Conf Band');
 
@@ -4693,8 +4714,18 @@ function applyLiveData(raw) {
   // \u2500\u2500 Stat cards \u2014 update nc-group datasets + displayed values
   const voteTotal = Object.values(dash.vote_split || {})[0] || 7;
   const conf = dash.decision_confidence || 67;
-  const confMin = dash.confidence_range?.min || 62;
-  const confMax = dash.confidence_range?.max || 72;
+  // Confidence band: prefer dashboard.confidence_range, fallback to computing from role_packets or role_assessment_preview
+  var confMin = dash.confidence_range?.min;
+  var confMax = dash.confidence_range?.max;
+  if (confMin == null || confMax == null) {
+    var dp = raw.dPacket || {};
+    var roleConfs = (dp.role_packets || dp.role_packets_slim || dash.role_assessment_preview || [])
+      .map(function(r) { var c = r.confidence_score || r.confidence || 0; return c > 1 ? c : Math.round(c * 100); })
+      .filter(function(c) { return c > 0; });
+    if (!roleConfs.length) roleConfs = stages.filter(function(s) { return s.round === 2; }).map(function(s) { var c = s.confidence_score || 0; return c > 1 ? c : Math.round(c * 100); }).filter(function(c) { return c > 0; });
+    confMin = roleConfs.length ? Math.min.apply(null, roleConfs) : 62;
+    confMax = roleConfs.length ? Math.max.apply(null, roleConfs) : 72;
+  }
 
   document.querySelectorAll('.nc-group').forEach(g => {
     const nc = g.querySelector('.num-cite');
@@ -4710,11 +4741,15 @@ function applyLiveData(raw) {
       if (valEl) valEl.textContent = conf;
       syncDataset({ val: conf + '%', source: 'dashboard.decision_confidence', note: 'Range ' + confMin + '\u2013' + confMax + '%. Groupthink: ' + (gt.severity || 'HIGH') + '.' });
     } else if (lbl === 'Total Capital') {
-      if (valEl) valEl.textContent = (fm.total_investment || '—').replace(/[^0-9]/g, '') || '—';
-      syncDataset({ val: fm.total_investment || '—', source: 'financial_mechanics.total_investment', note: fm.mechanics_summary || 'Phase-gated. Board approval required.' });
+      const capVal = fm.total_investment || fm.capital_required || (bgp.financial_overview && bgp.financial_overview.total_budget) || '—';
+      if (valEl) valEl.textContent = (capVal || '—').toString().replace(/[^0-9$.,KMBkmb]/g, '') || '—';
+      syncDataset({ val: capVal || '—', source: fm.total_investment ? 'financial_mechanics.total_investment' : 'board_governance_packet.financial_overview.total_budget', note: fm.mechanics_summary || 'Phase-gated. Board approval required.' });
     } else if (lbl === 'Kill Gates') {
+      const hardGates = Array.isArray(tl.hard_gates) ? tl.hard_gates : Object.values(tl.hard_gates || {});
+      const killCount = hardGates.length || (Array.isArray(bgp.kill_criteria) ? bgp.kill_criteria.length : 0);
+      if (valEl && killCount) valEl.textContent = killCount;
       const killTxt = typeof bgp.kill_criteria_summary === 'string' ? bgp.kill_criteria_summary : '';
-      syncDataset({ note: killTxt.substring(0, 160) || 'Board-enforced stop points.' });
+      syncDataset({ val: killCount ? String(killCount) : '—', note: killTxt.substring(0, 160) || (killCount + ' board-enforced stop points.') });
     } else if (lbl === 'Open Questions') {
       const oqSrc = (exec.top_conditions && exec.top_conditions.length) ? exec.top_conditions : (dash.all_conditions || []);
       const oqCount = oqSrc.length || 3;
@@ -4749,7 +4784,7 @@ function applyLiveData(raw) {
   if (bvEl) { var ncP = bvEl.closest('.num-cite'); if (ncP) { ncP.dataset.val = voteTotal + '/' + voteTotal; ncP.dataset.note = 'All ' + voteTotal + ' roles voted ' + voteKey.replace(/_/g,' ') + '.'; } }
   var bcEl = el('brief-conf-num');
   if (bcEl) { var ncP2 = bcEl.closest('.num-cite'); if (ncP2) { ncP2.dataset.val = conf + '%'; ncP2.dataset.note = 'Range ' + confMin + '\u2013' + confMax + '%. Groupthink: ' + (gt.severity || 'HIGH') + '.'; } }
-  var fmTotal = fm.total_investment || fm.capital_required || '';
+  var fmTotal = fm.total_investment || fm.capital_required || (bgp.financial_overview && bgp.financial_overview.total_budget) || '';
   var briefCapEl = el('brief-capital-chip');
   if (briefCapEl && fmTotal) briefCapEl.textContent = fmTotal;
 
@@ -4780,7 +4815,7 @@ function applyLiveData(raw) {
   // -- TIMELINE: populate from milestones or phases fallback
   var tlEl = document.getElementById('risk-timeline');
   if (tlEl && tl) {
-    var tlMilestones = tl.milestones || [];
+    var tlMilestones = (tl.milestones && tl.milestones.length ? tl.milestones : null) || (mso.milestones && mso.milestones.length ? mso.milestones : null) || (dir.strategic_milestones && dir.strategic_milestones.length ? dir.strategic_milestones : null) || [];
     var tlPhases2 = tl.phases || [];
     var tlGates2 = Array.isArray(tl.hard_gates) ? tl.hard_gates : Object.values(tl.hard_gates || {});
     var tlRows = [];
@@ -4885,7 +4920,7 @@ function hideEmptySections() {
   // (tab starts display:none and is shown by applyLiveData when marketIntelBlob exists)
 }
 
-function buildBriefingPanels(exec,dir,dash,bgp,fm,mso,stages,voteTotal,maxRound,optId,optName,raw){var conditions=exec.top_conditions||[];var killCriteria=bgp.kill_criteria||bgp.kill_gates||(Array.isArray(bgp.kill_criteria_summary)?bgp.kill_criteria_summary:[]); if(!killCriteria.length&&typeof bgp.kill_criteria_summary==='string'&&bgp.kill_criteria_summary){killCriteria=bgp.kill_criteria_summary.split(/[;\n]/).filter(Boolean).map(function(s){return s.trim();});}var candidates=dir.decision_candidates||[];var milestones=dir.strategic_milestones||[];var risksList=Array.isArray(mso.risks)?mso.risks:Object.values(mso.risks||{});var conf=dash.decision_confidence||67;var p1=fm.phase_1_immediate||'—';var p2=fm.phase_2_gated||'—';var dp=document.getElementById('brief-panel-decision');if(dp){var leadText='The ELT approved '+optId+': '+optName;if(p1)leadText+=' \u2014 '+p1+' phases immediately.';if(p2)leadText+=' The remaining '+p2+' is gated on milestone completion.';var condRows=conditions.map(function(c,i){var txt=typeof c==='string'?c:(c.condition||c.text||c.name||'');return'<div class="bit-row"><span class="bit-row-icon" data-c="amber">'+String(i+1).padStart(2,'0')+'</span>'+txt+'</div>';}).join('');var killRows=killCriteria.map(function(k){var txt=typeof k==='string'?k:(k.criterion||k.condition||k.description||k.text||k.name||'');var owner=typeof k==='object'?(k.role||k.owner||''):'';var short=txt.length>90?txt.substring(0,87)+'\u2026':txt;return'<div class="bit-row"><span class="bit-row-icon" data-c="red">\u2715</span>'+short+(owner?' <span style="color:var(--text-muted);font-size:var(--font-9)">\u2014 '+owner+'</span>':'')+'</div>';}).join('');dp.innerHTML='<p class="bit-lead">'+leadText+'</p><div class="bit-grid"><div><div class="bit-col-head" data-c="amber"><span class="bit-col-head-bar"></span>'+conditions.length+' Condition'+(conditions.length!==1?'s':'')+'</div><div class="bit-rows">'+(condRows||'<div class="bit-row">No conditions specified</div>')+'</div></div><div><div class="bit-col-head" data-c="red"><span class="bit-col-head-bar"></span>'+killCriteria.length+' Kill Criteri'+(killCriteria.length===1?'on':'a')+'</div><div class="bit-rows">'+(killRows||'<div class="bit-row">No kill criteria specified</div>')+'</div></div></div><div class="bit-chips">'+(bgp.requires_board_approval!==false?'<span class="chip chip-amber">Board Auth. Required</span>':'')+'<span class="chip chip-blue">'+optId+': '+optName+'</span></div>';}var up=document.getElementById('brief-panel-upside');if(up){var topActions=exec.top_actions||exec.top_3_actions||[];var chosenOpt=null;var ob=raw&&raw.outputBlob||{};var osData=ob.option_set||ob.option_set_thin||{};var osArr=osData.option_set||osData;if(Array.isArray(osArr)){chosenOpt=osArr.find(function(o){return o.option_id===optId;})||null;}if(!chosenOpt){var dcArr=dir.decision_candidates||[];chosenOpt=dcArr.find(function(c){return(c.option_id||c.id)===optId;})||null;}var chosenBenefits=(chosenOpt&&chosenOpt.benefits)||[];var finRows='';var fmScens=fm.scenarios||{};var ltvN=parseFloat((fm.ltv_target||fm.ltv_per_customer||'175').toString().replace(/[^0-9.]/g,''))||175;var tgtLogos=(fm.target_customers||fmScens.base_logos||3);var baseRev=fmScens.base_revenue||Math.round(ltvN*tgtLogos);if(baseRev)finRows+='<div class="bit-row"><span class="bit-row-icon" data-c="teal">+</span>$'+baseRev+'K base-case revenue ('+tgtLogos+' logos at $'+Math.round(ltvN)+'K LTV)</div>';if(fm.revenue_target)finRows+='<div class="bit-row"><span class="bit-row-icon" data-c="teal">+</span>'+fm.revenue_target+'</div>';var ratio=fm.ltv_cac_ratio;if(!ratio&&ltvN){var cacN=parseFloat((fm.cac_threshold||'50').toString().replace(/[^0-9.]/g,''))||50;if(cacN>0)ratio=(ltvN/cacN).toFixed(1)+'x';}if(ratio)finRows+='<div class="bit-row"><span class="bit-row-icon" data-c="teal">+</span>LTV/CAC: '+ratio+'</div>';if(fm.total_investment)finRows+='<div class="bit-row"><span class="bit-row-icon" data-c="teal">+</span>Total investment: '+fm.total_investment+' ('+p1+' Phase 1, '+p2+' gated)</div>';if(!finRows){if(p1)finRows+='<div class="bit-row"><span class="bit-row-icon" data-c="teal">+</span>'+p1+' Phase 1 limits downside, '+p2+' gated on milestones</div>';else finRows='<div class="bit-row"><span class="bit-row-icon" data-c="teal">+</span>Financial details pending</div>';}var growthRows='';if(chosenBenefits.length){growthRows=chosenBenefits.slice(0,4).map(function(b){var txt=typeof b==='string'?b:(b.benefit||b.description||b.text||'');return'<div class="bit-row"><span class="bit-row-icon" data-c="purple">+</span>'+txt+'</div>';}).join('');}if(!growthRows&&topActions.length){growthRows=topActions.slice(0,4).map(function(a){var txt=typeof a==='string'?a:(a.action||a.text||a.name||'');return'<div class="bit-row"><span class="bit-row-icon" data-c="purple">+</span>'+txt+'</div>';}).join('');}if(!growthRows&&risksList.length){growthRows=risksList.slice(0,4).map(function(r){var txt=typeof r==='string'?r:(r.risk||r.description||r.text||'');return'<div class="bit-row"><span class="bit-row-icon" data-c="purple">+</span>Mitigating: '+txt+'</div>';}).join('');}if(!growthRows)growthRows='<div class="bit-row"><span class="bit-row-icon" data-c="purple">+</span>Strategic growth drivers pending analysis</div>';var upsideLead=(dir.strategic_narrative||bgp.strategic_rationale||fm.mechanics_summary||'Approved option unlocks phased execution with controlled downside.').substring(0,200);up.innerHTML='<p class="bit-lead">'+upsideLead+'</p><div class="bit-grid"><div><div class="bit-col-head" data-c="teal"><span class="bit-col-head-bar"></span>Revenue Opportunity</div><div class="bit-rows">'+finRows+'</div></div><div><div class="bit-col-head" data-c="purple"><span class="bit-col-head-bar"></span>Strategic Value</div><div class="bit-rows">'+growthRows+'</div></div></div>';}var wp=document.getElementById('brief-panel-why');if(wp){var approvedId=dash.approved_option_id||optId;var optRows=candidates.map(function(c){var cId=c.option_id||c.id||'';var cName=c.option_name||c.name||'';var isApproved=cId===approvedId;var rowClass=isApproved?'':' muted';var iconC=isApproved?'teal-strike':'muted-strike';var label=cName;if(isApproved)label+=' \u2014 approved '+voteTotal+'/'+voteTotal;else if(c.rejection_reason)label+=' \u2014 '+c.rejection_reason;return'<div class="bit-row'+rowClass+'"><span class="bit-row-icon" data-c="'+iconC+'">'+cId+'</span>'+label+'</div>';}).join('');if(!optRows)optRows='<div class="bit-row"><span class="bit-row-icon" data-c="teal-strike">'+optId+'</span>'+optName+' \u2014 approved '+voteTotal+'/'+voteTotal+'</div>';var mileRows=milestones.slice(0,5).map(function(m,i){var txt=(m.milestone||m.name||m.text||'')+(m.owner?' \u2014 '+m.owner:'')+(m.deadline?' by '+m.deadline:'');return'<div class="bit-row"><span class="bit-row-icon" data-c="blue">'+(i+1)+'</span>'+txt+'</div>';}).join('');if(!mileRows)mileRows='<div class="bit-row"><span class="bit-row-icon" data-c="blue">1</span>Milestones will be generated from governance review</div>';var whyLead=optId+' was selected at '+conf+'% confidence across '+maxRound+' rounds \u2014 voted '+voteTotal+'/'+voteTotal+'.';if(bgp.strategic_rationale)whyLead=bgp.strategic_rationale.substring(0,200);wp.innerHTML='<p class="bit-lead">'+whyLead+'</p><div class="bit-grid"><div><div class="bit-col-head" data-c="muted"><span class="bit-col-head-bar"></span>Options Weighed</div><div class="bit-rows">'+optRows+'</div></div><div><div class="bit-col-head" data-c="blue"><span class="bit-col-head-bar"></span>Next Milestones</div><div class="bit-rows">'+mileRows+'</div></div></div>';}}
+function buildBriefingPanels(exec,dir,dash,bgp,fm,mso,stages,voteTotal,maxRound,optId,optName,raw){var conditions=exec.top_conditions||[];var killCriteria=bgp.kill_criteria||bgp.kill_gates||(Array.isArray(bgp.kill_criteria_summary)?bgp.kill_criteria_summary:[]); if(!killCriteria.length&&typeof bgp.kill_criteria_summary==='string'&&bgp.kill_criteria_summary){killCriteria=bgp.kill_criteria_summary.split(/[;\n]/).filter(Boolean).map(function(s){return s.trim();});}var candidates=dir.decision_candidates||[];var milestones=(dir.strategic_milestones&&dir.strategic_milestones.length?dir.strategic_milestones:null)||(mso.milestones&&mso.milestones.length?mso.milestones:null)||(dir.strategic_objectives&&dir.strategic_objectives.length?dir.strategic_objectives.map(function(o){return typeof o==='string'?{milestone:o}:o;}):null)||(mso.strategic_objectives&&mso.strategic_objectives.length?mso.strategic_objectives.map(function(o){return typeof o==='string'?{milestone:o}:o;}):null)||[];var risksList=Array.isArray(mso.risks)?mso.risks:Object.values(mso.risks||{});var conf=dash.decision_confidence||67;var p1=fm.phase_1_immediate||'—';var p2=fm.phase_2_gated||'—';var dp=document.getElementById('brief-panel-decision');if(dp){var leadText='The ELT approved '+optId+': '+optName;if(p1)leadText+=' \u2014 '+p1+' phases immediately.';if(p2)leadText+=' The remaining '+p2+' is gated on milestone completion.';var condRows=conditions.map(function(c,i){var txt=typeof c==='string'?c:(c.condition||c.text||c.name||'');return'<div class="bit-row"><span class="bit-row-icon" data-c="amber">'+String(i+1).padStart(2,'0')+'</span>'+txt+'</div>';}).join('');var killRows=killCriteria.map(function(k){var txt=typeof k==='string'?k:(k.criterion||k.condition||k.description||k.text||k.name||'');var owner=typeof k==='object'?(k.role||k.owner||''):'';var short=txt.length>90?txt.substring(0,87)+'\u2026':txt;return'<div class="bit-row"><span class="bit-row-icon" data-c="red">\u2715</span>'+short+(owner?' <span style="color:var(--text-muted);font-size:var(--font-9)">\u2014 '+owner+'</span>':'')+'</div>';}).join('');dp.innerHTML='<p class="bit-lead">'+leadText+'</p><div class="bit-grid"><div><div class="bit-col-head" data-c="amber"><span class="bit-col-head-bar"></span>'+conditions.length+' Condition'+(conditions.length!==1?'s':'')+'</div><div class="bit-rows">'+(condRows||'<div class="bit-row">No conditions specified</div>')+'</div></div><div><div class="bit-col-head" data-c="red"><span class="bit-col-head-bar"></span>'+killCriteria.length+' Kill Criteri'+(killCriteria.length===1?'on':'a')+'</div><div class="bit-rows">'+(killRows||'<div class="bit-row">No kill criteria specified</div>')+'</div></div></div><div class="bit-chips">'+(bgp.requires_board_approval!==false?'<span class="chip chip-amber">Board Auth. Required</span>':'')+'<span class="chip chip-blue">'+optId+': '+optName+'</span></div>';}var up=document.getElementById('brief-panel-upside');if(up){var topActions=exec.top_actions||exec.top_3_actions||[];var chosenOpt=null;var ob=raw&&raw.outputBlob||{};var osData=ob.option_set||ob.option_set_thin||{};var osArr=osData.option_set||osData;if(Array.isArray(osArr)){chosenOpt=osArr.find(function(o){return o.option_id===optId;})||null;}if(!chosenOpt){var dcArr=dir.decision_candidates||[];chosenOpt=dcArr.find(function(c){return(c.option_id||c.id)===optId;})||null;}var chosenBenefits=(chosenOpt&&chosenOpt.benefits)||[];var finRows='';var fmScens=fm.scenarios||{};var ltvN=parseFloat((fm.ltv_target||fm.ltv_per_customer||'175').toString().replace(/[^0-9.]/g,''))||175;var tgtLogos=(fm.target_customers||fmScens.base_logos||3);var baseRev=fmScens.base_revenue||Math.round(ltvN*tgtLogos);if(baseRev)finRows+='<div class="bit-row"><span class="bit-row-icon" data-c="teal">+</span>$'+baseRev+'K base-case revenue ('+tgtLogos+' logos at $'+Math.round(ltvN)+'K LTV)</div>';if(fm.revenue_target)finRows+='<div class="bit-row"><span class="bit-row-icon" data-c="teal">+</span>'+fm.revenue_target+'</div>';var ratio=fm.ltv_cac_ratio;if(!ratio&&ltvN){var cacN=parseFloat((fm.cac_threshold||'50').toString().replace(/[^0-9.]/g,''))||50;if(cacN>0)ratio=(ltvN/cacN).toFixed(1)+'x';}if(ratio)finRows+='<div class="bit-row"><span class="bit-row-icon" data-c="teal">+</span>LTV/CAC: '+ratio+'</div>';if(fm.total_investment)finRows+='<div class="bit-row"><span class="bit-row-icon" data-c="teal">+</span>Total investment: '+fm.total_investment+' ('+p1+' Phase 1, '+p2+' gated)</div>';if(!finRows){if(p1)finRows+='<div class="bit-row"><span class="bit-row-icon" data-c="teal">+</span>'+p1+' Phase 1 limits downside, '+p2+' gated on milestones</div>';else finRows='<div class="bit-row"><span class="bit-row-icon" data-c="teal">+</span>Financial details pending</div>';}var growthRows='';if(chosenBenefits.length){growthRows=chosenBenefits.slice(0,4).map(function(b){var txt=typeof b==='string'?b:(b.benefit||b.description||b.text||'');return'<div class="bit-row"><span class="bit-row-icon" data-c="purple">+</span>'+txt+'</div>';}).join('');}if(!growthRows&&topActions.length){growthRows=topActions.slice(0,4).map(function(a){var txt=typeof a==='string'?a:(a.action||a.text||a.name||'');return'<div class="bit-row"><span class="bit-row-icon" data-c="purple">+</span>'+txt+'</div>';}).join('');}if(!growthRows&&risksList.length){growthRows=risksList.slice(0,4).map(function(r){var txt=typeof r==='string'?r:(r.risk||r.description||r.text||'');return'<div class="bit-row"><span class="bit-row-icon" data-c="purple">+</span>Mitigating: '+txt+'</div>';}).join('');}if(!growthRows)growthRows='<div class="bit-row"><span class="bit-row-icon" data-c="purple">+</span>Strategic growth drivers pending analysis</div>';var upsideLead=(dir.strategic_narrative||bgp.strategic_rationale||fm.mechanics_summary||'Approved option unlocks phased execution with controlled downside.').substring(0,200);up.innerHTML='<p class="bit-lead">'+upsideLead+'</p><div class="bit-grid"><div><div class="bit-col-head" data-c="teal"><span class="bit-col-head-bar"></span>Revenue Opportunity</div><div class="bit-rows">'+finRows+'</div></div><div><div class="bit-col-head" data-c="purple"><span class="bit-col-head-bar"></span>Strategic Value</div><div class="bit-rows">'+growthRows+'</div></div></div>';}var wp=document.getElementById('brief-panel-why');if(wp){var approvedId=dash.approved_option_id||optId;var optRows=candidates.map(function(c){var cId=c.option_id||c.id||'';var cName=c.option_name||c.name||'';var isApproved=cId===approvedId;var rowClass=isApproved?'':' muted';var iconC=isApproved?'teal-strike':'muted-strike';var label=cName;if(isApproved)label+=' \u2014 approved '+voteTotal+'/'+voteTotal;else if(c.rejection_reason)label+=' \u2014 '+c.rejection_reason;return'<div class="bit-row'+rowClass+'"><span class="bit-row-icon" data-c="'+iconC+'">'+cId+'</span>'+label+'</div>';}).join('');if(!optRows)optRows='<div class="bit-row"><span class="bit-row-icon" data-c="teal-strike">'+optId+'</span>'+optName+' \u2014 approved '+voteTotal+'/'+voteTotal+'</div>';var mileRows=milestones.slice(0,5).map(function(m,i){var txt=(m.milestone||m.name||m.text||'')+(m.owner?' \u2014 '+m.owner:'')+(m.deadline?' by '+m.deadline:'');return'<div class="bit-row"><span class="bit-row-icon" data-c="blue">'+(i+1)+'</span>'+txt+'</div>';}).join('');if(!mileRows)mileRows='<div class="bit-row"><span class="bit-row-icon" data-c="blue">1</span>Milestones will be generated from governance review</div>';var whyLead=optId+' was selected at '+conf+'% confidence across '+maxRound+' rounds \u2014 voted '+voteTotal+'/'+voteTotal+'.';if(bgp.strategic_rationale)whyLead=bgp.strategic_rationale.substring(0,200);wp.innerHTML='<p class="bit-lead">'+whyLead+'</p><div class="bit-grid"><div><div class="bit-col-head" data-c="muted"><span class="bit-col-head-bar"></span>Options Weighed</div><div class="bit-rows">'+optRows+'</div></div><div><div class="bit-col-head" data-c="blue"><span class="bit-col-head-bar"></span>Next Milestones</div><div class="bit-rows">'+mileRows+'</div></div></div>';}}
 
 function buildBucketData(raw) {
   const stages = raw.stageOutputs || [];
@@ -5024,9 +5059,14 @@ function buildCommandCenter(raw, tl, dir, exec, fm, mso) {
   // Approved option badge
   set('cmd-option-badge', dash.approved_option_id ? dash.approved_option_id + ': ' + (dir?.chosen_option_name||dash.approved_option_label||'Selected Option') : 'Selected Option');
 
-  // Insight text
+  // Insight text — strategic wins with fallbacks
+  const stratWins = (Array.isArray(dash.strategic_wins) && dash.strategic_wins.length) ? dash.strategic_wins
+    : (Array.isArray(dir.strategic_objectives) && dir.strategic_objectives.length) ? dir.strategic_objectives
+    : (Array.isArray(mso.strategic_objectives) && mso.strategic_objectives.length) ? mso.strategic_objectives : [];
   const tlPhases = tl?.phases || [];
-  if (tlPhases[0] && tlPhases[1]) set('cmd-insight-1', tlPhases[0].phase_name+' ('+tlPhases[0].estimated_duration+') through initial approvals and compliance. '+tlPhases[1].phase_name+' ('+tlPhases[1].estimated_duration+') targets execution launch.');
+  if (stratWins.length) {
+    set('cmd-insight-1', stratWins.slice(0,3).map(function(w) { return typeof w === 'string' ? w : (w.objective || w.win || w.description || w.name || ''); }).filter(Boolean).join('. '));
+  } else if (tlPhases[0] && tlPhases[1]) set('cmd-insight-1', tlPhases[0].phase_name+' ('+tlPhases[0].estimated_duration+') through initial approvals and compliance. '+tlPhases[1].phase_name+' ('+tlPhases[1].estimated_duration+') targets execution launch.');
   else if (tlPhases[0]) set('cmd-insight-1', tlPhases[0].phase_name + (tlPhases[0].estimated_duration ? ' (' + tlPhases[0].estimated_duration + ')' : '') + ' — ' + (tlPhases[0].description || 'single-phase execution plan. Additional phases pending governance review.'));
   const tlGates = Array.isArray(tl?.hard_gates) ? tl.hard_gates : Object.values(tl?.hard_gates||{});
   const g1 = tlGates.find(g => g.gate_id==='G1');
@@ -5553,7 +5593,7 @@ if(arcEl){var offset=201-Math.round(201*(avgConf/100));arcEl.setAttribute("strok
 var confs=so.filter(function(s){return s.round===2;}).map(function(s){return Math.round((s.confidence_score||0.65)*100);});
 if(confs.length){var mn=Math.min.apply(null,confs),mx=Math.max.apply(null,confs);set("dr-conf-range",mn+"–"+mx+"%");}
 // Outcome stats
-var rounds=Object.keys(byRound).length;
+var rounds=dp.rounds_completed||Object.keys(byRound).length;
 set("dr-rounds-val",rounds);
 set("dr-gt-val",(gtFlag.severity||gt.severity||"HIGH"));
 var r2Voters=so.filter(function(s){return s.round===2&&s.role_key!=='SYSTEM';}).length||7;
@@ -6340,8 +6380,18 @@ function buildBoard(raw, bgp, dash, gt) {
       } else if (dr && typeof dr === 'string' && dr.trim()) {
         drText = dr;
       } else {
-        var gtSev = (gt && (gt.severity || (gt.triggered ? 'HIGH' : ''))) || (dash.groupthink_flag && (dash.groupthink_flag.severity || (dash.groupthink_flag.triggered ? 'HIGH' : ''))) || '';
-        drText = 'No formal dissent recorded' + (gtSev ? ' \u2014 ' + gtSev + ' groupthink risk flagged' : ' \u2014 unanimous with conditions');
+        // Fallback: compute dissent from stageOutputs — roles that voted differently from majority
+        var stgR2 = (raw.stageOutputs || []).filter(function(s) { return s.round === 2 && s.role_key !== 'SYSTEM'; });
+        var voteTally = {};
+        stgR2.forEach(function(s) { var v = s.vote || s.stance || 'APPROVE'; voteTally[v] = (voteTally[v] || 0) + 1; });
+        var majorityVote = Object.keys(voteTally).reduce(function(a, b) { return voteTally[a] > voteTally[b] ? a : b; }, '');
+        var dissenters = stgR2.filter(function(s) { return (s.vote || s.stance || 'APPROVE') !== majorityVote; });
+        if (dissenters.length) {
+          drText = dissenters.length + ' role(s) dissented: ' + dissenters.map(function(s) { return s.role_key + ' voted ' + (s.vote || s.stance); }).join(', ');
+        } else {
+          var gtSev = (gt && (gt.severity || (gt.triggered ? 'HIGH' : ''))) || (dash.groupthink_flag && (dash.groupthink_flag.severity || (dash.groupthink_flag.triggered ? 'HIGH' : ''))) || '';
+          drText = 'No formal dissent recorded' + (gtSev ? ' \u2014 ' + gtSev + ' groupthink risk flagged' : ' \u2014 unanimous with conditions');
+        }
       }
       govItems.push({label: 'Dissent Record', val: drText});
     }

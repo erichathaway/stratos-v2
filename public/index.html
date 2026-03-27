@@ -6286,7 +6286,19 @@ function toggleAudio(id) {
     if (apAudio) {
       apAudio.style.display = 'block';
       apAudio.src = af.url;
-      apAudio.play().catch(function(){});
+      // Handle tiny/corrupt audio files that fail to load or play
+      apAudio.onerror = function() {
+        _syncBtns(id, false);
+        if (apLabel) apLabel.textContent = af.label + ' — audio unavailable (file may be corrupted)';
+        var btn = document.querySelector('.ib-audio[onclick="toggleAudio(\'' + id + '\')"]');
+        if (btn) { btn.style.opacity = '0.5'; btn.title = 'Audio file may be corrupted or too small to play'; }
+      };
+      apAudio.play().catch(function(err){
+        _syncBtns(id, false);
+        if (apLabel) apLabel.textContent = af.label + ' — audio could not be played';
+        var btn2 = document.querySelector('.ib-audio[onclick="toggleAudio(\'' + id + '\')"]');
+        if (btn2) { btn2.style.opacity = '0.5'; btn2.title = 'Audio file may be corrupted or too small to play'; }
+      });
     }
     _syncBtns(id, true);
     return;

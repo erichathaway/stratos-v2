@@ -2298,6 +2298,126 @@ dep-item strong{display:block;font-family:var(--font-mono);font-size:var(--font-
   .card-body{padding:var(--gap-md)}
   .card-head{padding:var(--gap-sm) var(--gap-md)}
 }
+
+/* ── 34  MARKET INTEL — consulting-grade redesign ───────────────────────── */
+.mi-exec-summary{
+  background:linear-gradient(135deg,rgba(6,182,212,0.06),rgba(91,156,246,0.03));
+  border:1px solid rgba(6,182,212,0.15);border-radius:12px;padding:24px 28px;margin-bottom:20px;
+}
+.mi-exec-summary .mi-pos-stmt{font-size:14px;color:var(--text-primary);line-height:1.75;font-weight:400}
+.mi-exec-summary .mi-pos-stmt strong{color:var(--teal);font-weight:600}
+
+.mi-metrics-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.mi-metric{background:var(--bg-surface);border:1px solid var(--border);border-radius:12px;padding:18px 16px;text-align:center;position:relative;overflow:hidden}
+.mi-metric::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.mi-metric[data-accent="teal"]::before{background:var(--teal)}
+.mi-metric[data-accent="blue"]::before{background:var(--blue)}
+.mi-metric[data-accent="amber"]::before{background:var(--amber)}
+.mi-metric[data-accent="purple"]::before{background:var(--purple)}
+.mi-metric[data-accent="red"]::before{background:var(--red)}
+.mi-metric[data-accent="green"]::before{background:var(--green)}
+.mi-metric-label{font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-muted);margin-bottom:6px;font-weight:600}
+.mi-metric-value{font-size:26px;font-weight:900;color:var(--text-primary);line-height:1.1}
+.mi-metric-sub{font-size:11px;color:var(--text-secondary);margin-top:4px;font-weight:500}
+
+/* Competitor cards grid */
+.mi-comp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin-bottom:20px}
+.mi-comp-card{background:var(--bg-surface);border:1px solid var(--border);border-radius:12px;padding:16px 18px;transition:border-color var(--t-fast) var(--ease)}
+.mi-comp-card:hover{border-color:var(--border-hover)}
+.mi-comp-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.mi-comp-name{font-size:14px;font-weight:700;color:var(--text-primary)}
+.mi-comp-threat{font-size:9px;padding:3px 8px;border-radius:20px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px}
+.mi-comp-threat[data-level="high"]{background:rgba(232,96,96,0.12);color:var(--red);border:1px solid rgba(232,96,96,0.25)}
+.mi-comp-threat[data-level="medium"]{background:rgba(240,160,48,0.12);color:var(--amber);border:1px solid rgba(240,160,48,0.25)}
+.mi-comp-threat[data-level="low"]{background:rgba(38,200,176,0.12);color:var(--teal);border:1px solid rgba(38,200,176,0.25)}
+.mi-comp-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px}
+.mi-comp-stat-label{font-size:9px;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted)}
+.mi-comp-stat-val{font-size:13px;font-weight:700;color:var(--text-primary)}
+.mi-comp-strength{font-size:11px;color:var(--text-secondary);line-height:1.5;border-top:1px solid var(--border);padding-top:8px}
+
+/* CSS-only bar chart */
+.mi-bar-chart{display:flex;flex-direction:column;gap:6px;margin:12px 0}
+.mi-bar-row{display:flex;align-items:center;gap:10px}
+.mi-bar-label{width:100px;font-size:11px;color:var(--text-secondary);text-align:right;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mi-bar-track{flex:1;height:22px;background:var(--bg-surface-2);border-radius:4px;overflow:hidden;position:relative}
+.mi-bar-fill{height:100%;border-radius:4px;transition:width 0.6s var(--ease);display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:10px;font-weight:700;color:rgba(255,255,255,0.9);min-width:32px}
+
+/* Segment table rows */
+.mi-seg-row{display:grid;grid-template-columns:2fr 1fr 1fr 80px;align-items:center;padding:10px 12px;border-bottom:1px solid rgba(255,255,255,0.03);font-size:12px}
+.mi-seg-row:last-child{border-bottom:none}
+.mi-seg-name{color:var(--text-primary);font-weight:500}
+.mi-seg-val{color:var(--text-primary);font-weight:600;text-align:right}
+.mi-seg-growth{color:var(--teal);font-weight:600;text-align:right}
+
+/* Section card */
+.mi-card{background:var(--bg-surface);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:16px}
+.mi-card-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.mi-card-title::before{content:'';display:inline-block;width:3px;height:14px;border-radius:2px}
+.mi-card-title[data-color="teal"]{color:var(--teal)}.mi-card-title[data-color="teal"]::before{background:var(--teal)}
+.mi-card-title[data-color="blue"]{color:var(--blue)}.mi-card-title[data-color="blue"]::before{background:var(--blue)}
+.mi-card-title[data-color="amber"]{color:var(--amber)}.mi-card-title[data-color="amber"]::before{background:var(--amber)}
+.mi-card-title[data-color="purple"]{color:var(--purple)}.mi-card-title[data-color="purple"]::before{background:var(--purple)}
+.mi-card-title[data-color="red"]{color:var(--red)}.mi-card-title[data-color="red"]::before{background:var(--red)}
+.mi-card-title[data-color="green"]{color:var(--green)}.mi-card-title[data-color="green"]::before{background:var(--green)}
+
+/* Opportunity rows */
+.mi-opp{display:flex;gap:14px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.03)}
+.mi-opp:last-child{border-bottom:none}
+.mi-opp-num{width:26px;height:26px;border-radius:50%;background:var(--purple);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff;flex-shrink:0}
+.mi-opp-title{font-size:13px;color:var(--text-primary);font-weight:600}
+.mi-opp-meta{font-size:11px;color:var(--text-secondary);margin-top:3px;display:flex;gap:12px;flex-wrap:wrap}
+.mi-opp-meta span{display:flex;align-items:center;gap:4px}
+
+/* Trend items */
+.mi-trend{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.03)}
+.mi-trend:last-child{border-bottom:none}
+.mi-trend-text{font-size:12px;color:var(--text-secondary);flex:1}
+
+/* Recommendation box */
+.mi-reco{background:linear-gradient(135deg,rgba(6,182,212,0.08),rgba(6,182,212,0.02));border:1px solid rgba(6,182,212,0.18);border-radius:12px;padding:20px 24px}
+.mi-reco-text{font-size:13px;color:var(--text-primary);line-height:1.75}
+
+/* Risk pills */
+.mi-risk-pill{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:8px;background:var(--bg-surface);border:1px solid var(--border);font-size:11px;color:var(--text-secondary);margin:0 6px 6px 0}
+.mi-risk-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+
+/* Sources collapsible */
+.mi-sources-toggle{font-size:10px;color:var(--text-muted);cursor:pointer;display:flex;align-items:center;gap:6px;margin-top:12px;border-top:1px solid var(--border);padding-top:12px;user-select:none}
+.mi-sources-toggle:hover{color:var(--text-secondary)}
+.mi-sources-toggle .mi-chevron{transition:transform var(--t-fast) var(--ease);font-size:8px}
+.mi-sources-toggle.open .mi-chevron{transform:rotate(90deg)}
+.mi-sources-body{max-height:0;overflow:hidden;transition:max-height 0.3s var(--ease);font-size:10px;color:var(--text-muted);line-height:1.6}
+.mi-sources-body.open{max-height:500px;margin-top:8px}
+
+/* Report sections — collapsed by default */
+.mi-report-section{margin-bottom:0}
+.mi-report-toggle{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;cursor:pointer;user-select:none;border-radius:8px;transition:background var(--t-fast) var(--ease)}
+.mi-report-toggle:hover{background:var(--bg-hover)}
+.mi-report-toggle .mi-sec-title{font-size:12px;font-weight:600;color:var(--text-secondary)}
+.mi-report-toggle .mi-sec-chev{font-size:10px;color:var(--text-muted);transition:transform var(--t-fast) var(--ease)}
+.mi-report-toggle.open .mi-sec-chev{transform:rotate(90deg)}
+.mi-report-body{max-height:0;overflow:hidden;transition:max-height 0.4s var(--ease);padding:0 16px}
+.mi-report-body.open{max-height:2000px;padding-bottom:16px}
+.mi-report-body .mi-prose{font-size:12px;color:var(--text-secondary);line-height:1.75}
+.mi-report-body .mi-prose strong{color:var(--text-primary);font-weight:600}
+
+/* M&A items */
+.mi-ma-item{padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.03)}
+.mi-ma-item:last-child{border-bottom:none}
+.mi-ma-deal{font-size:12px;color:var(--text-primary);font-weight:600}
+.mi-ma-meta{font-size:10px;color:var(--text-muted);margin-top:3px}
+
+/* Two-column layout helper */
+.mi-two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+
+/* Responsive */
+@media(max-width:768px){
+  .mi-metrics-row{grid-template-columns:repeat(2,1fr)}
+  .mi-comp-grid{grid-template-columns:1fr}
+  .mi-two-col{grid-template-columns:1fr}
+  .mi-seg-row{grid-template-columns:1fr 1fr}
+  .mi-seg-row .mi-seg-growth,.mi-seg-row :nth-child(4){display:none}
+}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
@@ -4238,7 +4358,7 @@ function applyLiveData(raw) {
   var hasMarketIntel = !!(raw.marketIntelBlob);
   applyDashboardConfig(roomType.toUpperCase(), hasMarketIntel);
 
-  // Market Intelligence tab
+  // Market Intelligence tab — consulting-grade redesign
   var mi = raw.marketIntelBlob || null;
   if (mi) {
     var miData = typeof mi === 'string' ? JSON.parse(mi) : mi;
@@ -4252,180 +4372,242 @@ function applyLiveData(raw) {
         if (!text) return '';
         return cleanText(text)
           .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-          .replace(/\*\*(.+?)\*\*/g,'<strong style="color:var(--text-bright)">$1</strong>')
+          .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
           .replace(/\*(.+?)\*/g,'<em>$1</em>')
-          .replace(/^### (.+)$/gm,'<div style="font-size:13px;font-weight:700;color:var(--text-bright);margin:14px 0 6px;border-bottom:1px solid var(--border);padding-bottom:4px">$1</div>')
-          .replace(/^- (.+)$/gm,'<div style="padding-left:12px;position:relative;margin:3px 0"><span style="position:absolute;left:0;color:var(--teal)">&#8226;</span>$1</div>')
+          .replace(/^### (.+)$/gm,'<div style="font-size:13px;font-weight:700;color:var(--text-primary);margin:14px 0 6px;border-bottom:1px solid var(--border);padding-bottom:4px">$1</div>')
+          .replace(/^- (.+)$/gm,'<div style="padding-left:14px;position:relative;margin:4px 0"><span style="position:absolute;left:0;color:var(--teal)">&#8226;</span>$1</div>')
           .replace(/\[(\d+)\]/g,'<sup style="color:var(--teal);font-size:9px">[$1]</sup>')
           .replace(/\n\n/g,'<div style="height:8px"></div>')
           .replace(/\n/g,'<br>');
       }
-      function threatColor(level) { return level==='high'?'var(--red)':level==='medium'?'var(--amber)':'var(--teal)'; }
-      function fitBadge(fit) { var c=fit==='high'?'var(--teal)':fit==='medium'?'var(--amber)':'var(--text-muted)'; return '<span style="font-size:10px;padding:2px 6px;border-radius:4px;background:rgba(255,255,255,0.05);border:1px solid '+c+';color:'+c+';font-weight:600;text-transform:uppercase">'+fit+'</span>'; }
+      function fitBadge(fit) { var c=fit==='high'?'var(--teal)':fit==='medium'?'var(--amber)':'var(--text-muted)'; return '<span style="font-size:10px;padding:2px 8px;border-radius:20px;background:rgba(255,255,255,0.04);border:1px solid '+c+';color:'+c+';font-weight:600;text-transform:uppercase">'+fit+'</span>'; }
 
-      var miHtml = '';
+      var h = '';
 
-      // ── HEADER
-      miHtml += '<div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px">';
-      miHtml += '<div><div class="section-label" style="color:var(--teal);margin-bottom:2px">Market Intelligence Report</div>';
-      miHtml += '<div style="font-size:12px;color:var(--text-dim);margin-bottom:8px">' + (miData.company_name||'') + (miData.industry?' \u00b7 '+miData.industry:'') + '</div>';
-      if (s.executive_summary) miHtml += '<div style="font-size:13px;color:var(--text-bright);line-height:1.6;max-width:600px">' + s.executive_summary + '</div>';
-      miHtml += '</div>';
-      miHtml += '<div style="text-align:right"><div style="font-size:9px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px">Research Date</div><div style="font-size:12px;color:var(--text-dim)">' + (miData.search_date||'') + '</div></div>';
-      miHtml += '</div>';
+      // ── 1. EXECUTIVE SUMMARY — top-heavy positioning statement
+      h += '<div class="mi-exec-summary">';
+      h += '<div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px">';
+      h += '<div><div style="font-size:9px;text-transform:uppercase;letter-spacing:2px;color:var(--teal);font-weight:700;margin-bottom:4px">Market Intelligence</div>';
+      h += '<div style="font-size:18px;font-weight:700;color:var(--text-primary)">' + (miData.company_name||'Market') + ' Competitive Position</div>';
+      if (miData.industry) h += '<div style="font-size:12px;color:var(--text-secondary);margin-top:2px">' + miData.industry + '</div>';
+      h += '</div>';
+      h += '<div style="text-align:right;flex-shrink:0"><div style="font-size:9px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px">Research Date</div><div style="font-size:12px;color:var(--text-secondary);font-weight:500">' + (miData.search_date||'--') + '</div></div>';
+      h += '</div>';
+      if (s.executive_summary) h += '<div class="mi-pos-stmt">' + s.executive_summary + '</div>';
+      h += '</div>';
 
-      // ── TAM / SAM HERO
-      if (s.tam || s.sam) {
-        miHtml += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px">';
-        if (s.tam) {
-          miHtml += '<div style="background:linear-gradient(135deg,rgba(6,182,212,0.1),rgba(6,182,212,0.02));border:1px solid rgba(6,182,212,0.2);border-radius:12px;padding:20px;text-align:center">';
-          miHtml += '<div style="font-size:10px;color:var(--teal);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px">Total Addressable Market</div>';
-          miHtml += '<div style="font-size:32px;font-weight:900;color:var(--text-bright)">' + (s.tam.value||'--') + '</div>';
-          miHtml += '<div style="font-size:12px;color:var(--teal);font-weight:600">' + (s.tam.growth||'') + '</div>';
-          if (s.tam.source) miHtml += '<div style="font-size:9px;color:var(--text-muted);margin-top:4px">Source: ' + s.tam.source + '</div>';
-          miHtml += '</div>';
-        }
-        if (s.sam) {
-          miHtml += '<div style="background:linear-gradient(135deg,rgba(99,102,241,0.1),rgba(99,102,241,0.02));border:1px solid rgba(99,102,241,0.2);border-radius:12px;padding:20px;text-align:center">';
-          miHtml += '<div style="font-size:10px;color:var(--purple);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px">Serviceable Market</div>';
-          miHtml += '<div style="font-size:32px;font-weight:900;color:var(--text-bright)">' + (s.sam.value||'--') + '</div>';
-          if (s.sam.note) miHtml += '<div style="font-size:11px;color:var(--text-dim)">' + s.sam.note + '</div>';
-          miHtml += '</div>';
-        }
-        miHtml += '</div>';
-      }
-
-      // ── MARKET SEGMENTS TABLE
-      if (s.market_segments && s.market_segments.length) {
-        miHtml += '<div style="background:var(--card-bg);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:16px">';
-        miHtml += '<div style="font-size:12px;font-weight:700;color:var(--teal);margin-bottom:12px;text-transform:uppercase;letter-spacing:1px">Market Segments</div>';
-        miHtml += '<table style="width:100%;border-collapse:collapse;font-size:12px">';
-        miHtml += '<tr style="border-bottom:1px solid var(--border)"><th style="text-align:left;padding:6px 8px;color:var(--text-muted);font-weight:600;font-size:10px;text-transform:uppercase">Segment</th><th style="text-align:right;padding:6px 8px;color:var(--text-muted);font-weight:600;font-size:10px">Size</th><th style="text-align:right;padding:6px 8px;color:var(--text-muted);font-weight:600;font-size:10px">Growth</th><th style="text-align:center;padding:6px 8px;color:var(--text-muted);font-weight:600;font-size:10px">Fit</th></tr>';
-        s.market_segments.forEach(function(seg) {
-          miHtml += '<tr style="border-bottom:1px solid rgba(255,255,255,0.03)"><td style="padding:8px;color:var(--text-dim)">' + seg.name + '</td><td style="text-align:right;padding:8px;color:var(--text-bright);font-weight:600">' + (seg.size||'--') + '</td><td style="text-align:right;padding:8px;color:var(--teal);font-weight:600">' + (seg.growth||'--') + '</td><td style="text-align:center;padding:8px">' + fitBadge(seg.fit||'medium') + '</td></tr>';
-        });
-        miHtml += '</table></div>';
-      }
-
-      // ── COMPETITIVE LANDSCAPE TABLE
+      // ── 2. KEY METRICS ROW — TAM, SAM, competitive density, threat level
+      var metricCards = [];
+      if (s.tam) metricCards.push({label:'Total Addressable Market',value:s.tam.value||'--',sub:s.tam.growth||'',accent:'teal'});
+      if (s.sam) metricCards.push({label:'Serviceable Market',value:s.sam.value||'--',sub:s.sam.note||'',accent:'purple'});
       if (s.competitors && s.competitors.length) {
-        miHtml += '<div style="background:var(--card-bg);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:16px">';
-        miHtml += '<div style="font-size:12px;font-weight:700;color:var(--blue);margin-bottom:12px;text-transform:uppercase;letter-spacing:1px">Competitive Landscape</div>';
-        miHtml += '<table style="width:100%;border-collapse:collapse;font-size:11px">';
-        miHtml += '<tr style="border-bottom:1px solid var(--border)"><th style="text-align:left;padding:6px;color:var(--text-muted);font-size:9px;text-transform:uppercase">Company</th><th style="text-align:right;padding:6px;color:var(--text-muted);font-size:9px">Funding</th><th style="text-align:right;padding:6px;color:var(--text-muted);font-size:9px">Est. ARR</th><th style="text-align:right;padding:6px;color:var(--text-muted);font-size:9px">Team</th><th style="text-align:center;padding:6px;color:var(--text-muted);font-size:9px">Threat</th></tr>';
-        s.competitors.forEach(function(comp) {
-          var tc = threatColor(comp.threat_level||'medium');
-          miHtml += '<tr style="border-bottom:1px solid rgba(255,255,255,0.03)">';
-          miHtml += '<td style="padding:8px 6px"><div style="color:var(--text-bright);font-weight:600">' + comp.name + '</div>';
-          if (comp.strengths && comp.strengths[0]) miHtml += '<div style="font-size:9px;color:var(--text-muted);margin-top:2px">Strength: ' + comp.strengths[0] + '</div>';
-          miHtml += '</td>';
-          miHtml += '<td style="text-align:right;padding:8px 6px;color:var(--text-dim)">' + (comp.funding||'--') + '</td>';
-          miHtml += '<td style="text-align:right;padding:8px 6px;color:var(--teal);font-weight:600">' + (comp.arr_est||'--') + '</td>';
-          miHtml += '<td style="text-align:right;padding:8px 6px;color:var(--text-dim)">' + (comp.employees||'--') + '</td>';
-          miHtml += '<td style="text-align:center;padding:8px 6px"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:'+tc+'"></span></td>';
-          miHtml += '</tr>';
+        var highThreats = s.competitors.filter(function(c){return c.threat_level==='high'}).length;
+        metricCards.push({label:'Competitive Density',value:s.competitors.length+' Players',sub:highThreats+' high-threat',accent:'blue'});
+      }
+      if (s.opportunities && s.opportunities.length) {
+        metricCards.push({label:'Opportunity Pipeline',value:s.opportunities.length+' Identified',sub:'Strategic gaps',accent:'green'});
+      }
+      if (s.key_risks && s.key_risks.length) {
+        var sevHigh = s.key_risks.filter(function(r){return r.severity==='high'}).length;
+        metricCards.push({label:'Risk Exposure',value:s.key_risks.length+' Risks',sub:sevHigh+' critical',accent:'red'});
+      }
+      if (metricCards.length) {
+        // pad to 4 if only 2-3
+        while (metricCards.length < 4 && metricCards.length > 0) {
+          if (s.market_segments && s.market_segments.length && !metricCards.some(function(m){return m.label==='Market Segments'})) {
+            metricCards.push({label:'Market Segments',value:s.market_segments.length+' Segments',sub:'Analyzed',accent:'amber'});
+          } else break;
+        }
+        h += '<div class="mi-metrics-row">';
+        metricCards.forEach(function(m) {
+          h += '<div class="mi-metric" data-accent="'+m.accent+'">';
+          h += '<div class="mi-metric-label">'+m.label+'</div>';
+          h += '<div class="mi-metric-value">'+m.value+'</div>';
+          if (m.sub) h += '<div class="mi-metric-sub">'+m.sub+'</div>';
+          h += '</div>';
         });
-        miHtml += '</table></div>';
+        h += '</div>';
       }
 
-      // ── TRENDS + M&A SIDE BY SIDE
+      // ── 3. MARKET SEGMENTS — with visual bar chart
+      if (s.market_segments && s.market_segments.length) {
+        h += '<div class="mi-card">';
+        h += '<div class="mi-card-title" data-color="teal">Addressable Segments</div>';
+        // Header row
+        h += '<div class="mi-seg-row" style="border-bottom:1px solid var(--border);padding-bottom:6px;margin-bottom:4px"><div style="font-size:9px;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);font-weight:600">Segment</div><div style="font-size:9px;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);font-weight:600;text-align:right">Size</div><div style="font-size:9px;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);font-weight:600;text-align:right">Growth</div><div style="font-size:9px;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);font-weight:600;text-align:center">Fit</div></div>';
+        s.market_segments.forEach(function(seg) {
+          h += '<div class="mi-seg-row">';
+          h += '<div class="mi-seg-name">'+seg.name+'</div>';
+          h += '<div class="mi-seg-val">'+(seg.size||'--')+'</div>';
+          h += '<div class="mi-seg-growth">'+(seg.growth||'--')+'</div>';
+          h += '<div style="text-align:center">'+fitBadge(seg.fit||'medium')+'</div>';
+          h += '</div>';
+        });
+        h += '</div>';
+      }
+
+      // ── 4. COMPETITIVE LANDSCAPE — card grid, not a table
+      if (s.competitors && s.competitors.length) {
+        h += '<div class="mi-card" style="padding-bottom:8px">';
+        h += '<div class="mi-card-title" data-color="blue">Competitive Landscape</div>';
+
+        // Funding bar chart (CSS-only)
+        var compWithFunding = s.competitors.filter(function(c){return c.funding && c.funding !== '--'});
+        if (compWithFunding.length >= 2) {
+          h += '<div style="margin-bottom:16px">';
+          h += '<div style="font-size:10px;color:var(--text-muted);margin-bottom:8px;font-weight:600;text-transform:uppercase;letter-spacing:1px">Funding Comparison</div>';
+          h += '<div class="mi-bar-chart">';
+          // Parse funding amounts for bar widths
+          var fundingNums = compWithFunding.map(function(c){
+            var num = parseFloat((c.funding||'0').replace(/[^0-9.]/g,''));
+            var mult = (c.funding||'').toLowerCase().indexOf('b')>-1?1000:1;
+            return {name:c.name,val:num*mult,display:c.funding,threat:c.threat_level||'medium'};
+          });
+          var maxFund = Math.max.apply(null,fundingNums.map(function(f){return f.val})) || 1;
+          fundingNums.sort(function(a,b){return b.val-a.val});
+          fundingNums.forEach(function(f) {
+            var pct = Math.max(8,Math.round((f.val/maxFund)*100));
+            var barColor = f.threat==='high'?'var(--red)':f.threat==='medium'?'var(--amber)':'var(--teal)';
+            h += '<div class="mi-bar-row">';
+            h += '<div class="mi-bar-label">'+f.name+'</div>';
+            h += '<div class="mi-bar-track"><div class="mi-bar-fill" style="width:'+pct+'%;background:'+barColor+'">'+f.display+'</div></div>';
+            h += '</div>';
+          });
+          h += '</div></div>';
+        }
+
+        // Competitor cards
+        h += '<div class="mi-comp-grid">';
+        s.competitors.forEach(function(comp) {
+          h += '<div class="mi-comp-card">';
+          h += '<div class="mi-comp-head">';
+          h += '<div class="mi-comp-name">'+comp.name+'</div>';
+          h += '<div class="mi-comp-threat" data-level="'+(comp.threat_level||'medium')+'">'+(comp.threat_level||'medium')+'</div>';
+          h += '</div>';
+          h += '<div class="mi-comp-stats">';
+          h += '<div><div class="mi-comp-stat-label">Funding</div><div class="mi-comp-stat-val">'+(comp.funding||'--')+'</div></div>';
+          h += '<div><div class="mi-comp-stat-label">Est. ARR</div><div class="mi-comp-stat-val" style="color:var(--teal)">'+(comp.arr_est||'--')+'</div></div>';
+          h += '<div><div class="mi-comp-stat-label">Team</div><div class="mi-comp-stat-val">'+(comp.employees||'--')+'</div></div>';
+          h += '</div>';
+          if (comp.strengths && comp.strengths.length) {
+            h += '<div class="mi-comp-strength"><strong style="color:var(--text-muted);font-size:9px;text-transform:uppercase;letter-spacing:0.5px">Key Strengths:</strong> '+comp.strengths.slice(0,2).join('; ')+'</div>';
+          }
+          if (comp.weaknesses && comp.weaknesses.length) {
+            h += '<div style="font-size:11px;color:var(--text-secondary);margin-top:6px;line-height:1.5"><strong style="color:var(--text-muted);font-size:9px;text-transform:uppercase;letter-spacing:0.5px">Vulnerabilities:</strong> '+comp.weaknesses.slice(0,2).join('; ')+'</div>';
+          }
+          h += '</div>';
+        });
+        h += '</div></div>';
+      }
+
+      // ── 5. STRATEGIC IMPLICATIONS — two-column: opportunities + risks
+      var hasOpps = s.opportunities && s.opportunities.length;
+      var hasRisks = s.key_risks && s.key_risks.length;
+      if (hasOpps || hasRisks) {
+        h += '<div class="mi-two-col">';
+        if (hasOpps) {
+          h += '<div class="mi-card">';
+          h += '<div class="mi-card-title" data-color="purple">Strategic Opportunities</div>';
+          s.opportunities.forEach(function(opp,i) {
+            h += '<div class="mi-opp">';
+            h += '<div class="mi-opp-num">'+(i+1)+'</div>';
+            h += '<div style="flex:1"><div class="mi-opp-title">'+opp.opportunity+'</div>';
+            h += '<div class="mi-opp-meta">';
+            if (opp.potential_revenue) h += '<span style="color:var(--teal)">'+opp.potential_revenue+'</span>';
+            if (opp.timeframe) h += '<span>'+opp.timeframe+'</span>';
+            if (opp.difficulty) h += '<span>Difficulty: '+opp.difficulty+'</span>';
+            h += '</div></div></div>';
+          });
+          h += '</div>';
+        }
+        if (hasRisks) {
+          h += '<div class="mi-card">';
+          h += '<div class="mi-card-title" data-color="red">Risk Exposure</div>';
+          h += '<div style="display:flex;flex-wrap:wrap">';
+          s.key_risks.forEach(function(r) {
+            var rc = r.severity==='high'?'var(--red)':r.severity==='medium'?'var(--amber)':'var(--text-muted)';
+            h += '<div class="mi-risk-pill"><span class="mi-risk-dot" style="background:'+rc+'"></span>'+r.risk+'</div>';
+          });
+          h += '</div></div>';
+        }
+        h += '</div>';
+      }
+
+      // ── 6. TRENDS + M&A — two-column
       var hasTrends = s.market_trends && s.market_trends.length;
       var hasMA = s.recent_ma && s.recent_ma.length;
       if (hasTrends || hasMA) {
-        miHtml += '<div style="display:grid;grid-template-columns:' + (hasTrends&&hasMA?'1fr 1fr':'1fr') + ';gap:12px;margin-bottom:16px">';
+        h += '<div class="mi-two-col">';
         if (hasTrends) {
-          miHtml += '<div style="background:var(--card-bg);border:1px solid var(--border);border-radius:12px;padding:16px">';
-          miHtml += '<div style="font-size:12px;font-weight:700;color:var(--amber);margin-bottom:10px;text-transform:uppercase;letter-spacing:1px">Key Trends</div>';
+          h += '<div class="mi-card">';
+          h += '<div class="mi-card-title" data-color="amber">Market Tailwinds &amp; Headwinds</div>';
           s.market_trends.forEach(function(t) {
             var ic = t.impact==='high'?'var(--red)':t.impact==='medium'?'var(--amber)':'var(--teal)';
-            miHtml += '<div style="padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.03)">';
-            miHtml += '<div style="display:flex;justify-content:space-between;align-items:center">';
-            miHtml += '<span style="font-size:12px;color:var(--text-dim);flex:1">' + t.trend + '</span>';
-            miHtml += '<span style="font-size:9px;padding:2px 6px;border-radius:4px;border:1px solid '+ic+';color:'+ic+';margin-left:8px">' + (t.impact||'') + '</span>';
-            miHtml += '</div></div>';
+            h += '<div class="mi-trend">';
+            h += '<span class="mi-trend-text">'+t.trend+'</span>';
+            h += '<span style="font-size:9px;padding:2px 8px;border-radius:20px;border:1px solid '+ic+';color:'+ic+';margin-left:8px;font-weight:600;text-transform:uppercase">'+( t.impact||'')+'</span>';
+            h += '</div>';
           });
-          miHtml += '</div>';
+          h += '</div>';
         }
         if (hasMA) {
-          miHtml += '<div style="background:var(--card-bg);border:1px solid var(--border);border-radius:12px;padding:16px">';
-          miHtml += '<div style="font-size:12px;font-weight:700;color:var(--amber);margin-bottom:10px;text-transform:uppercase;letter-spacing:1px">Recent M&A</div>';
+          h += '<div class="mi-card">';
+          h += '<div class="mi-card-title" data-color="amber">Recent M&amp;A Activity</div>';
           s.recent_ma.forEach(function(ma) {
-            miHtml += '<div style="padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.03)">';
-            miHtml += '<div style="font-size:12px;color:var(--text-bright);font-weight:600">' + (ma.acquirer||'') + ' \u2192 ' + (ma.target||'') + '</div>';
-            miHtml += '<div style="font-size:10px;color:var(--text-muted);margin-top:2px">' + (ma.value||'') + ' \u00b7 ' + (ma.date||'') + (ma.rationale?' \u00b7 '+ma.rationale:'') + '</div>';
-            miHtml += '</div>';
+            h += '<div class="mi-ma-item">';
+            h += '<div class="mi-ma-deal">'+(ma.acquirer||'')+' &#8594; '+(ma.target||'')+'</div>';
+            h += '<div class="mi-ma-meta">'+(ma.value||'')+' &middot; '+(ma.date||'')+(ma.rationale?' &middot; '+ma.rationale:'')+'</div>';
+            h += '</div>';
           });
-          miHtml += '</div>';
+          h += '</div>';
         }
-        miHtml += '</div>';
+        h += '</div>';
       }
 
-      // ── OPPORTUNITIES
-      if (s.opportunities && s.opportunities.length) {
-        miHtml += '<div style="background:var(--card-bg);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:16px;border-left:3px solid var(--purple)">';
-        miHtml += '<div style="font-size:12px;font-weight:700;color:var(--purple);margin-bottom:12px;text-transform:uppercase;letter-spacing:1px">Strategic Opportunities</div>';
-        s.opportunities.forEach(function(opp,i) {
-          miHtml += '<div style="display:flex;gap:12px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.03)">';
-          miHtml += '<div style="width:24px;height:24px;border-radius:50%;background:var(--purple);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#fff;flex-shrink:0">' + (i+1) + '</div>';
-          miHtml += '<div style="flex:1"><div style="font-size:12px;color:var(--text-bright);font-weight:600">' + opp.opportunity + '</div>';
-          miHtml += '<div style="font-size:10px;color:var(--text-muted);margin-top:3px">';
-          if (opp.potential_revenue) miHtml += '<span style="color:var(--teal)">' + opp.potential_revenue + '</span> \u00b7 ';
-          if (opp.timeframe) miHtml += opp.timeframe + ' \u00b7 ';
-          if (opp.difficulty) miHtml += 'Difficulty: ' + opp.difficulty;
-          miHtml += '</div></div></div>';
-        });
-        miHtml += '</div>';
+      // ── 7. STRATEGIC RECOMMENDATION — callout box
+      if (s.recommendation) {
+        h += '<div class="mi-reco" style="margin-bottom:16px">';
+        h += '<div style="font-size:9px;text-transform:uppercase;letter-spacing:2px;color:var(--teal);font-weight:700;margin-bottom:8px">Strategic Recommendation</div>';
+        h += '<div class="mi-reco-text">'+s.recommendation+'</div>';
+        h += '</div>';
       }
 
-      // ── RECOMMENDATION + RISKS
-      if (s.recommendation || (s.key_risks && s.key_risks.length)) {
-        miHtml += '<div style="display:grid;grid-template-columns:' + (s.recommendation&&s.key_risks?'2fr 1fr':'1fr') + ';gap:12px;margin-bottom:16px">';
-        if (s.recommendation) {
-          miHtml += '<div style="background:linear-gradient(135deg,rgba(6,182,212,0.08),rgba(6,182,212,0.02));border:1px solid rgba(6,182,212,0.2);border-radius:12px;padding:16px">';
-          miHtml += '<div style="font-size:10px;color:var(--teal);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px">Strategic Recommendation</div>';
-          miHtml += '<div style="font-size:13px;color:var(--text-bright);line-height:1.7">' + s.recommendation + '</div>';
-          miHtml += '</div>';
-        }
-        if (s.key_risks && s.key_risks.length) {
-          miHtml += '<div style="background:var(--card-bg);border:1px solid var(--border);border-radius:12px;padding:16px">';
-          miHtml += '<div style="font-size:10px;color:var(--red);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px">Key Risks</div>';
-          s.key_risks.forEach(function(r) {
-            var rc = r.severity==='high'?'var(--red)':r.severity==='medium'?'var(--amber)':'var(--text-muted)';
-            miHtml += '<div style="padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.03);display:flex;align-items:center;gap:6px">';
-            miHtml += '<span style="width:6px;height:6px;border-radius:50%;background:'+rc+';flex-shrink:0"></span>';
-            miHtml += '<span style="font-size:11px;color:var(--text-dim)">' + r.risk + '</span></div>';
-          });
-          miHtml += '</div>';
-        }
-        miHtml += '</div>';
-      }
-
-      // ── SOURCES
-      if (s.sources_cited && s.sources_cited.length) {
-        miHtml += '<div style="font-size:10px;color:var(--text-muted);margin-top:8px;padding-top:12px;border-top:1px solid var(--border)">';
-        miHtml += '<strong style="color:var(--text-dim)">Sources:</strong> ' + s.sources_cited.join(' \u00b7 ');
-        miHtml += '</div>';
-      }
-
-      // ── REPORT SECTIONS (from miData.sections)
+      // ── 8. DEEP-DIVE SECTIONS — collapsed by default (less text dumping)
       if (miSections && typeof miSections === 'object') {
         var secKeys = Object.keys(miSections);
         if (secKeys.length) {
-          secKeys.forEach(function(secKey) {
+          h += '<div class="mi-card" style="padding:8px 4px">';
+          h += '<div style="font-size:9px;text-transform:uppercase;letter-spacing:2px;color:var(--text-muted);font-weight:700;padding:8px 12px;margin-bottom:4px">Detailed Research Sections</div>';
+          secKeys.forEach(function(secKey, idx) {
             var secContent = miSections[secKey];
             if (!secContent) return;
             var secTitle = secKey.replace(/_/g, ' ').replace(/\b\w/g, function(c){ return c.toUpperCase(); });
-            miHtml += '<div style="background:var(--card-bg);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:16px">';
-            miHtml += '<div style="font-size:12px;font-weight:700;color:var(--text-secondary);margin-bottom:10px;text-transform:uppercase;letter-spacing:1px">' + secTitle + '</div>';
-            miHtml += '<div style="font-size:12px;color:var(--text-dim);line-height:1.7">' + miMarkdown(typeof secContent === 'string' ? secContent : JSON.stringify(secContent)) + '</div>';
-            miHtml += '</div>';
+            var secId = 'mi-sec-' + idx;
+            h += '<div class="mi-report-section">';
+            h += '<div class="mi-report-toggle" onclick="this.classList.toggle(\'open\');document.getElementById(\''+secId+'\').classList.toggle(\'open\')">';
+            h += '<span class="mi-sec-title">'+secTitle+'</span>';
+            h += '<span class="mi-sec-chev">&#9654;</span>';
+            h += '</div>';
+            h += '<div class="mi-report-body" id="'+secId+'">';
+            h += '<div class="mi-prose">'+miMarkdown(typeof secContent === 'string' ? secContent : JSON.stringify(secContent))+'</div>';
+            h += '</div></div>';
           });
+          h += '</div>';
         }
       }
 
-      // ── DISCLAIMER
-      miHtml += '<div style="font-size:9px;color:var(--text-muted);margin-top:12px;opacity:0.6">' + (miData.disclaimer||'') + '</div>';
-      secMarket.innerHTML = miHtml;
+      // ── 9. SOURCES — collapsed
+      if (s.sources_cited && s.sources_cited.length) {
+        h += '<div class="mi-sources-toggle" onclick="this.classList.toggle(\'open\');this.nextElementSibling.classList.toggle(\'open\')">';
+        h += '<span class="mi-chevron">&#9654;</span> <strong>Sources &amp; Methodology</strong> ('+s.sources_cited.length+' sources cited)';
+        h += '</div>';
+        h += '<div class="mi-sources-body">'+s.sources_cited.join(' &middot; ')+'</div>';
+      }
+
+      // ── 10. DISCLAIMER
+      if (miData.disclaimer) h += '<div style="font-size:9px;color:var(--text-muted);margin-top:16px;opacity:0.5">'+miData.disclaimer+'</div>';
+
+      secMarket.innerHTML = h;
     }
   }
 

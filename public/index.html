@@ -243,7 +243,7 @@ body{background:var(--bg-page);color:var(--text-primary);font-family:var(--font-
 
 /* ── 5  SIDEBAR NAV ──────────────────────────────────────────────────────── */
 :root{--sidebar-w:240px;--sidebar-collapsed-w:60px;--sidebar-bg:rgba(var(--bg-page-rgb),.97);--sidebar-z:250}
-.s-sidebar{position:fixed;top:0;left:0;bottom:0;width:var(--sidebar-w);background:var(--sidebar-bg);border-right:1px solid rgba(0,229,255,0.15);box-shadow:1px 0 12px rgba(0,229,255,0.08);z-index:var(--sidebar-z);display:flex;flex-direction:column;backdrop-filter:blur(20px);transition:width var(--t-base) var(--ease),transform var(--t-base) var(--ease);overflow:hidden;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border-hover) transparent}
+.s-sidebar{position:fixed;top:0;left:0;bottom:0;width:var(--sidebar-w);background:var(--sidebar-bg);border-right:1px solid rgba(0,229,255,0.15);box-shadow:6px 0 14px -4px rgba(0,229,255,0.10);z-index:var(--sidebar-z);display:flex;flex-direction:column;backdrop-filter:blur(20px);transition:width var(--t-base) var(--ease),transform var(--t-base) var(--ease);overflow:hidden;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border-hover) transparent}
 .s-sidebar::-webkit-scrollbar{width:3px}.s-sidebar::-webkit-scrollbar-thumb{background:var(--border-hover);border-radius:2px}
 .s-sidebar.collapsed{width:var(--sidebar-collapsed-w)}
 .s-sidebar.collapsed .sb-label,.s-sidebar.collapsed .sb-section-head,.s-sidebar.collapsed .sb-meta-block,.s-sidebar.collapsed .sb-audio-row,.s-sidebar.collapsed .sb-export-row,.s-sidebar.collapsed .sb-logo-text,.s-sidebar.collapsed .sb-logo-pipe,.s-sidebar.collapsed .sb-logo-tag{display:none}
@@ -2455,6 +2455,7 @@ dep-item strong{display:block;font-family:var(--font-mono);font-size:var(--text-
     <div class="sb-tab" data-sec="room" onclick="switchTab(this)"><span class="sb-tab-icon">&#9673;</span><span class="sb-label">The Room &amp; Options</span></div>
     <div class="sb-tab" data-sec="management" onclick="switchTab(this)"><span class="sb-tab-icon">&#9654;</span><span class="sb-label">Management Handoff</span></div>
     <div class="sb-tab" data-sec="board" onclick="switchTab(this)"><span class="sb-tab-icon">&#9635;</span><span class="sb-label">Board Report</span></div>
+    <div class="sb-tab" data-sec="market" id="sb-tab-market" onclick="switchTab(this)" style="display:none"><span class="sb-tab-icon">&#128202;</span><span class="sb-label">Market Intel</span></div>
   </nav>
   <div class="sb-divider"></div>
   <div class="sb-section-head">Audio</div>
@@ -4329,7 +4330,11 @@ function applyDashboardConfig(roomType, hasMarketIntel) {
   orderedTabs.forEach(function(secName) {
     var tabEl = tabEls[secName];
     if (tabEl) {
-      if (secName === 'market' && hasMarketIntel) tabEl.style.display = '';
+      if (secName === 'market' && hasMarketIntel) {
+        tabEl.style.display = '';
+        var sbTabMarket = document.getElementById('sb-tab-market');
+        if (sbTabMarket) sbTabMarket.style.display = '';
+      }
       fragment.appendChild(tabEl);
       delete tabEls[secName];
     }
@@ -6365,13 +6370,42 @@ function buildBoard(raw, bgp, dash, gt) {
   if (act) set('board-ask', (typeof act === 'string' ? act : act.action || '').substring(0,300));
   set('board-risk', 'Groupthink: ' + (gt.severity || 'HIGH') + '. ' + (dash.single_source_warning ? 'Single-source warning \u2014 all evidence from internal documents only. ' : '') + 'Burn rate discrepancy must be reconciled in board materials.');
 
+  // Board hero: decision word, vote sub, chips, tags
+  var boardWordEl = el('board-action-word');
+  if (boardWordEl) {
+    var wordLine1 = vtKey.includes('APPROVE') ? 'Approve' : vtKey.includes('REJECT') ? 'Reject' : 'Approve';
+    var wordLine2 = vtKey.includes('CONDITIONS') ? '<br>With Conditions' : '';
+    boardWordEl.innerHTML = wordLine1 + wordLine2;
+  }
+  var boardChipsEl = el('board-hero-chips');
+  var boardConds = bgp.conditions_for_approval || [];
+  var boardKills = bgp.kill_criteria || bgp.kill_gates || [];
+  if (!boardKills.length && bgp.kill_criteria_summary) {
+    if (typeof bgp.kill_criteria_summary === 'string') boardKills = bgp.kill_criteria_summary.split(/[;\n]/).filter(Boolean);
+    else if (Array.isArray(bgp.kill_criteria_summary)) boardKills = bgp.kill_criteria_summary;
+  }
+  var boardOqs = (raw.outputBlob?.executive_summary?.top_conditions || []).length ? raw.outputBlob.executive_summary.top_conditions : (dash.all_conditions || []);
+  if (boardChipsEl) {
+    boardChipsEl.innerHTML = '<span class="v-chip">' + boardConds.length + ' Condition' + (boardConds.length !== 1 ? 's' : '') + '</span>' +
+      '<span class="v-chip">' + boardKills.length + ' Kill Gate' + (boardKills.length !== 1 ? 's' : '') + '</span>' +
+      '<span class="v-chip">' + boardOqs.length + ' Open Question' + (boardOqs.length !== 1 ? 's' : '') + '</span>';
+  }
+  var boardTagsEl = el('board-hero-tags');
+  if (boardTagsEl) {
+    boardTagsEl.innerHTML = '<span class="chip chip-blue">' + vtVal + '\u20130 Conditional</span>' +
+      '<span class="chip chip-red">' + (gt.severity || 'HIGH') + ' Groupthink</span>' +
+      '<span class="chip chip-amber">Board Auth Required</span>';
+  }
+
   // Summary metrics
   var dp = raw.dPacket || {};
   var cs = dp.confidence_summary || {};
-  var avgConf = Math.round((cs.avg || 0.67) * 100);
+  var avgConf = dash.decision_confidence ? Math.round(dash.decision_confidence > 1 ? dash.decision_confidence : dash.decision_confidence * 100) : Math.round((cs.avg || 0.67) * 100);
   set('board-sum-conf', avgConf + '%');
-  var fo = raw.optionsBlob || {};
-  if (fo.total_budget) set('board-sum-invest', fo.total_budget);
+  var boardFm = dash.financial_mechanics || {};
+  var boardInvestVal = boardFm.total_investment || boardFm.capital_required || (bgp.financial_overview && bgp.financial_overview.total_budget) || '';
+  if (!boardInvestVal) { var fo = raw.optionsBlob || {}; boardInvestVal = fo.total_budget || ''; }
+  if (boardInvestVal) set('board-sum-invest', boardInvestVal);
 
   // Conditions of approval (dynamic)
   const condsWrap = el('board-conditions-wrap');

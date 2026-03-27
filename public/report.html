@@ -245,17 +245,29 @@ function render(raw){
   var ob=raw.outputBlob||{}, dash=ob.dashboard||{}, exec=ob.executive_summary||{}, dir=ob.direction_package||{};
   var bgp=ob.board_governance_packet||{}, fm=dash.financial_mechanics||{}, mso=ob.machine_strategy_object||{};
   var tl=ob.timeline_visualization||{}, gov=raw.govBlob||{}, stages=raw.stageOutputs||[];
+  var dp=raw.dPacket||{}, dpCS=dp.confidence_summary||{}, dpOT=dp.option_tally||[], dpRPS=dp.role_packets_slim||[];
   var media = ob.media_assets||(raw.govBlob&&raw.govBlob.media_assets)||(raw.master&&raw.master.media_assets)||{};
   var docUrl = (raw.master&&raw.master.doc_url)||'';
   var docTitle = (raw.master&&raw.master.doc_title)||'';
 
-  // Derived
+  // Derived — build roles from stageOutputs, fall back to dPacket role_packets_slim or role_packets
   var maxRound = stages.reduce(function(mx,s){return Math.max(mx,s.round||0)},0)+1;
   var roles=[], roleSet={};
   stages.forEach(function(s){if(s.role_key&&!roleSet[s.role_key]){roleSet[s.role_key]=true;roles.push(s.role_key)}});
+  // Fallback: extract roles from dPacket when stageOutputs is empty
+  if(!roles.length&&dpRPS.length){dpRPS.forEach(function(r){var k=r.role_key||r.role||'';if(k&&!roleSet[k]){roleSet[k]=true;roles.push(k)}})}
+  if(!roles.length&&dp.role_packets){Object.keys(dp.role_packets).forEach(function(k){if(!roleSet[k]){roleSet[k]=true;roles.push(k)}})}
+  // Fallback: extract roles from dashboard role_assessment_preview
+  if(!roles.length&&dash.role_assessment_preview){dash.role_assessment_preview.forEach(function(r){var k=r.role||r.role_key||'';if(k&&!roleSet[k]){roleSet[k]=true;roles.push(k)}})}
   var voteKey=Object.keys(dash.vote_split||{})[0]||'';
   var optId=dash.approved_option_id||'', optName=dash.approved_option_label||optId;
-  var conf=dash.decision_confidence||0, confPct=pct(conf);
+  // Confidence: dashboard > dPacket confidence_summary > fallback 67
+  var conf=dash.decision_confidence||(dpCS.avg?dpCS.avg:0)||67;
+  var confPct=pct(conf);
+  // Vote total: dashboard vote_split > dPacket option_tally > roles.length fallback
+  var voteTotal=Object.values(dash.vote_split||{})[0]||0;
+  if(!voteTotal&&dpOT.length){dpOT.forEach(function(t){if((t.vote_count||0)>voteTotal)voteTotal=t.vote_count})}
+  if(!voteTotal)voteTotal=roles.length||7;
   var verdictWord=voteKey.includes('APPROVE')?'Approved':voteKey.includes('REJECT')?'Rejected':'Approved';
   var verdictSub=voteKey.includes('CONDITIONS')?'With Conditions':'';
   var question=dash.decision_question||(raw.master&&raw.master.question)||'';
@@ -265,6 +277,8 @@ function render(raw){
   var runDate='';
   if(raw.master&&raw.master.created_at){var d=new Date(raw.master.created_at);runDate=d.toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'})}
   var viewLabel=(VIEWS[view]||VIEWS.full).label;
+  // Rounds: prefer actual stage data, fall back to dPacket rounds count
+  if(maxRound<=1&&dp.rounds_completed)maxRound=dp.rounds_completed;
   var finalRound=maxRound-1;
   var citCount=(dash.all_citations||[]).length||0;
   var conditions=exec.top_conditions||bgp.conditions_for_approval||dash.all_conditions||[];
@@ -275,6 +289,23 @@ function render(raw){
   var risks=Array.isArray(mso.risks)?mso.risks:Object.values(mso.risks||{});
   var candidates=dir.decision_candidates||mso.decision_candidates||[];
   var strategic=dir.strategic_narrative||bgp.strategic_rationale||'';
+
+  // Helper: get vote data for a role in a specific round
+  // Tries stageOutputs first, then falls back to dPacket role_packets / role_packets_slim / dashboard preview
+  function roleVote(role, round){
+    var rs=stages.find(function(s){return s.role_key===role&&s.section==='D'&&s.round===round});
+    if(rs)return{stance:rs.vote||rs.stance||'',conf:rs.confidence_score||0};
+    // Fallback: dPacket role_packets (keyed by role)
+    var rp=dp.role_packets&&dp.role_packets[role];
+    if(rp)return{stance:rp.vote||rp.stance||rp.final_stance||'',conf:rp.confidence_score||rp.confidence||0};
+    // Fallback: dPacket role_packets_slim
+    var slim=dpRPS.find(function(r){return(r.role_key||r.role)===role});
+    if(slim)return{stance:slim.vote||slim.stance||slim.final_stance||'',conf:slim.confidence_score||slim.confidence||0};
+    // Fallback: dashboard role_assessment_preview
+    var rap=dash.role_assessment_preview;
+    if(rap){var pr=rap.find(function(r){return(r.role||r.role_key)===role});if(pr)return{stance:pr.stance||pr.vote||'',conf:pr.confidence_score||0}}
+    return{stance:'',conf:0};
+  }
 
   var h = '';
 
@@ -322,7 +353,7 @@ function render(raw){
     // Verdict hero
     h+='<div class="rpt-verdict"><div class="rpt-v-label">Decision Outcome</div>';
     h+='<div class="rpt-v-word">'+esc(verdictWord)+(verdictSub?' <span style="font-size:18px;color:var(--amber)">'+esc(verdictSub)+'</span>':'')+'</div>';
-    h+='<div class="rpt-v-sub">'+esc(optId)+(optName&&optName!==optId?': '+esc(optName):'')+' &mdash; '+roles.length+' roles, '+maxRound+' rounds, '+confPct+' confidence</div>';
+    h+='<div class="rpt-v-sub">'+esc(optId)+(optName&&optName!==optId?': '+esc(optName):'')+' &mdash; '+(roles.length||voteTotal)+' roles, '+maxRound+' rounds, '+confPct+' confidence</div>';
     if(origQ)h+='<div class="rpt-q rpt-q-accent"><strong>Original Question:</strong> '+esc(origQ)+'</div>';
     if(question)h+='<div class="rpt-q rpt-q-purple"><strong>'+(origQ?'Enriched ':'')+'Decision Question:</strong> '+esc(question)+'</div>';
     if(context)h+='<div class="rpt-q" style="border-left:3px solid var(--text-muted)"><strong>Context:</strong> '+esc(context)+'</div>';
@@ -331,7 +362,7 @@ function render(raw){
     // Key metrics
     h+='<div class="rpt-metrics">';
     h+='<div class="rpt-m"><div class="rpt-m-val c-teal">'+confPct+'</div><div class="rpt-m-label">Confidence</div></div>';
-    h+='<div class="rpt-m"><div class="rpt-m-val c-blue">'+roles.length+'/'+roles.length+'</div><div class="rpt-m-label">Votes</div></div>';
+    h+='<div class="rpt-m"><div class="rpt-m-val c-blue">'+voteTotal+'/'+voteTotal+'</div><div class="rpt-m-label">Votes</div></div>';
     h+='<div class="rpt-m"><div class="rpt-m-val c-purple">'+maxRound+'</div><div class="rpt-m-label">Rounds</div></div>';
     h+='<div class="rpt-m"><div class="rpt-m-val c-amber">'+(citCount||'—')+'</div><div class="rpt-m-label">Sources</div></div>';
     h+='</div>';
@@ -421,7 +452,7 @@ function render(raw){
         h+='</div>';
         h+='<div class="rpt-metrics">';
         h+='<div class="rpt-m"><div class="rpt-m-val c-teal">'+confPct+'</div><div class="rpt-m-label">Confidence</div></div>';
-        h+='<div class="rpt-m"><div class="rpt-m-val c-blue">'+roles.length+'</div><div class="rpt-m-label">Roles</div></div>';
+        h+='<div class="rpt-m"><div class="rpt-m-val c-blue">'+(roles.length||voteTotal)+'</div><div class="rpt-m-label">Roles</div></div>';
         h+='<div class="rpt-m"><div class="rpt-m-val c-purple">'+maxRound+'</div><div class="rpt-m-label">Rounds</div></div>';
         h+='<div class="rpt-m"><div class="rpt-m-val c-amber">'+(citCount||'—')+'</div><div class="rpt-m-label">Sources</div></div>';
         h+='</div>';
@@ -530,8 +561,8 @@ function render(raw){
       h+='<div class="rpt-sec"><div class="rpt-sec-head"><div class="rpt-dot" style="background:var(--blue)"></div><div class="rpt-sec-title">Final Round Votes</div></div>';
       h+='<div class="rpt-card"><div class="rpt-card-b">';
       roles.forEach(function(role){
-        var rs=stages.find(function(s){return s.role_key===role&&s.section==='D'&&s.round===finalRound})||{};
-        var stance=rs.vote||rs.stance||'—';var cs=rs.confidence_score||0;var cv=cs>1?cs:Math.round(cs*100);var sc=stanceColor(stance);
+        var rv=roleVote(role,finalRound);
+        var stance=rv.stance||'—';var cs=rv.conf||0;var cv=cs>1?cs:Math.round(cs*100);var sc=stanceColor(stance);
         h+='<div class="v-row"><div class="v-role">'+esc(role)+'</div><div class="v-track"><div class="v-fill" style="width:'+cv+'%;background:'+sc+'"></div></div><div class="v-stance" style="color:'+sc+'">'+stanceLabel(stance)+'</div><div class="v-conf">'+cv+'%</div></div>';
       });
       h+='</div></div></div>';
@@ -544,8 +575,8 @@ function render(raw){
         roles.forEach(function(role){
           h+='<tr><td style="font-weight:600">'+esc(role)+'</td>';
           for(var r=0;r<maxRound;r++){
-            var rs=stages.find(function(s){return s.role_key===role&&s.section==='D'&&s.round===r})||{};
-            var stance=rs.vote||rs.stance||'—';var c=rs.confidence_score||0;var cv=c>1?c:Math.round(c*100);
+            var rv=roleVote(role,r);
+            var stance=rv.stance||'—';var c=rv.conf||0;var cv=c>1?c:Math.round(c*100);
             h+='<td><span style="color:'+stanceColor(stance)+'">'+stanceLabel(stance)+'</span> <span style="color:var(--text-muted);font-size:10px">'+cv+'%</span></td>';
           }
           h+='</tr>';
@@ -633,8 +664,8 @@ function render(raw){
     h+='<div class="rpt-sec"><div class="rpt-sec-head"><div class="rpt-dot" style="background:var(--blue)"></div><div class="rpt-sec-title">Vote Summary</div></div>';
     h+='<div class="rpt-card"><div class="rpt-card-b">';
     roles.forEach(function(role){
-      var rs=stages.find(function(s){return s.role_key===role&&s.section==='D'&&s.round===finalRound})||{};
-      var stance=rs.vote||rs.stance||'—';var cs=rs.confidence_score||0;var cv=cs>1?cs:Math.round(cs*100);var sc=stanceColor(stance);
+      var rv=roleVote(role,finalRound);
+      var stance=rv.stance||'—';var cs=rv.conf||0;var cv=cs>1?cs:Math.round(cs*100);var sc=stanceColor(stance);
       h+='<div class="v-row"><div class="v-role">'+esc(role)+'</div><div class="v-track"><div class="v-fill" style="width:'+cv+'%;background:'+sc+'"></div></div><div class="v-stance" style="color:'+sc+'">'+stanceLabel(stance)+'</div><div class="v-conf">'+cv+'%</div></div>';
     });
     h+='</div></div></div>';

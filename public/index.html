@@ -3074,6 +3074,78 @@ function stanceLabel(s) {
 }
 
 // \u2500\u2500 APPLY ALL LIVE DATA \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+// ── DASHBOARD ROOM-TYPE CONFIG ─────────────────────────────────────────────
+const DASHBOARD_CONFIGS = {
+  ELT: {
+    tabs: ['briefing', 'command', 'risk', 'financials', 'room', 'management', 'board'],
+    expanded: ['briefing', 'command'],
+    priority_metrics: ['confidence', 'votes', 'conditions', 'risks']
+  },
+  BOARD: {
+    tabs: ['briefing', 'board', 'risk', 'financials', 'command', 'room'],
+    expanded: ['briefing', 'board'],
+    priority_metrics: ['governance', 'compliance', 'fiduciary']
+  },
+  MANAGEMENT: {
+    tabs: ['briefing', 'management', 'command', 'financials', 'room', 'risk'],
+    expanded: ['briefing', 'management'],
+    priority_metrics: ['execution', 'timeline', 'resources']
+  },
+  INNOVATION: {
+    tabs: ['briefing', 'risk', 'command', 'room', 'financials', 'management'],
+    expanded: ['briefing', 'risk'],
+    priority_metrics: ['feasibility', 'market_opportunity', 'technical_risk']
+  },
+  INVESTORS: {
+    tabs: ['briefing', 'financials', 'risk', 'command', 'board', 'room'],
+    expanded: ['briefing', 'financials'],
+    priority_metrics: ['roi', 'unit_economics', 'market_size']
+  }
+};
+
+function applyDashboardConfig(roomType, hasMarketIntel) {
+  var config = DASHBOARD_CONFIGS[roomType] || DASHBOARD_CONFIGS.ELT;
+  var tabBar = document.querySelector('.tabs');
+  if (!tabBar) return;
+
+  // Build ordered tab list — add market tab if data is present
+  var orderedTabs = config.tabs.slice();
+  if (hasMarketIntel && orderedTabs.indexOf('market') === -1) {
+    orderedTabs.push('market');
+  }
+
+  // Gather all tab elements
+  var tabEls = {};
+  tabBar.querySelectorAll('.tab[data-sec]').forEach(function(t) {
+    tabEls[t.dataset.sec] = t;
+  });
+
+  // Reorder: remove all tabs then re-append in config order
+  var fragment = document.createDocumentFragment();
+  orderedTabs.forEach(function(secName) {
+    var tabEl = tabEls[secName];
+    if (tabEl) {
+      if (secName === 'market' && hasMarketIntel) tabEl.style.display = '';
+      fragment.appendChild(tabEl);
+      delete tabEls[secName];
+    }
+  });
+  // Append any remaining tabs not in config (hidden tabs stay at end)
+  Object.keys(tabEls).forEach(function(key) {
+    fragment.appendChild(tabEls[key]);
+  });
+  tabBar.appendChild(fragment);
+
+  // Set default active tab (first expanded tab)
+  var defaultTab = config.expanded[0] || orderedTabs[0] || 'briefing';
+  tabBar.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
+  var activeTab = tabBar.querySelector('.tab[data-sec="' + defaultTab + '"]');
+  if (activeTab) activeTab.classList.add('active');
+  document.querySelectorAll('.s-section').forEach(function(s) { s.classList.remove('tab-active'); });
+  var activeSec = document.getElementById('sec-' + defaultTab);
+  if (activeSec) activeSec.classList.add('tab-active');
+}
+
 function applyLiveData(raw) {
   window.__stratosRaw = raw;
   if (!raw) {
@@ -3098,6 +3170,11 @@ function applyLiveData(raw) {
   // \u2500\u2500 Media assets (audio files, docs from Google Drive)
   var mediaAssets = ob.media_assets || (raw.govBlob && raw.govBlob.media_assets) || (raw.master && raw.master.media_assets) || null;
   if (mediaAssets) applyMediaAssets(mediaAssets);
+
+  // ── Apply room-type dashboard config (tab order, default active tab)
+  var roomType = dash.mode || raw.master?.room_type || 'ELT';
+  var hasMarketIntel = !!(raw.marketIntelBlob);
+  applyDashboardConfig(roomType.toUpperCase(), hasMarketIntel);
 
   // Market Intelligence tab
   var mi = raw.marketIntelBlob || null;
@@ -3379,9 +3456,10 @@ function applyLiveData(raw) {
       const killTxt = typeof bgp.kill_criteria_summary === 'string' ? bgp.kill_criteria_summary : '';
       syncDataset({ note: killTxt.substring(0, 160) || 'Board-enforced stop points.' });
     } else if (lbl === 'Open Questions') {
-      const oqCount = (exec.top_conditions || []).length || 3;
+      const oqSrc = (exec.top_conditions && exec.top_conditions.length) ? exec.top_conditions : (dash.all_conditions || []);
+      const oqCount = oqSrc.length || 3;
       if (valEl) valEl.textContent = oqCount;
-      syncDataset({ val: String(oqCount), note: (exec.top_conditions || []).slice(0,2).map(c => typeof c==='string'?c:(c.condition||'')).filter(Boolean).join(' | ') || 'Conditions pending' });
+      syncDataset({ val: String(oqCount), note: oqSrc.slice(0,2).map(c => typeof c==='string'?c:(c.condition||c.text||'')).filter(Boolean).join(' | ') || 'Conditions pending' });
     }
   });
 
@@ -3399,7 +3477,7 @@ function applyLiveData(raw) {
   set('brief-insight-1', 'All ' + voteTotal + ' ELT roles approved ' + (dash.approved_option_id || 'OPT-5') + ' after ' + maxRound + ' rounds. ' +
     (r0defers > 0 ? r0defers + ' roles deferred in R0 citing incomplete data before converging at R' + (maxRound-1) + '.' : 'Confidence built through structured evidence review across all rounds.'));
   set('brief-insight-2', conf + '% average confidence with ' + (gt.severity || 'HIGH') + ' groupthink signal flagged at convergence. Board approval is the binding gate \u2014 execution stalls if approval materials miss the deadline.');
-  var topConds = Array.isArray(exec.top_conditions) ? exec.top_conditions : (typeof exec.top_conditions === 'string' && exec.top_conditions ? exec.top_conditions.split(/[;\n]/).filter(Boolean) : []);
+  var topConds = Array.isArray(exec.top_conditions) && exec.top_conditions.length ? exec.top_conditions : (Array.isArray(dash.all_conditions) && dash.all_conditions.length ? dash.all_conditions : (typeof exec.top_conditions === 'string' && exec.top_conditions ? exec.top_conditions.split(/[;\n]/).filter(Boolean) : []));
   set('brief-insight-3', (fm.phase_1_immediate || p1) + ' releases now for initial workstreams. ' + (fm.phase_2_gated || p2) + ' gated on first milestone. ' + topConds.length + ' open questions must resolve before execution begins.');
 
   // Populate briefing stat cards dynamically
@@ -3419,7 +3497,7 @@ function applyLiveData(raw) {
   // \u2500\u2500 Bucket decision areas
   // Briefing intel panels (dynamic)
   const optId = dash.approved_option_id || 'OPT-5';
-  const optName = dir.chosen_option_name || dir.selected_option || 'Selected Option';
+  const optName = dir.chosen_option_name || dir.selected_option || dash.approved_option_label || 'Selected Option';
   buildBriefingPanels(exec, dir, dash, bgp, fm, mso, stages, voteTotal, maxRound, optId, optName, raw);
 
   const bucketData = buildBucketData(raw);
@@ -3561,7 +3639,7 @@ function buildBucketData(raw) {
   const risksRaw = Array.isArray(mso.risks) ? mso.risks : Object.values(mso.risks || {});
   const riskTexts = risksRaw.map(function(r){return typeof r==='string'?r:(r&&r.risk||r&&r.description||r&&r.text||'');}).filter(Boolean);
   const conds = bgp.conditions_for_approval || [];
-  const oqs = exec.top_conditions || [];
+  const oqs = (exec.top_conditions && exec.top_conditions.length) ? exec.top_conditions : (dash.all_conditions || []);
 
   return [
     { val: '<span>' + roles.length + '</span><span class="bc-unit">roles</span>', text: 'Every executive deliberated across 3 structured rounds. CEO led at ' + (Math.round((stages.find(s=>s.section==='D'&&s.round===2&&s.role_key==='CEO')?.confidence_score||0.67)*100)) + '%. ' + r0d + ' of ' + roles.length + ' deferred in R0 before converging at R2.' },
@@ -3590,18 +3668,25 @@ function buildCommandCenter(raw, tl, dir, exec, fm, mso) {
   const gt2El = el('cmd-groupthink2');
   const gt2 = dash.groupthink_flag || {};
   if (gt2El) { gt2El.textContent = gt2.triggered ? 'Groupthink · HIGH' : 'Groupthink · CLEAR'; gt2El.className = gt2.triggered ? 'chip chip-red' : 'chip chip-teal'; gt2El.style.fontSize='var(--font-9)'; }
-  const optLabel2 = dash.approved_option_id ? dash.approved_option_id+': '+(dir?.chosen_option_name||'Selected Option') : 'Selected Option';
+  const optLabel2 = dash.approved_option_id ? dash.approved_option_id+': '+(dir?.chosen_option_name||dash.approved_option_label||'Selected Option') : 'Selected Option';
   set('cmd-option-badge2', optLabel2);
   const heroRolesEl = el('cmd-hero-roles');
   const r2rows = (raw.stageOutputs||[]).filter(s => s.section==='D' && s.round===2);
   window.PHOTOS=window.PHOTOS||{CEO:'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=48&h=48&fit=crop',CFO:'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=48&h=48&fit=crop',CTO:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=48&h=48&fit=crop',CHRO:'https://images.unsplash.com/photo-1598550874175-4d0ef436c909?w=48&h=48&fit=crop',COO:'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=48&h=48&fit=crop',CSO:'https://images.unsplash.com/photo-1614644147798-f8c0fc9da7f6?w=48&h=48&fit=crop',LEGAL:'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=48&h=48&fit=crop'};
   const PHOTOS=window.PHOTOS;
   const NAMES={CEO:'Alexandra Reid',CFO:'Marcus Chen',CTO:'Dev Patel',CHRO:'Priya Sharma',COO:'Jordan Kim',CSO:'Isabel Torres',LEGAL:'Nathan Ellis'};
-  if (heroRolesEl && r2rows.length) { heroRolesEl.innerHTML = r2rows.map(s => { const rk=s.role_key||''; const pct=Math.round((s.confidence_score||0)*100); const isHigh=pct>=70; const stance=(s.stance||s.vote||'').includes('CONDITIONAL')?'AWC':(s.stance||s.vote||'AWC').substring(0,4); const chipC=isHigh?'chip-teal':'chip-amber'; const numC=isHigh?'var(--teal)':'var(--amber)'; return `<div class="cmd-role-row"><img src="${PHOTOS[rk]||PHOTOS.CEO}" style="width:var(--avatar-xs);height:var(--avatar-xs);border-radius:var(--r-full);object-fit:cover;flex-shrink:0;border:1px solid var(--border-hover)"><div style="flex:1;min-width:0"><div style="font-size:var(--text-xs);font-weight:700;line-height:1.2">${NAMES[rk]||rk}</div><div style="font-family:var(--font-mono);font-size:var(--font-9);color:var(--text-muted)">${rk}</div></div><span class="chip ${chipC}" style="font-size:var(--font-9);padding:var(--chip-py-xs) var(--chip-px-xs)">${stance}</span><span style="font-family:var(--font-mono);font-size:var(--font-9);color:${numC};font-weight:700;min-width:var(--avatar-xs);text-align:right">${pct}%</span></div>`; }).join(''); }
+  // Use stageOutputs R2, fall back to dashboard.role_assessment_preview
+  var heroRows = r2rows.length ? r2rows : (dash.role_assessment_preview || []).map(function(r) { return { role_key: r.role || r.role_key || '', confidence_score: r.confidence_score || 0, stance: r.stance || r.vote || '', vote: r.vote || '' }; });
+  if (heroRolesEl && heroRows.length) { heroRolesEl.innerHTML = heroRows.map(s => { const rk=s.role_key||''; const pct=Math.round((s.confidence_score||0)*(s.confidence_score>1?1:100)); const isHigh=pct>=70; const stance=(s.stance||s.vote||'').includes('CONDITIONAL')?'AWC':(s.stance||s.vote||'AWC').substring(0,4); const chipC=isHigh?'chip-teal':'chip-amber'; const numC=isHigh?'var(--teal)':'var(--amber)'; return `<div class="cmd-role-row"><img src="${PHOTOS[rk]||PHOTOS.CEO}" style="width:var(--avatar-xs);height:var(--avatar-xs);border-radius:var(--r-full);object-fit:cover;flex-shrink:0;border:1px solid var(--border-hover)"><div style="flex:1;min-width:0"><div style="font-size:var(--text-xs);font-weight:700;line-height:1.2">${NAMES[rk]||rk}</div><div style="font-family:var(--font-mono);font-size:var(--font-9);color:var(--text-muted)">${rk}</div></div><span class="chip ${chipC}" style="font-size:var(--font-9);padding:var(--chip-py-xs) var(--chip-px-xs)">${stance}</span><span style="font-family:var(--font-mono);font-size:var(--font-9);color:${numC};font-weight:700;min-width:var(--avatar-xs);text-align:right">${pct}%</span></div>`; }).join(''); }
   const vs = dash.vote_split || {};
-  const total = (vs.approve||0)+(vs.conditional||0)+(vs.defer||0);
-  var tvCount=stages.filter(function(s){return s.round===2&&s.role_key!=='SYSTEM';}).length||total||7;
-  set('cmd-vote', total ? (vs.approve||0)+(vs.conditional||0)+'/'+total : tvCount+'/'+tvCount);
+  // vote_split uses uppercase keys like APPROVE_WITH_CONDITIONS, APPROVE, REJECT, DEFER
+  var vsApprove = 0, vsTotal = 0;
+  Object.keys(vs).forEach(function(k) {
+    var v = vs[k] || 0; vsTotal += v;
+    if (/APPROVE/i.test(k) || /SUPPORT/i.test(k)) vsApprove += v;
+  });
+  var tvCount=stages.filter(function(s){return s.round===2&&s.role_key!=='SYSTEM';}).length||vsTotal||7;
+  set('cmd-vote', vsTotal ? vsApprove+'/'+vsTotal : tvCount+'/'+tvCount);
   set('cmd-risk', dash.risk_exposure || 'HIGH');
   const gt = dash.groupthink_flag || {};
   set('cmd-groupthink', gt.triggered ? 'FLAGGED' : 'CLEAR');
@@ -3636,7 +3721,9 @@ function buildCommandCenter(raw, tl, dir, exec, fm, mso) {
 
   // Open questions from live data — use unknowns (not candidates, which are options)
   const topActions = exec?.top_3_actions || [];
-  const qs = unknowns.length ? unknowns : (exec?.top_conditions || []).map(c => typeof c==='string'?c:(c.condition||''));
+  const allConds = dash.all_conditions || [];
+  const qsSrc = unknowns.length ? unknowns : ((exec?.top_conditions || []).length ? exec.top_conditions : allConds);
+  const qs = qsSrc.map(c => typeof c==='string'?c:(c.condition||c.text||c.question||''));
   if (qs.length) {
     const wrap = el('cmd-questions');
     if (wrap) wrap.innerHTML = qs.slice(0,5).map((q,i) => {
@@ -3675,7 +3762,7 @@ function buildCommandCenter(raw, tl, dir, exec, fm, mso) {
   if (growthMandate) set('cmd-win-growth',    getCommitment(growthMandate));
 
   // Approved option badge
-  set('cmd-option-badge', dash.approved_option_id ? dash.approved_option_id + ': ' + (dir?.chosen_option_name||'Selected Option') : 'Selected Option');
+  set('cmd-option-badge', dash.approved_option_id ? dash.approved_option_id + ': ' + (dir?.chosen_option_name||dash.approved_option_label||'Selected Option') : 'Selected Option');
 
   // Insight text
   const tlPhases = tl?.phases || [];
@@ -3836,6 +3923,8 @@ function buildRisk(raw, mso, dash) {
   _riskUsedPos.length = 0;
   const DOMAIN_ROLE = { Financial:'CFO', People:'CHRO', Technical:'CTO', Legal:'LEGAL', Strategic:'CSO', Operational:'COO', Compliance:'LEGAL', Governance:'LEGAL', Market:'CSO' };
   let liveRisks = Array.isArray(mso.risks) ? mso.risks : Object.values(mso.risks || {});
+  // Fallback: use dashboard.top_3_risks if mso.risks is empty
+  if (!liveRisks.length && dash && Array.isArray(dash.top_3_risks)) liveRisks = dash.top_3_risks;
   liveRisks = liveRisks.map(r => ({...r, role_key: r.role_key || DOMAIN_ROLE[r.domain] || 'CEO', img: r.img || ''}));
   // Merge: live risks first, then STATIC_RISKS that add new domains or reinforce existing ones
   const liveTexts = new Set(liveRisks.map(r => (r.risk || '').substring(0, 60).toLowerCase()));
@@ -4425,12 +4514,20 @@ if(grid){
 
 // -- Groupthink flag
 var gtEl=document.getElementById("room-gt-body");
-if(gtEl&&gtFlag.detected){
-  var sv=gtFlag.severity||"HIGH";
+if(gtEl&&(gtFlag.detected||gtFlag.triggered||gt.triggered)){
+  var sv=gtFlag.severity||gt.severity||"HIGH";
   var sc3=sv==="HIGH"?"chip-red":sv==="MEDIUM"?"chip-amber":"chip";
+  var gtIndicators = gtFlag.indicators || gt.indicators || {};
+  var gtWarning = gtFlag.warning || gt.warning || '';
+  if (!gtWarning && gtIndicators) {
+    var indParts = [];
+    Object.keys(gtIndicators).forEach(function(k) { var v = gtIndicators[k]; if (typeof v === 'string') indParts.push(v); else if (typeof v === 'boolean' && v) indParts.push(k.replace(/_/g,' ')); });
+    if (indParts.length) gtWarning = 'Indicators: ' + indParts.join('; ');
+  }
+  if (!gtWarning) gtWarning = "Roles converged with limited dissent. Probe for unvoiced concerns before committing.";
   gtEl.innerHTML='<div class="room-gt-icon">&#x26A0;</div><div class="room-gt-text">'+
     '<div><span class="chip '+sc3+'">GROUPTHINK '+sv+'</span></div>'+
-    '<div style="margin-top:var(--gap-xs)">'+(gtFlag.warning||"Roles converged with limited dissent. Probe for unvoiced concerns before committing.")+'</div>'+
+    '<div style="margin-top:var(--gap-xs)">'+gtWarning+'</div>'+
     '</div>';
 }
 
@@ -4633,7 +4730,8 @@ function buildFinancials(raw, fm, fo, bgp, mso, dash) {
 
   // ── Populate "The Full Picture" case cards ──
   var risksList = Array.isArray(mso.risks) ? mso.risks : Object.values(mso.risks || {});
-  var topConds = (raw.outputBlob || {}).executive_summary?.top_conditions || [];
+  if (!risksList.length && dash && Array.isArray(dash.top_3_risks)) risksList = dash.top_3_risks;
+  var topConds = ((raw.outputBlob || {}).executive_summary?.top_conditions || []).length ? (raw.outputBlob || {}).executive_summary.top_conditions : (dash.all_conditions || []);
   var bgpConds = bgp.conditions_for_approval || [];
   // Upside card
   var uBody = el('fin-case-upside-body');
@@ -4745,7 +4843,18 @@ panelsEl.innerHTML=ROLES.map(function(r,i){
     +"<div class='mh-phase2-grid'>"+p2+"</div></div>";
 }).join("");
 if(cfEl){
-  var depMap=dir.dependency_map||dir.cross_functional_dependencies||[];
+  var depMapRaw=dir.dependency_map||dir.cross_functional_dependencies||[];
+  // Normalize: if depMap is an object with category keys (governance, information, etc.), flatten to array
+  var depMap;
+  if(Array.isArray(depMapRaw)){depMap=depMapRaw;}
+  else if(depMapRaw&&typeof depMapRaw==='object'&&Object.keys(depMapRaw).length){
+    depMap=[];Object.keys(depMapRaw).forEach(function(catKey){
+      var cat=depMapRaw[catKey];
+      if(Array.isArray(cat)){cat.forEach(function(item){depMap.push(Object.assign({category:catKey},typeof item==='string'?{title:item}:item));});}
+      else if(cat&&typeof cat==='object'){depMap.push(Object.assign({category:catKey},cat));}
+      else if(typeof cat==='string'){depMap.push({category:catKey,title:cat});}
+    });
+  } else{depMap=[];}
   var CF;
   if(Array.isArray(depMap)&&depMap.length){
     CF=depMap.map(function(dep){

@@ -1,0 +1,25 @@
+{
+  "name": "stratos-v2",
+  "version": "1.0.0",
+  "description": "StratOS Dashboard v2",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/erichathaway/stratos-v2.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/erichathaway/stratos-v2/issues"
+  },
+  "homepage": "https://github.com/erichathaway/stratos-v2#readme",
+  "dependencies": {
+    "@sparticuz/chromium": "^143.0.4",
+    "puppeteer-core": "^24.40.0"
+  }
+}

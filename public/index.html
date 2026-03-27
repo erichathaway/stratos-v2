@@ -2333,8 +2333,9 @@ dep-item strong{display:block;font-family:var(--font-mono);font-size:var(--font-
   </div>
   <div class="header-right">
     <button class="tour-btn" onclick="openTour()">&#9670; Tour</button>
-    <button class="tour-btn" onclick="exportPDF()">Export PDF</button>
-    <button class="tour-btn" onclick="exportFullReport()" style="background:linear-gradient(135deg,rgba(26,54,93,0.25),rgba(26,54,93,0.1));border-color:rgba(91,156,246,0.4)">&#9670; Full Report</button>
+    <button class="tour-btn" onclick="openServerPDF('executive-brief')">Export PDF</button>
+    <button class="tour-btn" onclick="openServerPDF('full-report')" style="background:linear-gradient(135deg,rgba(26,54,93,0.25),rgba(26,54,93,0.1));border-color:rgba(91,156,246,0.4)">&#9670; Full Report</button>
+    <button class="tour-btn" onclick="openServerPDF('board-packet')" style="background:linear-gradient(135deg,rgba(26,54,93,0.15),rgba(26,54,93,0.05));border-color:rgba(91,156,246,0.3)">Board Packet</button>
   </div>
 </header>
 
@@ -3776,6 +3777,16 @@ var TAB_DISPLAY_NAMES = {
   'board': 'Board Report',
   'market': 'Market Intelligence'
 };
+
+function openServerPDF(reportType) {
+  var runId = (window.__stratosData || window.__stratosRaw || {}).run_id
+    || new URLSearchParams(location.search).get('run_id')
+    || new URLSearchParams(location.search).get('run')
+    || '';
+  var url = '/api/pdf?type=' + encodeURIComponent(reportType);
+  if (runId) url += '&run_id=' + encodeURIComponent(runId);
+  window.open(url, '_blank');
+}
 
 function exportPDF() {
   var activeSection = document.querySelector('.s-section.tab-active');

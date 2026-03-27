@@ -181,6 +181,30 @@ body{background:var(--bg-page);color:var(--text-primary);font-family:var(--font-
 .pdf-export-mode .rpt-gov-btn { display: none !important; }
 .pdf-export-mode .rpt-footer { background: #f8f9fa !important; }
 .pdf-export-mode .rpt-footer * { color: #666 !important; }
+/* ── Mobile responsive ─── */
+@media(max-width:768px){
+  .report{padding:20px 16px}
+  .rpt-header{flex-direction:column;align-items:flex-start;gap:10px}
+  .rpt-toolbar{gap:4px}
+  .rpt-view-btn{font-size:9px;padding:4px 8px}
+  .rpt-metrics{grid-template-columns:1fr 1fr;gap:8px}
+  .rpt-m-val{font-size:18px}
+  .g2,.g3{grid-template-columns:1fr}
+  .rpt-v-word{font-size:22px}
+  .rpt-tbl{font-size:11px}
+  .rpt-tbl th,.rpt-tbl td{padding:5px 6px}
+  .v-role{width:40px;font-size:9px}
+  .v-stance{width:60px;font-size:8px}
+  .rpt-audio,.rpt-doc{font-size:9px;padding:4px 8px}
+}
+@media(max-width:480px){
+  .report{padding:12px 10px}
+  .rpt-metrics{grid-template-columns:1fr 1fr}
+  .rpt-m{padding:10px}
+  .rpt-m-val{font-size:16px}
+  .rpt-toolbar{flex-direction:column;align-items:stretch}
+  .rpt-export-btn{margin-left:0}
+}
 </style>
 </head>
 <body>

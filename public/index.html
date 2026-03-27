@@ -1442,24 +1442,99 @@ dep-item strong{display:block;font-family:var(--font-mono);font-size:var(--font-
   .s-section { display: block !important; page-break-inside: avoid; }
   body { background: white; color: black; }
 }
-/* PDF Export Light Mode */
+/* PDF Export Light Mode — Professional Print Layout */
 .pdf-mode { background: #fff !important; }
 .pdf-mode, .pdf-mode * { color: #1a1a2e !important; }
-.pdf-mode .card { background: #f8f9fa !important; border-color: #e0e0e0 !important; }
-.pdf-mode .section-label { color: #0a0d14 !important; }
-.pdf-mode .stat-value, .pdf-mode .nc-val { color: #0a0d14 !important; }
-.pdf-mode .stat-sub, .pdf-mode .stat-chip { color: #555 !important; background: #eee !important; border-color: #ccc !important; }
-.pdf-mode .insight-q { color: #0a0d14 !important; }
-.pdf-mode .insight-a { color: #333 !important; }
-.pdf-mode .verdict-hero { background: #f0f4ff !important; }
-.pdf-mode .bucket-card { background: #f8f9fa !important; border-color: #ddd !important; }
-.pdf-mode .risk-panel-row { border-color: #eee !important; }
-.pdf-mode .fin-kpi { background: #f8f9fa !important; border-color: #e0e0e0 !important; }
-.pdf-mode .ev-card { background: #f8f9fa !important; border-color: #e0e0e0 !important; }
-.pdf-mode .board-sum-item { background: #f8f9fa !important; }
-.pdf-mode .mh-mandate-item { border-color: #eee !important; }
-.pdf-mode .tour-btn, .pdf-mode .info-btn { display: none !important; }
-.pdf-mode a { color: #0066cc !important; }
+.pdf-mode .card { background: #fff !important; border: 1px solid #d0d5dd !important; border-radius: 6px !important; box-shadow: none !important; }
+.pdf-mode .section-label { color: #1a365d !important; font-size: 13px !important; letter-spacing: 0.08em !important; border-bottom: 2px solid #1a365d !important; padding-bottom: 6px !important; margin-bottom: 16px !important; display: inline-block !important; }
+.pdf-mode .section-head { margin-bottom: 12px !important; }
+.pdf-mode .stat-value, .pdf-mode .nc-val { color: #0a0d14 !important; font-weight: 800 !important; }
+.pdf-mode .stat-sub, .pdf-mode .stat-chip { color: #475569 !important; background: #f1f5f9 !important; border-color: #cbd5e1 !important; }
+.pdf-mode .stat-card, .pdf-mode .nc-group { background: #fff !important; border: 1px solid #d0d5dd !important; border-radius: 6px !important; box-shadow: none !important; }
+.pdf-mode .insight-q { color: #0a0d14 !important; font-weight: 700 !important; }
+.pdf-mode .insight-a { color: #334155 !important; line-height: 1.7 !important; }
+.pdf-mode .verdict-hero { background: #f0f4ff !important; border: 1px solid #bfdbfe !important; box-shadow: none !important; }
+.pdf-mode .verdict-hero::before { display: none !important; }
+.pdf-mode .v-word { color: #1a365d !important; }
+.pdf-mode .v-tag { color: #1a365d !important; border-color: #93c5fd !important; }
+.pdf-mode .v-chip { color: #475569 !important; background: #e0e7ff !important; border-color: #93c5fd !important; }
+.pdf-mode .v-sub { color: #475569 !important; }
+.pdf-mode .bucket-card { background: #fff !important; border: 1px solid #d0d5dd !important; box-shadow: none !important; }
+.pdf-mode .bucket-card:hover { transform: none !important; }
+.pdf-mode .risk-panel-row { border-color: #e2e8f0 !important; }
+.pdf-mode .fin-kpi { background: #fff !important; border: 1px solid #d0d5dd !important; box-shadow: none !important; }
+.pdf-mode .ev-card { background: #fff !important; border: 1px solid #d0d5dd !important; box-shadow: none !important; }
+.pdf-mode .board-sum-item { background: #f8fafc !important; border: 1px solid #e2e8f0 !important; }
+.pdf-mode .mh-mandate-item { border-color: #e2e8f0 !important; }
+.pdf-mode .tour-btn, .pdf-mode .info-btn, .pdf-mode .cite, .pdf-mode .num-cite sup { display: none !important; }
+.pdf-mode a { color: #1a56db !important; text-decoration: none !important; }
+/* Tables */
+.pdf-mode table, .pdf-mode .risk-table { border-collapse: collapse !important; width: 100% !important; }
+.pdf-mode th { background: #f1f5f9 !important; color: #1a365d !important; font-weight: 700 !important; border-bottom: 2px solid #1a365d !important; padding: 8px 12px !important; text-align: left !important; font-size: 11px !important; }
+.pdf-mode td { border-bottom: 1px solid #e2e8f0 !important; padding: 8px 12px !important; font-size: 12px !important; }
+/* Risk matrix */
+.pdf-mode .risk-dot { border: 2px solid #1a365d !important; }
+.pdf-mode .rm-axis-label { color: #475569 !important; }
+.pdf-mode .rm-grid { border-color: #cbd5e1 !important; }
+/* Chips & badges */
+.pdf-mode .chip, .pdf-mode .v-chip, .pdf-mode .mode-badge { background: #f1f5f9 !important; border: 1px solid #cbd5e1 !important; color: #334155 !important; }
+/* Confidence bars */
+.pdf-mode .conf-bar-fill { background: #1a365d !important; }
+.pdf-mode .conf-bar-track { background: #e2e8f0 !important; }
+/* Cards — remove hover/glow/dim effects */
+.pdf-mode [class*="card"]:hover, .pdf-mode [class*="card"]:focus { transform: none !important; box-shadow: none !important; }
+.pdf-mode .expand-reveal, .pdf-mode .bucket-card .expand-txt { max-height: none !important; overflow: visible !important; }
+/* Remove interactive elements */
+.pdf-mode .s-nav, .pdf-mode .s-header, .pdf-mode #ap, .pdf-mode #strat-chat-fab, .pdf-mode #strat-chat-panel { display: none !important; }
+.pdf-mode .tour-overlay, .pdf-mode #tour-overlay { display: none !important; }
+.pdf-mode audio, .pdf-mode .audio-btn { display: none !important; }
+/* Timeline & waterfall */
+.pdf-mode .tl-phase { border-color: #d0d5dd !important; background: #fff !important; }
+.pdf-mode .tl-dot { background: #1a365d !important; }
+.pdf-mode .wf-bar { opacity: 1 !important; }
+/* Bit panels — show active only */
+.pdf-mode .bit-nav { display: none !important; }
+.pdf-mode .bit-panel { display: block !important; margin-bottom: 12px !important; }
+.pdf-mode .bit-panel:not(.active) { display: none !important; }
+/* qbar */
+.pdf-mode qbar { background: #f8fafc !important; border: 1px solid #d0d5dd !important; border-left: 3px solid #1a365d !important; }
+/* Role cards */
+.pdf-mode .room-role-row { border-color: #e2e8f0 !important; background: #fff !important; }
+.pdf-mode .dr-facil-card { background: #f8fafc !important; border: 1px solid #d0d5dd !important; }
+/* Management panels */
+.pdf-mode .mh-panel { background: #fff !important; border: 1px solid #d0d5dd !important; }
+.pdf-mode .mh-pill-btn { background: #f1f5f9 !important; border-color: #cbd5e1 !important; color: #334155 !important; }
+/* Options matrix */
+.pdf-mode .om-cell { border-color: #d0d5dd !important; background: #fff !important; }
+.pdf-mode .om-header { background: #f1f5f9 !important; color: #1a365d !important; }
+/* Full report specific styles */
+.pdf-cover-page { page-break-after: always; padding: 80px 40px; text-align: center; background: #fff; min-height: 800px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.pdf-cover-logo { width: 80px; height: 80px; margin-bottom: 32px; }
+.pdf-cover-title { font-family: 'Sora', system-ui, sans-serif; font-size: 32px; font-weight: 800; color: #1a365d; letter-spacing: -0.02em; margin-bottom: 8px; }
+.pdf-cover-subtitle { font-size: 14px; color: #64748b; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 48px; }
+.pdf-cover-question { font-size: 18px; color: #334155; line-height: 1.6; max-width: 500px; margin: 0 auto 40px; font-style: italic; border-left: 3px solid #1a365d; padding-left: 20px; text-align: left; }
+.pdf-cover-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 40px; text-align: left; max-width: 400px; margin: 0 auto; }
+.pdf-cover-meta dt { font-size: 10px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.1em; }
+.pdf-cover-meta dd { font-size: 14px; color: #1a365d; font-weight: 600; margin: 0 0 12px 0; }
+.pdf-cover-verdict { margin-top: 48px; padding: 20px 32px; background: #f0f4ff; border: 1px solid #bfdbfe; border-radius: 8px; }
+.pdf-cover-verdict-label { font-size: 10px; color: #64748b; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 4px; }
+.pdf-cover-verdict-value { font-size: 28px; font-weight: 800; color: #1a365d; }
+.pdf-cover-verdict-sub { font-size: 13px; color: #475569; margin-top: 4px; }
+.pdf-toc { page-break-after: always; padding: 60px 40px; background: #fff; }
+.pdf-toc h2 { font-family: 'Sora', system-ui, sans-serif; font-size: 22px; font-weight: 700; color: #1a365d; margin-bottom: 32px; border-bottom: 2px solid #1a365d; padding-bottom: 8px; }
+.pdf-toc-item { display: flex; justify-content: space-between; align-items: baseline; padding: 10px 0; border-bottom: 1px dotted #cbd5e1; font-size: 14px; color: #334155; }
+.pdf-toc-item .toc-num { color: #94a3b8; font-family: 'DM Mono', monospace; font-size: 12px; min-width: 28px; }
+.pdf-toc-item .toc-name { font-weight: 600; }
+.pdf-toc-item .toc-page { color: #94a3b8; font-family: 'DM Mono', monospace; font-size: 12px; }
+.pdf-section-break { page-break-before: always; }
+.pdf-section-header { background: #f0f4ff; border: 1px solid #bfdbfe; border-radius: 6px; padding: 16px 24px; margin-bottom: 24px; }
+.pdf-section-header h2 { font-family: 'Sora', system-ui, sans-serif; font-size: 18px; font-weight: 700; color: #1a365d; margin: 0; }
+.pdf-section-header .pdf-section-num { font-family: 'DM Mono', monospace; font-size: 11px; color: #94a3b8; letter-spacing: 0.08em; }
+.pdf-header-bar { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; margin-bottom: 16px; border-bottom: 1px solid #e2e8f0; font-family: 'DM Mono', monospace; font-size: 9px; color: #94a3b8; letter-spacing: 0.06em; text-transform: uppercase; }
+.pdf-footer-bar { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; margin-top: 24px; border-top: 1px solid #e2e8f0; font-family: 'DM Mono', monospace; font-size: 9px; color: #94a3b8; letter-spacing: 0.06em; }
+/* Narrative prose blocks for PDF */
+.pdf-narrative { font-size: 13px; line-height: 1.75; color: #334155; margin-bottom: 16px; }
+.pdf-narrative p { margin-bottom: 10px; }
 
 /* ── 33  ENHANCED MOBILE RESPONSIVE ────────────────────────────────────────── */
 
@@ -1715,6 +1790,7 @@ dep-item strong{display:block;font-family:var(--font-mono);font-size:var(--font-
   <div class="header-right">
     <button class="tour-btn" onclick="openTour()">&#9670; Tour</button>
     <button class="tour-btn" onclick="exportPDF()">Export PDF</button>
+    <button class="tour-btn" onclick="exportFullReport()" style="background:linear-gradient(135deg,rgba(26,54,93,0.25),rgba(26,54,93,0.1));border-color:rgba(91,156,246,0.4)">&#9670; Full Report</button>
   </div>
 </header>
 
@@ -3012,30 +3088,325 @@ dep-item strong{display:block;font-family:var(--font-mono);font-size:var(--font-
 <script>
 // \u2500\u2500 UTILITIES \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
 // ── PDF EXPORT ────────────────────────────────────────────────────────────
+
+// Narrativize: converts data-dense card content into flowing prose for PDF
+function narrativize(html) {
+  if (!html || typeof html !== 'string') return html || '';
+  var div = document.createElement('div');
+  div.innerHTML = html;
+
+  // Convert bullet lists into flowing sentences
+  div.querySelectorAll('ul, .bit-list, .bucket-list').forEach(function(list) {
+    var items = [];
+    list.querySelectorAll('li, .bit-item, .bucket-item').forEach(function(li) {
+      var txt = li.textContent.trim().replace(/^[\u2022\u2013\u2014\-\u00d7]\s*/, '').replace(/^[\d]+\.\s*/, '');
+      if (txt) items.push(txt);
+    });
+    if (items.length > 0 && items.length <= 6) {
+      var joined = items.length === 1 ? items[0] :
+        items.slice(0, -1).join('; ') + '; and ' + items[items.length - 1];
+      var p = document.createElement('p');
+      p.className = 'pdf-narrative';
+      p.textContent = joined + '.';
+      list.parentNode.replaceChild(p, list);
+    }
+  });
+
+  // Convert role assessment previews into narrative prose
+  div.querySelectorAll('.room-role-row, .role-preview, .dr-facil-card').forEach(function(card) {
+    var role = card.querySelector('.room-role-name, .role-name, .dr-facil-round');
+    var conf = card.querySelector('.room-role-conf, .role-conf, .dr-conf-num');
+    var stance = card.querySelector('.room-role-stance, .role-stance');
+    var detail = card.querySelector('.room-role-detail, .role-detail, .dr-facil-text');
+    if (role && (conf || detail)) {
+      var roleName = role.textContent.trim();
+      var confVal = conf ? conf.textContent.trim() : '';
+      var stanceVal = stance ? stance.textContent.trim().toLowerCase() : '';
+      var detailTxt = detail ? detail.textContent.trim() : '';
+      if (roleName && (confVal || detailTxt)) {
+        var prose = 'The ' + roleName;
+        if (stanceVal && confVal) {
+          prose += ' expressed ' + stanceVal + ' support at ' + confVal + ' confidence';
+        } else if (confVal) {
+          prose += ' assessed at ' + confVal + ' confidence';
+        }
+        if (detailTxt) {
+          prose += ', noting: "' + detailTxt.substring(0, 200) + (detailTxt.length > 200 ? '...' : '') + '"';
+        }
+        prose += '.';
+        var p = document.createElement('p');
+        p.className = 'pdf-narrative';
+        p.textContent = prose;
+        card.innerHTML = '';
+        card.appendChild(p);
+        card.style.border = 'none';
+        card.style.padding = '0';
+        card.style.background = 'transparent';
+      }
+    }
+  });
+
+  // Convert short condition/risk chip lists into inline prose
+  div.querySelectorAll('.v-chips, .cond-chips').forEach(function(chipRow) {
+    var chips = [];
+    chipRow.querySelectorAll('.v-chip, .chip, .cond-chip').forEach(function(c) {
+      chips.push(c.textContent.trim());
+    });
+    if (chips.length > 0) {
+      var p = document.createElement('span');
+      p.className = 'pdf-narrative';
+      p.textContent = chips.join(' | ');
+      chipRow.parentNode.replaceChild(p, chipRow);
+    }
+  });
+
+  return div.innerHTML;
+}
+
+// Get PDF metadata from live data
+function getPdfMeta() {
+  var raw = window.__stratosData || window.__stratosRaw || {};
+  var ob = raw.outputBlob || {};
+  var dash = ob.dashboard || {};
+  var mb = raw.masterBlob || {};
+  var masterInput = mb.input_data || raw.master?.input_data || raw.master || {};
+  var originals = masterInput._originals || {};
+  var qOrig = originals.question || raw.master?.question || masterInput.question || '';
+  var qEnriched = dash.decision_question || masterInput.question || '';
+  var voteKey = Object.keys(dash.vote_split || {})[0] || '';
+  var verdict = voteKey.includes('APPROVE') ? 'Approved' : voteKey.includes('REJECT') ? 'Rejected' : 'Approved';
+  var verdictSub = voteKey.includes('CONDITIONS') ? 'With Conditions' : '';
+  var conf = dash.decision_confidence || 67;
+  if (conf < 1) conf = Math.round(conf * 100);
+  var runId = raw.run_id || new URLSearchParams(location.search).get('run_id') || new URLSearchParams(location.search).get('run') || 'N/A';
+  var mi = raw.marketIntelBlob || {};
+  var miData = typeof mi === 'string' ? JSON.parse(mi) : mi;
+  var company = miData.company_name || masterInput.company_name || masterInput.company || originals.company_name || '';
+  var mode = dash.mode || raw.master?.room_type || 'ELT';
+  var today = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  return {
+    question: qOrig || qEnriched || 'Decision question pending',
+    company: company,
+    runId: runId,
+    date: today,
+    verdict: verdict,
+    verdictSub: verdictSub,
+    confidence: conf,
+    mode: mode.toUpperCase(),
+    voteOutcome: voteKey.replace(/_/g, ' ') || 'Pending'
+  };
+}
+
+// Tab name to display name mapping
+var TAB_DISPLAY_NAMES = {
+  'briefing': 'Executive Briefing',
+  'command': 'Command Center',
+  'risk': 'Risk & Intelligence',
+  'financials': 'Financial Analysis',
+  'room': 'The Room & Options',
+  'management': 'Management Handoff',
+  'board': 'Board Report',
+  'market': 'Market Intelligence'
+};
+
 function exportPDF() {
   var activeSection = document.querySelector('.s-section.tab-active');
   if (!activeSection) { window.print(); return; }
-  var toolbar = document.querySelector('.tabs');
+  var nav = document.querySelector('.s-nav');
+  var header = document.querySelector('.s-header');
   var tour = document.getElementById('ap');
-  if (toolbar) toolbar.style.display = 'none';
+  var chatFab = document.getElementById('strat-chat-fab');
+  var chatPanel = document.getElementById('strat-chat-panel');
+  if (nav) nav.style.display = 'none';
+  if (header) header.style.display = 'none';
   if (tour) tour.style.display = 'none';
-  var runId = new URLSearchParams(location.search).get('run_id') || 'export';
+  if (chatFab) chatFab.style.display = 'none';
+  if (chatPanel) chatPanel.style.display = 'none';
+
+  var meta = getPdfMeta();
+  var runId = meta.runId;
   var tabName = activeSection.id.replace('sec-','') || 'dashboard';
-  // Add light mode for PDF
+  var displayName = TAB_DISPLAY_NAMES[tabName] || tabName;
+
+  // Build wrapper with header/footer
+  var wrapper = document.createElement('div');
+  wrapper.className = 'pdf-mode';
+  wrapper.style.background = '#fff';
+
+  // Header bar
+  var hdr = document.createElement('div');
+  hdr.className = 'pdf-header-bar';
+  hdr.innerHTML = '<span>STRATOS \u2014 DECISION INTELLIGENCE REPORT</span><span>' + displayName.toUpperCase() + '</span><span>' + meta.date + '</span>';
+  wrapper.appendChild(hdr);
+
+  // Clone section content
   activeSection.classList.add('pdf-mode');
   document.body.classList.add('pdf-mode');
+  var clone = activeSection.cloneNode(true);
+  clone.style.display = 'block';
+  clone.classList.add('pdf-mode');
+  wrapper.appendChild(clone);
+
+  // Footer bar
+  var ftr = document.createElement('div');
+  ftr.className = 'pdf-footer-bar';
+  ftr.innerHTML = '<span>StratOS Decision Engine</span><span>' + meta.runId + '</span><span>Confidential</span>';
+  wrapper.appendChild(ftr);
+
+  document.body.appendChild(wrapper);
+
   html2pdf().set({
-    margin: [10, 10, 14, 10],
+    margin: [8, 10, 12, 10],
     filename: 'StratOS-' + tabName + '-' + runId + '.pdf',
-    image: { type: 'jpeg', quality: 0.98 },
-    html2canvas: { scale: 2.5, useCORS: true, backgroundColor: '#ffffff' },
+    image: { type: 'jpeg', quality: 0.95 },
+    html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff', logging: false },
     jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-    pagebreak: { mode: ['avoid-all', 'css'] }
-  }).from(activeSection).save().then(function(){
+    pagebreak: { mode: ['css', 'legacy'], avoid: ['.card', '.stat-card', '.bucket-card', '.fin-kpi', '.ev-card'] }
+  }).from(wrapper).save().then(function(){
+    wrapper.remove();
     activeSection.classList.remove('pdf-mode');
     document.body.classList.remove('pdf-mode');
-    if (toolbar) toolbar.style.display = '';
+    if (nav) nav.style.display = '';
+    if (header) header.style.display = '';
     if (tour) tour.style.display = '';
+    if (chatFab) chatFab.style.display = '';
+    if (chatPanel) chatPanel.style.display = '';
+  });
+}
+
+// ── FULL REPORT PDF EXPORT ──────────────────────────────────────────────
+function exportFullReport() {
+  var meta = getPdfMeta();
+
+  // Hide UI elements
+  var nav = document.querySelector('.s-nav');
+  var header = document.querySelector('.s-header');
+  var tour = document.getElementById('ap');
+  var chatFab = document.getElementById('strat-chat-fab');
+  var chatPanel = document.getElementById('strat-chat-panel');
+  if (nav) nav.style.display = 'none';
+  if (header) header.style.display = 'none';
+  if (tour) tour.style.display = 'none';
+  if (chatFab) chatFab.style.display = 'none';
+  if (chatPanel) chatPanel.style.display = 'none';
+  document.body.classList.add('pdf-mode');
+
+  // Build full report container
+  var report = document.createElement('div');
+  report.className = 'pdf-mode';
+  report.style.background = '#fff';
+
+  // ── COVER PAGE ──
+  var cover = document.createElement('div');
+  cover.className = 'pdf-cover-page';
+  cover.innerHTML =
+    '<div class="pdf-cover-logo">' +
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none" width="80" height="80">' +
+        '<circle cx="256" cy="256" r="250" fill="#0f1729"/>' +
+        '<circle cx="256" cy="256" r="230" stroke="#1a365d" stroke-width="2" fill="none"/>' +
+        '<circle cx="256" cy="256" r="200" stroke="#1a365d" stroke-width="1" fill="none" opacity="0.4"/>' +
+        '<polygon points="256,50 244,210 268,210" fill="#1a365d"/>' +
+        '<circle cx="256" cy="256" r="16" fill="#0f1729"/>' +
+        '<circle cx="256" cy="256" r="10" fill="#1a365d"/>' +
+        '<text x="256" y="95" text-anchor="middle" font-family="system-ui,sans-serif" font-size="28" font-weight="900" fill="#1a365d">N</text>' +
+      '</svg>' +
+    '</div>' +
+    '<div class="pdf-cover-title">StratOS</div>' +
+    '<div class="pdf-cover-subtitle">Decision Intelligence Report</div>' +
+    '<div class="pdf-cover-question">' + esc(meta.question) + '</div>' +
+    '<dl class="pdf-cover-meta">' +
+      (meta.company ? '<dt>Company</dt><dd>' + esc(meta.company) + '</dd>' : '') +
+      '<dt>Run ID</dt><dd>' + esc(meta.runId) + '</dd>' +
+      '<dt>Date</dt><dd>' + meta.date + '</dd>' +
+      '<dt>Mode</dt><dd>' + meta.mode + '</dd>' +
+      '<dt>Confidence</dt><dd>' + meta.confidence + '%</dd>' +
+      '<dt>Vote Outcome</dt><dd>' + esc(meta.voteOutcome) + '</dd>' +
+    '</dl>' +
+    '<div class="pdf-cover-verdict">' +
+      '<div class="pdf-cover-verdict-label">Final Decision</div>' +
+      '<div class="pdf-cover-verdict-value">' + esc(meta.verdict) + '</div>' +
+      (meta.verdictSub ? '<div class="pdf-cover-verdict-sub">' + esc(meta.verdictSub) + '</div>' : '') +
+    '</div>';
+  report.appendChild(cover);
+
+  // ── TABLE OF CONTENTS ──
+  var sections = document.querySelectorAll('.s-section');
+  var visibleSections = [];
+  sections.forEach(function(sec) {
+    if (sec.style.display === 'none' || sec.offsetParent === null) return;
+    var tabId = sec.id.replace('sec-', '');
+    var name = TAB_DISPLAY_NAMES[tabId] || tabId;
+    visibleSections.push({ id: tabId, name: name, el: sec });
+  });
+
+  var toc = document.createElement('div');
+  toc.className = 'pdf-toc';
+  var tocHtml = '<h2>Contents</h2>';
+  visibleSections.forEach(function(s, i) {
+    tocHtml += '<div class="pdf-toc-item">' +
+      '<span class="toc-num">' + String(i + 1).padStart(2, '0') + '</span>' +
+      '<span class="toc-name">' + s.name + '</span>' +
+      '<span class="toc-page">Section ' + (i + 1) + '</span>' +
+    '</div>';
+  });
+  toc.innerHTML = tocHtml;
+  report.appendChild(toc);
+
+  // ── SECTION PAGES ──
+  visibleSections.forEach(function(s, i) {
+    var secWrap = document.createElement('div');
+    secWrap.className = 'pdf-section-break';
+
+    // Section header bar (repeated on each section)
+    var shdr = document.createElement('div');
+    shdr.className = 'pdf-header-bar';
+    shdr.innerHTML = '<span>STRATOS \u2014 DECISION INTELLIGENCE REPORT</span><span>' + s.name.toUpperCase() + '</span><span>' + meta.date + '</span>';
+    secWrap.appendChild(shdr);
+
+    // Section title
+    var sTitle = document.createElement('div');
+    sTitle.className = 'pdf-section-header';
+    sTitle.innerHTML = '<div class="pdf-section-num">SECTION ' + String(i + 1).padStart(2, '0') + '</div><h2>' + s.name + '</h2>';
+    secWrap.appendChild(sTitle);
+
+    // Clone and apply pdf-mode + narrativize
+    s.el.classList.add('pdf-mode');
+    var clone = s.el.cloneNode(true);
+    clone.style.display = 'block';
+    clone.classList.add('pdf-mode');
+
+    // Narrativize the cloned content
+    clone.innerHTML = narrativize(clone.innerHTML);
+
+    secWrap.appendChild(clone);
+
+    // Section footer
+    var sftr = document.createElement('div');
+    sftr.className = 'pdf-footer-bar';
+    sftr.innerHTML = '<span>StratOS Decision Engine</span><span>' + meta.runId + '</span><span>Page ' + (i + 1) + ' of ' + visibleSections.length + '</span>';
+    secWrap.appendChild(sftr);
+
+    report.appendChild(secWrap);
+  });
+
+  document.body.appendChild(report);
+
+  html2pdf().set({
+    margin: [8, 10, 12, 10],
+    filename: 'StratOS-Full-Report-' + meta.runId + '.pdf',
+    image: { type: 'jpeg', quality: 0.92 },
+    html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff', logging: false },
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+    pagebreak: { mode: ['css', 'legacy'], before: ['.pdf-section-break'], avoid: ['.card', '.stat-card', '.bucket-card', '.fin-kpi', '.ev-card', '.pdf-section-header'] }
+  }).from(report).save().then(function(){
+    report.remove();
+    document.body.classList.remove('pdf-mode');
+    sections.forEach(function(sec) { sec.classList.remove('pdf-mode'); });
+    if (nav) nav.style.display = '';
+    if (header) header.style.display = '';
+    if (tour) tour.style.display = '';
+    if (chatFab) chatFab.style.display = '';
+    if (chatPanel) chatPanel.style.display = '';
   });
 }
 

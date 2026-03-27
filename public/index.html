@@ -1442,99 +1442,643 @@ dep-item strong{display:block;font-family:var(--font-mono);font-size:var(--font-
   .s-section { display: block !important; page-break-inside: avoid; }
   body { background: white; color: black; }
 }
-/* PDF Export Light Mode — Professional Print Layout */
-.pdf-mode { background: #fff !important; }
-.pdf-mode, .pdf-mode * { color: #1a1a2e !important; }
-.pdf-mode .card { background: #fff !important; border: 1px solid #d0d5dd !important; border-radius: 6px !important; box-shadow: none !important; }
-.pdf-mode .section-label { color: #1a365d !important; font-size: 13px !important; letter-spacing: 0.08em !important; border-bottom: 2px solid #1a365d !important; padding-bottom: 6px !important; margin-bottom: 16px !important; display: inline-block !important; }
-.pdf-mode .section-head { margin-bottom: 12px !important; }
-.pdf-mode .stat-value, .pdf-mode .nc-val { color: #0a0d14 !important; font-weight: 800 !important; }
-.pdf-mode .stat-sub, .pdf-mode .stat-chip { color: #475569 !important; background: #f1f5f9 !important; border-color: #cbd5e1 !important; }
-.pdf-mode .stat-card, .pdf-mode .nc-group { background: #fff !important; border: 1px solid #d0d5dd !important; border-radius: 6px !important; box-shadow: none !important; }
-.pdf-mode .insight-q { color: #0a0d14 !important; font-weight: 700 !important; }
-.pdf-mode .insight-a { color: #334155 !important; line-height: 1.7 !important; }
-.pdf-mode .verdict-hero { background: #f0f4ff !important; border: 1px solid #bfdbfe !important; box-shadow: none !important; }
+/* ── PDF EXPORT — McKinsey/BCG-Grade Print Layout ─────────────────────── */
+/* Design language: clean serif+sans pairing, generous whitespace,
+   section numbers in margin, pull quotes with accent bars, flowing
+   document layout — NOT a dashboard printed to PDF. */
+
+/* ── Base reset: white bg, Inter body, kill all dark-mode artifacts ── */
+.pdf-mode {
+  background: #ffffff !important;
+  font-family: 'Inter', 'Georgia', serif !important;
+  font-size: 13px !important;
+  line-height: 1.8 !important;
+  color: #1a1a2e !important;
+  -webkit-font-smoothing: antialiased !important;
+}
+.pdf-mode, .pdf-mode * {
+  color: #1a1a2e !important;
+  text-shadow: none !important;
+  box-shadow: none !important;
+  background-image: none !important;
+  filter: none !important;
+  -webkit-filter: none !important;
+}
+.pdf-mode *::before, .pdf-mode *::after {
+  background-image: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+  filter: none !important;
+  opacity: 1 !important;
+}
+
+/* ── Typography: Inter body, Sora headings, DM Mono data only ── */
+.pdf-mode h1, .pdf-mode h2, .pdf-mode h3, .pdf-mode h4 {
+  font-family: 'Sora', 'Helvetica Neue', sans-serif !important;
+  color: #0f172a !important;
+  letter-spacing: -0.01em !important;
+  line-height: 1.3 !important;
+}
+.pdf-mode p, .pdf-mode span, .pdf-mode li, .pdf-mode div {
+  font-family: 'Inter', 'Georgia', serif !important;
+}
+.pdf-mode .stat-value, .pdf-mode .nc-val, .pdf-mode .fin-kpi-val,
+.pdf-mode .conf-num, .pdf-mode .dr-conf-num {
+  font-family: 'DM Mono', 'Courier New', monospace !important;
+}
+
+/* ── Cards: remove ALL card chrome, flow as document sections ── */
+.pdf-mode .card, .pdf-mode .stat-card, .pdf-mode .nc-group,
+.pdf-mode .bucket-card, .pdf-mode .fin-kpi, .pdf-mode .ev-card,
+.pdf-mode .board-sum-item, .pdf-mode .mh-panel, .pdf-mode .dr-facil-card {
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  margin-bottom: 20px !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+  padding-bottom: 20px !important;
+}
+.pdf-mode .card:last-child, .pdf-mode .bucket-card:last-child,
+.pdf-mode .ev-card:last-child, .pdf-mode .fin-kpi:last-child {
+  border-bottom: none !important;
+}
+.pdf-mode [class*="card"]:hover, .pdf-mode [class*="card"]:focus {
+  transform: none !important;
+  box-shadow: none !important;
+  border-color: #e2e8f0 !important;
+}
+.pdf-mode .expand-reveal, .pdf-mode .bucket-card .expand-txt {
+  max-height: none !important;
+  overflow: visible !important;
+}
+
+/* ── Section labels: numbered, Sora, navy, thin rule underneath ── */
+.pdf-mode .section-label {
+  font-family: 'Sora', sans-serif !important;
+  font-size: 20px !important;
+  font-weight: 700 !important;
+  color: #0f172a !important;
+  letter-spacing: -0.01em !important;
+  text-transform: none !important;
+  border-bottom: 2px solid #0f172a !important;
+  padding-bottom: 10px !important;
+  margin-bottom: 28px !important;
+  display: block !important;
+  width: 100% !important;
+}
+.pdf-mode .section-head { margin-bottom: 24px !important; }
+
+/* ── Stat values: large bold numbers with small gray labels ── */
+.pdf-mode .stat-value, .pdf-mode .nc-val {
+  font-size: 32px !important;
+  font-weight: 800 !important;
+  color: #0f172a !important;
+  line-height: 1.1 !important;
+  display: block !important;
+  margin-bottom: 4px !important;
+}
+.pdf-mode .stat-sub, .pdf-mode .stat-chip, .pdf-mode .stat-label {
+  font-size: 11px !important;
+  font-weight: 500 !important;
+  color: #64748b !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.06em !important;
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+}
+
+/* ── Insight Q&A: clean typography ── */
+.pdf-mode .insight-q {
+  font-family: 'Sora', sans-serif !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  color: #0f172a !important;
+  margin-bottom: 8px !important;
+}
+.pdf-mode .insight-a {
+  font-family: 'Inter', serif !important;
+  font-size: 13px !important;
+  color: #334155 !important;
+  line-height: 1.8 !important;
+}
+
+/* ── Verdict hero: callout box with blue accent bar ── */
+.pdf-mode .verdict-hero {
+  background: #ffffff !important;
+  border: none !important;
+  border-left: 4px solid #1e40af !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: 24px 28px !important;
+  margin: 28px 0 !important;
+}
 .pdf-mode .verdict-hero::before { display: none !important; }
-.pdf-mode .v-word { color: #1a365d !important; }
-.pdf-mode .v-tag { color: #1a365d !important; border-color: #93c5fd !important; }
-.pdf-mode .v-chip { color: #475569 !important; background: #e0e7ff !important; border-color: #93c5fd !important; }
-.pdf-mode .v-sub { color: #475569 !important; }
-.pdf-mode .bucket-card { background: #fff !important; border: 1px solid #d0d5dd !important; box-shadow: none !important; }
+.pdf-mode .v-word {
+  font-family: 'Sora', sans-serif !important;
+  font-size: 28px !important;
+  font-weight: 800 !important;
+  color: #0f172a !important;
+}
+.pdf-mode .v-tag {
+  font-size: 12px !important;
+  color: #1e40af !important;
+  border-color: #93c5fd !important;
+  font-weight: 600 !important;
+}
+.pdf-mode .v-chip {
+  font-size: 11px !important;
+  color: #475569 !important;
+  background: #f1f5f9 !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 2px !important;
+}
+.pdf-mode .v-sub { color: #475569 !important; font-size: 13px !important; line-height: 1.7 !important; }
+
+/* ── Bucket cards: document flow ── */
 .pdf-mode .bucket-card:hover { transform: none !important; }
 .pdf-mode .risk-panel-row { border-color: #e2e8f0 !important; }
-.pdf-mode .fin-kpi { background: #fff !important; border: 1px solid #d0d5dd !important; box-shadow: none !important; }
-.pdf-mode .ev-card { background: #fff !important; border: 1px solid #d0d5dd !important; box-shadow: none !important; }
-.pdf-mode .board-sum-item { background: #f8fafc !important; border: 1px solid #e2e8f0 !important; }
 .pdf-mode .mh-mandate-item { border-color: #e2e8f0 !important; }
-.pdf-mode .tour-btn, .pdf-mode .info-btn, .pdf-mode .cite, .pdf-mode .num-cite sup { display: none !important; }
-.pdf-mode a { color: #1a56db !important; text-decoration: none !important; }
-/* Tables */
-.pdf-mode table, .pdf-mode .risk-table { border-collapse: collapse !important; width: 100% !important; }
-.pdf-mode th { background: #f1f5f9 !important; color: #1a365d !important; font-weight: 700 !important; border-bottom: 2px solid #1a365d !important; padding: 8px 12px !important; text-align: left !important; font-size: 11px !important; }
-.pdf-mode td { border-bottom: 1px solid #e2e8f0 !important; padding: 8px 12px !important; font-size: 12px !important; }
-/* Risk matrix */
-.pdf-mode .risk-dot { border: 2px solid #1a365d !important; }
-.pdf-mode .rm-axis-label { color: #475569 !important; }
+
+/* ── Remove interactive elements ── */
+.pdf-mode .tour-btn, .pdf-mode .info-btn, .pdf-mode .cite,
+.pdf-mode .num-cite sup, .pdf-mode .expand-btn, .pdf-mode .collapse-btn {
+  display: none !important;
+}
+.pdf-mode a { color: #1e40af !important; text-decoration: none !important; }
+
+/* ── Tables: alternating rows, clean headers ── */
+.pdf-mode table, .pdf-mode .risk-table {
+  border-collapse: collapse !important;
+  width: 100% !important;
+  margin: 16px 0 24px !important;
+  border: none !important;
+  border-radius: 0 !important;
+}
+.pdf-mode th {
+  background: #f1f5f9 !important;
+  color: #0f172a !important;
+  font-family: 'Sora', sans-serif !important;
+  font-weight: 600 !important;
+  font-size: 10px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.06em !important;
+  border-bottom: 2px solid #0f172a !important;
+  border-top: none !important;
+  padding: 10px 14px !important;
+  text-align: left !important;
+}
+.pdf-mode td {
+  border-bottom: 1px solid #e2e8f0 !important;
+  padding: 10px 14px !important;
+  font-size: 12px !important;
+  line-height: 1.6 !important;
+  vertical-align: top !important;
+}
+.pdf-mode tr:nth-child(even) td { background: #f8fafc !important; }
+.pdf-mode tr:nth-child(odd) td { background: #ffffff !important; }
+
+/* ── Risk matrix: B&W readable ── */
+.pdf-mode .risk-dot {
+  border: 2px solid #0f172a !important;
+  position: relative !important;
+}
+.pdf-mode .risk-dot::after {
+  content: attr(data-label) !important;
+  position: absolute !important;
+  top: 110% !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  font-size: 8px !important;
+  font-family: 'Inter', sans-serif !important;
+  color: #334155 !important;
+  white-space: nowrap !important;
+  font-weight: 600 !important;
+}
+.pdf-mode .rm-axis-label { color: #475569 !important; font-size: 10px !important; font-weight: 600 !important; }
 .pdf-mode .rm-grid { border-color: #cbd5e1 !important; }
-/* Chips & badges */
-.pdf-mode .chip, .pdf-mode .v-chip, .pdf-mode .mode-badge { background: #f1f5f9 !important; border: 1px solid #cbd5e1 !important; color: #334155 !important; }
-/* Confidence bars */
-.pdf-mode .conf-bar-fill { background: #1a365d !important; }
-.pdf-mode .conf-bar-track { background: #e2e8f0 !important; }
-/* Cards — remove hover/glow/dim effects */
-.pdf-mode [class*="card"]:hover, .pdf-mode [class*="card"]:focus { transform: none !important; box-shadow: none !important; }
-.pdf-mode .expand-reveal, .pdf-mode .bucket-card .expand-txt { max-height: none !important; overflow: visible !important; }
-/* Remove interactive elements */
-.pdf-mode .s-nav, .pdf-mode .s-header, .pdf-mode #ap, .pdf-mode #strat-chat-fab, .pdf-mode #strat-chat-panel { display: none !important; }
+
+/* ── Chips & badges: subtle, flat ── */
+.pdf-mode .chip, .pdf-mode .v-chip, .pdf-mode .mode-badge {
+  background: #f8fafc !important;
+  border: 1px solid #e2e8f0 !important;
+  color: #334155 !important;
+  border-radius: 2px !important;
+  font-size: 11px !important;
+}
+
+/* ── Confidence bars: print-clean ── */
+.pdf-mode .conf-bar-fill { background: #0f172a !important; border-radius: 0 !important; }
+.pdf-mode .conf-bar-track { background: #e2e8f0 !important; border-radius: 0 !important; }
+
+/* ── Hide UI chrome ── */
+.pdf-mode .s-nav, .pdf-mode .s-header, .pdf-mode #ap,
+.pdf-mode #strat-chat-fab, .pdf-mode #strat-chat-panel { display: none !important; }
 .pdf-mode .tour-overlay, .pdf-mode #tour-overlay { display: none !important; }
 .pdf-mode audio, .pdf-mode .audio-btn { display: none !important; }
-/* Timeline & waterfall */
-.pdf-mode .tl-phase { border-color: #d0d5dd !important; background: #fff !important; }
-.pdf-mode .tl-dot { background: #1a365d !important; }
-.pdf-mode .wf-bar { opacity: 1 !important; }
-/* Bit panels — show active only */
+
+/* ── Timeline & waterfall ── */
+.pdf-mode .tl-phase {
+  border-color: #e2e8f0 !important;
+  background: #ffffff !important;
+  border-radius: 0 !important;
+}
+.pdf-mode .tl-dot { background: #0f172a !important; }
+.pdf-mode .wf-bar { opacity: 1 !important; border-radius: 0 !important; }
+
+/* ── Bit panels: show active only ── */
 .pdf-mode .bit-nav { display: none !important; }
-.pdf-mode .bit-panel { display: block !important; margin-bottom: 12px !important; }
+.pdf-mode .bit-panel { display: block !important; margin-bottom: 20px !important; }
 .pdf-mode .bit-panel:not(.active) { display: none !important; }
-/* qbar */
-.pdf-mode qbar { background: #f8fafc !important; border: 1px solid #d0d5dd !important; border-left: 3px solid #1a365d !important; }
-/* Role cards */
-.pdf-mode .room-role-row { border-color: #e2e8f0 !important; background: #fff !important; }
-.pdf-mode .dr-facil-card { background: #f8fafc !important; border: 1px solid #d0d5dd !important; }
-/* Management panels */
-.pdf-mode .mh-panel { background: #fff !important; border: 1px solid #d0d5dd !important; }
-.pdf-mode .mh-pill-btn { background: #f1f5f9 !important; border-color: #cbd5e1 !important; color: #334155 !important; }
-/* Options matrix */
-.pdf-mode .om-cell { border-color: #d0d5dd !important; background: #fff !important; }
-.pdf-mode .om-header { background: #f1f5f9 !important; color: #1a365d !important; }
-/* Full report specific styles */
-.pdf-cover-page { page-break-after: always; padding: 80px 40px; text-align: center; background: #fff; min-height: 800px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-.pdf-cover-logo { width: 80px; height: 80px; margin-bottom: 32px; }
-.pdf-cover-title { font-family: 'Sora', system-ui, sans-serif; font-size: 32px; font-weight: 800; color: #1a365d; letter-spacing: -0.02em; margin-bottom: 8px; }
-.pdf-cover-subtitle { font-size: 14px; color: #64748b; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 48px; }
-.pdf-cover-question { font-size: 18px; color: #334155; line-height: 1.6; max-width: 500px; margin: 0 auto 40px; font-style: italic; border-left: 3px solid #1a365d; padding-left: 20px; text-align: left; }
-.pdf-cover-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 40px; text-align: left; max-width: 400px; margin: 0 auto; }
-.pdf-cover-meta dt { font-size: 10px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.1em; }
-.pdf-cover-meta dd { font-size: 14px; color: #1a365d; font-weight: 600; margin: 0 0 12px 0; }
-.pdf-cover-verdict { margin-top: 48px; padding: 20px 32px; background: #f0f4ff; border: 1px solid #bfdbfe; border-radius: 8px; }
-.pdf-cover-verdict-label { font-size: 10px; color: #64748b; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 4px; }
-.pdf-cover-verdict-value { font-size: 28px; font-weight: 800; color: #1a365d; }
-.pdf-cover-verdict-sub { font-size: 13px; color: #475569; margin-top: 4px; }
-.pdf-toc { page-break-after: always; padding: 60px 40px; background: #fff; }
-.pdf-toc h2 { font-family: 'Sora', system-ui, sans-serif; font-size: 22px; font-weight: 700; color: #1a365d; margin-bottom: 32px; border-bottom: 2px solid #1a365d; padding-bottom: 8px; }
-.pdf-toc-item { display: flex; justify-content: space-between; align-items: baseline; padding: 10px 0; border-bottom: 1px dotted #cbd5e1; font-size: 14px; color: #334155; }
-.pdf-toc-item .toc-num { color: #94a3b8; font-family: 'DM Mono', monospace; font-size: 12px; min-width: 28px; }
-.pdf-toc-item .toc-name { font-weight: 600; }
-.pdf-toc-item .toc-page { color: #94a3b8; font-family: 'DM Mono', monospace; font-size: 12px; }
-.pdf-section-break { page-break-before: always; }
-.pdf-section-header { background: #f0f4ff; border: 1px solid #bfdbfe; border-radius: 6px; padding: 16px 24px; margin-bottom: 24px; }
-.pdf-section-header h2 { font-family: 'Sora', system-ui, sans-serif; font-size: 18px; font-weight: 700; color: #1a365d; margin: 0; }
-.pdf-section-header .pdf-section-num { font-family: 'DM Mono', monospace; font-size: 11px; color: #94a3b8; letter-spacing: 0.08em; }
-.pdf-header-bar { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; margin-bottom: 16px; border-bottom: 1px solid #e2e8f0; font-family: 'DM Mono', monospace; font-size: 9px; color: #94a3b8; letter-spacing: 0.06em; text-transform: uppercase; }
-.pdf-footer-bar { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; margin-top: 24px; border-top: 1px solid #e2e8f0; font-family: 'DM Mono', monospace; font-size: 9px; color: #94a3b8; letter-spacing: 0.06em; }
-/* Narrative prose blocks for PDF */
-.pdf-narrative { font-size: 13px; line-height: 1.75; color: #334155; margin-bottom: 16px; }
-.pdf-narrative p { margin-bottom: 10px; }
+
+/* ── Qbar: pull-quote style with accent bar ── */
+.pdf-mode qbar {
+  background: #f8fafc !important;
+  border: none !important;
+  border-left: 3px solid #1e40af !important;
+  padding: 16px 20px !important;
+  margin: 16px 0 !important;
+  border-radius: 0 !important;
+  font-style: italic !important;
+}
+
+/* ── Role cards: document flow ── */
+.pdf-mode .room-role-row {
+  border-color: #e2e8f0 !important;
+  background: transparent !important;
+  border-radius: 0 !important;
+}
+.pdf-mode .dr-facil-card {
+  background: transparent !important;
+  border: none !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+  border-radius: 0 !important;
+  padding-bottom: 16px !important;
+  margin-bottom: 16px !important;
+}
+
+/* ── Management panels ── */
+.pdf-mode .mh-pill-btn {
+  background: #f1f5f9 !important;
+  border-color: #e2e8f0 !important;
+  color: #334155 !important;
+  border-radius: 2px !important;
+}
+
+/* ── Options matrix ── */
+.pdf-mode .om-cell {
+  border-color: #e2e8f0 !important;
+  background: #ffffff !important;
+  border-radius: 0 !important;
+}
+.pdf-mode .om-header {
+  background: #f1f5f9 !important;
+  color: #0f172a !important;
+  font-family: 'Sora', sans-serif !important;
+  font-weight: 600 !important;
+  border-radius: 0 !important;
+}
+
+/* ── Kill ALL remaining dark-mode artifacts ── */
+.pdf-mode [style*="gradient"], .pdf-mode [style*="glow"] {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+.pdf-mode [class*="glow"], .pdf-mode [class*="shimmer"],
+.pdf-mode [class*="pulse"], .pdf-mode [class*="animate"] {
+  animation: none !important;
+  box-shadow: none !important;
+  background-image: none !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   COVER PAGE — Thin gradient accent, centered compass, clean metadata
+   ══════════════════════════════════════════════════════════════════════ */
+.pdf-cover-page {
+  page-break-after: always;
+  padding: 0 60px 60px;
+  text-align: center;
+  background: #ffffff;
+  min-height: 900px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+.pdf-cover-accent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #1e40af, #3b82f6, #93c5fd);
+}
+.pdf-cover-logo { width: 72px; height: 72px; margin-bottom: 40px; }
+.pdf-cover-title {
+  font-family: 'Sora', 'Helvetica Neue', sans-serif;
+  font-size: 36px;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.02em;
+  margin-bottom: 6px;
+}
+.pdf-cover-subtitle {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+  margin-bottom: 56px;
+}
+.pdf-cover-question {
+  font-family: 'Inter', 'Georgia', serif;
+  font-size: 17px;
+  color: #334155;
+  line-height: 1.7;
+  max-width: 480px;
+  margin: 0 auto 48px;
+  font-style: italic;
+  border-left: 3px solid #1e40af;
+  padding-left: 24px;
+  text-align: left;
+}
+.pdf-cover-meta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 48px;
+  text-align: left;
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 24px 0;
+  border-top: 1px solid #e2e8f0;
+}
+.pdf-cover-meta dt {
+  font-family: 'Inter', sans-serif;
+  font-size: 9px;
+  font-weight: 600;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+.pdf-cover-meta dd {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  color: #0f172a;
+  font-weight: 600;
+  margin: 0 0 16px 0;
+}
+.pdf-cover-verdict {
+  margin-top: 48px;
+  padding: 24px 36px;
+  background: #ffffff;
+  border: none;
+  border-left: 4px solid #1e40af;
+  border-radius: 0;
+  text-align: left;
+  max-width: 420px;
+}
+.pdf-cover-verdict-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 9px;
+  font-weight: 600;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-bottom: 6px;
+}
+.pdf-cover-verdict-value {
+  font-family: 'Sora', sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  color: #0f172a;
+}
+.pdf-cover-verdict-sub {
+  font-family: 'Inter', serif;
+  font-size: 13px;
+  color: #475569;
+  margin-top: 6px;
+  line-height: 1.6;
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   TABLE OF CONTENTS
+   ══════════════════════════════════════════════════════════════════════ */
+.pdf-toc {
+  page-break-after: always;
+  padding: 72px 60px;
+  background: #ffffff;
+}
+.pdf-toc h2 {
+  font-family: 'Sora', sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 40px;
+  border-bottom: 2px solid #0f172a;
+  padding-bottom: 12px;
+}
+.pdf-toc-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 12px 0;
+  border-bottom: 1px solid #f1f5f9;
+  font-size: 14px;
+  color: #334155;
+}
+.pdf-toc-item:last-child { border-bottom: none; }
+.pdf-toc-item .toc-num {
+  font-family: 'DM Mono', monospace;
+  font-size: 13px;
+  font-weight: 600;
+  color: #1e40af;
+  min-width: 36px;
+}
+.pdf-toc-item .toc-name {
+  font-family: 'Sora', sans-serif;
+  font-weight: 600;
+  color: #0f172a;
+  flex: 1;
+}
+.pdf-toc-item .toc-page {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: #94a3b8;
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   SECTION PAGES
+   ══════════════════════════════════════════════════════════════════════ */
+.pdf-section-break { page-break-before: always; padding: 0 12px; }
+.pdf-section-header {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0 0 16px;
+  margin-bottom: 28px;
+  border-bottom: 2px solid #0f172a;
+}
+.pdf-section-header h2 {
+  font-family: 'Sora', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+}
+.pdf-section-header .pdf-section-num {
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  font-weight: 600;
+  color: #1e40af;
+  letter-spacing: 0.08em;
+  display: block;
+  margin-bottom: 4px;
+}
+
+/* ── Running header/footer ── */
+.pdf-header-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  margin-bottom: 24px;
+  border-bottom: 1px solid #e2e8f0;
+  font-family: 'Inter', sans-serif;
+  font-size: 8px;
+  font-weight: 600;
+  color: #94a3b8;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.pdf-footer-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  margin-top: 32px;
+  border-top: 1px solid #e2e8f0;
+  font-family: 'Inter', sans-serif;
+  font-size: 8px;
+  font-weight: 600;
+  color: #94a3b8;
+  letter-spacing: 0.08em;
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   NARRATIVE PROSE — the connective tissue between data sections
+   ══════════════════════════════════════════════════════════════════════ */
+.pdf-narrative {
+  font-family: 'Inter', 'Georgia', serif;
+  font-size: 13px;
+  line-height: 1.8;
+  color: #334155;
+  margin-bottom: 20px;
+}
+.pdf-narrative p { margin-bottom: 12px; }
+
+/* ── Callout boxes (for key findings) ── */
+.pdf-callout {
+  background: #f8fafc;
+  border-left: 3px solid #1e40af;
+  padding: 16px 20px;
+  margin: 20px 0;
+  font-size: 13px;
+  line-height: 1.7;
+  color: #334155;
+}
+.pdf-callout-label {
+  font-family: 'Sora', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  color: #1e40af;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 6px;
+}
+
+/* ── Key metric display (large number + context) ── */
+.pdf-key-metric {
+  text-align: center;
+  padding: 20px 0;
+  margin: 16px 0;
+}
+.pdf-key-metric-value {
+  font-family: 'Sora', sans-serif;
+  font-size: 42px;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+.pdf-key-metric-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* ── Executive summary block (page 1 after cover) ── */
+.pdf-exec-summary {
+  page-break-after: always;
+  padding: 72px 60px;
+  background: #ffffff;
+}
+.pdf-exec-summary h2 {
+  font-family: 'Sora', sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 24px;
+  border-bottom: 2px solid #0f172a;
+  padding-bottom: 12px;
+}
+.pdf-exec-summary p {
+  font-family: 'Inter', 'Georgia', serif;
+  font-size: 14px;
+  line-height: 1.8;
+  color: #334155;
+  margin-bottom: 16px;
+}
+
+/* ── Vote summary: horizontal bars for print ── */
+.pdf-vote-bar-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  font-size: 12px;
+}
+.pdf-vote-bar-label {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  color: #0f172a;
+  min-width: 100px;
+}
+.pdf-vote-bar-track {
+  flex: 1;
+  height: 16px;
+  background: #f1f5f9;
+  margin: 0 12px;
+  position: relative;
+}
+.pdf-vote-bar-fill {
+  height: 100%;
+  background: #0f172a;
+}
+.pdf-vote-bar-val {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: #475569;
+  min-width: 36px;
+  text-align: right;
+}
 
 /* ── 33  ENHANCED MOBILE RESPONSIVE ────────────────────────────────────────── */
 
@@ -3095,24 +3639,32 @@ function narrativize(html) {
   var div = document.createElement('div');
   div.innerHTML = html;
 
-  // Convert bullet lists into flowing sentences
+  // Convert bullet lists into numbered flowing prose
   div.querySelectorAll('ul, .bit-list, .bucket-list').forEach(function(list) {
     var items = [];
     list.querySelectorAll('li, .bit-item, .bucket-item').forEach(function(li) {
       var txt = li.textContent.trim().replace(/^[\u2022\u2013\u2014\-\u00d7]\s*/, '').replace(/^[\d]+\.\s*/, '');
       if (txt) items.push(txt);
     });
-    if (items.length > 0 && items.length <= 6) {
-      var joined = items.length === 1 ? items[0] :
-        items.slice(0, -1).join('; ') + '; and ' + items[items.length - 1];
+    if (items.length > 0 && items.length <= 8) {
       var p = document.createElement('p');
       p.className = 'pdf-narrative';
-      p.textContent = joined + '.';
+      if (items.length <= 3) {
+        var joined = items.length === 1 ? items[0] :
+          items.slice(0, -1).join('; ') + '; and ' + items[items.length - 1];
+        p.textContent = joined + '.';
+      } else {
+        // Numbered list as flowing prose for longer lists
+        var parts = items.map(function(item, idx) {
+          return '(' + (idx + 1) + ') ' + item;
+        });
+        p.textContent = parts.join('; ') + '.';
+      }
       list.parentNode.replaceChild(p, list);
     }
   });
 
-  // Convert role assessment previews into narrative prose
+  // Convert role assessment previews into narrative prose with role attribution
   div.querySelectorAll('.room-role-row, .role-preview, .dr-facil-card').forEach(function(card) {
     var role = card.querySelector('.room-role-name, .role-name, .dr-facil-round');
     var conf = card.querySelector('.room-role-conf, .role-conf, .dr-conf-num');
@@ -3124,39 +3676,55 @@ function narrativize(html) {
       var stanceVal = stance ? stance.textContent.trim().toLowerCase() : '';
       var detailTxt = detail ? detail.textContent.trim() : '';
       if (roleName && (confVal || detailTxt)) {
-        var prose = 'The ' + roleName;
+        var prose = '<strong>[' + roleName + ']</strong> ';
         if (stanceVal && confVal) {
-          prose += ' expressed ' + stanceVal + ' support at ' + confVal + ' confidence';
+          prose += 'Expressed ' + stanceVal + ' support (' + confVal + ' confidence)';
         } else if (confVal) {
-          prose += ' assessed at ' + confVal + ' confidence';
+          prose += 'Assessed at ' + confVal + ' confidence';
         }
         if (detailTxt) {
-          prose += ', noting: "' + detailTxt.substring(0, 200) + (detailTxt.length > 200 ? '...' : '') + '"';
+          prose += ' \u2014 \u201c' + detailTxt.substring(0, 250) + (detailTxt.length > 250 ? '\u2026' : '') + '\u201d';
         }
         prose += '.';
         var p = document.createElement('p');
         p.className = 'pdf-narrative';
-        p.textContent = prose;
+        p.innerHTML = prose;
         card.innerHTML = '';
         card.appendChild(p);
         card.style.border = 'none';
-        card.style.padding = '0';
+        card.style.borderBottom = '1px solid #f1f5f9';
+        card.style.padding = '8px 0';
         card.style.background = 'transparent';
       }
     }
   });
 
-  // Convert short condition/risk chip lists into inline prose
+  // Convert condition/risk chip lists into numbered flowing prose
   div.querySelectorAll('.v-chips, .cond-chips').forEach(function(chipRow) {
     var chips = [];
     chipRow.querySelectorAll('.v-chip, .chip, .cond-chip').forEach(function(c) {
       chips.push(c.textContent.trim());
     });
     if (chips.length > 0) {
-      var p = document.createElement('span');
+      var p = document.createElement('p');
       p.className = 'pdf-narrative';
-      p.textContent = chips.join(' | ');
+      if (chips.length <= 3) {
+        p.textContent = chips.join('; ') + '.';
+      } else {
+        var numbered = chips.map(function(c, i) { return '(' + (i + 1) + ') ' + c; });
+        p.textContent = numbered.join('; ') + '.';
+      }
       chipRow.parentNode.replaceChild(p, chipRow);
+    }
+  });
+
+  // Wrap standalone stat-cards to look like key-metric displays
+  div.querySelectorAll('.stat-card').forEach(function(sc) {
+    var val = sc.querySelector('.stat-value');
+    var sub = sc.querySelector('.stat-sub, .stat-label');
+    if (val && sub) {
+      sc.style.textAlign = 'left';
+      sc.style.padding = '12px 0';
     }
   });
 
@@ -3228,16 +3796,23 @@ function exportPDF() {
   var tabName = activeSection.id.replace('sec-','') || 'dashboard';
   var displayName = TAB_DISPLAY_NAMES[tabName] || tabName;
 
-  // Build wrapper with header/footer
+  // Build wrapper with professional header/footer
   var wrapper = document.createElement('div');
   wrapper.className = 'pdf-mode';
   wrapper.style.background = '#fff';
+  wrapper.style.padding = '0 12px';
 
-  // Header bar
+  // Running header
   var hdr = document.createElement('div');
   hdr.className = 'pdf-header-bar';
-  hdr.innerHTML = '<span>STRATOS \u2014 DECISION INTELLIGENCE REPORT</span><span>' + displayName.toUpperCase() + '</span><span>' + meta.date + '</span>';
+  hdr.innerHTML = '<span>StratOS &mdash; Decision Intelligence Report</span><span>' + displayName + '</span><span>' + meta.date + '</span>';
   wrapper.appendChild(hdr);
+
+  // Section title with number styling
+  var sTitle = document.createElement('div');
+  sTitle.className = 'pdf-section-header';
+  sTitle.innerHTML = '<div class="pdf-section-num">SECTION EXTRACT</div><h2>' + displayName + '</h2>';
+  wrapper.appendChild(sTitle);
 
   // Clone section content
   activeSection.classList.add('pdf-mode');
@@ -3245,23 +3820,24 @@ function exportPDF() {
   var clone = activeSection.cloneNode(true);
   clone.style.display = 'block';
   clone.classList.add('pdf-mode');
+  clone.innerHTML = narrativize(clone.innerHTML);
   wrapper.appendChild(clone);
 
-  // Footer bar
+  // Running footer with confidentiality notice
   var ftr = document.createElement('div');
   ftr.className = 'pdf-footer-bar';
-  ftr.innerHTML = '<span>StratOS Decision Engine</span><span>' + meta.runId + '</span><span>Confidential</span>';
+  ftr.innerHTML = '<span>Confidential &mdash; ' + (meta.company ? esc(meta.company) : 'StratOS') + '</span><span>' + meta.runId + '</span><span>' + meta.date + '</span>';
   wrapper.appendChild(ftr);
 
   document.body.appendChild(wrapper);
 
   html2pdf().set({
-    margin: [8, 10, 12, 10],
+    margin: [14, 18, 16, 18],
     filename: 'StratOS-' + tabName + '-' + runId + '.pdf',
     image: { type: 'jpeg', quality: 0.95 },
     html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff', logging: false },
-    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-    pagebreak: { mode: ['css', 'legacy'], avoid: ['.card', '.stat-card', '.bucket-card', '.fin-kpi', '.ev-card'] }
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' },
+    pagebreak: { mode: ['css', 'legacy'], avoid: ['.pdf-section-header', '.pdf-narrative', '.stat-value'] }
   }).from(wrapper).save().then(function(){
     wrapper.remove();
     activeSection.classList.remove('pdf-mode');
@@ -3300,34 +3876,57 @@ function exportFullReport() {
   var cover = document.createElement('div');
   cover.className = 'pdf-cover-page';
   cover.innerHTML =
+    '<div class="pdf-cover-accent"></div>' +
     '<div class="pdf-cover-logo">' +
-      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none" width="80" height="80">' +
-        '<circle cx="256" cy="256" r="250" fill="#0f1729"/>' +
-        '<circle cx="256" cy="256" r="230" stroke="#1a365d" stroke-width="2" fill="none"/>' +
-        '<circle cx="256" cy="256" r="200" stroke="#1a365d" stroke-width="1" fill="none" opacity="0.4"/>' +
-        '<polygon points="256,50 244,210 268,210" fill="#1a365d"/>' +
-        '<circle cx="256" cy="256" r="16" fill="#0f1729"/>' +
-        '<circle cx="256" cy="256" r="10" fill="#1a365d"/>' +
-        '<text x="256" y="95" text-anchor="middle" font-family="system-ui,sans-serif" font-size="28" font-weight="900" fill="#1a365d">N</text>' +
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none" width="72" height="72">' +
+        '<circle cx="256" cy="256" r="248" fill="#ffffff" stroke="#e2e8f0" stroke-width="2"/>' +
+        '<circle cx="256" cy="256" r="220" stroke="#0f172a" stroke-width="1.5" fill="none"/>' +
+        '<circle cx="256" cy="256" r="180" stroke="#cbd5e1" stroke-width="1" fill="none"/>' +
+        '<polygon points="256,60 246,210 266,210" fill="#0f172a"/>' +
+        '<polygon points="256,452 246,302 266,302" fill="#cbd5e1"/>' +
+        '<polygon points="60,256 210,246 210,266" fill="#cbd5e1"/>' +
+        '<polygon points="452,256 302,246 302,266" fill="#cbd5e1"/>' +
+        '<circle cx="256" cy="256" r="12" fill="#0f172a"/>' +
+        '<circle cx="256" cy="256" r="6" fill="#ffffff"/>' +
+        '<text x="256" y="48" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-size="20" font-weight="700" fill="#0f172a">N</text>' +
       '</svg>' +
     '</div>' +
     '<div class="pdf-cover-title">StratOS</div>' +
     '<div class="pdf-cover-subtitle">Decision Intelligence Report</div>' +
     '<div class="pdf-cover-question">' + esc(meta.question) + '</div>' +
     '<dl class="pdf-cover-meta">' +
-      (meta.company ? '<dt>Company</dt><dd>' + esc(meta.company) + '</dd>' : '') +
-      '<dt>Run ID</dt><dd>' + esc(meta.runId) + '</dd>' +
+      (meta.company ? '<dt>Organization</dt><dd>' + esc(meta.company) + '</dd>' : '') +
+      '<dt>Report ID</dt><dd>' + esc(meta.runId) + '</dd>' +
       '<dt>Date</dt><dd>' + meta.date + '</dd>' +
-      '<dt>Mode</dt><dd>' + meta.mode + '</dd>' +
-      '<dt>Confidence</dt><dd>' + meta.confidence + '%</dd>' +
-      '<dt>Vote Outcome</dt><dd>' + esc(meta.voteOutcome) + '</dd>' +
+      '<dt>Analysis Mode</dt><dd>' + meta.mode + '</dd>' +
+      '<dt>Confidence Level</dt><dd>' + meta.confidence + '%</dd>' +
+      '<dt>Consensus</dt><dd>' + esc(meta.voteOutcome) + '</dd>' +
     '</dl>' +
     '<div class="pdf-cover-verdict">' +
-      '<div class="pdf-cover-verdict-label">Final Decision</div>' +
+      '<div class="pdf-cover-verdict-label">Recommendation</div>' +
       '<div class="pdf-cover-verdict-value">' + esc(meta.verdict) + '</div>' +
       (meta.verdictSub ? '<div class="pdf-cover-verdict-sub">' + esc(meta.verdictSub) + '</div>' : '') +
     '</div>';
   report.appendChild(cover);
+
+  // ── EXECUTIVE SUMMARY (page 1 after cover) ──
+  var execSum = document.createElement('div');
+  execSum.className = 'pdf-exec-summary';
+  var execHtml = '<h2>Executive Summary</h2>';
+  execHtml += '<p>This report presents the findings of a StratOS decision intelligence analysis conducted on ' + meta.date + '. ';
+  execHtml += 'The central question under review: <em>' + esc(meta.question) + '</em></p>';
+  execHtml += '<p>The analysis panel reached a <strong>' + esc(meta.verdict) + '</strong> recommendation ';
+  execHtml += 'with an overall confidence level of <strong>' + meta.confidence + '%</strong>. ';
+  if (meta.voteOutcome) {
+    execHtml += 'The deliberation resulted in a <strong>' + esc(meta.voteOutcome) + '</strong> consensus among panel members.';
+  }
+  execHtml += '</p>';
+  if (meta.verdictSub) {
+    execHtml += '<p>' + esc(meta.verdictSub) + '</p>';
+  }
+  execHtml += '<p style="font-size:11px;color:#94a3b8;margin-top:32px;font-style:italic;">The sections that follow detail the full analytical framework, risk assessment, financial implications, and strategic recommendations produced by the StratOS decision engine.</p>';
+  execSum.innerHTML = execHtml;
+  report.appendChild(execSum);
 
   // ── TABLE OF CONTENTS ──
   var sections = document.querySelectorAll('.s-section');
@@ -3346,7 +3945,7 @@ function exportFullReport() {
     tocHtml += '<div class="pdf-toc-item">' +
       '<span class="toc-num">' + String(i + 1).padStart(2, '0') + '</span>' +
       '<span class="toc-name">' + s.name + '</span>' +
-      '<span class="toc-page">Section ' + (i + 1) + '</span>' +
+      '<span class="toc-page">' + String(i + 1).padStart(2, '0') + '</span>' +
     '</div>';
   });
   toc.innerHTML = tocHtml;
@@ -3357,16 +3956,16 @@ function exportFullReport() {
     var secWrap = document.createElement('div');
     secWrap.className = 'pdf-section-break';
 
-    // Section header bar (repeated on each section)
+    // Running header
     var shdr = document.createElement('div');
     shdr.className = 'pdf-header-bar';
-    shdr.innerHTML = '<span>STRATOS \u2014 DECISION INTELLIGENCE REPORT</span><span>' + s.name.toUpperCase() + '</span><span>' + meta.date + '</span>';
+    shdr.innerHTML = '<span>StratOS &mdash; Decision Intelligence Report</span><span>' + s.name + '</span><span>' + meta.date + '</span>';
     secWrap.appendChild(shdr);
 
-    // Section title
+    // Section number + title with rule
     var sTitle = document.createElement('div');
     sTitle.className = 'pdf-section-header';
-    sTitle.innerHTML = '<div class="pdf-section-num">SECTION ' + String(i + 1).padStart(2, '0') + '</div><h2>' + s.name + '</h2>';
+    sTitle.innerHTML = '<div class="pdf-section-num">' + String(i + 1).padStart(2, '0') + '</div><h2>' + s.name + '</h2>';
     secWrap.appendChild(sTitle);
 
     // Clone and apply pdf-mode + narrativize
@@ -3380,10 +3979,10 @@ function exportFullReport() {
 
     secWrap.appendChild(clone);
 
-    // Section footer
+    // Running footer with confidentiality + page numbers
     var sftr = document.createElement('div');
     sftr.className = 'pdf-footer-bar';
-    sftr.innerHTML = '<span>StratOS Decision Engine</span><span>' + meta.runId + '</span><span>Page ' + (i + 1) + ' of ' + visibleSections.length + '</span>';
+    sftr.innerHTML = '<span>Confidential &mdash; ' + (meta.company ? esc(meta.company) : 'StratOS') + '</span><span>' + meta.runId + '</span><span>Page ' + (i + 3) + '</span>';
     secWrap.appendChild(sftr);
 
     report.appendChild(secWrap);
@@ -3392,12 +3991,12 @@ function exportFullReport() {
   document.body.appendChild(report);
 
   html2pdf().set({
-    margin: [8, 10, 12, 10],
+    margin: [14, 18, 16, 18],
     filename: 'StratOS-Full-Report-' + meta.runId + '.pdf',
-    image: { type: 'jpeg', quality: 0.92 },
+    image: { type: 'jpeg', quality: 0.95 },
     html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff', logging: false },
-    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-    pagebreak: { mode: ['css', 'legacy'], before: ['.pdf-section-break'], avoid: ['.card', '.stat-card', '.bucket-card', '.fin-kpi', '.ev-card', '.pdf-section-header'] }
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' },
+    pagebreak: { mode: ['css', 'legacy'], before: ['.pdf-section-break', '.pdf-exec-summary'], avoid: ['.pdf-section-header', '.pdf-narrative', '.pdf-callout', '.pdf-key-metric', '.stat-value'] }
   }).from(report).save().then(function(){
     report.remove();
     document.body.classList.remove('pdf-mode');

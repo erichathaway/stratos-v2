@@ -733,13 +733,21 @@ tcn-exit.show{display:block}
    Each section sets --tab-c. Every element that reads --tab-c shifts colour.  */
 #sec-briefing   {--tab-c:var(--blue)}
 #sec-command    {--tab-c:var(--green)}
-#sec-risk       {--tab-c:var(--purple)}
+#sec-risk       {--tab-c:var(--red)}
 #sec-financials {--tab-c:var(--teal)}
 
 #sec-room       {--tab-c:var(--amber)}
 #sec-management {--tab-c:#3b82f6}
 #sec-board      {--tab-c:#7c3aed}
 #sec-market     {--tab-c:var(--teal)}
+
+/* Force management=blue and board=purple on all nested elements */
+#sec-management .section-label,#sec-management .insight-q{color:#3b82f6!important}
+#sec-management .card{border-top-color:rgba(59,130,246,0.3)!important}
+#sec-management .ib-wrap{border-left-color:#3b82f6!important}
+#sec-board .section-label,#sec-board .insight-q{color:#7c3aed!important}
+#sec-board .card{border-top-color:rgba(124,58,237,0.3)!important}
+#sec-board .ib-wrap{border-left-color:#7c3aed!important}
 
 /* ib-wrap left border always reads --tab-c */
 .ib-wrap{display:flex;flex-direction:column;background:var(--bg-surface);border:1px solid var(--border);border-left: var(--r-xs) solid var(--tab-c,var(--blue));border-radius:var(--r-lg);box-shadow:var(--shadow-sm);transition:border-color var(--t-base),box-shadow var(--t-base),border-left-color var(--t-base)}

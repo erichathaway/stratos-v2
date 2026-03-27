@@ -3583,10 +3583,12 @@ dep-item strong{display:block;font-family:var(--font-mono);font-size:var(--text-
   <div class="section-label">Facilitator Observations &mdash; What the Moderator Saw <button class="info-btn" data-title="Facilitator Observations" data-body="The AI facilitator observed each round of deliberation and flagged key dynamics: coalition shifts, persuasion patterns, and unresolved tensions. These are the moments a human moderator would have noted.">i</button></div>
   <div class="dr-facil-grid" id="dr-facil-grid"></div>
 
-  <!-- OPTIONS: what was on the table -->
-  <div class="section-label">Options on the Table &mdash; What the Room Evaluated <button class="info-btn" data-title="Options Evaluated" data-body="Five options were evaluated by all roles in the room. Each option was voted on in Round 2. Click any option tab to see the case for and against.">i</button></div>
-  <div class="room-opts-tabs" id="room-opts-tabs"></div>
-  <div id="room-opts-panels"></div>
+  <!-- OPTIONS: compact pill list -->
+  <div class="section-label" style="margin-bottom:var(--gap-xs)">Options Evaluated <button class="info-btn" data-title="Options Evaluated" data-body="Options evaluated by all roles in the room. The selected option satisfied governance thresholds and runway covenants.">i</button></div>
+  <div id="room-opts-compact" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:var(--gap-lg)"></div>
+  <!-- Hidden containers kept for buildOptions compatibility -->
+  <div class="room-opts-tabs" id="room-opts-tabs" style="display:none"></div>
+  <div id="room-opts-panels" style="display:none"></div>
 
 </div>
 
@@ -5615,6 +5617,23 @@ container.innerHTML=optDefs.map(function(o){
     +"</div></div>";
 }).join("");
 switchOpt(chosenId);
+// Build compact pill list for Options Evaluated
+var compactEl=document.getElementById("room-opts-compact");
+if(compactEl){
+  compactEl.innerHTML=optDefs.map(function(o){
+    var isChosen=(o.id===chosenId);
+    var vc_count=voteCounts[o.id]||0;
+    var pillBg=isChosen?"color-mix(in srgb,var(--teal) 12%,transparent)":"var(--bg-surface)";
+    var pillBorder=isChosen?"color-mix(in srgb,var(--teal) 35%,transparent)":"var(--border)";
+    var pillColor=isChosen?"var(--teal)":"var(--text-muted)";
+    var nameShort=o.name.length>40?o.name.substring(0,38)+'…':o.name;
+    return "<span style=\"display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:6px;border:1px solid "+pillBorder+";background:"+pillBg+";font-family:var(--font-mono);font-size:10px;font-weight:700;letter-spacing:.3px;color:"+pillColor+"\">"
+      +o.id+(isChosen?" <span style='color:var(--teal);font-size:8px'>&#x2713;</span>":"")
+      +"<span style=\"font-weight:500;font-family:var(--font-body);font-size:10px;color:var(--text-secondary);max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap\">"+nameShort+"</span>"
+      +(vc_count>0?"<span style=\"font-size:9px;color:var(--text-muted)\">"+vc_count+"/7</span>":"")
+      +"</span>";
+  }).join("");
+}
 }
 
 // \u2500\u2500 THE ROOM \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500

@@ -244,6 +244,7 @@ fetch(apiUrl).then(function(r){return r.json()}).then(render).catch(function(e){
 function render(raw){
   var ob=raw.outputBlob||{}, dash=ob.dashboard||{}, exec=ob.executive_summary||{}, dir=ob.direction_package||{};
   var bgp=ob.board_governance_packet||{}, fm=dash.financial_mechanics||{}, mso=ob.machine_strategy_object||{};
+  var fo=raw.optionsBlob||{};
   var tl=ob.timeline_visualization||{}, gov=raw.govBlob||{}, stages=raw.stageOutputs||[];
   var dp=raw.dPacket||{}, dpCS=dp.confidence_summary||{}, dpOT=dp.option_tally||[], dpRPS=dp.role_packets_slim||[];
   var media = ob.media_assets||(raw.govBlob&&raw.govBlob.media_assets)||(raw.master&&raw.master.media_assets)||{};
@@ -259,13 +260,14 @@ function render(raw){
   if(!roles.length&&dp.role_packets){Object.keys(dp.role_packets).forEach(function(k){if(!roleSet[k]){roleSet[k]=true;roles.push(k)}})}
   // Fallback: extract roles from dashboard role_assessment_preview
   if(!roles.length&&dash.role_assessment_preview){dash.role_assessment_preview.forEach(function(r){var k=r.role||r.role_key||'';if(k&&!roleSet[k]){roleSet[k]=true;roles.push(k)}})}
-  var voteKey=Object.keys(dash.vote_split||{})[0]||'';
+  var voteSplit=(bgp.elt_vote_outcome&&bgp.elt_vote_outcome.vote_split)||dash.vote_split||{};
+  var voteKey=Object.keys(voteSplit)[0]||'';
   var optId=dash.approved_option_id||'', optName=dash.approved_option_label||optId;
   // Confidence: dashboard > dPacket confidence_summary > fallback 67
-  var conf=dash.decision_confidence||(dpCS.avg?dpCS.avg:0)||67;
+  var conf=dash.decision_confidence||(dpCS.avg||0.67)||67;
   var confPct=pct(conf);
-  // Vote total: dashboard vote_split > dPacket option_tally > roles.length fallback
-  var voteTotal=Object.values(dash.vote_split||{})[0]||0;
+  // Vote total: vote_split > dPacket option_tally > roles.length fallback
+  var voteTotal=Object.values(voteSplit)[0]||0;
   if(!voteTotal&&dpOT.length){dpOT.forEach(function(t){if((t.vote_count||0)>voteTotal)voteTotal=t.vote_count})}
   if(!voteTotal)voteTotal=roles.length||7;
   var verdictWord=voteKey.includes('APPROVE')?'Approved':voteKey.includes('REJECT')?'Rejected':'Approved';
@@ -373,13 +375,16 @@ function render(raw){
       h+='<div class="rpt-card"><div class="rpt-card-b"><p class="rpt-narrative">'+esc(strategic)+'</p></div></div></div>';
     }
 
-    // Investment snapshot
-    if(fm.total_investment||fm.phase_1_immediate){
+    // Investment snapshot — fallback chains match dashboard: fm > fo > capital_required
+    var invTotal=fm.total_investment||fo.total_budget||fm.capital_required||'';
+    var invP1=fm.phase_1_immediate||fo.phase_1||'';
+    var invP2=fm.phase_2_gated||fo.phase_2||'';
+    if(invTotal||invP1){
       h+='<div class="rpt-sec"><div class="rpt-sec-head"><div class="rpt-dot" style="background:var(--green)"></div><div class="rpt-sec-title">Investment</div></div>';
       h+='<div class="g3">';
-      h+='<div class="rpt-card"><div class="rpt-card-b" style="text-align:center"><div style="font-family:var(--font-display);font-size:20px;font-weight:700;color:var(--teal)">'+esc(safe(fm.phase_1_immediate,'—'))+'</div><div class="rpt-m-label">Phase 1 (Live)</div></div></div>';
-      h+='<div class="rpt-card"><div class="rpt-card-b" style="text-align:center"><div style="font-family:var(--font-display);font-size:20px;font-weight:700;color:var(--amber)">'+esc(safe(fm.phase_2_gated,'—'))+'</div><div class="rpt-m-label">Phase 2 (Gated)</div></div></div>';
-      h+='<div class="rpt-card"><div class="rpt-card-b" style="text-align:center"><div style="font-family:var(--font-display);font-size:20px;font-weight:700;color:var(--blue)">'+esc(safe(fm.total_investment,'—'))+'</div><div class="rpt-m-label">Total</div></div></div>';
+      h+='<div class="rpt-card"><div class="rpt-card-b" style="text-align:center"><div style="font-family:var(--font-display);font-size:20px;font-weight:700;color:var(--teal)">'+esc(safe(invP1,'—'))+'</div><div class="rpt-m-label">Phase 1 (Live)</div></div></div>';
+      h+='<div class="rpt-card"><div class="rpt-card-b" style="text-align:center"><div style="font-family:var(--font-display);font-size:20px;font-weight:700;color:var(--amber)">'+esc(safe(invP2,'—'))+'</div><div class="rpt-m-label">Phase 2 (Gated)</div></div></div>';
+      h+='<div class="rpt-card"><div class="rpt-card-b" style="text-align:center"><div style="font-family:var(--font-display);font-size:20px;font-weight:700;color:var(--blue)">'+esc(safe(invTotal,'—'))+'</div><div class="rpt-m-label">Total</div></div></div>';
       h+='</div></div>';
     }
 
@@ -529,14 +534,14 @@ function render(raw){
       h+='<div class="page-break"></div><div class="page-label">Financial Overview</div>';
       h+='<div class="g2">';
       h+='<div class="rpt-card"><div class="rpt-card-h">Investment Structure</div><div class="rpt-card-b">';
-      h+='<div class="rpt-item"><div class="rpt-icon ic-teal">1</div><div><strong>Phase 1:</strong> '+esc(safe(fm.phase_1_immediate))+'</div></div>';
-      h+='<div class="rpt-item"><div class="rpt-icon ic-blue">2</div><div><strong>Phase 2:</strong> '+esc(safe(fm.phase_2_gated))+'</div></div>';
-      h+='<div class="rpt-item"><div class="rpt-icon ic-purple">&Sigma;</div><div><strong>Total:</strong> '+esc(safe(fm.total_investment))+'</div></div>';
+      h+='<div class="rpt-item"><div class="rpt-icon ic-teal">1</div><div><strong>Phase 1:</strong> '+esc(safe(fm.phase_1_immediate||fo.phase_1))+'</div></div>';
+      h+='<div class="rpt-item"><div class="rpt-icon ic-blue">2</div><div><strong>Phase 2:</strong> '+esc(safe(fm.phase_2_gated||fo.phase_2))+'</div></div>';
+      h+='<div class="rpt-item"><div class="rpt-icon ic-purple">&Sigma;</div><div><strong>Total:</strong> '+esc(safe(fm.total_investment||fo.total_budget||fm.capital_required))+'</div></div>';
       h+='</div></div>';
       var ue=fm.unit_economics||{};
       h+='<div class="rpt-card"><div class="rpt-card-h">Unit Economics</div><div class="rpt-card-b">';
-      h+='<div class="rpt-item"><div class="rpt-icon ic-teal">$</div><div><strong>LTV:</strong> '+esc(safe(ue.ltv_per_customer||fm.ltv_per_customer||fm.ltv_target))+'</div></div>';
-      h+='<div class="rpt-item"><div class="rpt-icon ic-amber">$</div><div><strong>CAC:</strong> '+esc(safe(ue.cac_threshold||fm.cac_threshold))+'</div></div>';
+      h+='<div class="rpt-item"><div class="rpt-icon ic-teal">$</div><div><strong>LTV:</strong> '+esc(safe(ue.ltv_per_customer||fm.ltv_per_customer||fo.ltv_per_customer||fm.ltv_target))+'</div></div>';
+      h+='<div class="rpt-item"><div class="rpt-icon ic-amber">$</div><div><strong>CAC:</strong> '+esc(safe(ue.cac_threshold||fm.cac_threshold||fm.cac_signal))+'</div></div>';
       h+='<div class="rpt-item"><div class="rpt-icon ic-green">&times;</div><div><strong>LTV/CAC:</strong> '+esc(safe(ue.ltv_cac_ratio||fm.ltv_cac_ratio))+'</div></div>';
       h+='</div></div></div>';
       var sc=fm.scenarios||{};
@@ -584,7 +589,7 @@ function render(raw){
         h+='</tbody></table></div></div></div>';
       }
       // Groupthink
-      var gt=raw.dPacket&&raw.dPacket.groupthink_flag;
+      var gt=dash.groupthink_flag||(raw.dPacket&&raw.dPacket.groupthink_flag)||{};
       if(gt&&gt.severity){
         h+='<div class="rpt-card"><div class="rpt-card-h">Groupthink Assessment</div><div class="rpt-card-b">';
         h+='<div class="rpt-item"><div class="rpt-icon ic-'+(gt.severity==='HIGH'?'red':gt.severity==='MEDIUM'?'amber':'teal')+'">!</div><div><strong>'+esc(gt.severity)+'</strong>'+(gt.explanation?' &mdash; <span style="font-size:12px;color:var(--text-secondary)">'+esc(gt.explanation)+'</span>':'')+'</div></div>';

@@ -7415,7 +7415,7 @@ el('tour-overlay').addEventListener('click', e => {
 
 function startTourFrom(sec) {
   closeTour();
-  if (sec === 'current') sec = document.querySelector('.tab.active')?.dataset.sec || 'briefing';
+  if (sec === 'current') sec = document.querySelector('.sb-tab.active')?.dataset.sec || document.querySelector('.tab.active')?.dataset.sec || 'briefing';
   _tSec = TAB_ORDER.includes(sec) ? sec : 'briefing';
   _tIdx = 0;
   document.body.classList.add('tour-running');

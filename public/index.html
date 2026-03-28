@@ -7105,7 +7105,19 @@ function applyMediaAssets(assets) {
     // New Supabase Storage format — object with url property
     if (val && typeof val === 'object' && val.url) {
       var audioKey = ASSET_TO_AUDIO[key] || key;
-      AUDIO_FILES[audioKey] = { url: val.url, label: val.label || AUDIO_DEFAULTS[audioKey]?.label || key };
+      var durSec = val.duration_sec || 0;
+      var durMin = durSec > 0 ? Math.ceil(durSec / 60) : 0;
+      var durLabel = durMin > 0 ? durMin + ' min' : '';
+      AUDIO_FILES[audioKey] = { url: val.url, label: val.label || AUDIO_DEFAULTS[audioKey]?.label || key, duration_sec: durSec };
+      // Update duration displays in sidebar and briefing
+      document.querySelectorAll('.sb-audio-link, .ib-inline-link').forEach(function(el) {
+        if (el.textContent.includes('Brief') && audioKey === 'audio-brief' && durLabel) {
+          el.innerHTML = '&#9654; Executive Brief &middot; ' + durLabel;
+        }
+        if (el.textContent.includes('Deep') && audioKey === 'audio-deep' && durLabel) {
+          el.innerHTML = '&#9654; Deep Dive &middot; ' + durLabel;
+        }
+      });
       return;
     }
     // Legacy Google Drive format — string file ID

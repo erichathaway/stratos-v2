@@ -8257,16 +8257,17 @@ window.sendChat = async function(){
     setTimeout(function() { $('demo-cursor').classList.remove('clicking'); }, 200);
   }
 
-  // FIX 2: scroll to element ONLY if it's in main content (not sidebar)
   function scrollAndPoint(sel, cb, offX, offY) {
     var el = typeof sel === 'string' ? qs(sel) : sel;
-    if (!el) return;
-    // Sidebar elements are fixed — no scroll needed
+    if (!el) { if (cb) cb(el); return; }
+    // Sidebar elements: position immediately if visible, skip if off-screen
     if (el.closest('.s-sidebar')) {
-      _posAt(el, offX, offY);
+      var r = el.getBoundingClientRect();
+      if (r.left >= 0 && r.right <= window.innerWidth) _posAt(el, offX, offY);
       if (cb) cb(el);
       return;
     }
+    // Content elements: scroll into view, wait, then position
     el.scrollIntoView({ behavior:'smooth', block:'center' });
     setTimeout(function() {
       _posAt(el, offX, offY);
@@ -8289,17 +8290,27 @@ window.sendChat = async function(){
   function goTab(sec, cb) {
     var tab = qs('.sb-tab[data-sec="' + sec + '"]');
     if (!tab) return;
-    _posAt(tab);
-    setTimeout(function() {
-      clickAnim();
+    // Check if sidebar tab is actually visible on screen
+    var r = tab.getBoundingClientRect();
+    var tabVisible = r.left >= 0 && r.right <= window.innerWidth && r.top >= 0;
+    if (tabVisible) {
+      // Desktop: move cursor to sidebar tab, click anim, then switch
+      _posAt(tab);
       setTimeout(function() {
-        if (typeof switchTab === 'function') switchTab(tab);
+        clickAnim();
         setTimeout(function() {
-          window.scrollTo({ top: 0, behavior: 'smooth' });
+          switchTab(tab);
+          window.scrollTo(0, 0);
           if (cb) setTimeout(cb, 400);
-        }, 200);
-      }, 180);
-    }, 700);
+        }, 180);
+      }, 700);
+    } else {
+      // Mobile/collapsed: just switch tab directly, hide ring briefly
+      hideRing();
+      switchTab(tab);
+      window.scrollTo(0, 0);
+      if (cb) setTimeout(cb, 600);
+    }
   }
 
   function hoverEl(sel, dur, cb) {
@@ -8486,28 +8497,36 @@ window.sendChat = async function(){
     // ── 37.5s: Board ──
     at(37500, function() { goTab('board'); });
 
-    // ── 39.5s: Sidebar features — cursor moves, one card ──
+    // ── 39.5s: Sidebar features (only if visible) ──
     at(39500, function() {
-      _posAt(qs('.sb-audio-link'));
-    });
-    at(40200, function() { _posAt(qs('.sb-deck-link')); });
-    at(41000, function() {
-      _posAt(qs('.sb-chat-link'));
-      showCard('SIDEBAR', 'Audio, Reports, Chat', 'All one click away.', 1500);
-    });
-
-    // ── 42.5s: Open chat briefly ──
-    at(42500, function() {
-      clickAnim();
-      if (typeof toggleChat === 'function') toggleChat();
-    });
-
-    // ── 44s: Close chat, final ──
-    at(44000, function() {
-      var p = $('strat-chat-panel');
-      if (p && p.classList.contains('open') && typeof toggleChat === 'function') toggleChat();
-      hideRing();
-      showCenterCard('READY', 'Your Turn', 'Click any tab to explore.', 2000);
+      var audioLink = qs('.sb-audio-link');
+      if (audioLink && audioLink.getBoundingClientRect().left >= 0) {
+        _posAt(audioLink);
+        setTimeout(function() { _posAt(qs('.sb-deck-link')); }, 700);
+        setTimeout(function() {
+          _posAt(qs('.sb-chat-link'));
+          showCard('SIDEBAR', 'Audio, Reports, Chat', 'All one click away.', 1500);
+        }, 1500);
+        // Open chat briefly
+        setTimeout(function() {
+          clickAnim();
+          if (typeof toggleChat === 'function') toggleChat();
+        }, 3200);
+        // Close chat + final
+        setTimeout(function() {
+          var p = $('strat-chat-panel');
+          if (p && p.classList.contains('open') && typeof toggleChat === 'function') toggleChat();
+          hideRing();
+          showCenterCard('READY', 'Your Turn', 'Click any tab to explore.', 2000);
+        }, 4700);
+      } else {
+        // Mobile: skip sidebar tour, show chat, then final
+        showCard('FEATURES', 'Chat, Audio, Reports', 'All in the sidebar menu.', 1800);
+        setTimeout(function() {
+          hideRing();
+          showCenterCard('READY', 'Your Turn', 'Click any tab to explore.', 2000);
+        }, 2500);
+      }
     });
 
     at(46500, function() { endDemo(); });

@@ -2722,12 +2722,12 @@ dep-item strong{display:block;font-family:var(--font-mono);font-size:var(--text-
 
 /* ── Product Demo (click-through onboarding) ── */
 .demo-active .demo-cursor{opacity:1}
-.demo-cursor{position:fixed;z-index:9600;pointer-events:none;opacity:0;transition:left .7s cubic-bezier(.25,.1,.25,1),top .7s cubic-bezier(.25,.1,.25,1),opacity .4s ease;filter:drop-shadow(0 2px 8px rgba(0,0,0,.5))}
+.demo-cursor{position:fixed;z-index:9600;pointer-events:none;opacity:0;transition:left .9s cubic-bezier(.22,.61,.36,1),top .9s cubic-bezier(.22,.61,.36,1),opacity .5s ease;filter:drop-shadow(0 2px 8px rgba(0,0,0,.5))}
 .demo-cursor svg{width:24px;height:24px;transition:transform .15s ease}
 .demo-cursor.clicking svg{transform:scale(.82)}
-.demo-ring{position:fixed;z-index:9590;pointer-events:none;width:48px;height:48px;border-radius:50%;border:3px solid rgba(20,184,166,.6);box-shadow:0 0 16px rgba(20,184,166,.2),0 0 0 6px rgba(20,184,166,.06);opacity:0;transition:left .7s cubic-bezier(.25,.1,.25,1),top .7s cubic-bezier(.25,.1,.25,1),opacity .35s ease,width .3s ease,height .3s ease}
+.demo-ring{position:fixed;z-index:9590;pointer-events:none;width:48px;height:48px;border-radius:50%;border:3px solid rgba(20,184,166,.6);box-shadow:0 0 16px rgba(20,184,166,.2),0 0 0 6px rgba(20,184,166,.06);opacity:0;transition:left .9s cubic-bezier(.22,.61,.36,1),top .9s cubic-bezier(.22,.61,.36,1),opacity .4s ease,width .3s ease,height .3s ease}
 .demo-active .demo-ring.visible{opacity:1}
-.demo-popup{position:fixed;z-index:9550;opacity:0;pointer-events:none;transition:opacity .35s ease;background:var(--bg-surface-3);border:1px solid rgba(0,229,255,.18);border-radius:10px;padding:12px 16px;max-width:260px;width:max-content;text-align:left;box-shadow:0 8px 24px rgba(0,0,0,.4)}
+.demo-popup{position:fixed;z-index:9550;opacity:0;pointer-events:none;transition:opacity .45s ease;background:var(--bg-surface-3);border:1px solid rgba(0,229,255,.18);border-radius:10px;padding:12px 16px;max-width:260px;width:max-content;text-align:left;box-shadow:0 8px 24px rgba(0,0,0,.4)}
 .demo-popup.visible{opacity:1}
 .demo-popup-step{font-family:var(--font-mono);font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);margin-bottom:4px}
 .demo-popup-title{font-family:var(--font-display);font-size:14px;font-weight:700;color:var(--text-bright);line-height:1.25;margin-bottom:4px}
@@ -8266,9 +8266,15 @@ window.sendChat = async function(){
         if (r.left >= 0) posAt(el, ox, oy);
         next(); return;
       }
-      // INSTANT scroll — no race conditions. Cursor CSS transition = visual smoothness.
-      el.scrollIntoView({ block:'center' });
-      setTimeout(function() { posAt(el, ox, oy); next(); }, 50);
+      // Smooth scroll, then position after settle
+      el.scrollIntoView({ behavior:'smooth', block:'center' });
+      setTimeout(function() {
+        // Verify in viewport, force instant if not
+        var r2 = el.getBoundingClientRect();
+        if (r2.top < 0 || r2.top > window.innerHeight) el.scrollIntoView({ block:'center' });
+        posAt(el, ox, oy);
+        next();
+      }, 500);
     });
   }
 
@@ -8284,15 +8290,14 @@ window.sendChat = async function(){
           clickAnim();
           setTimeout(function() {
             switchTab(tab);
-            // Force instant scroll to top (switchTab uses smooth which races)
             window.scrollTo(0, 0);
-            setTimeout(next, 300);
+            setTimeout(next, 500);
           }, 200);
-        }, 700);
+        }, 800);
       } else {
         switchTab(tab);
         window.scrollTo(0, 0);
-        setTimeout(next, 300);
+        setTimeout(next, 500);
       }
     });
   }
@@ -8301,11 +8306,12 @@ window.sendChat = async function(){
     _dQ.push(function() {
       var el = typeof sel === 'string' ? qs(sel) : sel;
       if (!el || !el.offsetHeight) { next(); return; }
-      if (el.closest && !el.closest('.s-sidebar')) el.scrollIntoView({ block:'center' });
+      if (el.closest && !el.closest('.s-sidebar')) el.scrollIntoView({ behavior:'smooth', block:'center' });
       setTimeout(function() {
+        if (el.closest && !el.closest('.s-sidebar')) { var r=el.getBoundingClientRect(); if(r.top<0||r.top>window.innerHeight) el.scrollIntoView({block:'center'}); }
         posAt(el);
-        setTimeout(function() { clickAnim(); setTimeout(function() { el.click(); next(); }, 200); }, 500);
-      }, 50);
+        setTimeout(function() { clickAnim(); setTimeout(function() { el.click(); next(); }, 250); }, 600);
+      }, 500);
     });
   }
 
@@ -8313,11 +8319,12 @@ window.sendChat = async function(){
     _dQ.push(function() {
       var el = typeof sel === 'string' ? qs(sel) : sel;
       if (!el || !el.offsetHeight) { next(); return; }
-      if (el.closest && !el.closest('.s-sidebar')) el.scrollIntoView({ block:'center' });
+      if (el.closest && !el.closest('.s-sidebar')) el.scrollIntoView({ behavior:'smooth', block:'center' });
       setTimeout(function() {
+        if (el.closest && !el.closest('.s-sidebar')) { var r=el.getBoundingClientRect(); if(r.top<0||r.top>window.innerHeight) el.scrollIntoView({block:'center'}); }
         posAt(el);
-        setTimeout(function() { clickAnim(); setTimeout(next, 200); }, 500);
-      }, 50);
+        setTimeout(function() { clickAnim(); setTimeout(next, 250); }, 600);
+      }, 500);
     });
   }
 
@@ -8362,7 +8369,8 @@ window.sendChat = async function(){
       popup.classList.add('visible');
       _cardTimer = setTimeout(function() {
         popup.classList.remove('visible'); _cardTimer = null;
-        next();
+        // Brief pause after card fades before next action
+        setTimeout(next, 300);
       }, dur || 2000);
     });
   }

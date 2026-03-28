@@ -745,17 +745,24 @@ function buildCoverPage(meta) {
   const vc = verdictColor(meta.verdict);
   const vbg = verdictBg(meta.verdict);
   return `
+  <div class="cover-accent"></div>
   <div class="cover">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none" class="cover-logo" width="64" height="64">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none" class="cover-logo" width="72" height="72">
+      <defs>
+        <linearGradient id="cg1" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#00e5ff"/>
+          <stop offset="100%" stop-color="#14b8a6"/>
+        </linearGradient>
+      </defs>
       <circle cx="256" cy="256" r="248" fill="#ffffff" stroke="#e2e8f0" stroke-width="2"/>
-      <circle cx="256" cy="256" r="220" stroke="#0f172a" stroke-width="1.5" fill="none"/>
-      <circle cx="256" cy="256" r="180" stroke="#cbd5e1" stroke-width="1" fill="none"/>
+      <circle cx="256" cy="256" r="220" stroke="url(#cg1)" stroke-width="2" fill="none"/>
+      <circle cx="256" cy="256" r="180" stroke="#e2e8f0" stroke-width="1" fill="none"/>
       <polygon points="256,60 246,210 266,210" fill="#0f172a"/>
-      <polygon points="256,452 246,302 266,302" fill="#cbd5e1"/>
-      <polygon points="60,256 210,246 210,266" fill="#cbd5e1"/>
-      <polygon points="452,256 302,246 302,266" fill="#cbd5e1"/>
+      <polygon points="256,452 246,302 266,302" fill="#14b8a6" opacity="0.5"/>
+      <polygon points="60,256 210,246 210,266" fill="#14b8a6" opacity="0.3"/>
+      <polygon points="452,256 302,246 302,266" fill="#14b8a6" opacity="0.3"/>
       <circle cx="256" cy="256" r="12" fill="#0f172a"/>
-      <circle cx="256" cy="256" r="6" fill="#ffffff"/>
+      <circle cx="256" cy="256" r="6" fill="#00e5ff"/>
       <text x="256" y="48" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-size="20" font-weight="700" fill="#0f172a">N</text>
     </svg>
     <div class="cover-brand">StratOS</div>

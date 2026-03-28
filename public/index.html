@@ -2720,35 +2720,26 @@ dep-item strong{display:block;font-family:var(--font-mono);font-size:var(--text-
 .pp-signout:hover{color:var(--text-secondary)}
 @media(max-width:480px){.portal-panel{width:100%}}
 
-/* ── Walkthrough (cinematic auto-tour) ── */
-.wt-active{}
-.wt-fog{position:fixed;background:rgba(7,13,26,.86);backdrop-filter:blur(4px);pointer-events:none;z-index:9500;transition:all .7s cubic-bezier(.4,0,.2,1);opacity:0}
-.wt-active .wt-fog{opacity:1}
-.wt-fog.wt-fog-full{inset:0}
-.wt-spot{position:fixed;z-index:9502;border-radius:16px;border:2px solid rgba(20,184,166,.5);box-shadow:0 0 0 4px rgba(20,184,166,.08),0 0 40px rgba(20,184,166,.2);transition:all .7s cubic-bezier(.4,0,.2,1);opacity:0;pointer-events:none}
-.wt-spot.visible{opacity:1}
-.wt-cursor{position:fixed;z-index:9510;pointer-events:none;width:28px;height:28px;transition:left .8s cubic-bezier(.4,0,.2,1),top .8s cubic-bezier(.4,0,.2,1),opacity .3s ease}
-.wt-cursor-dot{width:10px;height:10px;border-radius:50%;background:var(--teal);box-shadow:0 0 16px var(--teal),0 0 40px rgba(20,184,166,.3);position:absolute;top:9px;left:9px}
-.wt-cursor-ring{width:28px;height:28px;border-radius:50%;border:2px solid rgba(20,184,166,.5);position:absolute;top:0;left:0;animation:wt-pulse 1.2s ease infinite}
-@keyframes wt-pulse{0%,100%{transform:scale(1);opacity:.6}50%{transform:scale(1.5);opacity:0}}
-.wt-cursor.clicking .wt-cursor-ring{animation:wt-click .3s ease forwards}
-@keyframes wt-click{0%{transform:scale(1);opacity:.8}50%{transform:scale(2.2);opacity:.2}100%{transform:scale(1);opacity:.6}}
-.wt-caption{position:fixed;z-index:9520;bottom:60px;left:50%;transform:translateX(-50%);text-align:center;max-width:680px;opacity:0;transition:opacity .4s ease,transform .4s ease;transform:translateX(-50%) translateY(12px);pointer-events:none}
-.wt-caption.visible{opacity:1;transform:translateX(-50%) translateY(0)}
-.wt-caption-label{font-family:var(--font-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);margin-bottom:6px}
-.wt-caption-title{font-family:var(--font-display);font-size:28px;font-weight:800;color:var(--text-bright);line-height:1.2;margin-bottom:8px;text-shadow:0 2px 20px rgba(0,0,0,.5)}
-.wt-caption-body{font-family:var(--font-body);font-size:14px;color:var(--text-secondary);line-height:1.6;max-width:560px;margin:0 auto}
-.wt-progress{position:fixed;z-index:9530;bottom:0;left:0;height:3px;background:linear-gradient(90deg,var(--teal),var(--blue));transition:width .3s linear;border-radius:0 2px 0 0}
-.wt-controls{position:fixed;z-index:9530;bottom:24px;right:24px;display:flex;gap:8px;opacity:0;pointer-events:none;transition:opacity .3s ease}
-.wt-active .wt-controls{opacity:1;pointer-events:all}
-.wt-btn{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:var(--text-secondary);font-family:var(--font-mono);font-size:11px;padding:6px 14px;border-radius:8px;cursor:pointer;transition:all .15s ease;backdrop-filter:blur(8px)}
-.wt-btn:hover{background:rgba(255,255,255,.14);color:var(--text-bright)}
-.wt-btn-skip{background:rgba(20,184,166,.15);border-color:rgba(20,184,166,.3);color:var(--teal)}
-.wt-counter{position:fixed;z-index:9530;top:24px;right:24px;font-family:var(--font-mono);font-size:11px;letter-spacing:.06em;color:var(--text-muted);opacity:0;transition:opacity .3s ease}
-.wt-active .wt-counter{opacity:1}
-.sb-walkthrough-btn{display:flex;align-items:center;gap:8px;width:100%;padding:7px 14px;background:none;border:none;color:var(--text-muted);font-family:var(--font-body);font-size:12px;cursor:pointer;transition:color .15s ease;text-align:left;white-space:nowrap}
-.sb-walkthrough-btn:hover{color:var(--teal)}
-.sb-walkthrough-btn span:first-child{font-size:15px;flex-shrink:0}
+/* ── Product Demo (click-through onboarding) ── */
+.demo-active .demo-cursor{opacity:1}
+.demo-cursor{position:fixed;z-index:9600;pointer-events:none;opacity:0;transition:opacity .3s ease;filter:drop-shadow(0 2px 8px rgba(0,0,0,.5))}
+.demo-cursor svg{width:24px;height:24px}
+.demo-cursor.clicking svg{transform:scale(.85);transition:transform .1s ease}
+.demo-popup{position:fixed;z-index:9550;top:50%;left:50%;transform:translate(-50%,-50%) scale(.92);opacity:0;pointer-events:none;transition:opacity .35s ease,transform .35s ease;background:var(--bg-surface-3);border:1px solid rgba(0,229,255,.2);border-radius:16px;padding:28px 32px;max-width:440px;width:90%;text-align:center;box-shadow:0 16px 48px rgba(0,0,0,.5),0 0 0 1px rgba(0,229,255,.06)}
+.demo-popup.visible{opacity:1;transform:translate(-50%,-50%) scale(1);pointer-events:all}
+.demo-popup-step{font-family:var(--font-mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);margin-bottom:8px}
+.demo-popup-title{font-family:var(--font-display);font-size:22px;font-weight:800;color:var(--text-bright);line-height:1.25;margin-bottom:10px}
+.demo-popup-body{font-family:var(--font-body);font-size:13px;color:var(--text-secondary);line-height:1.65}
+.demo-popup-nav{display:flex;justify-content:center;gap:8px;margin-top:16px}
+.demo-popup-btn{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:var(--text-secondary);font-family:var(--font-mono);font-size:11px;padding:7px 16px;border-radius:8px;cursor:pointer;transition:all .15s ease}
+.demo-popup-btn:hover{background:rgba(255,255,255,.12);color:var(--text-bright)}
+.demo-popup-btn.primary{background:rgba(20,184,166,.15);border-color:rgba(20,184,166,.3);color:var(--teal)}
+.demo-popup-progress{display:flex;gap:4px;justify-content:center;margin-top:12px}
+.demo-pip{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.12);transition:background .2s ease}
+.demo-pip.active{background:var(--teal)}
+.sb-demo-btn{display:flex;align-items:center;gap:8px;width:100%;padding:7px 14px;background:none;border:none;color:var(--text-muted);font-family:var(--font-body);font-size:12px;cursor:pointer;transition:color .15s ease;text-align:left;white-space:nowrap}
+.sb-demo-btn:hover{color:var(--teal)}
+.sb-demo-btn span:first-child{font-size:15px;flex-shrink:0}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -2809,31 +2800,24 @@ dep-item strong{display:block;font-family:var(--font-mono);font-size:var(--text-
         <span class="sb-label">Ask StratOS</span>
       </button>
     </div>
-    <button class="sb-walkthrough-btn" onclick="startWalkthrough()">
+    <button class="sb-demo-btn" onclick="startDemo()">
       <span>&#9655;</span>
-      <span class="sb-label">1-Min Walkthrough</span>
+      <span class="sb-label">How It Works</span>
     </button>
   </div>
 </aside>
 
-<!-- WALKTHROUGH FOG PANELS -->
-<div class="wt-fog" id="wt-fog-top"></div>
-<div class="wt-fog" id="wt-fog-bottom"></div>
-<div class="wt-fog" id="wt-fog-left"></div>
-<div class="wt-fog" id="wt-fog-right"></div>
-<div class="wt-fog wt-fog-full" id="wt-fog-full"></div>
-<div class="wt-spot" id="wt-spot"></div>
-<div class="wt-cursor" id="wt-cursor"><div class="wt-cursor-dot"></div><div class="wt-cursor-ring"></div></div>
-<div class="wt-caption" id="wt-caption">
-  <div class="wt-caption-label" id="wt-cap-label"></div>
-  <div class="wt-caption-title" id="wt-cap-title"></div>
-  <div class="wt-caption-body" id="wt-cap-body"></div>
-</div>
-<div class="wt-progress" id="wt-progress"></div>
-<div class="wt-counter" id="wt-counter"></div>
-<div class="wt-controls">
-  <button class="wt-btn" onclick="endWalkthrough()">ESC to Exit</button>
-  <button class="wt-btn wt-btn-skip" onclick="wtSkip()">Skip &rarr;</button>
+<!-- PRODUCT DEMO ELEMENTS -->
+<div class="demo-cursor" id="demo-cursor"><svg viewBox="0 0 24 24" fill="none"><path d="M5.5 3.21V20.8c0 .45.54.67.85.35l4.86-4.86h6.3c.38 0 .62-.4.44-.74L5.95 3.01c-.2-.37-.45-.15-.45.2z" fill="#fff" stroke="#000" stroke-width="1"/></svg></div>
+<div class="demo-popup" id="demo-popup">
+  <div class="demo-popup-step" id="demo-step"></div>
+  <div class="demo-popup-title" id="demo-title"></div>
+  <div class="demo-popup-body" id="demo-body"></div>
+  <div class="demo-popup-nav">
+    <button class="demo-popup-btn" onclick="endDemo()">Exit</button>
+    <button class="demo-popup-btn primary" onclick="demoNext()" id="demo-next-btn">Next</button>
+  </div>
+  <div class="demo-popup-progress" id="demo-pips"></div>
 </div>
 
 <!-- PORTAL PANEL (My Decisions slide-out) -->
@@ -2900,7 +2884,6 @@ dep-item strong{display:block;font-family:var(--font-mono);font-size:var(--text-
       <div class="tour-step" onclick="startTourFrom('room')"><div class="tour-step-num">5</div><div class="tour-step-text">The Room &amp; Options &mdash; Deliberation arc, role positions, strategy choice</div><div class="tour-step-meta">3 min</div></div>
       <div class="tour-step" onclick="startTourFrom('management')"><div class="tour-step-num">6</div><div class="tour-step-text">Management Handoff &mdash; Commitments, kill criteria, metrics</div><div class="tour-step-meta">2 min</div></div>
       <div class="tour-step" onclick="startTourFrom('board')"><div class="tour-step-num">7</div><div class="tour-step-text">Board Report &mdash; Governance packet, conditions, dissent</div><div class="tour-step-meta">2 min</div></div>
-      <div class="tour-step" onclick="startTourFrom('market')"><div class="tour-step-num">8</div><div class="tour-step-text">Market Intel &mdash; Competitive landscape, opportunities, threats</div><div class="tour-step-meta">3 min</div></div>
     </div>
     <div class="tour-footer">
       <div class="tour-audio-row">
@@ -7508,16 +7491,10 @@ const TOUR_STEPS = {
     { el:'#sec-board .board-summary-row',      title:'Decision Metrics',            body:'Four numbers the Board needs: total investment, confidence, conditions placed, and kill gates. Hover any number for its source.' },
     { el:'#sec-board .board-rec-card',         title:'Board Recommendation',        body:'The formal recommendation text: authorize the two-tranche structure with Phase 2 gated on validated line-item budget by March 15.' },
     { el:'#sec-board .board-gov-grid',         title:'Governance Framework',        body:'Board oversight requirements, reporting cadence, and escalation triggers. The governance packet that ensures Board maintains control through execution.' }
-  ]},
-  market: { audio: 'Market Intelligence -- 3 min', steps: [
-    { el:'#sec-market .mi-hero',              title:'Market Positioning',          body:'Executive summary of the competitive landscape. TAM/SAM sizing, market position, and key research findings at a glance.' },
-    { el:'#sec-market .mi-metrics-row',       title:'Intelligence Metrics',        body:'Five key market indicators: competitor count, addressable segments, opportunity pipeline, risk factors, and monitored trends.' },
-    { el:'#sec-market .mi-comp-grid',         title:'Competitive Dossiers',        body:'Detailed competitive intelligence on each identified competitor. Funding, ARR, strengths, weaknesses, and threat assessment. Sorted by threat level.' },
-    { el:'#sec-market .mi-opp-grid',          title:'Opportunity Pipeline',        body:'Ranked strategic opportunities with revenue potential, difficulty rating, and recommended first steps. The growth playbook derived from market intelligence.' }
   ]}
 };
 
-const TAB_ORDER = ['briefing','command','risk','financials','room','management','board','market'];
+const TAB_ORDER = ['briefing','command','risk','financials','room','management','board'];
 let _tSec='briefing', _tIdx=0, _tAudio='manual', _tPlaying=false;
 
 function setAudioPref(p) {
@@ -7614,7 +7591,7 @@ function _renderStep() {
   const sd = TOUR_STEPS[_tSec] || {steps:[]};
   const s  = sd.steps[_tIdx];
   if (!s) return;
-  const lbl = {briefing:'Briefing',command:'Command Center',risk:'Risk & Intel',financials:'Financials',room:'The Room',management:'Management',board:'Board Report',market:'Market Intel'}[_tSec] || _tSec;
+  const lbl = {briefing:'Briefing',command:'Command Center',risk:'Risk & Intel',financials:'Financials',room:'The Room',management:'Management',board:'Board Report'}[_tSec] || _tSec;
   set('tc-step', lbl.toUpperCase() + ' \u00b7 ' + (_tIdx+1) + ' OF ' + sd.steps.length);
   set('tc-title', s.title);
   const tcb = el('tc-body'); if (tcb) tcb.innerHTML = s.body;
@@ -8249,206 +8226,186 @@ window.sendChat = async function(){
 })();
 </script>
 
-<!-- WALKTHROUGH ENGINE -->
+<!-- PRODUCT DEMO ENGINE -->
 <script>
 (function() {
-  var _wtActive = false, _wtIdx = 0, _wtTimer = null;
+  var _dActive = false, _dIdx = -1;
 
-  var WT_SCENES = [
-    { sec: null, el: null, dur: 3500,
-      label: 'Welcome', title: 'Your Decision Brief',
-      body: 'A complete strategic analysis generated by StratOS. Let\'s walk through what you\'re looking at in 60 seconds.' },
-    { sec: 'briefing', el: '.verdict-hero', dur: 5000,
-      label: 'Briefing', title: 'The Verdict',
-      body: 'The headline decision from a governed 3-round deliberation. This is the bottom line before any detail.' },
-    { sec: 'briefing', el: '.g5.dim-group', dur: 4000,
-      label: 'Briefing', title: 'Key Metrics',
-      body: 'Five headline numbers from the decision engine. Every value is sourced and cited.' },
-    { sec: 'command', el: '.cmd-opp-hero', dur: 4500,
-      label: 'Command Center', title: 'The Opportunity',
-      body: 'Market window, investment structure, and projected returns. The strategic case in one panel.' },
-    { sec: 'command', el: '.g2', dur: 4000,
-      label: 'Command Center', title: 'Decision Dashboard',
-      body: 'Room consensus with all role stances and the capital structure with phase-gated deployment.' },
-    { sec: 'risk', el: '.g7030', dur: 5000,
-      label: 'Risk & Intel', title: 'Risk Matrix',
-      body: '15 risks plotted by probability and impact. Critical risks in the ACT NOW zone are flagged for immediate attention.' },
-    { sec: 'risk', el: '.risk-row-list', dur: 3500,
-      label: 'Risk & Intel', title: 'Decision-Breaking Risks',
-      body: 'The risks with both high impact and high probability. Any one of these can invalidate the decision.' },
-    { sec: 'financials', el: '.fin-header', dur: 4000,
-      label: 'Financials', title: 'Financial Overview',
-      body: 'Investment, revenue targets, and unit economics. The numbers that must hold for this decision to work.' },
-    { sec: 'financials', el: '.fin-scenario-wrap', dur: 4000,
-      label: 'Financials', title: 'Scenario Analysis',
-      body: 'Three cases modeled across best, base, and worst scenarios. Phase 1 caps maximum exposure.' },
-    { sec: 'room', el: '.g7030', dur: 5000,
-      label: 'The Room', title: 'Deliberation Grid',
-      body: 'Watch ten roles converge across three rounds. From fragmented positions to conditional alignment.' },
-    { sec: 'room', el: '.room-role-table', dur: 4000,
-      label: 'The Room', title: 'Role Breakdown',
-      body: 'Every role\'s final confidence, stance evolution, and hard gate condition. Click any row for their direct quote.' },
-    { sec: 'management', el: '.mh-hero', dur: 4500,
-      label: 'Management', title: 'Execution Timeline',
-      body: 'Phase-gated deployment. Phase 1 deploys immediately, Phase 2 releases only after validated GO/NO-GO gate.' },
-    { sec: 'management', el: '.mh-priority-grid', dur: 3500,
-      label: 'Management', title: 'Priority Actions',
-      body: 'The three actions gating everything else. Running in parallel, not sequence.' },
-    { sec: 'board', el: '.verdict-hero', dur: 4500,
-      label: 'Board Report', title: 'Board Action',
-      body: 'The formal governance packet. Unanimous conditional approval with specific conditions and kill gates.' },
-    { sec: 'board', el: '.board-gov-grid', dur: 4000,
-      label: 'Board Report', title: 'Governance Framework',
-      body: 'Oversight requirements, reporting cadence, and escalation triggers. The Board maintains control through execution.' },
-    { sec: null, el: null, dur: 4000,
-      label: 'Ready', title: 'Your Turn',
-      body: 'Use the sidebar to jump to any section. Click the tour button for guided step-by-step detail. This is your decision brief.' }
+  // Each step: action to perform, then show popup
+  // Actions: click tab, scroll to element, hover element, click element
+  var DEMO = [
+    { step: '1 of 10', title: 'Welcome to Your Decision Brief',
+      body: 'This dashboard is a complete strategic analysis. Seven tabs, each a different lens on the same decision. Let\'s walk through how to use it.',
+      actions: [] },
+
+    { step: '2 of 10', title: 'Navigate with the Sidebar',
+      body: 'Click any tab to jump between sections. The sidebar shows all seven analysis areas. You\'re currently on Briefing — the executive summary.',
+      actions: [{ type:'tab', sec:'briefing' }] },
+
+    { step: '3 of 10', title: 'Everything is Cited',
+      body: 'Hover any colored diamond to see its source. Every number, claim, and recommendation traces back to the deliberation record or financial model. Nothing is unattributed.',
+      actions: [{ type:'scroll', el:'#sec-briefing .verdict-hero' }, { type:'hover', el:'#sec-briefing .cite', delay:800 }] },
+
+    { step: '4 of 10', title: 'Insight Briefs Explain Each Section',
+      body: 'Every section has a three-column brief answering key questions. Below that: an audio overview button and downloadable report. Click the audio button to listen while you read.',
+      actions: [{ type:'scroll', el:'#sec-briefing .ib-wrap' }] },
+
+    { step: '5 of 10', title: 'Command Center — The Strategic Case',
+      body: 'This tab frames the opportunity: market window, investment structure, projected returns, and the room\'s verdict. The Command Brief distills the "why" behind the decision.',
+      actions: [{ type:'tab', sec:'command' }, { type:'scroll', el:'#sec-command .cmd-opp-hero' }] },
+
+    { step: '6 of 10', title: 'Risk Matrix — Interactive',
+      body: 'Risks are plotted by probability and impact. Hover any dot to expand the risk detail. Red zone = ACT NOW. The risk register below lists every identified risk with mitigations.',
+      actions: [{ type:'tab', sec:'risk' }, { type:'scroll', el:'#sec-risk .g7030' }] },
+
+    { step: '7 of 10', title: 'Financials — Scenario Analysis',
+      body: 'Unit economics, capital waterfall, and three-case scenario modeling. The numbers that gate whether Phase 2 funding releases. Hover the KPI values for source citations.',
+      actions: [{ type:'tab', sec:'financials' }, { type:'scroll', el:'#sec-financials .fin-header' }] },
+
+    { step: '8 of 10', title: 'The Room — Watch Consensus Form',
+      body: 'Ten expert roles deliberated across three rounds. The convergence grid shows how positions shifted from fragmented to aligned. Click any role row to read their direct quote.',
+      actions: [{ type:'tab', sec:'room' }, { type:'scroll', el:'#sec-room .g7030' }] },
+
+    { step: '9 of 10', title: 'Management Handoff — Action Plans',
+      body: 'Phase-gated execution timeline with department-level action plans. Click any role tab to expand their Phase 1 commitments, success metrics, and kill gate conditions.',
+      actions: [{ type:'tab', sec:'management' }, { type:'scroll', el:'#sec-management .mh-hero' }] },
+
+    { step: '10 of 10', title: 'Board Report — Governance Packet',
+      body: 'The formal Board recommendation. Conditions of approval, kill criteria, open questions, and the governance framework. Everything the Board needs to make an informed decision.',
+      actions: [{ type:'tab', sec:'board' }, { type:'scroll', el:'#sec-board .verdict-hero' }] }
   ];
 
-  var totalDur = WT_SCENES.reduce(function(s, sc) { return s + sc.dur; }, 0);
-
   function $(id) { return document.getElementById(id); }
-  function qs(sel, ctx) { return (ctx || document).querySelector(sel); }
 
-  function _setFog(id, css) { var e = $(id); if (e) e.style.cssText = css; }
-
-  function _positionFog(r) {
-    // Four panels around the spotlight cutout — content shows through the gap
-    var pad = 14;
-    var tx = r.left - pad, ty = r.top - pad, tw = r.width + pad * 2, th = r.height + pad * 2;
-    _setFog('wt-fog-top',    'top:0;left:0;right:0;height:' + ty + 'px');
-    _setFog('wt-fog-bottom', 'top:' + (ty + th) + 'px;left:0;right:0;bottom:0');
-    _setFog('wt-fog-left',   'top:' + ty + 'px;left:0;width:' + tx + 'px;height:' + th + 'px');
-    _setFog('wt-fog-right',  'top:' + ty + 'px;left:' + (tx + tw) + 'px;right:0;height:' + th + 'px');
-    // Hide full-screen fog
-    _setFog('wt-fog-full', 'display:none');
+  function _moveCursor(x, y, cb) {
+    var cur = $('demo-cursor');
+    cur.style.transition = 'left .6s cubic-bezier(.4,0,.2,1), top .6s cubic-bezier(.4,0,.2,1)';
+    cur.style.left = x + 'px';
+    cur.style.top = y + 'px';
+    if (cb) setTimeout(cb, 650);
   }
 
-  function _fullFog() {
-    // Full screen fog (intro/outro — no cutout)
-    _setFog('wt-fog-top', '');
-    _setFog('wt-fog-bottom', '');
-    _setFog('wt-fog-left', '');
-    _setFog('wt-fog-right', '');
-    _setFog('wt-fog-full', 'inset:0;display:block');
+  function _clickAnim() {
+    var cur = $('demo-cursor');
+    cur.classList.add('clicking');
+    setTimeout(function() { cur.classList.remove('clicking'); }, 200);
   }
 
-  function _clearFog() {
-    ['wt-fog-top','wt-fog-bottom','wt-fog-left','wt-fog-right','wt-fog-full'].forEach(function(id) {
-      var e = $(id); if (e) e.style.cssText = '';
-    });
-  }
-
-  window.startWalkthrough = function() {
-    if (_wtActive) return;
-    _wtActive = true;
-    _wtIdx = 0;
-    document.body.classList.add('wt-active');
-    document.addEventListener('keydown', _wtKey);
-    _fullFog();
-    _playScene(0);
-  };
-
-  window.endWalkthrough = function() {
-    if (!_wtActive) return;
-    _wtActive = false;
-    clearTimeout(_wtTimer);
-    document.body.classList.remove('wt-active');
-    _clearFog();
-    $('wt-spot').classList.remove('visible');
-    $('wt-spot').style.cssText = '';
-    $('wt-caption').classList.remove('visible');
-    $('wt-cursor').style.opacity = '0';
-    $('wt-progress').style.width = '0';
-    document.removeEventListener('keydown', _wtKey);
-  };
-
-  window.wtSkip = function() {
-    if (!_wtActive) return;
-    clearTimeout(_wtTimer);
-    if (_wtIdx < WT_SCENES.length - 1) { _wtIdx++; _playScene(_wtIdx); }
-    else endWalkthrough();
-  };
-
-  function _wtKey(e) {
-    if (e.key === 'Escape') endWalkthrough();
-    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); wtSkip(); }
-  }
-
-  function _playScene(idx) {
-    if (!_wtActive || idx >= WT_SCENES.length) { endWalkthrough(); return; }
-    _wtIdx = idx;
-    var sc = WT_SCENES[idx];
-    var spot = $('wt-spot');
-    var cursor = $('wt-cursor');
-    var caption = $('wt-caption');
-
-    // Progress
-    var elapsed = 0;
-    for (var i = 0; i < idx; i++) elapsed += WT_SCENES[i].dur;
-    $('wt-progress').style.width = Math.round((elapsed / totalDur) * 100) + '%';
-    $('wt-counter').textContent = (idx + 1) + ' / ' + WT_SCENES.length;
-
-    // Switch section
-    if (sc.sec) {
-      var sbTab = qs('.sb-tab[data-sec="' + sc.sec + '"]');
-      if (sbTab && typeof switchTab === 'function') switchTab(sbTab);
-    }
-
-    caption.classList.remove('visible');
-
-    setTimeout(function() {
-      var secEl = sc.sec ? qs('#sec-' + sc.sec) : null;
-      var target = sc.el ? qs(sc.el, secEl) : null;
-
-      if (target && target.offsetHeight > 0) {
-        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
-
-        setTimeout(function() {
-          var r = target.getBoundingClientRect();
-          var pad = 14;
-
-          // Position fog panels around the target
-          _positionFog(r);
-
-          // Position spotlight ring
-          spot.style.left = (r.left - pad) + 'px';
-          spot.style.top = (r.top - pad) + 'px';
-          spot.style.width = (r.width + pad * 2) + 'px';
-          spot.style.height = (r.height + pad * 2) + 'px';
-          spot.classList.add('visible');
-
-          // Cursor
-          cursor.style.left = (r.left + r.width * 0.35) + 'px';
-          cursor.style.top = (r.top + r.height * 0.25) + 'px';
-          cursor.style.opacity = '1';
+  function _runActions(actions, cb) {
+    if (!actions || !actions.length) { cb(); return; }
+    var i = 0;
+    function next() {
+      if (i >= actions.length) { cb(); return; }
+      var a = actions[i++];
+      if (a.type === 'tab') {
+        var sbTab = document.querySelector('.sb-tab[data-sec="' + a.sec + '"]');
+        if (sbTab) {
+          var r = sbTab.getBoundingClientRect();
+          _moveCursor(r.left + r.width / 2, r.top + r.height / 2, function() {
+            _clickAnim();
+            setTimeout(function() {
+              if (typeof switchTab === 'function') switchTab(sbTab);
+              setTimeout(next, 300);
+            }, 200);
+          });
+        } else next();
+      } else if (a.type === 'scroll') {
+        var el = document.querySelector(a.el);
+        if (el) {
+          el.scrollIntoView({ behavior:'smooth', block:'center' });
           setTimeout(function() {
-            cursor.classList.add('clicking');
-            setTimeout(function() { cursor.classList.remove('clicking'); }, 400);
-          }, 300);
-        }, 350);
-      } else {
-        // Intro/outro — full fog, no cutout
-        _fullFog();
-        spot.classList.remove('visible');
-        cursor.style.opacity = '0';
-      }
+            var r = el.getBoundingClientRect();
+            _moveCursor(r.left + r.width * 0.3, r.top + 40, function() { next(); });
+          }, 400);
+        } else next();
+      } else if (a.type === 'hover') {
+        setTimeout(function() {
+          var el = document.querySelector(a.el);
+          if (el) {
+            var r = el.getBoundingClientRect();
+            _moveCursor(r.left + r.width / 2, r.top + r.height / 2, function() {
+              // Trigger hover state
+              el.dispatchEvent(new MouseEvent('mouseenter', {bubbles:true}));
+              setTimeout(function() {
+                el.dispatchEvent(new MouseEvent('mouseleave', {bubbles:true}));
+                next();
+              }, 1200);
+            });
+          } else next();
+        }, a.delay || 0);
+      } else if (a.type === 'click') {
+        var el = document.querySelector(a.el);
+        if (el) {
+          var r = el.getBoundingClientRect();
+          _moveCursor(r.left + r.width / 2, r.top + r.height / 2, function() {
+            _clickAnim();
+            setTimeout(function() { el.click(); setTimeout(next, 400); }, 200);
+          });
+        } else next();
+      } else next();
+    }
+    next();
+  }
 
-      // Caption
-      $('wt-cap-label').textContent = sc.label;
-      $('wt-cap-title').textContent = sc.title;
-      $('wt-cap-body').textContent = sc.body;
-      setTimeout(function() { caption.classList.add('visible'); }, 200);
+  function _showPopup() {
+    var s = DEMO[_dIdx];
+    $('demo-step').textContent = s.step;
+    $('demo-title').textContent = s.title;
+    $('demo-body').textContent = s.body;
+    $('demo-next-btn').textContent = _dIdx >= DEMO.length - 1 ? 'Finish' : 'Next';
+    // Pips
+    var pips = $('demo-pips');
+    pips.innerHTML = '';
+    for (var i = 0; i < DEMO.length; i++) {
+      var p = document.createElement('div');
+      p.className = 'demo-pip' + (i === _dIdx ? ' active' : '');
+      pips.appendChild(p);
+    }
+    $('demo-popup').classList.add('visible');
+  }
 
-      // Auto-advance
-      _wtTimer = setTimeout(function() {
-        if (idx < WT_SCENES.length - 1) _playScene(idx + 1);
-        else {
-          $('wt-progress').style.width = '100%';
-          setTimeout(function() { endWalkthrough(); }, 2000);
-        }
-      }, sc.dur);
-    }, 150);
+  function _hidePopup(cb) {
+    $('demo-popup').classList.remove('visible');
+    setTimeout(cb || function(){}, 350);
+  }
+
+  window.startDemo = function() {
+    if (_dActive) return;
+    _dActive = true;
+    _dIdx = -1;
+    document.body.classList.add('demo-active');
+    // Position cursor off-screen initially
+    var cur = $('demo-cursor');
+    cur.style.left = '-40px';
+    cur.style.top = '50%';
+    cur.style.transition = 'none';
+    document.addEventListener('keydown', _dKey);
+    demoNext();
+  };
+
+  window.endDemo = function() {
+    if (!_dActive) return;
+    _dActive = false;
+    _hidePopup();
+    document.body.classList.remove('demo-active');
+    $('demo-cursor').style.opacity = '0';
+    document.removeEventListener('keydown', _dKey);
+  };
+
+  window.demoNext = function() {
+    if (!_dActive) return;
+    _dIdx++;
+    if (_dIdx >= DEMO.length) { endDemo(); return; }
+    _hidePopup(function() {
+      _runActions(DEMO[_dIdx].actions, function() {
+        _showPopup();
+      });
+    });
+  };
+
+  function _dKey(e) {
+    if (e.key === 'Escape') endDemo();
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); demoNext(); }
   }
 })();
 </script>

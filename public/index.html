@@ -8219,7 +8219,7 @@ window.sendChat = async function(){
 <!-- PRODUCT DEMO ENGINE v6 -->
 <script>
 (function() {
-  var _dOn = false, _dT = [], _dStart = 0, _dTotal = 43500, _dRaf = 0;
+  var _dOn = false, _dT = [], _dStart = 0, _dTotal = 46500, _dRaf = 0;
   var _curX = -40, _curY = 300;
   var _hoverInterval = null;
   var _cardTimer = null; // FIX 3: single timer prevents overlapping popups
@@ -8408,12 +8408,12 @@ window.sendChat = async function(){
       if (tab && typeof switchTab === 'function') switchTab(tab);
     });
 
-    // ── 0.8s: Intro (centered, cursor not visible yet) ──
-    at(800, function() {
+    // ── 1s: Intro card (centered, no cursor yet) ──
+    at(1000, function() {
       showCenterCard('OVERVIEW', 'Your Decision Brief', 'Seven tabs. Every insight cited.', 2200);
     });
 
-    // ── 3.5s: Cursor enters → verdict hero ──
+    // ── 3.5s: Cursor enters → verdict hero (top of page, always visible) ──
     at(3500, function() {
       var hero = qs('#sec-briefing .verdict-hero');
       if (hero) _posAt(hero, 140, 50);
@@ -8425,81 +8425,92 @@ window.sendChat = async function(){
       if (tabs.length > 1) clickEl(tabs[1]);
     });
 
-    // ── 7.5s: Hover citation — card shows AFTER cursor arrives ──
+    // ── 7.5s: Card FIRST (no hover overlap), then hover citation ──
     at(7500, function() {
-      hoverEl('#sec-briefing .cite', 1800, function() {});
-      // Show card slightly after cursor settles on cite
-      setTimeout(function() { showCard('CITATIONS', 'Sourced', 'Every claim traces back to the record.', 2000); }, 1000);
+      showCard('CITATIONS', 'Sourced', 'Every claim traces to the record.', 1800);
+    });
+    at(9500, function() {
+      hoverEl('#sec-briefing .cite', 1500);
     });
 
-    // ── 11s: Command Center ──
-    at(11000, function() { goTab('command'); });
-    at(13000, function() {
+    // ── 12s: Command Center ──
+    at(12000, function() { goTab('command'); });
+    at(14000, function() {
       scrollAndPoint('#sec-command .ib-wrap', function() {
-        showCard('INTELLIGENCE', 'Audio + Brief', 'Three-column brief with audio narration.', 2200);
+        showCard('INTELLIGENCE', 'Audio + Brief', 'Three-column brief with narration.', 2000);
       });
     });
 
-    // ── 16s: Audio button — visual only ──
-    at(16000, function() {
-      fakeClickEl('#sec-command .ib-audio', function() {
-        showCard('AUDIO', 'Listen While You Read', 'Each section has its own audio overview.', 1800);
+    // ── 17s: Audio button — visual only, card AFTER ──
+    at(17000, function() {
+      fakeClickEl('#sec-command .ib-audio');
+    });
+    at(18500, function() {
+      showCard('AUDIO', 'Listen While You Read', 'Each section has audio.', 1500);
+    });
+
+    // ── 20.5s: Risk ──
+    at(20500, function() { goTab('risk'); });
+    // Card first, then hover the dot
+    at(22500, function() {
+      scrollAndPoint('#sec-risk .g7030', function() {
+        showCard('RISK', 'Interactive', 'Hover any dot to expand.', 1500);
       });
     });
-
-    // ── 18.5s: Risk ──
-    at(18500, function() { goTab('risk'); });
-    at(20500, function() {
-      hoverEl('#sec-risk .risk-dot-abs', 1600, function() {});
-      setTimeout(function() { showCard('RISK', 'Interactive', 'Hover any dot to expand details.', 1800); }, 1000);
+    at(24500, function() {
+      hoverEl('#sec-risk .risk-dot-abs', 1500);
     });
 
-    // ── 24s: Financials ──
-    at(24000, function() { goTab('financials'); });
-    at(26000, function() {
-      hoverEl('#sec-financials .num-cite', 1600, function() {});
-      setTimeout(function() { showCard('FINANCIALS', 'Cited', 'Hover any number for its source.', 1800); }, 1000);
+    // ── 27s: Financials ──
+    at(27000, function() { goTab('financials'); });
+    // Card first, then hover number
+    at(29000, function() {
+      scrollAndPoint('#sec-financials .fin-kpi-row', function() {
+        showCard('FINANCIALS', 'Cited', 'Hover any value for source.', 1500);
+      });
     });
-
-    // ── 29s: Room ──
-    at(29000, function() { goTab('room'); });
     at(31000, function() {
+      hoverEl('#sec-financials .num-cite', 1500);
+    });
+
+    // ── 33s: Room — click row, card AFTER expand ──
+    at(33000, function() { goTab('room'); });
+    at(35000, function() {
       clickEl('#sec-room .room-role-row', function() {
-        showCard('THE ROOM', 'Expand Any Role', 'Direct quotes and stance evolution.', 1800);
+        setTimeout(function() {
+          showCard('THE ROOM', 'Expand Roles', 'Quotes and stance evolution.', 1500);
+        }, 300);
       });
     });
 
-    // ── 34s: Board ──
-    at(34000, function() { goTab('board'); });
+    // ── 37.5s: Board ──
+    at(37500, function() { goTab('board'); });
 
-    // ── 36s: Sidebar features ──
-    at(36000, function() {
+    // ── 39.5s: Sidebar features — cursor moves, one card ──
+    at(39500, function() {
       _posAt(qs('.sb-audio-link'));
-      showCard('SIDEBAR', 'Audio + Reports', 'Listen or download from the sidebar.', 1800);
     });
-    at(37500, function() { _posAt(qs('.sb-deck-link')); });
-    at(38500, function() {
+    at(40200, function() { _posAt(qs('.sb-deck-link')); });
+    at(41000, function() {
       _posAt(qs('.sb-chat-link'));
-      showCard('CHAT', 'Ask StratOS', 'AI assistant knows your entire decision.', 1800);
+      showCard('SIDEBAR', 'Audio, Reports, Chat', 'All one click away.', 1500);
     });
 
-    // ── 39.5s: Open chat panel briefly ──
-    at(39800, function() {
+    // ── 42.5s: Open chat briefly ──
+    at(42500, function() {
       clickAnim();
       if (typeof toggleChat === 'function') toggleChat();
     });
 
-    // ── 41s: Close chat, final card ──
-    at(41000, function() {
-      if (typeof toggleChat === 'function') {
-        var p = $('strat-chat-panel');
-        if (p && p.classList.contains('open')) toggleChat();
-      }
+    // ── 44s: Close chat, final ──
+    at(44000, function() {
+      var p = $('strat-chat-panel');
+      if (p && p.classList.contains('open') && typeof toggleChat === 'function') toggleChat();
       hideRing();
-      showCenterCard('READY', 'Your Turn', 'Click any tab to explore.', 2200);
+      showCenterCard('READY', 'Your Turn', 'Click any tab to explore.', 2000);
     });
 
-    at(43500, function() { endDemo(); });
+    at(46500, function() { endDemo(); });
   }
 
   // ══════════════════════════════════════════════
@@ -8513,13 +8524,13 @@ window.sendChat = async function(){
     document.body.classList.add('demo-active');
     var cur = $('demo-cursor');
     cur.style.transition = 'none';
-    cur.style.left = '-40px';
-    cur.style.top = '300px';
-    _curX = -40; _curY = 300;
+    cur.style.left = '-60px';
+    cur.style.top = '-60px';
+    _curX = -60; _curY = -60;
     var ring = $('demo-ring');
     ring.style.transition = 'none';
-    ring.style.left = '-64px';
-    ring.style.top = '276px';
+    ring.style.left = '-84px';
+    ring.style.top = '-84px';
     ring.classList.remove('visible');
     requestAnimationFrame(function() {
       requestAnimationFrame(function() {

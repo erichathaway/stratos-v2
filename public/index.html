@@ -5500,6 +5500,17 @@ function applyLiveData(raw) {
     }
   });
 
+  // ── Format raw numbers in num-cite elements (e.g. 1500000 → $1.5M) ───
+  function _fmtNum(v) { if(!v)return v; var n=typeof v==='number'?v:parseFloat(String(v).replace(/[^0-9.]/g,'')); if(isNaN(n)||n<1000)return v; if(n>=1e9)return '$'+Math.round(n/1e9)+'B'; if(n>=1e6)return '$'+(n/1e6).toFixed(1).replace(/\.0$/,'')+'M'; if(n>=1e3)return '$'+Math.round(n/1e3)+'K'; return '$'+n; }
+  document.querySelectorAll('.num-cite').forEach(function(nc) {
+    var text = nc.textContent.trim();
+    // If text is a raw number > 999 with no $ sign, format it
+    if (/^\d{4,}$/.test(text)) {
+      nc.textContent = _fmtNum(parseInt(text));
+      nc.dataset.val = nc.textContent;
+    }
+  });
+
   // Re-wire citation listeners after innerHTML updates
   wireListeners();
 

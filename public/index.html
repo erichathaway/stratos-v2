@@ -2643,6 +2643,40 @@ dep-item strong{display:block;font-family:var(--font-mono);font-size:var(--text-
   .mi-hero{padding:20px}
   .mi-tam-value{font-size:28px}
 }
+
+/* ── PORTAL PANEL (My Decisions slide-out) ──────────────────────────────── */
+.portal-panel-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:299;opacity:0;pointer-events:none;transition:opacity 300ms ease}
+.portal-panel-backdrop.open{opacity:1;pointer-events:auto}
+.portal-panel{position:fixed;top:0;left:0;bottom:0;width:360px;background:var(--bg-page);border-right:1px solid rgba(0,229,255,.15);box-shadow:6px 0 24px rgba(0,0,0,.6);z-index:300;transform:translateX(-100%);transition:transform 300ms var(--ease);display:flex;flex-direction:column;overflow:hidden}
+.portal-panel.open{transform:translateX(0)}
+.pp-header{display:flex;align-items:center;justify-content:space-between;padding:18px 20px 14px;border-bottom:1px solid var(--border);flex-shrink:0}
+.pp-header-left{display:flex;align-items:center;gap:10px}
+.pp-header-logo{width:22px;height:22px;flex-shrink:0}
+.pp-header-logo svg{width:100%;height:100%}
+.pp-header-title{font-family:var(--font-display);font-size:var(--text-md);font-weight:600;color:var(--text-primary);letter-spacing:.02em}
+.pp-close{background:none;border:none;color:var(--text-secondary);font-size:20px;cursor:pointer;padding:4px 8px;border-radius:var(--r-sm);transition:color 180ms,background 180ms}
+.pp-close:hover{color:var(--text-primary);background:var(--bg-hover)}
+.pp-body{flex:1;overflow-y:auto;padding:16px 18px;display:flex;flex-direction:column;gap:12px;scrollbar-width:thin;scrollbar-color:var(--border-hover) transparent}
+.pp-body::-webkit-scrollbar{width:4px}.pp-body::-webkit-scrollbar-thumb{background:var(--border-hover);border-radius:2px}
+.pp-loading{display:flex;align-items:center;justify-content:center;padding:48px 0;color:var(--text-secondary);font-size:var(--text-sm);font-family:var(--font-body)}
+.pp-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:60px 24px;text-align:center}
+.pp-empty-icon{font-size:32px;opacity:.5}
+.pp-empty-text{font-family:var(--font-body);font-size:var(--text-sm);color:var(--text-secondary);line-height:1.55}
+.pp-empty-cta{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);padding:8px 16px;border-radius:var(--r-md);border:1px solid color-mix(in srgb,var(--accent) 30%,transparent);background:color-mix(in srgb,var(--accent) 6%,transparent);cursor:pointer;transition:all var(--t-fast);text-decoration:none}
+.pp-empty-cta:hover{background:color-mix(in srgb,var(--accent) 14%,transparent);border-color:color-mix(in srgb,var(--accent) 50%,transparent)}
+.pp-card{background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:14px 16px;cursor:pointer;transition:border-color 200ms,background 200ms,box-shadow 200ms}
+.pp-card:hover{border-color:var(--border-hover);background:var(--bg-surface-2);box-shadow:var(--shadow-sm)}
+.pp-card-question{font-family:var(--font-body);font-size:var(--text-sm);color:var(--text-primary);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:10px}
+.pp-card-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.pp-card-date{font-family:var(--font-mono);font-size:10px;color:var(--text-muted);letter-spacing:.03em}
+.pp-badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:var(--r-xs);font-family:var(--font-mono);font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;line-height:1.6}
+.pp-badge-complete{color:#38cc70;background:rgba(56,204,112,.1);border:1px solid rgba(56,204,112,.2)}
+.pp-badge-running{color:#f0a030;background:rgba(240,160,48,.1);border:1px solid rgba(240,160,48,.2)}
+.pp-badge-pending{color:var(--text-secondary);background:rgba(122,138,168,.08);border:1px solid rgba(122,138,168,.15)}
+.pp-badge-error{color:#e86060;background:rgba(232,96,96,.1);border:1px solid rgba(232,96,96,.2)}
+.pp-badge-room{color:var(--purple);background:rgba(155,120,240,.1);border:1px solid rgba(155,120,240,.2)}
+.pp-badge-conf{color:var(--teal);background:rgba(38,200,176,.1);border:1px solid rgba(38,200,176,.18)}
+@media(max-width:480px){.portal-panel{width:100%}}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
@@ -2697,10 +2731,10 @@ dep-item strong{display:block;font-family:var(--font-mono);font-size:var(--text-
   <div class="sb-bottom-section">
     <div class="sb-bottom-divider"></div>
     <div class="sb-export-row">
-      <a class="sb-portal-link" href="https://app.stratos.lucidorg.com/portal" target="_self">
+      <button class="sb-portal-link" onclick="togglePortalPanel()" style="background:none;border:none;text-align:left;white-space:nowrap">
         <span style="font-size:16px;flex-shrink:0">&#9638;</span>
         <span class="sb-label">My Decisions</span>
-      </a>
+      </button>
       <button class="sb-chat-link" onclick="toggleChat()">
         <span style="font-size:16px;flex-shrink:0">&#128172;</span>
         <span class="sb-label">Ask StratOS</span>
@@ -2708,6 +2742,21 @@ dep-item strong{display:block;font-family:var(--font-mono);font-size:var(--text-
     </div>
   </div>
 </aside>
+
+<!-- PORTAL PANEL (My Decisions slide-out) -->
+<div class="portal-panel-backdrop" id="pp-backdrop" onclick="togglePortalPanel(false)"></div>
+<div class="portal-panel" id="portal-panel">
+  <div class="pp-header">
+    <div class="pp-header-left">
+      <div class="pp-header-logo"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none"><defs><radialGradient id="ppcg" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#67e8f9"/><stop offset="100%" stop-color="#0891b2"/></radialGradient></defs><circle cx="256" cy="256" r="250" fill="#070d1a"/><circle cx="256" cy="256" r="230" stroke="#00e5ff" stroke-width="2" fill="none" opacity="0.5"/><circle cx="256" cy="256" r="10" fill="#00e5ff"/></svg></div>
+      <span class="pp-header-title">My Decisions</span>
+    </div>
+    <button class="pp-close" onclick="togglePortalPanel(false)" title="Close">&times;</button>
+  </div>
+  <div class="pp-body" id="pp-body">
+    <div class="pp-loading" id="pp-loading">Loading decisions&hellip;</div>
+  </div>
+</div>
 
 <!-- TOUR ELEMENTS: fog panels + ring + card + backdrop -->
 <div id="tour-backdrop" onclick="tourEnd()"></div>
@@ -7751,6 +7800,169 @@ window.sendChat = async function(){
   btn.disabled=false;
   inp.focus();
 };
+})();
+
+// ── PORTAL PANEL (My Decisions) ─────────────────────────────────────────
+(function(){
+  var SUPABASE_URL = 'https://xwmjrphmdjhlhveyyfey.supabase.co';
+  var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh3bWpycGhtZGpobGh2ZXl5ZmV5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE2MTc5MDgsImV4cCI6MjA4NzE5MzkwOH0.wrHIaQiAFOFCE4hHd_jBLsgsv0v8n7ZwWJMzmYjd22g';
+  var panelEl = document.getElementById('portal-panel');
+  var backdropEl = document.getElementById('pp-backdrop');
+  var bodyEl = document.getElementById('pp-body');
+  var loadingEl = document.getElementById('pp-loading');
+  var _portalLoaded = false;
+
+  function supaFetch(path) {
+    return fetch(SUPABASE_URL + '/rest/v1/' + path, {
+      headers: {
+        'apikey': SUPABASE_KEY,
+        'Authorization': 'Bearer ' + SUPABASE_KEY,
+        'Accept': 'application/json'
+      }
+    }).then(function(r){ return r.json(); });
+  }
+
+  function getUserFilter() {
+    var p = new URLSearchParams(window.location.search);
+    var email = p.get('email') || localStorage.getItem('stratos_email');
+    var ck = p.get('customer_key') || localStorage.getItem('stratos_customer_key');
+    if (ck) return '&customer_key=eq.' + encodeURIComponent(ck);
+    if (email) return '&customer_key=eq.' + encodeURIComponent(email);
+    return '';
+  }
+
+  function statusBadge(status) {
+    if (!status) return '';
+    var s = String(status).toUpperCase();
+    var cls = 'pp-badge ';
+    if (s === 'COMPLETE' || s === 'COMPLETED') cls += 'pp-badge-complete';
+    else if (s === 'RUNNING' || s === 'IN_PROGRESS') cls += 'pp-badge-running';
+    else if (s === 'ERROR' || s === 'FAILED') cls += 'pp-badge-error';
+    else cls += 'pp-badge-pending';
+    var label = s === 'IN_PROGRESS' ? 'RUNNING' : (s === 'COMPLETED' ? 'COMPLETE' : s);
+    return '<span class="' + cls + '">' + label + '</span>';
+  }
+
+  function roomBadge(roomType) {
+    if (!roomType) return '';
+    return '<span class="pp-badge pp-badge-room">' + roomType + '</span>';
+  }
+
+  function confBadge(conf) {
+    if (conf == null) return '';
+    return '<span class="pp-badge pp-badge-conf">' + Math.round(conf) + '%</span>';
+  }
+
+  function fmtDate(iso) {
+    if (!iso) return '';
+    try {
+      var d = new Date(iso);
+      return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) + ' ' +
+             d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+    } catch(e) { return iso.slice(0,10); }
+  }
+
+  function renderCard(ec, master) {
+    var question = (master && master.question) ? master.question : (ec.run_id || 'Untitled decision');
+    var roomType = '';
+    if (master && master.decision_id) {
+      var di = String(master.decision_id).toLowerCase();
+      if (di.indexOf('board') !== -1) roomType = 'Board';
+      else if (di.indexOf('elt') !== -1) roomType = 'ELT';
+      else if (di.indexOf('market') !== -1) roomType = 'Market';
+      else roomType = 'ELT';
+    }
+    var confidence = (master && master.confidence_score != null) ? master.confidence_score : null;
+    var html = '<div class="pp-card" data-runid="' + ec.run_id + '">';
+    html += '<div class="pp-card-question">' + escHTML(question) + '</div>';
+    html += '<div class="pp-card-meta">';
+    html += '<span class="pp-card-date">' + fmtDate(ec.started_at) + '</span>';
+    html += statusBadge(ec.section_status || ec.current_section);
+    if (roomType) html += roomBadge(roomType);
+    if (confidence !== null) html += confBadge(confidence);
+    html += '</div></div>';
+    return html;
+  }
+
+  function escHTML(s) {
+    var d = document.createElement('div');
+    d.textContent = s;
+    return d.innerHTML;
+  }
+
+  function renderEmpty() {
+    return '<div class="pp-empty">' +
+      '<div class="pp-empty-icon">&#9670;</div>' +
+      '<div class="pp-empty-text">No decisions yet &mdash; start your first one</div>' +
+      '<a class="pp-empty-cta" href="https://app.stratos.lucidorg.com" target="_blank">Launch StratOS &rarr;</a>' +
+    '</div>';
+  }
+
+  async function loadDecisions() {
+    loadingEl.style.display = '';
+    try {
+      var filter = getUserFilter();
+      var ecData = await supaFetch(
+        'execution_control?select=run_id,current_section,section_status,started_at,customer_key' +
+        '&order=started_at.desc&limit=20' + filter
+      );
+      if (!Array.isArray(ecData) || ecData.length === 0) {
+        bodyEl.innerHTML = renderEmpty();
+        return;
+      }
+      // Fetch master state for questions/confidence
+      var runIds = ecData.map(function(r){ return r.run_id; });
+      var masterData = [];
+      try {
+        masterData = await supaFetch(
+          'engine_master_state?select=run_id,question,decision_id,confidence_score' +
+          '&run_id=in.(' + runIds.map(encodeURIComponent).join(',') + ')'
+        );
+      } catch(e) { /* non-critical */ }
+      var masterMap = {};
+      if (Array.isArray(masterData)) {
+        masterData.forEach(function(m){ masterMap[m.run_id] = m; });
+      }
+      var html = '';
+      ecData.forEach(function(ec) {
+        html += renderCard(ec, masterMap[ec.run_id] || null);
+      });
+      bodyEl.innerHTML = html;
+      // Attach click handlers
+      bodyEl.querySelectorAll('.pp-card').forEach(function(card) {
+        card.addEventListener('click', function() {
+          var rid = card.getAttribute('data-runid');
+          if (rid) {
+            var url = new URL(window.location.href);
+            url.searchParams.set('run_id', rid);
+            window.location.href = url.toString();
+          }
+        });
+      });
+    } catch(e) {
+      bodyEl.innerHTML = '<div class="pp-loading" style="color:var(--red)">Failed to load decisions</div>';
+      console.error('[PortalPanel]', e);
+    }
+  }
+
+  window.togglePortalPanel = function(forceState) {
+    var isOpen = panelEl.classList.contains('open');
+    var shouldOpen = (typeof forceState === 'boolean') ? forceState : !isOpen;
+    panelEl.classList.toggle('open', shouldOpen);
+    backdropEl.classList.toggle('open', shouldOpen);
+    document.body.style.overflow = shouldOpen ? 'hidden' : '';
+    if (shouldOpen && !_portalLoaded) {
+      _portalLoaded = true;
+      loadDecisions();
+    }
+  };
+
+  // ESC key closes panel
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && panelEl.classList.contains('open')) {
+      togglePortalPanel(false);
+    }
+  });
 })();
 </script>
 </body></html>

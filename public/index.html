@@ -5379,7 +5379,11 @@ function applyLiveData(raw) {
     (r0defers > 0 ? r0defers + ' roles deferred in R0 citing incomplete data before converging at R' + (maxRound-1) + '.' : 'Confidence built through structured evidence review across all rounds.'));
   set('brief-insight-2', conf + '% average confidence with ' + (gt.severity || 'HIGH') + ' groupthink signal flagged at convergence. Board approval is the binding gate \u2014 execution stalls if approval materials miss the deadline.');
   var topConds = Array.isArray(exec.top_conditions) && exec.top_conditions.length ? exec.top_conditions : (Array.isArray(dash.all_conditions) && dash.all_conditions.length ? dash.all_conditions : (typeof exec.top_conditions === 'string' && exec.top_conditions ? exec.top_conditions.split(/[;\n]/).filter(Boolean) : []));
-  set('brief-insight-3', (fm.phase_1_immediate || p1) + ' releases now for initial workstreams. ' + (fm.phase_2_gated || p2) + ' gated on first milestone. ' + topConds.length + ' open questions must resolve before execution begins.');
+  if (p1 && p2) {
+    set('brief-insight-3', p1 + ' releases now for initial workstreams. ' + p2 + ' gated on first milestone. ' + topConds.length + ' open questions must resolve before execution begins.');
+  } else {
+    set('brief-insight-3', 'Capital deployment is phase-gated with board approval required. ' + topConds.length + ' open questions must resolve before execution begins.');
+  }
 
   // Populate briefing stat cards dynamically
   set('brief-vote-num', voteTotal);
@@ -5390,7 +5394,9 @@ function applyLiveData(raw) {
   if (bvEl) { var ncP = bvEl.closest('.num-cite'); if (ncP) { ncP.dataset.val = voteTotal + '/' + voteTotal; ncP.dataset.note = 'All ' + voteTotal + ' roles voted ' + voteKey.replace(/_/g,' ') + '.'; } }
   var bcEl = el('brief-conf-num');
   if (bcEl) { var ncP2 = bcEl.closest('.num-cite'); if (ncP2) { ncP2.dataset.val = conf + '%'; ncP2.dataset.note = 'Range ' + confMin + '\u2013' + confMax + '%. Groupthink: ' + (gt.severity || 'HIGH') + '.'; } }
-  var fmTotal = fm.total_investment || fm.capital_required || (bgp.financial_overview && bgp.financial_overview.total_budget) || '';
+  var fmTotalRaw = fm.total_investment || fm.capital_required || (bgp.financial_overview && bgp.financial_overview.total_budget) || '';
+  function _fmtCap(v) { if(!v)return ''; var n=typeof v==='number'?v:parseFloat(String(v).replace(/[^0-9.]/g,'')); if(isNaN(n))return String(v); if(n>=1e9)return '$'+Math.round(n/1e9)+'B'; if(n>=1e6)return '$'+(n/1e6).toFixed(1).replace(/\.0$/,'')+'M'; if(n>=1e3)return '$'+Math.round(n/1e3)+'K'; return '$'+n; }
+  var fmTotal = _fmtCap(fmTotalRaw) || '';
   var briefCapEl = el('brief-capital-chip');
   if (briefCapEl && fmTotal) briefCapEl.textContent = fmTotal;
 
@@ -5620,7 +5626,7 @@ function buildBucketData(raw) {
 
   return [
     { val: '<span>' + roles.length + '</span><span class="bc-unit">roles</span>', text: 'Every executive deliberated across 3 structured rounds. CEO led at ' + (Math.round((stages.find(s=>s.section==='D'&&s.round===2&&s.role_key==='CEO')?.confidence_score||0.67)*100)) + '%. ' + r0d + ' of ' + roles.length + ' deferred in R0 before converging at R2.' },
-    { val: '<span>' + (fm.phase_1_immediate||'—') + '</span>', text: 'Phase 1 releases now for initial authorized workstreams. ' + (fm.phase_2_gated||'—') + ' gated on first milestone completion.' },
+    { val: fm.phase_1_immediate ? '<span>' + fm.phase_1_immediate + '</span>' : null, text: fm.phase_1_immediate ? 'Phase 1 releases now for initial authorized workstreams. ' + (fm.phase_2_gated||'remaining') + ' gated on first milestone completion.' : 'Capital deployment is phase-gated. Board approval required before any spend.' },
     { val: null, text: conds.length ? conds[0]?.condition || 'Board authorization required before capital deployment.' : 'Board authorization required before capital deployment.' },
     { val: null, text: conds.length > 1 ? conds[1]?.condition || 'Operational capacity review required before scaling.' : 'Operational capacity review required before scaling.' },
     { val: null, text: conds.length > 2 ? conds[2]?.condition || 'Compliance requirements must be met before operations begin.' : (riskTexts.length ? riskTexts[0] : 'Key risks under active monitoring.') },

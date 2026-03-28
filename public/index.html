@@ -2722,14 +2722,16 @@ dep-item strong{display:block;font-family:var(--font-mono);font-size:var(--text-
 
 /* ── Product Demo (click-through onboarding) ── */
 .demo-active .demo-cursor{opacity:1}
-.demo-cursor{position:fixed;z-index:9600;pointer-events:none;opacity:0;transition:opacity .3s ease;filter:drop-shadow(0 2px 8px rgba(0,0,0,.5))}
-.demo-cursor svg{width:24px;height:24px}
-.demo-cursor.clicking svg{transform:scale(.85);transition:transform .1s ease}
-.demo-popup{position:fixed;z-index:9550;top:50%;left:50%;transform:translate(-50%,-50%) scale(.92);opacity:0;pointer-events:none;transition:opacity .35s ease,transform .35s ease;background:var(--bg-surface-3);border:1px solid rgba(0,229,255,.2);border-radius:16px;padding:28px 32px;max-width:440px;width:90%;text-align:center;box-shadow:0 16px 48px rgba(0,0,0,.5),0 0 0 1px rgba(0,229,255,.06)}
-.demo-popup.visible{opacity:1;transform:translate(-50%,-50%) scale(1);pointer-events:all}
-.demo-popup-step{font-family:var(--font-mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);margin-bottom:8px}
-.demo-popup-title{font-family:var(--font-display);font-size:22px;font-weight:800;color:var(--text-bright);line-height:1.25;margin-bottom:10px}
-.demo-popup-body{font-family:var(--font-body);font-size:13px;color:var(--text-secondary);line-height:1.65}
+.demo-cursor{position:fixed;z-index:9600;pointer-events:none;opacity:0;transition:left .7s cubic-bezier(.25,.1,.25,1),top .7s cubic-bezier(.25,.1,.25,1),opacity .4s ease;filter:drop-shadow(0 2px 8px rgba(0,0,0,.5))}
+.demo-cursor svg{width:24px;height:24px;transition:transform .15s ease}
+.demo-cursor.clicking svg{transform:scale(.82)}
+.demo-ring{position:fixed;z-index:9590;pointer-events:none;width:48px;height:48px;border-radius:50%;border:3px solid rgba(20,184,166,.6);box-shadow:0 0 16px rgba(20,184,166,.2),0 0 0 6px rgba(20,184,166,.06);opacity:0;transition:left .7s cubic-bezier(.25,.1,.25,1),top .7s cubic-bezier(.25,.1,.25,1),opacity .35s ease,width .3s ease,height .3s ease}
+.demo-active .demo-ring.visible{opacity:1}
+.demo-popup{position:fixed;z-index:9550;opacity:0;pointer-events:none;transition:opacity .4s ease,transform .4s ease;background:var(--bg-surface-3);border:1px solid rgba(0,229,255,.2);border-radius:14px;padding:20px 24px;max-width:360px;width:max-content;text-align:left;box-shadow:0 12px 40px rgba(0,0,0,.5),0 0 0 1px rgba(0,229,255,.06)}
+.demo-popup.visible{opacity:1;pointer-events:all}
+.demo-popup-step{font-family:var(--font-mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);margin-bottom:6px}
+.demo-popup-title{font-family:var(--font-display);font-size:18px;font-weight:800;color:var(--text-bright);line-height:1.25;margin-bottom:6px}
+.demo-popup-body{font-family:var(--font-body);font-size:12px;color:var(--text-secondary);line-height:1.6}
 .demo-progress{position:fixed;z-index:9560;bottom:0;left:0;height:3px;background:linear-gradient(90deg,var(--teal),var(--blue));border-radius:0 2px 0 0;width:0;transition:width .3s linear}
 .demo-esc-hint{position:fixed;z-index:9560;bottom:16px;right:16px;font-family:var(--font-mono);font-size:10px;letter-spacing:.06em;color:var(--text-muted);opacity:0;transition:opacity .4s ease}
 .demo-active .demo-esc-hint{opacity:1}
@@ -2804,6 +2806,7 @@ dep-item strong{display:block;font-family:var(--font-mono);font-size:var(--text-
 </aside>
 
 <!-- PRODUCT DEMO ELEMENTS -->
+<div class="demo-ring" id="demo-ring"></div>
 <div class="demo-cursor" id="demo-cursor"><svg viewBox="0 0 24 24" fill="none"><path d="M5.5 3.21V20.8c0 .45.54.67.85.35l4.86-4.86h6.3c.38 0 .62-.4.44-.74L5.95 3.01c-.2-.37-.45-.15-.45.2z" fill="#fff" stroke="#000" stroke-width="1"/></svg></div>
 <div class="demo-popup" id="demo-popup">
   <div class="demo-popup-step" id="demo-step"></div>
@@ -8219,24 +8222,32 @@ window.sendChat = async function(){
 })();
 </script>
 
-<!-- PRODUCT DEMO ENGINE (fluid 30s auto-play) -->
+<!-- PRODUCT DEMO ENGINE (fluid ~45s auto-play) -->
 <script>
 (function() {
-  var _dActive = false, _dTimers = [], _dStart = 0, _dTotal = 33000, _dRaf = 0;
+  var _dActive = false, _dTimers = [], _dStart = 0, _dTotal = 48000, _dRaf = 0;
 
   function $(id) { return document.getElementById(id); }
   function qs(sel) { return document.querySelector(sel); }
 
-  // ── Cursor helpers ──
+  // ── Cursor + ring movement (smooth, never jerky) ──
   function moveTo(sel, offX, offY) {
     var el = typeof sel === 'string' ? qs(sel) : sel;
     if (!el || !el.offsetHeight) return;
     var r = el.getBoundingClientRect();
+    var x = r.left + (offX != null ? offX : r.width * 0.4);
+    var y = r.top + (offY != null ? offY : r.height * 0.4);
     var cur = $('demo-cursor');
-    cur.style.transition = 'left .55s cubic-bezier(.4,0,.2,1), top .55s cubic-bezier(.4,0,.2,1)';
-    cur.style.left = (r.left + (offX || r.width * 0.4)) + 'px';
-    cur.style.top = (r.top + (offY || r.height * 0.35)) + 'px';
+    cur.style.left = x + 'px';
+    cur.style.top = y + 'px';
+    // Ring centers on cursor tip
+    var ring = $('demo-ring');
+    ring.style.left = (x - 24) + 'px';
+    ring.style.top = (y - 24) + 'px';
+    ring.classList.add('visible');
   }
+
+  function hideRing() { $('demo-ring').classList.remove('visible'); }
 
   function clickAnim() {
     var cur = $('demo-cursor');
@@ -8246,10 +8257,15 @@ window.sendChat = async function(){
 
   function goTab(sec) {
     var tab = qs('.sb-tab[data-sec="' + sec + '"]');
-    if (tab) { moveTo(tab); setTimeout(function() { clickAnim(); setTimeout(function() { if (typeof switchTab === 'function') switchTab(tab); }, 150); }, 550); }
+    if (!tab) return;
+    moveTo(tab);
+    setTimeout(function() {
+      clickAnim();
+      setTimeout(function() { if (typeof switchTab === 'function') switchTab(tab); }, 200);
+    }, 750);
   }
 
-  function scrollTo(sel) {
+  function scrollEl(sel) {
     var el = qs(sel);
     if (el) el.scrollIntoView({ behavior:'smooth', block:'center' });
   }
@@ -8260,31 +8276,53 @@ window.sendChat = async function(){
     moveTo(el);
     setTimeout(function() {
       el.dispatchEvent(new MouseEvent('mouseenter', {bubbles:true}));
-      setTimeout(function() { el.dispatchEvent(new MouseEvent('mouseleave', {bubbles:true})); }, dur || 1200);
-    }, 600);
+      setTimeout(function() { el.dispatchEvent(new MouseEvent('mouseleave', {bubbles:true})); }, dur || 1500);
+    }, 800);
   }
 
   function clickEl(sel) {
     var el = qs(sel);
     if (!el) return;
     moveTo(el);
-    setTimeout(function() { clickAnim(); setTimeout(function() { el.click(); }, 150); }, 550);
+    setTimeout(function() {
+      clickAnim();
+      setTimeout(function() { el.click(); }, 200);
+    }, 750);
   }
 
-  function showCard(label, title, body, dur) {
+  // ── Popup positioned near an element (not screen center) ──
+  function showCard(label, title, body, nearSel, dur) {
     $('demo-step').textContent = label;
     $('demo-title').textContent = title;
     $('demo-body').textContent = body;
-    $('demo-popup').classList.add('visible');
-    setTimeout(function() { $('demo-popup').classList.remove('visible'); }, dur || 2500);
+    var popup = $('demo-popup');
+    // Position near the element or center if no selector
+    if (nearSel) {
+      var el = qs(nearSel);
+      if (el) {
+        var r = el.getBoundingClientRect();
+        var px = Math.min(r.left + r.width + 20, window.innerWidth - 380);
+        var py = Math.max(20, r.top - 20);
+        if (py + 200 > window.innerHeight) py = window.innerHeight - 220;
+        popup.style.left = Math.max(20, px) + 'px';
+        popup.style.top = py + 'px';
+        popup.style.transform = 'scale(.95)';
+      }
+    } else {
+      // Centered for intro/outro
+      popup.style.left = '50%';
+      popup.style.top = '50%';
+      popup.style.transform = 'translate(-50%,-50%) scale(.95)';
+    }
+    popup.classList.add('visible');
+    popup.style.transform = popup.style.transform.replace('scale(.95)', 'scale(1)');
+    setTimeout(function() { popup.classList.remove('visible'); }, dur || 3000);
   }
 
   function hideCard() { $('demo-popup').classList.remove('visible'); }
 
-  // ── Schedule a function at time offset ──
   function at(ms, fn) { _dTimers.push(setTimeout(fn, ms)); }
 
-  // ── Progress bar updater ──
   function _updateProgress() {
     if (!_dActive) return;
     var pct = Math.min(100, ((Date.now() - _dStart) / _dTotal) * 100);
@@ -8292,70 +8330,92 @@ window.sendChat = async function(){
     _dRaf = requestAnimationFrame(_updateProgress);
   }
 
-  // ── Timeline ──
+  // ── Timeline (~48s, breathing room between each action) ──
   function _buildTimeline() {
-    // 0s — scroll to top, intro card
+    // 0s — Scroll all the way to top, ensure briefing visible
     at(0, function() {
       window.scrollTo({ top:0, behavior:'smooth' });
-      goTab('briefing');
+      var tab = qs('.sb-tab[data-sec="briefing"]');
+      if (tab && typeof switchTab === 'function') switchTab(tab);
     });
-    at(400, function() { showCard('OVERVIEW', 'Your Decision Brief', 'Seven tabs. Every insight cited. Full strategic analysis in one dashboard.', 2200); });
 
-    // 3s — Briefing: click "THE UPSIDE" tab in verdict header
-    at(3000, function() { scrollTo('#sec-briefing .verdict-hero'); });
-    at(3600, function() {
+    // 1.5s — Cursor enters from left, moves to verdict hero
+    at(1500, function() { moveTo('#sec-briefing .verdict-hero', 120, 60); });
+
+    // 2.5s — Intro card near the verdict
+    at(2500, function() { showCard('OVERVIEW', 'Your Decision Brief', 'Seven tabs. Every insight cited. Full strategic analysis in one dashboard.', '#sec-briefing .verdict-hero', 3000); });
+
+    // 6s — Click "THE UPSIDE" tab in verdict header
+    at(6000, function() { scrollEl('#sec-briefing .verdict-hero'); });
+    at(6800, function() {
       var tabs = document.querySelectorAll('#sec-briefing .brief-intel-tab');
-      var upside = tabs[1]; // THE UPSIDE
-      if (upside) { moveTo(upside); setTimeout(function() { clickAnim(); setTimeout(function() { upside.click(); }, 150); }, 550); }
+      var upside = tabs.length > 1 ? tabs[1] : null;
+      if (upside) clickEl(upside);
     });
 
-    // 5s — Hover a citation diamond
-    at(5000, function() { hoverEl('#sec-briefing .cite', 1400); });
+    // 8.5s — Hover a citation diamond
+    at(8500, function() {
+      showCard('CITATIONS', 'Every Claim is Sourced', 'Hover any diamond to trace it back to the deliberation record.', '#sec-briefing .cite', 2500);
+    });
+    at(9000, function() { hoverEl('#sec-briefing .cite', 2000); });
 
-    // 7s — Command Center
-    at(7200, function() { goTab('command'); });
-    at(8200, function() { scrollTo('#sec-command .ib-wrap'); });
-    at(8800, function() { showCard('INTELLIGENCE', 'Every Section Has Audio + Brief', 'Three-column insight brief with audio narration and downloadable reports.', 2200); });
+    // 12s — Command Center
+    at(12000, function() { goTab('command'); });
+    at(13500, function() { scrollEl('#sec-command .ib-wrap'); });
+    at(14200, function() {
+      showCard('INTELLIGENCE', 'Audio + Insight Brief', 'Every section has a three-column brief and audio narration.', '#sec-command .ib-wrap', 2800);
+    });
 
-    // 11s — Click on-page audio button
-    at(11000, function() {
+    // 17s — Click on-page audio button
+    at(17000, function() {
       var aud = qs('#sec-command .ib-audio');
-      if (aud) { moveTo(aud); setTimeout(function() { clickAnim(); }, 550); }
+      if (aud) { moveTo(aud); setTimeout(function() { clickAnim(); }, 750); }
     });
 
-    // 12.5s — Risk
-    at(12500, function() { goTab('risk'); });
-    at(13500, function() { scrollTo('#sec-risk .g7030'); });
-    at(14200, function() { hoverEl('#sec-risk .risk-dot-abs', 1200); });
-
-    // 16s — Financials
-    at(16000, function() { goTab('financials'); });
-    at(17000, function() { scrollTo('#sec-financials .fin-kpi-row'); });
-    at(17600, function() { hoverEl('#sec-financials .num-cite', 1400); });
-
-    // 19.5s — Room
-    at(19500, function() { goTab('room'); });
-    at(20500, function() { scrollTo('#sec-room .room-role-table'); });
-    at(21200, function() { clickEl('#sec-room .room-role-row'); });
-
-    // 23s — Board
-    at(23000, function() { goTab('board'); });
-    at(24000, function() { scrollTo('#sec-board .verdict-hero'); });
-    at(24500, function() { showCard('FEATURES', 'Audio, Reports, Chat, Tour', 'Everything in the sidebar. One click to listen, download, ask questions, or take the guided tour.', 2500); });
-
-    // 27s — Highlight sidebar features
-    at(27000, function() { moveTo('.sb-audio-link'); });
-    at(27800, function() { moveTo('.sb-deck-link'); });
-    at(28600, function() {
-      var tourBtn = qs('.s-header .tour-trigger') || qs('.s-header-btn');
-      if (tourBtn) moveTo(tourBtn);
+    // 19s — Risk
+    at(19000, function() { goTab('risk'); });
+    at(20500, function() { scrollEl('#sec-risk .g7030'); });
+    at(21500, function() { hoverEl('#sec-risk .risk-dot-abs', 1800); });
+    at(21800, function() {
+      showCard('RISK', 'Interactive Risk Matrix', 'Hover any dot to expand. Red zone risks require immediate action.', '#sec-risk .g7030', 2500);
     });
 
-    // 30s — Final card
-    at(30000, function() { showCard('READY', 'Your Turn', 'Click any tab to explore. Use the guided tour for step-by-step detail.', 2500); });
+    // 25s — Financials
+    at(25000, function() { goTab('financials'); });
+    at(26500, function() { scrollEl('#sec-financials .fin-kpi-row'); });
+    at(27500, function() { hoverEl('#sec-financials .num-cite', 1800); });
+    at(27800, function() {
+      showCard('FINANCIALS', 'Cited Numbers', 'Hover any value to see its source and methodology.', '#sec-financials .num-cite', 2500);
+    });
 
-    // 33s — Auto-close
-    at(33000, function() { endDemo(); });
+    // 31s — Room
+    at(31000, function() { goTab('room'); });
+    at(32500, function() { scrollEl('#sec-room .room-role-table'); });
+    at(33500, function() { clickEl('#sec-room .room-role-row'); });
+    at(34000, function() {
+      showCard('THE ROOM', 'Click Any Role', 'Expand to read their direct quote and see how their stance evolved.', '#sec-room .room-role-table', 2500);
+    });
+
+    // 37s — Board
+    at(37000, function() { goTab('board'); });
+    at(38500, function() { scrollEl('#sec-board .verdict-hero'); });
+
+    // 39.5s — Highlight sidebar features
+    at(39500, function() { moveTo('.sb-audio-link'); });
+    at(39800, function() {
+      showCard('SIDEBAR', 'Audio, Reports, Chat, Tour', 'One click to listen, download, ask questions, or take the guided tour.', '.sb-audio-link', 2800);
+    });
+    at(41000, function() { moveTo('.sb-deck-link'); });
+    at(42500, function() { moveTo('.sb-chat-link'); });
+
+    // 44s — Final card (centered)
+    at(44000, function() {
+      hideRing();
+      showCard('READY', 'Your Turn', 'Click any tab to explore. Use the guided tour for step-by-step detail.', null, 3500);
+    });
+
+    // 48s — Auto-close
+    at(48000, function() { endDemo(); });
   }
 
   // ── Public API ──
@@ -8364,10 +8424,21 @@ window.sendChat = async function(){
     _dActive = true;
     _dStart = Date.now();
     document.body.classList.add('demo-active');
+    // Start cursor off-screen left
     var cur = $('demo-cursor');
     cur.style.transition = 'none';
     cur.style.left = '-40px';
-    cur.style.top = '50%';
+    cur.style.top = '300px';
+    var ring = $('demo-ring');
+    ring.style.transition = 'none';
+    ring.style.left = '-64px';
+    ring.style.top = '276px';
+    ring.classList.remove('visible');
+    // Re-enable transitions after a frame
+    requestAnimationFrame(function() {
+      cur.style.transition = '';
+      ring.style.transition = '';
+    });
     $('demo-progress').style.width = '0';
     document.addEventListener('keydown', _dKey);
     _updateProgress();
@@ -8381,11 +8452,11 @@ window.sendChat = async function(){
     _dTimers = [];
     cancelAnimationFrame(_dRaf);
     hideCard();
+    hideRing();
     document.body.classList.remove('demo-active');
     $('demo-cursor').style.opacity = '0';
     $('demo-progress').style.width = '0';
     document.removeEventListener('keydown', _dKey);
-    // Clean up any lingering hover states
     document.querySelectorAll('.cite, .num-cite, .risk-dot-abs').forEach(function(el) {
       el.dispatchEvent(new MouseEvent('mouseleave', {bubbles:true}));
     });

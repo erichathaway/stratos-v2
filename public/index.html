@@ -4747,6 +4747,21 @@ function applyLiveData(raw) {
   const bgp   = ob.board_governance_packet || {};
   const exec  = ob.executive_summary || {};
   const fm    = dash.financial_mechanics || {};
+  // Fallback: extract financial data from CFO stage output if fm is empty
+  if (!fm.total_investment && raw.stageOutputs) {
+    var cfoR2 = raw.stageOutputs.filter(function(s) { return (s.role_key||'').toUpperCase()==='CFO' && s.round===2; })[0]
+             || raw.stageOutputs.filter(function(s) { return (s.role_key||'').toUpperCase()==='CFO'; }).pop();
+    if (cfoR2) {
+      var cfoText = [cfoR2.rationale||'', JSON.stringify(cfoR2.conditions||''), JSON.stringify(cfoR2.implementation_commitments||''), JSON.stringify(cfoR2.success_metrics||'')].join(' ');
+      function parseDollar(m) { if(!m)return null; var n=parseFloat(m.replace(/[$,]/g,'')); if(m.toUpperCase().endsWith('K'))return n*1000; if(m.toUpperCase().endsWith('M'))return n*1000000; return n; }
+      var investM = cfoText.match(/(?:budget|invest|allocat|spend|capital)[^.]*?(\$[\d,.]+[KMBkmb]?)/gi);
+      if (investM) { var amounts = investM.map(function(m){ var d=m.match(/(\$[\d,.]+[KMBkmb]?)/); return d?parseDollar(d[1]):null; }).filter(Boolean); if(amounts.length) fm.total_investment = Math.max.apply(null,amounts); }
+      var cacM = cfoText.match(/CAC[^.]*?(\$[\d,.]+[KMBkmb]?)/gi);
+      if (cacM && !fm.cac_threshold) { var ca = cacM.map(function(m){ var d=m.match(/(\$[\d,.]+[KMBkmb]?)/); return d?parseDollar(d[1]):null; }).filter(Boolean); if(ca.length) fm.cac_threshold = Math.min.apply(null,ca); }
+      var ltvM = cfoText.match(/LTV[^.]*?(\$[\d,.]+[KMBkmb]?)/gi);
+      if (ltvM && !fm.ltv_target) { var la = ltvM.map(function(m){ var d=m.match(/(\$[\d,.]+[KMBkmb]?)/); return d?parseDollar(d[1]):null; }).filter(Boolean); if(la.length) fm.ltv_target = Math.max.apply(null,la); }
+    }
+  }
   // Groupthink: use dashboard flag, or infer from vote_split unanimity
   var gt    = dash.groupthink_flag || {};
   if (!gt.triggered && dash.vote_split) {
@@ -6566,9 +6581,13 @@ buildOptions(raw,stages,gt);
 
 // \u2500\u2500 FINANCIALS \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
 function buildFinancials(raw, fm, fo, bgp, mso, dash) {
-  var tot   = (fo&&fo.total_budget)||(fm&&fm.capital_required)||(fm&&fm.total_investment)||'—';
-  var cac   = (fm&&fm.cac_signal)||(fm&&fm.cac_threshold)||'—';
-  var ltv   = (fo&&fo.ltv_per_customer)||(fm&&fm.ltv_target)||'—';
+  function fmtDollar(v) { if(!v||v==='—')return '—'; var n=typeof v==='number'?v:parseFloat(String(v).replace(/[^0-9.]/g,'')); if(isNaN(n))return String(v); if(n>=1e9)return '$'+Math.round(n/1e9)+'B'; if(n>=1e6)return '$'+(n/1e6).toFixed(1).replace(/\.0$/,'')+'M'; if(n>=1e3)return '$'+Math.round(n/1e3)+'K'; return '$'+n; }
+  var totRaw = (fo&&fo.total_budget)||(fm&&fm.capital_required)||(fm&&fm.total_investment)||'—';
+  var tot = typeof totRaw === 'number' ? fmtDollar(totRaw) : totRaw;
+  var cacRaw = (fm&&fm.cac_signal)||(fm&&fm.cac_threshold)||'—';
+  var cac = typeof cacRaw === 'number' ? fmtDollar(cacRaw) : cacRaw;
+  var ltvRaw = (fo&&fo.ltv_per_customer)||(fm&&fm.ltv_target)||'—';
+  var ltv = typeof ltvRaw === 'number' ? fmtDollar(ltvRaw) : ltvRaw;
   var conf  = (dash&&dash.decision_confidence)||67;
   var tgt   = (fo&&fo.target_customers)||3;
   var ltvN  = parseFloat((ltv||'').replace(/[^0-9.]/g,''))||175;

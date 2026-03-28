@@ -2647,38 +2647,64 @@ dep-item strong{display:block;font-family:var(--font-mono);font-size:var(--text-
 /* ── PORTAL PANEL (My Decisions slide-out) ──────────────────────────────── */
 .portal-panel-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:299;opacity:0;pointer-events:none;transition:opacity 300ms ease}
 .portal-panel-backdrop.open{opacity:1;pointer-events:auto}
-.portal-panel{position:fixed;top:0;left:0;bottom:0;width:360px;background:var(--bg-page);border-right:1px solid rgba(0,229,255,.15);box-shadow:6px 0 24px rgba(0,0,0,.6);z-index:300;transform:translateX(-100%);transition:transform 300ms var(--ease);display:flex;flex-direction:column;overflow:hidden}
+.portal-panel{position:fixed;top:0;left:0;bottom:0;width:380px;background:var(--bg-page);border-right:1px solid rgba(0,229,255,.15);box-shadow:6px 0 24px rgba(0,0,0,.6);z-index:300;transform:translateX(-100%);transition:transform 300ms var(--ease);display:flex;flex-direction:column;overflow:hidden}
 .portal-panel.open{transform:translateX(0)}
 .pp-header{display:flex;align-items:center;justify-content:space-between;padding:18px 20px 14px;border-bottom:1px solid var(--border);flex-shrink:0}
 .pp-header-left{display:flex;align-items:center;gap:10px}
 .pp-header-logo{width:22px;height:22px;flex-shrink:0}
 .pp-header-logo svg{width:100%;height:100%}
-.pp-header-title{font-family:var(--font-display);font-size:var(--text-md);font-weight:600;color:var(--text-primary);letter-spacing:.02em}
+.pp-header-title{font-family:var(--font-display);font-size:18px;font-weight:600;color:var(--text-primary);letter-spacing:.02em}
 .pp-close{background:none;border:none;color:var(--text-secondary);font-size:20px;cursor:pointer;padding:4px 8px;border-radius:var(--r-sm);transition:color 180ms,background 180ms}
 .pp-close:hover{color:var(--text-primary);background:var(--bg-hover)}
-.pp-body{flex:1;overflow-y:auto;padding:16px 18px;display:flex;flex-direction:column;gap:12px;scrollbar-width:thin;scrollbar-color:var(--border-hover) transparent}
+.pp-body{flex:1;overflow-y:auto;padding:16px 18px 16px 36px;display:flex;flex-direction:column;gap:12px;scrollbar-width:thin;scrollbar-color:var(--border-hover) transparent}
 .pp-body::-webkit-scrollbar{width:4px}.pp-body::-webkit-scrollbar-thumb{background:var(--border-hover);border-radius:2px}
 .pp-loading{display:flex;align-items:center;justify-content:center;padding:48px 0;color:var(--text-secondary);font-size:var(--text-sm);font-family:var(--font-body)}
 .pp-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:60px 24px;text-align:center}
 .pp-empty-icon{font-size:32px;opacity:.5}
-.pp-empty-text{font-family:var(--font-body);font-size:var(--text-sm);color:var(--text-secondary);line-height:1.55}
+.pp-empty-text{font-family:var(--font-body);font-size:15px;color:var(--text-secondary);line-height:1.55}
 .pp-empty-cta{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);padding:8px 16px;border-radius:var(--r-md);border:1px solid color-mix(in srgb,var(--accent) 30%,transparent);background:color-mix(in srgb,var(--accent) 6%,transparent);cursor:pointer;transition:all var(--t-fast);text-decoration:none}
 .pp-empty-cta:hover{background:color-mix(in srgb,var(--accent) 14%,transparent);border-color:color-mix(in srgb,var(--accent) 50%,transparent)}
-.pp-card{background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:14px 16px;cursor:pointer;transition:border-color 200ms,background 200ms,box-shadow 200ms}
+.pp-card{background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:14px 16px 14px 20px;cursor:pointer;transition:border-color 200ms,background 200ms,box-shadow 200ms}
 .pp-card:hover{border-color:var(--border-hover);background:var(--bg-surface-2);box-shadow:var(--shadow-sm)}
-.pp-card-question{font-family:var(--font-body);font-size:var(--text-sm);color:var(--text-primary);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:10px}
+.pp-card-question{font-family:var(--font-body);font-size:15px;color:var(--text-primary);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:10px}
 .pp-card-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.pp-card-date{font-family:var(--font-mono);font-size:10px;color:var(--text-muted);letter-spacing:.03em}
-.pp-badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:var(--r-xs);font-family:var(--font-mono);font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;line-height:1.6}
+.pp-card-date{font-family:var(--font-mono);font-size:12px;color:var(--text-muted);letter-spacing:.03em}
+.pp-badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:var(--r-xs);font-family:var(--font-mono);font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;line-height:1.6}
 .pp-badge-complete{color:#38cc70;background:rgba(56,204,112,.1);border:1px solid rgba(56,204,112,.2)}
 .pp-badge-running{color:#f0a030;background:rgba(240,160,48,.1);border:1px solid rgba(240,160,48,.2)}
 .pp-badge-pending{color:var(--text-secondary);background:rgba(122,138,168,.08);border:1px solid rgba(122,138,168,.15)}
 .pp-badge-error{color:#e86060;background:rgba(232,96,96,.1);border:1px solid rgba(232,96,96,.2)}
 .pp-badge-room{color:var(--purple);background:rgba(155,120,240,.1);border:1px solid rgba(155,120,240,.2)}
 .pp-badge-conf{color:var(--teal);background:rgba(38,200,176,.1);border:1px solid rgba(38,200,176,.18)}
+/* Portal Login Screen */
+.pp-login{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;padding:60px 32px 40px;text-align:center;flex:1}
+.pp-login-logo{width:44px;height:44px;margin-bottom:4px}
+.pp-login-logo svg{width:100%;height:100%}
+.pp-login-heading{font-family:var(--font-display);font-size:18px;font-weight:600;color:var(--text-primary);letter-spacing:.02em}
+.pp-login-sub{font-family:var(--font-body);font-size:14px;color:var(--text-secondary);line-height:1.5;max-width:260px}
+.pp-login-buttons{display:flex;flex-direction:column;gap:12px;width:100%;max-width:280px;margin-top:8px}
+.pp-btn-linkedin{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:12px 16px;border:none;border-radius:var(--r-md);background:#0A66C2;color:#fff;font-family:var(--font-body);font-size:15px;font-weight:600;cursor:pointer;transition:background 180ms,box-shadow 180ms;text-decoration:none}
+.pp-btn-linkedin:hover{background:#004182;box-shadow:0 2px 12px rgba(10,102,194,.35)}
+.pp-btn-linkedin-icon{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:4px;background:#fff;color:#0A66C2;font-family:var(--font-display);font-size:14px;font-weight:800;line-height:1;flex-shrink:0}
+.pp-btn-email{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px 16px;border:1px solid var(--border-hover);border-radius:var(--r-md);background:var(--bg-surface-2);color:var(--text-primary);font-family:var(--font-body);font-size:15px;font-weight:600;cursor:pointer;transition:background 180ms,border-color 180ms}
+.pp-btn-email:hover{background:var(--bg-surface-3);border-color:var(--border-accent)}
+.pp-email-form{display:flex;flex-direction:column;gap:10px;width:100%;max-width:280px;margin-top:4px}
+.pp-email-input{width:100%;padding:11px 14px;border:1px solid var(--border-hover);border-radius:var(--r-md);background:var(--bg-surface);color:var(--text-primary);font-family:var(--font-body);font-size:14px;outline:none;transition:border-color 180ms;box-sizing:border-box}
+.pp-email-input:focus{border-color:var(--accent)}
+.pp-email-input::placeholder{color:var(--text-muted)}
+.pp-email-submit{width:100%;padding:11px 14px;border:none;border-radius:var(--r-md);background:var(--accent);color:#fff;font-family:var(--font-body);font-size:14px;font-weight:600;cursor:pointer;transition:opacity 180ms}
+.pp-email-submit:hover{opacity:.88}
+.pp-email-submit:disabled{opacity:.5;cursor:not-allowed}
+.pp-login-msg{font-family:var(--font-body);font-size:13px;color:var(--teal);line-height:1.5;padding:8px 0}
+.pp-login-err{font-family:var(--font-body);font-size:13px;color:var(--red);line-height:1.5;padding:8px 0}
+.pp-login-divider{display:flex;align-items:center;gap:12px;width:100%;max-width:280px;color:var(--text-muted);font-family:var(--font-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase}
+.pp-login-divider::before,.pp-login-divider::after{content:'';flex:1;height:1px;background:var(--border)}
+.pp-signout{background:none;border:none;color:var(--text-muted);font-family:var(--font-mono);font-size:11px;letter-spacing:.04em;cursor:pointer;padding:6px 10px;transition:color 180ms;margin-top:auto;flex-shrink:0;align-self:center}
+.pp-signout:hover{color:var(--text-secondary)}
 @media(max-width:480px){.portal-panel{width:100%}}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
@@ -2756,6 +2782,7 @@ dep-item strong{display:block;font-family:var(--font-mono);font-size:var(--text-
   <div class="pp-body" id="pp-body">
     <div class="pp-loading" id="pp-loading">Loading decisions&hellip;</div>
   </div>
+  <button class="pp-signout" id="pp-signout" style="display:none" onclick="portalSignOut()">Sign Out</button>
 </div>
 
 <!-- TOUR ELEMENTS: fog panels + ring + card + backdrop -->
@@ -7802,7 +7829,7 @@ window.sendChat = async function(){
 };
 })();
 
-// ── PORTAL PANEL (My Decisions) ─────────────────────────────────────────
+// ── PORTAL PANEL (My Decisions) — with auth gate ────────────────────────
 (function(){
   var SUPABASE_URL = 'https://xwmjrphmdjhlhveyyfey.supabase.co';
   var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh3bWpycGhtZGpobGh2ZXl5ZmV5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE2MTc5MDgsImV4cCI6MjA4NzE5MzkwOH0.wrHIaQiAFOFCE4hHd_jBLsgsv0v8n7ZwWJMzmYjd22g';
@@ -7810,8 +7837,131 @@ window.sendChat = async function(){
   var backdropEl = document.getElementById('pp-backdrop');
   var bodyEl = document.getElementById('pp-body');
   var loadingEl = document.getElementById('pp-loading');
+  var signoutEl = document.getElementById('pp-signout');
   var _portalLoaded = false;
+  var _authChecked = false;
 
+  // Init Supabase client for magic link auth
+  var sbClient = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
+
+  // ── Auth helpers ──
+  var AUTH_KEY = 'stratos_portal_auth';
+
+  function getAuthEmail() {
+    return localStorage.getItem(AUTH_KEY) || null;
+  }
+
+  function setAuthEmail(email) {
+    localStorage.setItem(AUTH_KEY, email);
+  }
+
+  function clearAuth() {
+    localStorage.removeItem(AUTH_KEY);
+    _portalLoaded = false;
+    _authChecked = false;
+    signoutEl.style.display = 'none';
+    showLoginScreen();
+  }
+
+  window.portalSignOut = clearAuth;
+
+  // Check for magic-link callback (access_token in URL hash)
+  function checkMagicLinkCallback() {
+    var hash = window.location.hash;
+    if (hash && hash.indexOf('access_token') !== -1) {
+      var params = new URLSearchParams(hash.substring(1));
+      var token = params.get('access_token');
+      if (token && sbClient) {
+        // Decode JWT to get email
+        try {
+          var payload = JSON.parse(atob(token.split('.')[1]));
+          if (payload.email) {
+            setAuthEmail(payload.email);
+            // Also set stratos_email for backward compat with data queries
+            localStorage.setItem('stratos_email', payload.email);
+          }
+        } catch(e) { /* ignore decode error */ }
+        // Clean the hash from the URL
+        history.replaceState(null, '', window.location.pathname + window.location.search);
+      }
+    }
+  }
+  checkMagicLinkCallback();
+
+  // ── Login screen ──
+  function showLoginScreen() {
+    loadingEl.style.display = 'none';
+    bodyEl.innerHTML =
+      '<div class="pp-login">' +
+        '<div class="pp-login-logo"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none"><defs><radialGradient id="pplog" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#67e8f9"/><stop offset="100%" stop-color="#0891b2"/></radialGradient></defs><circle cx="256" cy="256" r="250" fill="#070d1a"/><circle cx="256" cy="256" r="230" stroke="#00e5ff" stroke-width="2" fill="none" opacity="0.5"/><circle cx="256" cy="256" r="10" fill="#00e5ff"/></svg></div>' +
+        '<div class="pp-login-heading">Access Your Decisions</div>' +
+        '<div class="pp-login-sub">Sign in to view and manage your StratOS decision history</div>' +
+        '<div class="pp-login-buttons">' +
+          '<a class="pp-btn-linkedin" href="https://app.stratos.lucidorg.com/login?provider=linkedin&redirect=dashboard">' +
+            '<span class="pp-btn-linkedin-icon">in</span>' +
+            'Sign in with LinkedIn' +
+          '</a>' +
+        '</div>' +
+        '<div class="pp-login-divider">or</div>' +
+        '<div class="pp-login-buttons" id="pp-email-section">' +
+          '<button class="pp-btn-email" id="pp-email-toggle">' +
+            '<span style="font-size:16px">&#9993;</span> Sign in with Email' +
+          '</button>' +
+        '</div>' +
+      '</div>';
+
+    // Wire up email toggle
+    var emailToggle = document.getElementById('pp-email-toggle');
+    var emailSection = document.getElementById('pp-email-section');
+    if (emailToggle) {
+      emailToggle.addEventListener('click', function() {
+        emailSection.innerHTML =
+          '<div class="pp-email-form">' +
+            '<input class="pp-email-input" id="pp-email-input" type="email" placeholder="you@company.com" autocomplete="email" />' +
+            '<button class="pp-email-submit" id="pp-email-submit">Send Magic Link</button>' +
+            '<div id="pp-email-msg"></div>' +
+          '</div>';
+        var inp = document.getElementById('pp-email-input');
+        var btn = document.getElementById('pp-email-submit');
+        var msg = document.getElementById('pp-email-msg');
+        if (inp) inp.focus();
+        if (btn) {
+          btn.addEventListener('click', async function() {
+            var email = (inp.value || '').trim();
+            if (!email || email.indexOf('@') === -1) {
+              msg.className = 'pp-login-err';
+              msg.textContent = 'Please enter a valid email address';
+              return;
+            }
+            btn.disabled = true;
+            btn.textContent = 'Sending\u2026';
+            try {
+              if (sbClient) {
+                var result = await sbClient.auth.signInWithOtp({ email: email });
+                if (result.error) throw result.error;
+              }
+              msg.className = 'pp-login-msg';
+              msg.textContent = 'Check your email for a sign-in link';
+              btn.textContent = 'Link Sent';
+            } catch(e) {
+              msg.className = 'pp-login-err';
+              msg.textContent = e.message || 'Failed to send magic link';
+              btn.disabled = false;
+              btn.textContent = 'Send Magic Link';
+            }
+          });
+        }
+        // Enter key triggers send
+        if (inp) {
+          inp.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') btn.click();
+          });
+        }
+      });
+    }
+  }
+
+  // ── Data fetching (unchanged logic) ──
   function supaFetch(path) {
     return fetch(SUPABASE_URL + '/rest/v1/' + path, {
       headers: {
@@ -7824,7 +7974,7 @@ window.sendChat = async function(){
 
   function getUserFilter() {
     var p = new URLSearchParams(window.location.search);
-    var email = p.get('email') || localStorage.getItem('stratos_email');
+    var email = p.get('email') || localStorage.getItem('stratos_email') || getAuthEmail();
     var ck = p.get('customer_key') || localStorage.getItem('stratos_customer_key');
     if (ck) return '&customer_key=eq.' + encodeURIComponent(ck);
     if (email) return '&customer_key=eq.' + encodeURIComponent(email);
@@ -7900,6 +8050,7 @@ window.sendChat = async function(){
 
   async function loadDecisions() {
     loadingEl.style.display = '';
+    signoutEl.style.display = '';
     try {
       var filter = getUserFilter();
       var ecData = await supaFetch(
@@ -7945,15 +8096,24 @@ window.sendChat = async function(){
     }
   }
 
+  // ── Panel open/close with auth gate ──
   window.togglePortalPanel = function(forceState) {
     var isOpen = panelEl.classList.contains('open');
     var shouldOpen = (typeof forceState === 'boolean') ? forceState : !isOpen;
     panelEl.classList.toggle('open', shouldOpen);
     backdropEl.classList.toggle('open', shouldOpen);
     document.body.style.overflow = shouldOpen ? 'hidden' : '';
-    if (shouldOpen && !_portalLoaded) {
-      _portalLoaded = true;
-      loadDecisions();
+    if (shouldOpen && !_authChecked) {
+      _authChecked = true;
+      var cachedEmail = getAuthEmail();
+      if (cachedEmail) {
+        // Authenticated — load decisions
+        _portalLoaded = true;
+        loadDecisions();
+      } else {
+        // Not authenticated — show login screen
+        showLoginScreen();
+      }
     }
   };
 

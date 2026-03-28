@@ -7586,8 +7586,8 @@ function _renderStep() {
   if (tcExit) tcExit.className = 'tc-exit' + (isLast ? ' show' : '');
 
   const target = document.querySelector(s.el);
-  if (!target || target.offsetHeight === 0) {
-    // Element missing or hidden — auto-advance to next step
+  if (!target || target.offsetHeight === 0 || target.closest('.mi-locked')) {
+    // Element missing, hidden, or behind paywall — auto-advance to next step
     if (_tIdx < sd.steps.length - 1) { _tIdx++; _renderStep(); }
     return;
   }

@@ -2611,6 +2611,17 @@ dep-item strong{display:block;font-family:var(--font-mono);font-size:var(--text-
 .mi-source-card{padding:8px 12px;background:var(--bg-surface);border:1px solid var(--border);border-radius:8px;font-size:10px;color:var(--text-secondary);display:flex;align-items:center;gap:8px}
 .mi-source-num{width:18px;height:18px;border-radius:50%;background:rgba(20,184,166,0.1);border:1px solid rgba(20,184,166,0.2);display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:800;color:var(--teal);flex-shrink:0}
 
+/* Freemium paywall */
+.mi-paywall-banner{text-align:center;padding:32px 24px;margin:24px 0;background:linear-gradient(135deg,rgba(20,184,166,0.06),rgba(20,184,166,0.02));border:1px solid rgba(20,184,166,0.2);border-radius:16px}
+.mi-paywall-lock{font-size:36px;margin-bottom:12px}
+.mi-paywall-title{font-family:var(--font-display);font-size:20px;font-weight:800;color:var(--text-bright);margin-bottom:8px}
+.mi-paywall-desc{font-size:13px;color:var(--text-secondary);line-height:1.6;max-width:500px;margin:0 auto 16px}
+.mi-paywall-cta{display:inline-block;padding:10px 28px;background:linear-gradient(135deg,#14b8a6,#0d9488);color:#fff;font-weight:700;font-size:13px;border-radius:10px;text-decoration:none;transition:all 200ms ease}
+.mi-paywall-cta:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(20,184,166,0.3)}
+.mi-premium-sections{transition:filter 300ms ease}
+.mi-premium-sections.mi-locked{filter:blur(6px);pointer-events:none;user-select:none;max-height:600px;overflow:hidden;position:relative}
+.mi-premium-sections.mi-locked::after{content:'';position:absolute;bottom:0;left:0;right:0;height:120px;background:linear-gradient(transparent,var(--bg-page))}
+
 /* Two-column layout helper */
 .mi-two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
 
@@ -4741,6 +4752,19 @@ function applyLiveData(raw) {
         h += '</div></div>';
       }
 
+      // ═══ FREEMIUM PAYWALL — Premium sections start here ═══
+      var tier = (new URLSearchParams(window.location.search).get('tier') || '').toLowerCase();
+      var isPremium = tier === 'professional' || tier === 'enterprise' || tier === 'unlocked';
+      if (!isPremium) {
+        h += '<div class="mi-paywall-banner">';
+        h += '<div class="mi-paywall-lock">&#128274;</div>';
+        h += '<div class="mi-paywall-title">Unlock Full Market Intelligence</div>';
+        h += '<div class="mi-paywall-desc">Competitive dossiers, opportunity pipeline, M&A activity, risk register, and deep-dive research — included with Professional ($99) and Enterprise ($249) plans, or add to any decision for $49.</div>';
+        h += '<a href="https://app.stratos.lucidorg.com" class="mi-paywall-cta">Upgrade Now</a>';
+        h += '</div>';
+      }
+      h += '<div class="mi-premium-sections' + (isPremium ? '' : ' mi-locked') + '">';
+
       // ═══ 5. COMPETITIVE INTELLIGENCE GRID ═══
       if (sortedComps.length) {
         h += '<div class="mi-card" style="padding-bottom:12px">';
@@ -4999,6 +5023,8 @@ function applyLiveData(raw) {
         });
         h += '</div></div></div>';
       }
+
+      h += '</div>'; // close mi-premium-sections
 
       // ═══ 13. DISCLAIMER ═══
       if (miData.disclaimer) h += '<div style="font-size:9px;color:var(--text-muted);margin-top:20px;opacity:0.4;line-height:1.6">'+miData.disclaimer+'</div>';

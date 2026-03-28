@@ -251,8 +251,8 @@ function wrapHTML(body, meta) {
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 body {
   font-family: 'Inter', 'Helvetica Neue', sans-serif;
-  font-size: 11px;
-  line-height: 1.6;
+  font-size: 12px;
+  line-height: 1.75;
   color: #475569;
   background: #ffffff;
   -webkit-print-color-adjust: exact !important;
@@ -429,10 +429,17 @@ tr:nth-child(odd) td { background: #ffffff; }
 
 /* ── Narrative blocks ── */
 .narrative {
-  font-size: 11.5px;
-  line-height: 1.7;
+  font-size: 12px;
+  line-height: 1.8;
   color: #334155;
   margin-bottom: 16px;
+  max-width: 65ch;
+}
+.narrative-dense {
+  font-size: 11px;
+  line-height: 1.65;
+  color: #475569;
+  margin-bottom: 8px;
 }
 
 /* ── Lists ── */

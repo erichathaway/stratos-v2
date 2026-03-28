@@ -2846,6 +2846,7 @@ dep-item strong{display:block;font-family:var(--font-mono);font-size:var(--text-
       <div class="tour-step" onclick="startTourFrom('room')"><div class="tour-step-num">5</div><div class="tour-step-text">The Room &amp; Options &mdash; Deliberation arc, role positions, strategy choice</div><div class="tour-step-meta">3 min</div></div>
       <div class="tour-step" onclick="startTourFrom('management')"><div class="tour-step-num">6</div><div class="tour-step-text">Management Handoff &mdash; Commitments, kill criteria, metrics</div><div class="tour-step-meta">2 min</div></div>
       <div class="tour-step" onclick="startTourFrom('board')"><div class="tour-step-num">7</div><div class="tour-step-text">Board Report &mdash; Governance packet, conditions, dissent</div><div class="tour-step-meta">2 min</div></div>
+      <div class="tour-step" onclick="startTourFrom('market')"><div class="tour-step-num">8</div><div class="tour-step-text">Market Intel &mdash; Competitive landscape, opportunities, threats</div><div class="tour-step-meta">3 min</div></div>
     </div>
     <div class="tour-footer">
       <div class="tour-audio-row">
@@ -7453,10 +7454,16 @@ const TOUR_STEPS = {
     { el:'#sec-board .board-summary-row',      title:'Decision Metrics',            body:'Four numbers the Board needs: total investment, confidence, conditions placed, and kill gates. Hover any number for its source.' },
     { el:'#sec-board .board-rec-card',         title:'Board Recommendation',        body:'The formal recommendation text: authorize the two-tranche structure with Phase 2 gated on validated line-item budget by March 15.' },
     { el:'#sec-board .board-gov-grid',         title:'Governance Framework',        body:'Board oversight requirements, reporting cadence, and escalation triggers. The governance packet that ensures Board maintains control through execution.' }
+  ]},
+  market: { audio: 'Market Intelligence -- 3 min', steps: [
+    { el:'#sec-market .mi-hero',              title:'Market Positioning',          body:'Executive summary of the competitive landscape. TAM/SAM sizing, market position, and key research findings at a glance.' },
+    { el:'#sec-market .mi-metrics-row',       title:'Intelligence Metrics',        body:'Five key market indicators: competitor count, addressable segments, opportunity pipeline, risk factors, and monitored trends.' },
+    { el:'#sec-market .mi-comp-grid',         title:'Competitive Dossiers',        body:'Detailed competitive intelligence on each identified competitor. Funding, ARR, strengths, weaknesses, and threat assessment. Sorted by threat level.' },
+    { el:'#sec-market .mi-opp-grid',          title:'Opportunity Pipeline',        body:'Ranked strategic opportunities with revenue potential, difficulty rating, and recommended first steps. The growth playbook derived from market intelligence.' }
   ]}
 };
 
-const TAB_ORDER = ['briefing','command','risk','financials','room','management','board'];
+const TAB_ORDER = ['briefing','command','risk','financials','room','management','board','market'];
 let _tSec='briefing', _tIdx=0, _tAudio='manual', _tPlaying=false;
 
 function setAudioPref(p) {
@@ -7553,7 +7560,7 @@ function _renderStep() {
   const sd = TOUR_STEPS[_tSec] || {steps:[]};
   const s  = sd.steps[_tIdx];
   if (!s) return;
-  const lbl = {briefing:'Briefing',command:'Command Center',risk:'Risk & Intel',financials:'Financials',room:'The Room',management:'Management',board:'Board Report'}[_tSec] || _tSec;
+  const lbl = {briefing:'Briefing',command:'Command Center',risk:'Risk & Intel',financials:'Financials',room:'The Room',management:'Management',board:'Board Report',market:'Market Intel'}[_tSec] || _tSec;
   set('tc-step', lbl.toUpperCase() + ' \u00b7 ' + (_tIdx+1) + ' OF ' + sd.steps.length);
   set('tc-title', s.title);
   const tcb = el('tc-body'); if (tcb) tcb.innerHTML = s.body;
@@ -7579,7 +7586,11 @@ function _renderStep() {
   if (tcExit) tcExit.className = 'tc-exit' + (isLast ? ' show' : '');
 
   const target = document.querySelector(s.el);
-  if (!target) return;
+  if (!target || target.offsetHeight === 0) {
+    // Element missing or hidden — auto-advance to next step
+    if (_tIdx < sd.steps.length - 1) { _tIdx++; _renderStep(); }
+    return;
+  }
   target.scrollIntoView({behavior:'smooth', block:'center'});
   setTimeout(() => {
     const pad=12, r=target.getBoundingClientRect();

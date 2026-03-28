@@ -2727,11 +2727,11 @@ dep-item strong{display:block;font-family:var(--font-mono);font-size:var(--text-
 .demo-cursor.clicking svg{transform:scale(.82)}
 .demo-ring{position:fixed;z-index:9590;pointer-events:none;width:48px;height:48px;border-radius:50%;border:3px solid rgba(20,184,166,.6);box-shadow:0 0 16px rgba(20,184,166,.2),0 0 0 6px rgba(20,184,166,.06);opacity:0;transition:left .7s cubic-bezier(.25,.1,.25,1),top .7s cubic-bezier(.25,.1,.25,1),opacity .35s ease,width .3s ease,height .3s ease}
 .demo-active .demo-ring.visible{opacity:1}
-.demo-popup{position:fixed;z-index:9550;opacity:0;pointer-events:none;transition:opacity .4s ease,transform .4s ease;background:var(--bg-surface-3);border:1px solid rgba(0,229,255,.2);border-radius:14px;padding:20px 24px;max-width:360px;width:max-content;text-align:left;box-shadow:0 12px 40px rgba(0,0,0,.5),0 0 0 1px rgba(0,229,255,.06)}
-.demo-popup.visible{opacity:1;pointer-events:all}
-.demo-popup-step{font-family:var(--font-mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);margin-bottom:6px}
-.demo-popup-title{font-family:var(--font-display);font-size:18px;font-weight:800;color:var(--text-bright);line-height:1.25;margin-bottom:6px}
-.demo-popup-body{font-family:var(--font-body);font-size:12px;color:var(--text-secondary);line-height:1.6}
+.demo-popup{position:fixed;z-index:9550;opacity:0;pointer-events:none;transition:opacity .35s ease;background:var(--bg-surface-3);border:1px solid rgba(0,229,255,.18);border-radius:10px;padding:12px 16px;max-width:260px;width:max-content;text-align:left;box-shadow:0 8px 24px rgba(0,0,0,.4)}
+.demo-popup.visible{opacity:1}
+.demo-popup-step{font-family:var(--font-mono);font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);margin-bottom:4px}
+.demo-popup-title{font-family:var(--font-display);font-size:14px;font-weight:700;color:var(--text-bright);line-height:1.25;margin-bottom:4px}
+.demo-popup-body{font-family:var(--font-body);font-size:11px;color:var(--text-secondary);line-height:1.5}
 .demo-progress{position:fixed;z-index:9560;bottom:0;left:0;height:3px;background:linear-gradient(90deg,var(--teal),var(--blue));border-radius:0 2px 0 0;width:0;transition:width .3s linear}
 .demo-esc-hint{position:fixed;z-index:9560;bottom:16px;right:16px;font-family:var(--font-mono);font-size:10px;letter-spacing:.06em;color:var(--text-muted);opacity:0;transition:opacity .4s ease}
 .demo-active .demo-esc-hint{opacity:1}
@@ -8219,7 +8219,7 @@ window.sendChat = async function(){
 <!-- PRODUCT DEMO ENGINE v6 -->
 <script>
 (function() {
-  var _dOn = false, _dT = [], _dStart = 0, _dTotal = 42000, _dRaf = 0;
+  var _dOn = false, _dT = [], _dStart = 0, _dTotal = 43500, _dRaf = 0;
   var _curX = -40, _curY = 300;
   var _hoverInterval = null;
   var _cardTimer = null; // FIX 3: single timer prevents overlapping popups
@@ -8351,23 +8351,23 @@ window.sendChat = async function(){
   // FIX 3: always cancel previous card timer before showing new one
   function showCard(label, title, body, dur) {
     hideCard();
-    setTimeout(function() {
-      $('demo-step').textContent = label;
-      $('demo-title').textContent = title;
-      $('demo-body').textContent = body;
-      var popup = $('demo-popup');
-      var px = _curX + 36;
-      var py = Math.max(40, _curY - 30);
-      var minLeft = SIDEBAR_W + 16;
-      if (px < minLeft) px = minLeft;
-      if (px + 370 > window.innerWidth - 16) px = Math.max(minLeft, _curX - 390);
-      if (py + 180 > window.innerHeight - 16) py = window.innerHeight - 200;
-      popup.style.left = px + 'px';
-      popup.style.top = py + 'px';
-      popup.style.transform = 'none';
-      popup.classList.add('visible');
-      _cardTimer = setTimeout(function() { popup.classList.remove('visible'); _cardTimer = null; }, dur || 2800);
-    }, 50);
+    $('demo-step').textContent = label;
+    $('demo-title').textContent = title;
+    $('demo-body').textContent = body;
+    var popup = $('demo-popup');
+    // Position: prefer right of cursor, then left, then below
+    var px = _curX + 32;
+    var py = _curY - 10;
+    var minLeft = SIDEBAR_W + 12;
+    if (px + 275 > window.innerWidth - 12) px = _curX - 280;
+    if (px < minLeft) px = minLeft;
+    if (py < 12) py = 12;
+    if (py + 120 > window.innerHeight - 12) py = window.innerHeight - 130;
+    popup.style.left = px + 'px';
+    popup.style.top = py + 'px';
+    popup.style.transform = 'none';
+    popup.classList.add('visible');
+    _cardTimer = setTimeout(function() { popup.classList.remove('visible'); _cardTimer = null; }, dur || 2500);
   }
 
   function showCenterCard(label, title, body, dur) {
@@ -8397,7 +8397,7 @@ window.sendChat = async function(){
   }
 
   // ══════════════════════════════════════════════
-  //  TIMELINE (~42s)
+  //  TIMELINE (~42s) — cards chained to cursor arrival
   // ══════════════════════════════════════════════
   function _run() {
 
@@ -8408,9 +8408,9 @@ window.sendChat = async function(){
       if (tab && typeof switchTab === 'function') switchTab(tab);
     });
 
-    // ── 0.8s: Intro ──
+    // ── 0.8s: Intro (centered, cursor not visible yet) ──
     at(800, function() {
-      showCenterCard('OVERVIEW', 'Your Decision Brief', 'Seven tabs. Every insight cited. Full strategic analysis in one dashboard.', 2500);
+      showCenterCard('OVERVIEW', 'Your Decision Brief', 'Seven tabs. Every insight cited.', 2200);
     });
 
     // ── 3.5s: Cursor enters → verdict hero ──
@@ -8425,54 +8425,81 @@ window.sendChat = async function(){
       if (tabs.length > 1) clickEl(tabs[1]);
     });
 
-    // ── 7.5s: Hover citation ──
-    at(7500, function() { hoverEl('#sec-briefing .cite', 1800); });
-    at(8200, function() { showCard('CITATIONS', 'Every Claim is Sourced', 'Hover any diamond to trace it to the deliberation record.', 2200); });
+    // ── 7.5s: Hover citation — card shows AFTER cursor arrives ──
+    at(7500, function() {
+      hoverEl('#sec-briefing .cite', 1800, function() {});
+      // Show card slightly after cursor settles on cite
+      setTimeout(function() { showCard('CITATIONS', 'Sourced', 'Every claim traces back to the record.', 2000); }, 1000);
+    });
 
     // ── 11s: Command Center ──
     at(11000, function() { goTab('command'); });
     at(13000, function() {
       scrollAndPoint('#sec-command .ib-wrap', function() {
-        showCard('INTELLIGENCE', 'Audio + Insight Brief', 'Three-column brief with audio narration and downloadable reports.', 2500);
+        showCard('INTELLIGENCE', 'Audio + Brief', 'Three-column brief with audio narration.', 2200);
       });
     });
 
-    // ── 16s: Audio button — VISUAL ONLY, no actual play ──
-    at(16000, function() { fakeClickEl('#sec-command .ib-audio'); });
+    // ── 16s: Audio button — visual only ──
+    at(16000, function() {
+      fakeClickEl('#sec-command .ib-audio', function() {
+        showCard('AUDIO', 'Listen While You Read', 'Each section has its own audio overview.', 1800);
+      });
+    });
 
-    // ── 18s: Risk ──
-    at(18000, function() { goTab('risk'); });
-    at(20000, function() { hoverEl('#sec-risk .risk-dot-abs', 1600); });
-    at(20600, function() { showCard('RISK', 'Interactive Risk Matrix', 'Hover any dot to expand risk details. Red = act now.', 2200); });
+    // ── 18.5s: Risk ──
+    at(18500, function() { goTab('risk'); });
+    at(20500, function() {
+      hoverEl('#sec-risk .risk-dot-abs', 1600, function() {});
+      setTimeout(function() { showCard('RISK', 'Interactive', 'Hover any dot to expand details.', 1800); }, 1000);
+    });
 
-    // ── 23.5s: Financials ──
-    at(23500, function() { goTab('financials'); });
-    at(25500, function() { hoverEl('#sec-financials .num-cite', 1600); });
-    at(26100, function() { showCard('FINANCIALS', 'Cited Numbers', 'Hover any value for source and methodology.', 2200); });
+    // ── 24s: Financials ──
+    at(24000, function() { goTab('financials'); });
+    at(26000, function() {
+      hoverEl('#sec-financials .num-cite', 1600, function() {});
+      setTimeout(function() { showCard('FINANCIALS', 'Cited', 'Hover any number for its source.', 1800); }, 1000);
+    });
 
     // ── 29s: Room ──
     at(29000, function() { goTab('room'); });
-    at(31000, function() { clickEl('#sec-room .room-role-row'); });
-    at(31800, function() { showCard('THE ROOM', 'Click Any Role', 'Expand for direct quotes and stance evolution across rounds.', 2200); });
+    at(31000, function() {
+      clickEl('#sec-room .room-role-row', function() {
+        showCard('THE ROOM', 'Expand Any Role', 'Direct quotes and stance evolution.', 1800);
+      });
+    });
 
-    // ── 34.5s: Board ──
-    at(34500, function() { goTab('board'); });
+    // ── 34s: Board ──
+    at(34000, function() { goTab('board'); });
 
-    // ── 36.5s: Sidebar features ──
-    at(36500, function() {
+    // ── 36s: Sidebar features ──
+    at(36000, function() {
       _posAt(qs('.sb-audio-link'));
-      showCard('SIDEBAR', 'Audio, Reports, Chat, Tour', 'Everything accessible from the sidebar. One click away.', 2500);
+      showCard('SIDEBAR', 'Audio + Reports', 'Listen or download from the sidebar.', 1800);
     });
-    at(38000, function() { _posAt(qs('.sb-deck-link')); });
-    at(39000, function() { _posAt(qs('.sb-chat-link')); });
+    at(37500, function() { _posAt(qs('.sb-deck-link')); });
+    at(38500, function() {
+      _posAt(qs('.sb-chat-link'));
+      showCard('CHAT', 'Ask StratOS', 'AI assistant knows your entire decision.', 1800);
+    });
 
-    // ── 40s: Final ──
-    at(40000, function() {
+    // ── 39.5s: Open chat panel briefly ──
+    at(39800, function() {
+      clickAnim();
+      if (typeof toggleChat === 'function') toggleChat();
+    });
+
+    // ── 41s: Close chat, final card ──
+    at(41000, function() {
+      if (typeof toggleChat === 'function') {
+        var p = $('strat-chat-panel');
+        if (p && p.classList.contains('open')) toggleChat();
+      }
       hideRing();
-      showCenterCard('READY', 'Your Turn', 'Click any tab to explore. Use the guided tour for step-by-step detail.', 2500);
+      showCenterCard('READY', 'Your Turn', 'Click any tab to explore.', 2200);
     });
 
-    at(42500, function() { endDemo(); });
+    at(43500, function() { endDemo(); });
   }
 
   // ══════════════════════════════════════════════

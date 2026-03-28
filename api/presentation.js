@@ -154,12 +154,16 @@ async function callGammaAPI(slideContent, deckType) {
     numCards: 10,
     cardSplit: 'inputTextBreaks',
     additionalInstructions: [
-      `This is a ${titles[deckType]}.`,
+      `This is a ${titles[deckType]} by StratOS Decision Engine.`,
+      `Brand: StratOS — an AI-powered decision intelligence platform. The brand is premium, modern, and data-driven.`,
       `Tone: ${tones[deckType]}`,
-      `Use bold, clean layouts. Emphasize key numbers and metrics prominently.`,
-      `Use professional data visualization where possible — progress bars, comparison tables, numbered lists.`,
-      `Every slide should have a clear takeaway. No filler content.`,
-      `Color palette: dark navy (#0f172a), teal (#14b8a6), cyan (#00e5ff), emerald (#10b981) accents on white/light backgrounds.`,
+      `DESIGN: Use bold, clean layouts inspired by McKinsey and Bain presentations. Large metrics, clear hierarchy, minimal clutter.`,
+      `VISUALS: Use professional data visualization — progress bars, comparison tables, numbered lists, metric cards. Make key numbers LARGE and prominent.`,
+      `CONTENT: Every slide must have a clear takeaway headline at the top. No filler. Data-dense but readable.`,
+      `COLOR PALETTE: Primary dark navy (#0f172a), accents in teal (#14b8a6), cyan (#00e5ff), emerald (#10b981). Use white or light gray backgrounds for readability.`,
+      `IMAGERY: Use professional business imagery — boardrooms, strategy sessions, data dashboards, cityscapes. No clipart or cartoons.`,
+      `BRANDING: Include "StratOS | Decision Intelligence" in the footer of every slide. The first slide should prominently feature the StratOS brand.`,
+      `QUALITY: This presentation will be shared with C-suite executives and board members. It must look like it cost $10,000 to produce.`,
     ].join(' '),
     textOptions: {
       amount: 'detailed',
@@ -168,7 +172,7 @@ async function callGammaAPI(slideContent, deckType) {
       language: 'en',
     },
     imageOptions: {
-      source: 'themeAccent',
+      source: 'web',
     },
     cardOptions: {
       dimensions: '16x9',

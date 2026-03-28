@@ -2752,18 +2752,11 @@ dep-item strong{display:block;font-family:var(--font-mono);font-size:var(--text-
     <button class="sb-audio-link" onclick="toggleAudio('audio-deep')">&#9654; Deep Dive &middot; 8 min</button>
   </div>
   <div class="sb-divider"></div>
-  <div class="sb-section-head">Export</div>
+  <div class="sb-section-head">Reports</div>
   <div class="sb-export-row">
-    <button class="sb-export-link" onclick="openServerPDF('executive-brief')">&#128196; PDF &mdash; Executive Brief</button>
-    <button class="sb-export-link" onclick="openServerPDF('full-report')">&#128196; Full Report</button>
-    <button class="sb-export-link" onclick="openServerPDF('board-packet')">&#128196; Board Packet</button>
-  </div>
-  <div class="sb-divider"></div>
-  <div class="sb-section-head">Presentations</div>
-  <div class="sb-export-row">
-    <button class="sb-deck-link" onclick="openGammaDeck('executive')" id="btn-deck-executive">&#128202; Executive Deck</button>
-    <button class="sb-deck-link" onclick="openGammaDeck('board')" id="btn-deck-board">&#128203; Board Packet</button>
-    <button class="sb-deck-link" id="btn-deck-market" onclick="openGammaDeck('market')" style="display:none">&#128269; Market Brief</button>
+    <button class="sb-deck-link" onclick="openGammaDeck('executive')" id="btn-deck-executive">&#9670; Executive Brief</button>
+    <button class="sb-deck-link" onclick="openGammaDeck('board')" id="btn-deck-board">&#9635; Board Packet</button>
+    <button class="sb-deck-link" id="btn-deck-market" onclick="openGammaDeck('market')" style="display:none">&#9672; Market Intelligence</button>
   </div>
   <div class="sb-divider"></div>
   <div class="sb-section-head">Run Info</div>
@@ -4330,9 +4323,26 @@ function openServerPDF(reportType) {
 function openGammaDeck(deckType) {
   var btn = document.getElementById('btn-deck-' + deckType);
   if (!btn || btn.classList.contains('generating')) return;
-  var origText = btn.textContent;
+  var origHTML = btn.innerHTML;
+  var icon = btn.textContent.split(' ')[0];
   btn.classList.add('generating');
-  btn.textContent = btn.textContent.split(' ')[0] + ' Generating...';
+
+  // Progress indicator with timer
+  var elapsed = 0;
+  var progressEl = document.createElement('div');
+  progressEl.style.cssText = 'position:fixed;bottom:24px;right:24px;z-index:9999;background:var(--bg-surface,#0a0e1f);border:1px solid rgba(124,58,237,0.3);border-radius:12px;padding:16px 20px;box-shadow:0 8px 32px rgba(0,0,0,0.5);display:flex;align-items:center;gap:12px;font-family:Inter,sans-serif';
+  progressEl.innerHTML = '<div style="width:20px;height:20px;border:2px solid rgba(124,58,237,0.3);border-top-color:#7c3aed;border-radius:50%;animation:spin 1s linear infinite"></div><div><div style="font-size:13px;color:#fff;font-weight:600">Generating ' + deckType + ' deck...</div><div id="gamma-timer" style="font-size:11px;color:rgba(255,255,255,0.5);margin-top:2px">0s — building slides</div></div>';
+  document.body.appendChild(progressEl);
+
+  var timerInterval = setInterval(function() {
+    elapsed++;
+    var timerEl = document.getElementById('gamma-timer');
+    if (timerEl) {
+      var msg = elapsed < 15 ? 'analyzing decision data' : elapsed < 40 ? 'building slides' : elapsed < 70 ? 'applying design' : 'finalizing...';
+      timerEl.textContent = elapsed + 's — ' + msg;
+    }
+  }, 1000);
+
   var runId = (window.__stratosData || window.__stratosRaw || {}).run_id
     || new URLSearchParams(location.search).get('run_id')
     || new URLSearchParams(location.search).get('run')
@@ -4342,15 +4352,19 @@ function openGammaDeck(deckType) {
   fetch(url)
     .then(function(r) { return r.json(); })
     .then(function(data) {
+      clearInterval(timerInterval);
+      progressEl.remove();
       btn.classList.remove('generating');
-      btn.textContent = origText;
+      btn.innerHTML = origHTML;
       if (data.error) { alert('Deck generation failed: ' + data.error); return; }
       if (data.gammaUrl) { window.open(data.gammaUrl, '_blank'); }
-      else { alert('Deck generated but no URL returned. Check your Gamma workspace.'); }
+      else { alert('Deck generated but no URL returned.'); }
     })
     .catch(function(err) {
+      clearInterval(timerInterval);
+      progressEl.remove();
       btn.classList.remove('generating');
-      btn.textContent = origText;
+      btn.innerHTML = origHTML;
       alert('Deck generation error: ' + err.message);
     });
 }

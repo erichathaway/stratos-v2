@@ -8434,42 +8434,38 @@ window.sendChat = async function(){
     qCard('CITATIONS', 'Sourced', 'Every claim traces to the record.', 1800);
     wait(300);
 
-    // Command Center
+    // Command Center — cursor on the audio button specifically
     qTab('command');
-    qScrollTo('#sec-command .ib-wrap');
-    qCard('INTELLIGENCE', 'Audio + Brief', 'Three-column brief with narration.', 2000);
-
-    // Audio button (visual only)
+    qScrollTo('#sec-command .ib-audio');
+    qCard('AUDIO', 'Listen While You Read', 'Every section has an audio brief.', 1800);
     qFakeClick('#sec-command .ib-audio');
-    qCard('AUDIO', 'Listen While You Read', 'Each section has audio.', 1500);
+    wait(400);
 
-    // Risk
+    // Risk — cursor on a specific risk dot
     qTab('risk');
-    qScrollTo('#sec-risk .g7030');
-    qCard('RISK', 'Interactive', 'Hover any dot to expand.', 1500);
     qScrollTo('#sec-risk .risk-dot-abs');
+    qCard('RISK', 'Interactive Matrix', 'Hover any dot to expand details.', 1500);
     qHover('#sec-risk .risk-dot-abs', 1500);
     wait(300);
 
-    // Financials
+    // Financials — cursor on a specific KPI number
     qTab('financials');
-    qScrollTo('#sec-financials .fin-kpi-row');
-    qCard('FINANCIALS', 'Cited', 'Hover any value for source.', 1500);
     qScrollTo('#sec-financials .num-cite');
+    qCard('FINANCIALS', 'Cited Numbers', 'Hover any value for its source.', 1500);
     qHover('#sec-financials .num-cite', 1500);
     wait(300);
 
-    // Room
+    // Room — cursor on first role row, click to expand
     qTab('room');
-    qScrollTo('#sec-room .room-role-table');
+    qScrollTo('#sec-room .room-role-row');
     qClick('#sec-room .room-role-row');
     wait(300);
-    qCard('THE ROOM', 'Expand Roles', 'Quotes and stance evolution.', 1500);
+    qCard('THE ROOM', 'Expand Any Role', 'Direct quotes and stance evolution.', 1500);
 
-    // Board
+    // Board — cursor on the action word
     qTab('board');
-    qScrollTo('#sec-board .verdict-hero', 200, 50);
-    wait(800);
+    qScrollTo('#sec-board .v-word');
+    wait(600);
 
     // Sidebar features
     _dQ.push(function() {

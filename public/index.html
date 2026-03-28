@@ -2778,13 +2778,10 @@ dep-item strong{display:block;font-family:var(--font-mono);font-size:var(--text-
     <button class="sb-deck-link" id="btn-deck-market" onclick="openGammaDeck('market')" style="display:none">&#9672; Market Intelligence</button>
   </div>
   <div class="sb-divider"></div>
-  <div class="sb-section-head">Run Info</div>
-  <div class="sb-meta-block" id="sb-meta-block">
+  <div class="sb-meta-block" id="sb-meta-block" style="display:none">
     <div class="sb-meta-row"><span>Run ID</span> <span class="sb-meta-val" id="sb-run-id">&#8212;</span></div>
     <div class="sb-meta-row"><span>Date</span> <span class="sb-meta-val" id="sb-run-date">&#8212;</span></div>
     <div class="sb-meta-row"><span>Room</span> <span class="sb-meta-val" id="sb-room-type">ELT</span></div>
-    <div class="sb-meta-row"><span>Roles</span> <span class="sb-meta-val">7</span></div>
-    <div class="sb-meta-row"><span>Rounds</span> <span class="sb-meta-val">3</span></div>
   </div>
   <div class="sb-bottom-section">
     <div class="sb-bottom-divider"></div>
@@ -8422,64 +8419,55 @@ window.sendChat = async function(){
     // Intro
     qCenter('OVERVIEW', 'Your Decision Brief', 'Seven tabs. Every insight cited.', 2200);
 
-    // Cursor → verdict hero
+    // Briefing — cursor on verdict, click upside tab, show citation card
     qScrollTo('#sec-briefing .verdict-hero', 140, 50);
-    wait(800);
-
-    // Click "THE UPSIDE" tab
     qClick('#sec-briefing .brief-intel-tab:nth-child(2)');
-    wait(600);
+    qCard('CITATIONS', 'Sourced', 'Every claim traces to the record.', 1600);
 
-    // Show card about citations — the card IS the explanation, no hover needed
-    qCard('CITATIONS', 'Sourced', 'Every claim traces to the record.', 1800);
-    wait(300);
-
-    // Command Center — cursor on the audio button specifically
+    // Command — cursor on audio button, fake click
     qTab('command');
     qScrollTo('#sec-command .ib-audio');
-    qCard('AUDIO', 'Listen While You Read', 'Every section has an audio brief.', 1800);
+    qCard('AUDIO', 'Listen While You Read', 'Every section has an audio brief.', 1600);
     qFakeClick('#sec-command .ib-audio');
-    wait(400);
 
-    // Risk — cursor on a specific risk dot
+    // Risk — hover a risk dot
     qTab('risk');
     qScrollTo('#sec-risk .risk-dot-abs');
     qCard('RISK', 'Interactive Matrix', 'Hover any dot to expand details.', 1500);
-    qHover('#sec-risk .risk-dot-abs', 1500);
-    wait(300);
+    qHover('#sec-risk .risk-dot-abs', 1200);
 
-    // Financials — cursor on a specific KPI number
+    // Financials — hover a cited number
     qTab('financials');
     qScrollTo('#sec-financials .num-cite');
     qCard('FINANCIALS', 'Cited Numbers', 'Hover any value for its source.', 1500);
-    qHover('#sec-financials .num-cite', 1500);
-    wait(300);
+    qHover('#sec-financials .num-cite', 1200);
 
-    // Room — cursor on first role row, click to expand
+    // Room — click a role row to expand
     qTab('room');
     qScrollTo('#sec-room .room-role-row');
     qClick('#sec-room .room-role-row');
-    wait(300);
     qCard('THE ROOM', 'Expand Any Role', 'Direct quotes and stance evolution.', 1500);
 
-    // Board — cursor on the action word
+    // Management — cursor on execution timeline
+    qTab('management');
+    qScrollTo('#sec-management .mh-hero');
+    qCard('MANAGEMENT', 'Execution Plan', 'Phase-gated timeline with kill gates.', 1500);
+
+    // Board — cursor on the board action
     qTab('board');
     qScrollTo('#sec-board .v-word');
-    wait(600);
+    qCard('BOARD', 'Governance Packet', 'Conditions, kill criteria, oversight.', 1500);
 
-    // Sidebar features
+    // Sidebar features — quick sweep
     _dQ.push(function() {
       var al = qs('.sb-audio-link');
       if (al && al.getBoundingClientRect().left >= 0) {
         posAt(al);
-        setTimeout(function() { posAt(qs('.sb-deck-link')); }, 700);
-        setTimeout(function() {
-          posAt(qs('.sb-chat-link'));
-          next();
-        }, 1400);
+        setTimeout(function() { posAt(qs('.sb-deck-link')); }, 600);
+        setTimeout(function() { posAt(qs('.sb-chat-link')); next(); }, 1200);
       } else { next(); }
     });
-    qCard('SIDEBAR', 'Audio, Reports, Chat', 'All one click away.', 1500);
+    qCard('SIDEBAR', 'Audio, Reports, Chat', 'All one click away.', 1400);
 
     // Open chat briefly
     _dQ.push(function() {
@@ -8489,9 +8477,8 @@ window.sendChat = async function(){
         var p = $('strat-chat-panel');
         if (p && p.classList.contains('open') && typeof toggleChat === 'function') toggleChat();
         next();
-      }, 1500);
+      }, 1200);
     });
-    wait(300);
 
     // Final
     _dQ.push(function() { hideRing(); next(); });

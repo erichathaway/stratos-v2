@@ -8466,16 +8466,17 @@ window.sendChat = async function(){
     qScrollTo('#sec-board .v-word');
     qCard('BOARD', 'Governance Packet', 'Conditions, kill criteria, oversight.', 1500);
 
-    // Sidebar features — quick sweep
-    _dQ.push(function() {
-      var al = qs('.sb-audio-link');
-      if (al && al.getBoundingClientRect().left >= 0) {
-        posAt(al);
-        setTimeout(function() { posAt(qs('.sb-deck-link')); }, 600);
-        setTimeout(function() { posAt(qs('.sb-chat-link')); next(); }, 1200);
-      } else { next(); }
-    });
-    qCard('SIDEBAR', 'Audio, Reports, Chat', 'All one click away.', 1400);
+    // Sidebar: Audio
+    qScrollTo('.sb-audio-link');
+    qCard('AUDIO', 'Audio Briefs', 'Listen to any section while you read.', 1500);
+
+    // Sidebar: Reports
+    qScrollTo('.sb-deck-link');
+    qCard('REPORTS', 'Downloadable Decks', 'Executive brief and board packet.', 1500);
+
+    // Sidebar: Chat
+    qScrollTo('.sb-chat-link');
+    qCard('CHAT', 'Ask StratOS', 'AI assistant knows your full decision.', 1500);
 
     // Open chat briefly
     _dQ.push(function() {
@@ -8485,7 +8486,7 @@ window.sendChat = async function(){
         var p = $('strat-chat-panel');
         if (p && p.classList.contains('open') && typeof toggleChat === 'function') toggleChat();
         next();
-      }, 1200);
+      }, 1400);
     });
 
     // Final

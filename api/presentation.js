@@ -7,6 +7,7 @@ export const config = { maxDuration: 120 };
 
 const GAMMA_API_KEY = process.env.GAMMA_API_KEY || 'sk-gamma-P3kSiUkiWN5I8WUxcAEtO6fxjuK3p0VBVrByDQzJ8rA';
 const GAMMA_BASE = 'https://public-api.gamma.app';
+const GAMMA_THEME_ID = process.env.GAMMA_THEME_ID || null; // Custom StratOS brand theme
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -180,6 +181,11 @@ async function callGammaAPI(slideContent, deckType) {
       externalAccess: 'view',
     },
   };
+
+  // Apply custom StratOS brand theme if configured
+  if (GAMMA_THEME_ID) {
+    body.themeId = GAMMA_THEME_ID;
+  }
 
   // POST to Gamma
   const createRes = await fetch(`${GAMMA_BASE}/v1.0/generations`, {

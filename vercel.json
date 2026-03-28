@@ -3,6 +3,9 @@
     "api/pdf.js": {
       "maxDuration": 60,
       "memory": 1024
+    },
+    "api/presentation.js": {
+      "maxDuration": 120
     }
   },
   "rewrites": [

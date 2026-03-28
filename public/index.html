@@ -313,6 +313,10 @@ body{background:var(--bg-page);color:var(--text-primary);font-family:var(--font-
 .sb-audio-link.playing{color:#10b981;background:rgba(16,185,129,0.1);text-shadow:0 0 8px rgba(16,185,129,0.3)}
 .sb-export-link{color:rgba(0,229,255,0.55)}
 .sb-export-link:hover{color:#00e5ff;background:rgba(0,229,255,0.08);text-shadow:0 0 6px rgba(0,229,255,0.2)}
+.sb-deck-link{display:flex;align-items:center;gap:var(--gap-sm);padding:6px 10px;border-radius:var(--r-md);font-family:var(--font-body);font-size:12px;font-weight:500;letter-spacing:0.02em;cursor:pointer;transition:color 200ms ease,background 200ms ease,text-shadow 200ms ease,opacity 200ms ease;background:linear-gradient(135deg,rgba(124,58,237,0.06),rgba(20,184,166,0.06));border:1px solid rgba(124,58,237,0.12);text-align:left;white-space:nowrap;color:rgba(124,58,237,0.65)}
+.sb-deck-link:hover{color:#7c3aed;background:linear-gradient(135deg,rgba(124,58,237,0.12),rgba(20,184,166,0.10));border-color:rgba(124,58,237,0.25);text-shadow:0 0 6px rgba(124,58,237,0.2)}
+.sb-deck-link.generating{opacity:0.6;pointer-events:none;cursor:wait}
+.sb-deck-link.generating::after{content:' Generating...';font-size:10px;color:rgba(124,58,237,0.5)}
 .sb-portal-link{display:flex;align-items:center;gap:var(--gap-sm);padding:8px 10px;border-radius:var(--r-md);font-family:var(--font-body);font-size:13px;font-weight:500;letter-spacing:0.02em;color:rgba(124,58,237,0.6);cursor:pointer;transition:color 200ms ease,background 200ms ease,text-shadow 200ms ease;text-decoration:none}
 .sb-portal-link:hover{color:rgba(124,58,237,0.95);background:rgba(124,58,237,0.06);text-shadow:0 0 8px rgba(124,58,237,0.25)}
 .sb-chat-link{display:flex;align-items:center;gap:var(--gap-sm);padding:8px 10px;border-radius:var(--r-md);font-family:var(--font-body);font-size:13px;font-weight:500;letter-spacing:0.02em;color:rgba(0,229,255,0.6);cursor:pointer;transition:color 200ms ease,background 200ms ease,text-shadow 200ms ease;background:none;border:none;text-align:left;white-space:nowrap}
@@ -2730,7 +2734,7 @@ dep-item strong{display:block;font-family:var(--font-mono);font-size:var(--text-
     <button class="sb-toggle" id="sb-toggle" onclick="toggleSidebar()" title="Toggle sidebar">&#9776;</button>
     <span class="sb-header-label sb-label" style="font-family:var(--font-mono);font-size:10px;color:var(--text-muted);letter-spacing:0.1em;text-transform:uppercase">NAVIGATION</span>
   </div>
-  <div class="sb-collapsed-logo"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none" width="100%" height="100%"><defs><radialGradient id="sblcg" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#67e8f9"/><stop offset="100%" stop-color="#0891b2"/></radialGradient></defs><circle cx="256" cy="256" r="250" fill="#070d1a"/><circle cx="256" cy="256" r="230" stroke="#00e5ff" stroke-width="2" fill="none" opacity="0.5"/><circle cx="256" cy="256" r="10" fill="#00e5ff"/></svg></div>
+  <div class="sb-collapsed-logo"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none" width="100%" height="100%"><circle cx="16" cy="16" r="14.5" stroke="#00e5ff" stroke-width="1.2" fill="#070d1a"/><circle cx="16" cy="16" r="12" stroke="#00e5ff" stroke-width="0.5" fill="none" opacity="0.3"/><polygon points="16,3.5 14.5,13 17.5,13" fill="#00e5ff"/><polygon points="16,3.5 14.8,12 16,11" fill="#67e8f9" opacity="0.7"/><polygon points="16,28.5 14.5,19 17.5,19" fill="#00e5ff" opacity="0.2"/><polygon points="28.5,16 19,14.5 19,17.5" fill="#00e5ff" opacity="0.15"/><polygon points="3.5,16 13,14.5 13,17.5" fill="#00e5ff" opacity="0.15"/><line x1="16" y1="2" x2="16" y2="4" stroke="#00e5ff" stroke-width="1" opacity="0.5"/><line x1="30" y1="16" x2="28" y2="16" stroke="#00e5ff" stroke-width="1" opacity="0.5"/><line x1="16" y1="30" x2="16" y2="28" stroke="#00e5ff" stroke-width="1" opacity="0.5"/><line x1="2" y1="16" x2="4" y2="16" stroke="#00e5ff" stroke-width="1" opacity="0.5"/><circle cx="16" cy="16" r="3" fill="#00e5ff" opacity="0.9"/><circle cx="16" cy="16" r="1.8" fill="#070d1a"/><circle cx="16" cy="16" r="1" fill="#67e8f9"/></svg></div>
   <nav class="sb-nav">
     <div class="sb-tab active" data-sec="briefing" onclick="switchTab(this)"><span class="sb-tab-icon">&#9670;</span><span class="sb-label">Briefing</span></div>
     <div class="sb-tab" data-sec="command" onclick="switchTab(this)"><span class="sb-tab-icon">&#9881;</span><span class="sb-label">Command Center</span></div>
@@ -2753,6 +2757,13 @@ dep-item strong{display:block;font-family:var(--font-mono);font-size:var(--text-
     <button class="sb-export-link" onclick="openServerPDF('executive-brief')">&#128196; PDF &mdash; Executive Brief</button>
     <button class="sb-export-link" onclick="openServerPDF('full-report')">&#128196; Full Report</button>
     <button class="sb-export-link" onclick="openServerPDF('board-packet')">&#128196; Board Packet</button>
+  </div>
+  <div class="sb-divider"></div>
+  <div class="sb-section-head">Presentations</div>
+  <div class="sb-export-row">
+    <button class="sb-deck-link" onclick="openGammaDeck('executive')" id="btn-deck-executive">&#128202; Executive Deck</button>
+    <button class="sb-deck-link" onclick="openGammaDeck('board')" id="btn-deck-board">&#128203; Board Packet</button>
+    <button class="sb-deck-link" id="btn-deck-market" onclick="openGammaDeck('market')" style="display:none">&#128269; Market Brief</button>
   </div>
   <div class="sb-divider"></div>
   <div class="sb-section-head">Run Info</div>
@@ -2783,7 +2794,7 @@ dep-item strong{display:block;font-family:var(--font-mono);font-size:var(--text-
 <div class="portal-panel" id="portal-panel">
   <div class="pp-header">
     <div class="pp-header-left">
-      <div class="pp-header-logo"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none"><defs><radialGradient id="ppcg" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#67e8f9"/><stop offset="100%" stop-color="#0891b2"/></radialGradient></defs><circle cx="256" cy="256" r="250" fill="#070d1a"/><circle cx="256" cy="256" r="230" stroke="#00e5ff" stroke-width="2" fill="none" opacity="0.5"/><circle cx="256" cy="256" r="10" fill="#00e5ff"/></svg></div>
+      <div class="pp-header-logo"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none" width="100%" height="100%"><circle cx="16" cy="16" r="14.5" stroke="#00e5ff" stroke-width="1.2" fill="#070d1a"/><circle cx="16" cy="16" r="12" stroke="#00e5ff" stroke-width="0.5" fill="none" opacity="0.3"/><polygon points="16,3.5 14.5,13 17.5,13" fill="#00e5ff"/><polygon points="16,3.5 14.8,12 16,11" fill="#67e8f9" opacity="0.7"/><polygon points="16,28.5 14.5,19 17.5,19" fill="#00e5ff" opacity="0.2"/><polygon points="28.5,16 19,14.5 19,17.5" fill="#00e5ff" opacity="0.15"/><polygon points="3.5,16 13,14.5 13,17.5" fill="#00e5ff" opacity="0.15"/><line x1="16" y1="2" x2="16" y2="4" stroke="#00e5ff" stroke-width="1" opacity="0.5"/><line x1="30" y1="16" x2="28" y2="16" stroke="#00e5ff" stroke-width="1" opacity="0.5"/><line x1="16" y1="30" x2="16" y2="28" stroke="#00e5ff" stroke-width="1" opacity="0.5"/><line x1="2" y1="16" x2="4" y2="16" stroke="#00e5ff" stroke-width="1" opacity="0.5"/><circle cx="16" cy="16" r="3" fill="#00e5ff" opacity="0.9"/><circle cx="16" cy="16" r="1.8" fill="#070d1a"/><circle cx="16" cy="16" r="1" fill="#67e8f9"/></svg></div>
       <span class="pp-header-title">My Decisions</span>
     </div>
     <button class="pp-close" onclick="togglePortalPanel(false)" title="Close">&times;</button>
@@ -2860,7 +2871,7 @@ dep-item strong{display:block;font-family:var(--font-mono);font-size:var(--text-
 <header class="s-header s-header-with-sidebar" id="s-header">
   <div class="logo">
     <button class="sb-toggle sb-mobile-toggle" id="sb-mobile-toggle" onclick="toggleSidebar()" style="display:none" title="Menu">&#9776;</button>
-    <div class="logo-mark"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none" width="100%" height="100%"><defs><radialGradient id="hlcg" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#67e8f9"/><stop offset="100%" stop-color="#0891b2"/></radialGradient></defs><circle cx="256" cy="256" r="248" fill="#070d1a"/><circle cx="256" cy="256" r="230" stroke="#00e5ff" stroke-width="2" fill="none" opacity="0.5"/><polygon points="256,60 246,220 266,220" fill="#00e5ff" opacity="0.9"/><polygon points="256,452 246,292 266,292" fill="rgba(0,229,255,0.3)"/><polygon points="60,256 220,246 220,266" fill="rgba(0,229,255,0.2)"/><polygon points="452,256 292,246 292,266" fill="rgba(0,229,255,0.2)"/><circle cx="256" cy="256" r="10" fill="#00e5ff"/><circle cx="256" cy="256" r="5" fill="#070d1a"/></svg></div>
+    <div class="logo-mark"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none" width="100%" height="100%"><circle cx="16" cy="16" r="14.5" stroke="#00e5ff" stroke-width="1.2" fill="#070d1a"/><circle cx="16" cy="16" r="12" stroke="#00e5ff" stroke-width="0.5" fill="none" opacity="0.3"/><polygon points="16,3.5 14.5,13 17.5,13" fill="#00e5ff"/><polygon points="16,3.5 14.8,12 16,11" fill="#67e8f9" opacity="0.7"/><polygon points="16,28.5 14.5,19 17.5,19" fill="#00e5ff" opacity="0.2"/><polygon points="28.5,16 19,14.5 19,17.5" fill="#00e5ff" opacity="0.15"/><polygon points="3.5,16 13,14.5 13,17.5" fill="#00e5ff" opacity="0.15"/><line x1="16" y1="2" x2="16" y2="4" stroke="#00e5ff" stroke-width="1" opacity="0.5"/><line x1="30" y1="16" x2="28" y2="16" stroke="#00e5ff" stroke-width="1" opacity="0.5"/><line x1="16" y1="30" x2="16" y2="28" stroke="#00e5ff" stroke-width="1" opacity="0.5"/><line x1="2" y1="16" x2="4" y2="16" stroke="#00e5ff" stroke-width="1" opacity="0.5"/><circle cx="16" cy="16" r="3" fill="#00e5ff" opacity="0.9"/><circle cx="16" cy="16" r="1.8" fill="#070d1a"/><circle cx="16" cy="16" r="1" fill="#67e8f9"/></svg></div>
     <span class="logo-name">StratOS</span>
     <div class="logo-pipe"></div>
     <span class="logo-tag">Decision Engine</span>
@@ -4316,6 +4327,34 @@ function openServerPDF(reportType) {
   window.open(url, '_blank');
 }
 
+function openGammaDeck(deckType) {
+  var btn = document.getElementById('btn-deck-' + deckType);
+  if (!btn || btn.classList.contains('generating')) return;
+  var origText = btn.textContent;
+  btn.classList.add('generating');
+  btn.textContent = btn.textContent.split(' ')[0] + ' Generating...';
+  var runId = (window.__stratosData || window.__stratosRaw || {}).run_id
+    || new URLSearchParams(location.search).get('run_id')
+    || new URLSearchParams(location.search).get('run')
+    || '';
+  var url = '/api/presentation?type=' + encodeURIComponent(deckType);
+  if (runId) url += '&run_id=' + encodeURIComponent(runId);
+  fetch(url)
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      btn.classList.remove('generating');
+      btn.textContent = origText;
+      if (data.error) { alert('Deck generation failed: ' + data.error); return; }
+      if (data.gammaUrl) { window.open(data.gammaUrl, '_blank'); }
+      else { alert('Deck generated but no URL returned. Check your Gamma workspace.'); }
+    })
+    .catch(function(err) {
+      btn.classList.remove('generating');
+      btn.textContent = origText;
+      alert('Deck generation error: ' + err.message);
+    });
+}
+
 function exportPDF() {
   var activeSection = document.querySelector('.s-section.tab-active');
   if (!activeSection) { window.print(); return; }
@@ -4417,18 +4456,7 @@ function exportFullReport() {
   cover.innerHTML =
     '<div class="pdf-cover-accent"></div>' +
     '<div class="pdf-cover-logo">' +
-      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none" width="72" height="72">' +
-        '<circle cx="256" cy="256" r="248" fill="#ffffff" stroke="#e2e8f0" stroke-width="2"/>' +
-        '<circle cx="256" cy="256" r="220" stroke="#0f172a" stroke-width="1.5" fill="none"/>' +
-        '<circle cx="256" cy="256" r="180" stroke="#cbd5e1" stroke-width="1" fill="none"/>' +
-        '<polygon points="256,60 246,210 266,210" fill="#0f172a"/>' +
-        '<polygon points="256,452 246,302 266,302" fill="#cbd5e1"/>' +
-        '<polygon points="60,256 210,246 210,266" fill="#cbd5e1"/>' +
-        '<polygon points="452,256 302,246 302,266" fill="#cbd5e1"/>' +
-        '<circle cx="256" cy="256" r="12" fill="#0f172a"/>' +
-        '<circle cx="256" cy="256" r="6" fill="#ffffff"/>' +
-        '<text x="256" y="48" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-size="20" font-weight="700" fill="#0f172a">N</text>' +
-      '</svg>' +
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none" width="100%" height="100%"><circle cx="16" cy="16" r="14.5" stroke="#00e5ff" stroke-width="1.2" fill="#070d1a"/><circle cx="16" cy="16" r="12" stroke="#00e5ff" stroke-width="0.5" fill="none" opacity="0.3"/><polygon points="16,3.5 14.5,13 17.5,13" fill="#00e5ff"/><polygon points="16,3.5 14.8,12 16,11" fill="#67e8f9" opacity="0.7"/><polygon points="16,28.5 14.5,19 17.5,19" fill="#00e5ff" opacity="0.2"/><polygon points="28.5,16 19,14.5 19,17.5" fill="#00e5ff" opacity="0.15"/><polygon points="3.5,16 13,14.5 13,17.5" fill="#00e5ff" opacity="0.15"/><line x1="16" y1="2" x2="16" y2="4" stroke="#00e5ff" stroke-width="1" opacity="0.5"/><line x1="30" y1="16" x2="28" y2="16" stroke="#00e5ff" stroke-width="1" opacity="0.5"/><line x1="16" y1="30" x2="16" y2="28" stroke="#00e5ff" stroke-width="1" opacity="0.5"/><line x1="2" y1="16" x2="4" y2="16" stroke="#00e5ff" stroke-width="1" opacity="0.5"/><circle cx="16" cy="16" r="3" fill="#00e5ff" opacity="0.9"/><circle cx="16" cy="16" r="1.8" fill="#070d1a"/><circle cx="16" cy="16" r="1" fill="#67e8f9"/></svg>' +
     '</div>' +
     '<div class="pdf-cover-title">StratOS</div>' +
     '<div class="pdf-cover-subtitle">Decision Intelligence Report</div>' +
@@ -4691,6 +4719,10 @@ function applyLiveData(raw) {
   var roomType = dash.mode || raw.master?.room_type || 'ELT';
   var hasMarketIntel = !!(raw.marketIntelBlob);
   applyDashboardConfig(roomType.toUpperCase(), hasMarketIntel);
+
+  // Show/hide market deck button based on data availability
+  var mktDeckBtn = document.getElementById('btn-deck-market');
+  if (mktDeckBtn) mktDeckBtn.style.display = hasMarketIntel ? '' : 'none';
 
   // Market Intelligence tab — McKinsey-grade intelligence report
   var mi = raw.marketIntelBlob || null;
@@ -7905,7 +7937,7 @@ window.sendChat = async function(){
     loadingEl.style.display = 'none';
     bodyEl.innerHTML =
       '<div class="pp-login">' +
-        '<div class="pp-login-logo"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none"><defs><radialGradient id="pplog" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#67e8f9"/><stop offset="100%" stop-color="#0891b2"/></radialGradient></defs><circle cx="256" cy="256" r="250" fill="#070d1a"/><circle cx="256" cy="256" r="230" stroke="#00e5ff" stroke-width="2" fill="none" opacity="0.5"/><circle cx="256" cy="256" r="10" fill="#00e5ff"/></svg></div>' +
+        '<div class="pp-login-logo"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none" width="100%" height="100%"><circle cx="16" cy="16" r="14.5" stroke="#00e5ff" stroke-width="1.2" fill="#070d1a"/><circle cx="16" cy="16" r="12" stroke="#00e5ff" stroke-width="0.5" fill="none" opacity="0.3"/><polygon points="16,3.5 14.5,13 17.5,13" fill="#00e5ff"/><polygon points="16,3.5 14.8,12 16,11" fill="#67e8f9" opacity="0.7"/><polygon points="16,28.5 14.5,19 17.5,19" fill="#00e5ff" opacity="0.2"/><polygon points="28.5,16 19,14.5 19,17.5" fill="#00e5ff" opacity="0.15"/><polygon points="3.5,16 13,14.5 13,17.5" fill="#00e5ff" opacity="0.15"/><line x1="16" y1="2" x2="16" y2="4" stroke="#00e5ff" stroke-width="1" opacity="0.5"/><line x1="30" y1="16" x2="28" y2="16" stroke="#00e5ff" stroke-width="1" opacity="0.5"/><line x1="16" y1="30" x2="16" y2="28" stroke="#00e5ff" stroke-width="1" opacity="0.5"/><line x1="2" y1="16" x2="4" y2="16" stroke="#00e5ff" stroke-width="1" opacity="0.5"/><circle cx="16" cy="16" r="3" fill="#00e5ff" opacity="0.9"/><circle cx="16" cy="16" r="1.8" fill="#070d1a"/><circle cx="16" cy="16" r="1" fill="#67e8f9"/></svg></div>' +
         '<div class="pp-login-heading">Access Your Decisions</div>' +
         '<div class="pp-login-sub">Sign in to view and manage your StratOS decision history</div>' +
         '<div class="pp-login-buttons">' +

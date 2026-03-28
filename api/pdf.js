@@ -323,16 +323,36 @@ h2, h3, h4 { page-break-after: avoid; break-after: avoid; }
   color: #64748b;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  margin-bottom: 48px;
+  margin-bottom: 8px;
+}
+.cover-subtitle {
+  font-family: 'Sora', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  color: #94a3b8;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-variant: small-caps;
+  margin-bottom: 40px;
+}
+.cover-prepared {
+  font-size: 11px;
+  color: #64748b;
+  margin-bottom: 12px;
+  letter-spacing: 0.02em;
 }
 .cover-question {
   font-family: 'Sora', sans-serif;
   font-size: 20px;
   font-weight: 600;
+  font-style: italic;
   color: #1a365d;
   max-width: 600px;
   margin-bottom: 32px;
   line-height: 1.4;
+  border-left: 3px solid #14b8a6;
+  padding-left: 20px;
+  text-align: left;
 }
 .cover-meta {
   display: flex;
@@ -345,12 +365,13 @@ h2, h3, h4 { page-break-after: avoid; break-after: avoid; }
 .cover-meta dd { color: #1e293b; font-weight: 500; font-size: 12px; }
 .verdict-badge {
   display: inline-block;
-  padding: 10px 32px;
-  border-radius: 6px;
+  padding: 14px 40px;
+  border-radius: 8px;
   font-family: 'Sora', sans-serif;
-  font-size: 16px;
+  font-size: 20px;
   font-weight: 700;
   letter-spacing: 0.02em;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
 }
 .verdict-sub {
   font-size: 11px;
@@ -441,11 +462,11 @@ th {
 }
 .table-branded th { background: linear-gradient(135deg, var(--dark), var(--navy)); }
 td {
-  padding: 8px 12px;
+  padding: 10px 12px;
   border-bottom: 1px solid #e2e8f0;
   vertical-align: top;
 }
-tr:nth-child(even) td { background: #f8fafc; }
+tr:nth-child(even) td { background: #f1f5f9; }
 tr:nth-child(odd) td { background: #ffffff; }
 
 /* ── Callout boxes ── */
@@ -717,6 +738,78 @@ tr:nth-child(odd) td { background: #ffffff; }
   margin-top: 4px;
 }
 
+/* ── Section insight summary ── */
+.section-insight {
+  font-style: italic;
+  font-size: 11px;
+  color: #94a3b8;
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+
+/* ── Numbered action circle ── */
+.action-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #1a365d;
+  color: #ffffff;
+  font-family: 'Sora', sans-serif;
+  font-size: 9px;
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-right: 8px;
+}
+
+/* ── Board memo header ── */
+.memo-header {
+  border: 2px solid #1a365d;
+  border-radius: 0;
+  margin-bottom: 24px;
+  font-size: 12px;
+}
+.memo-header td, .memo-header th {
+  padding: 10px 16px;
+  border-bottom: 1px solid #cbd5e1;
+  background: #ffffff;
+}
+.memo-header th {
+  background: #f8fafc;
+  color: #1a365d;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  width: 130px;
+  text-align: left;
+}
+.memo-header tr:last-child td,
+.memo-header tr:last-child th { border-bottom: none; }
+
+/* ── Confidential watermark ── */
+.conf-watermark {
+  position: relative;
+  overflow: hidden;
+}
+.conf-watermark::before {
+  content: 'CONFIDENTIAL';
+  position: absolute;
+  top: 40px;
+  right: -20px;
+  font-family: 'Sora', sans-serif;
+  font-size: 48px;
+  font-weight: 800;
+  color: rgba(148, 163, 184, 0.08);
+  transform: rotate(-25deg);
+  letter-spacing: 0.15em;
+  pointer-events: none;
+  z-index: 0;
+  white-space: nowrap;
+}
+
 /* ── Watermark / Confidential stripe ── */
 .conf-stripe {
   text-align: center;
@@ -766,7 +859,9 @@ function buildCoverPage(meta) {
       <text x="256" y="48" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-size="20" font-weight="700" fill="#0f172a">N</text>
     </svg>
     <div class="cover-brand">StratOS</div>
-    <div class="cover-tagline">Decision Intelligence Report</div>
+    <div class="cover-tagline">Decision Intelligence Platform</div>
+    <div class="cover-subtitle">Decision Intelligence Report</div>
+    ${meta.company ? `<div class="cover-prepared">Prepared for ${esc(meta.company)}</div>` : ''}
     <div class="cover-question">${esc(meta.question)}</div>
     <div class="cover-meta">
       ${meta.company ? `<div><dt>Organization</dt><dd>${esc(meta.company)}</dd></div>` : ''}
@@ -797,6 +892,7 @@ function buildExecSummary(meta, dash, exec, mso, bgp = {}, fm = {}, data = {}) {
 
   let html = `<div class="page-break"></div><div class="section">`;
   html += `<div class="section-header"><div class="section-num">01</div><h2>Executive Summary</h2></div>`;
+  html += `<div class="section-insight">A synthesized view of the deliberation outcome, panel consensus, and recommended next steps.</div>`;
 
   // Verdict + confidence bar side by side
   html += `<div class="two-col">`;
@@ -826,9 +922,9 @@ function buildExecSummary(meta, dash, exec, mso, bgp = {}, fm = {}, data = {}) {
       const title = typeof a === 'string' ? a : (a.action || a.title || a.name || `Action ${i + 1}`);
       const detail = typeof a === 'string' ? '' : (a.description || a.detail || a.rationale || '');
       const owner = typeof a === 'string' ? '' : (a.owner || a.responsible || '');
-      html += `<li><strong>${i + 1}. ${esc(title)}</strong>`;
-      if (detail) html += `<br>${esc(detail)}`;
-      if (owner) html += `<br><span style="font-size:9px;color:#64748b;">Owner: ${esc(owner)}</span>`;
+      html += `<li><span class="action-num">${String(i + 1).padStart(2, '0')}</span><strong>${esc(title)}</strong>`;
+      if (detail) html += `<br><span style="margin-left:30px;">${esc(detail)}</span>`;
+      if (owner) html += `<br><span style="font-size:9px;color:#64748b;margin-left:30px;">Owner: ${esc(owner)}</span>`;
       html += `</li>`;
     });
     html += `</ul>`;
@@ -906,6 +1002,7 @@ function buildKeyMetrics(meta, dash, data, exec = {}, bgp = {}) {
 
   let html = `<div class="page-break"></div><div class="section">`;
   html += `<div class="section-header"><div class="section-num">02</div><h2>Analysis Details</h2></div>`;
+  html += `<div class="section-insight">Quantitative metrics and supporting evidence underpinning the decision outcome.</div>`;
   html += `<div class="metrics-grid">`;
   html += metricCard(meta.confidence + '%', 'Decision Confidence');
   html += metricCard(totalVotes || roleSet.size, 'Panel Votes');
@@ -977,6 +1074,7 @@ function buildBriefingSection(meta, dash, exec, dir, mso = {}) {
 
   let html = `<div class="page-break"></div><div class="section" data-color="teal">`;
   html += `<div class="section-header"><div class="section-num">02</div><h2>Executive Briefing</h2></div>`;
+  html += `<div class="section-insight">Strategic context, narrative rationale, and the evidence base driving this recommendation.</div>`;
 
   if (decision) {
     html += `<h3>Decision Narrative</h3><div class="callout callout-green"><div class="narrative">${esc(decision)}</div></div>`;
@@ -1061,6 +1159,7 @@ function buildBriefingSection(meta, dash, exec, dir, mso = {}) {
 function buildCommandCenter(mso, dir, dash = {}, tlViz = {}) {
   let html = `<div class="page-break"></div><div class="section" data-color="green">`;
   html += `<div class="section-header"><div class="section-num">03</div><h2>Command Center</h2></div>`;
+  html += `<div class="section-insight">Operational execution plan, timeline, hard gates, and key dependencies for implementation.</div>`;
 
   // Decision record
   const decisionRecord = mso.decision_record || {};
@@ -1159,6 +1258,7 @@ function buildRiskIntel(dash, data, mso = {}) {
 
   let html = `<div class="page-break"></div><div class="section" data-color="rose">`;
   html += `<div class="section-header"><div class="section-num">04</div><h2>Risk &amp; Intelligence</h2></div>`;
+  html += `<div class="section-insight">Comprehensive risk register, severity analysis, and mitigation strategies identified across all expert perspectives.</div>`;
 
   if (riskMatrix.summary || riskMatrix.description) {
     html += `<div class="narrative">${esc(riskMatrix.summary || riskMatrix.description)}</div>`;
@@ -1232,6 +1332,7 @@ function buildFinancials(fm, dash, bgp = {}) {
   const finOverview = bgp.financial_overview || {};
   let html = `<div class="page-break"></div><div class="section" data-color="teal">`;
   html += `<div class="section-header"><div class="section-num">05</div><h2>Financial Analysis</h2></div>`;
+  html += `<div class="section-insight">Investment structure, return projections, and scenario modelling for the recommended path forward.</div>`;
 
   // Financial overview narrative from board governance
   const finNarrative = finOverview.summary || finOverview.headline || finOverview.overview || '';
@@ -1316,6 +1417,7 @@ function buildTheRoom(dash, data, rolePackets = {}, dPacket = {}) {
 
   let html = `<div class="page-break"></div><div class="section" data-color="amber">`;
   html += `<div class="section-header"><div class="section-num">06</div><h2>The Room</h2></div>`;
+  html += `<div class="section-insight">Individual expert assessments, vote rationale, and the convergence narrative from multi-round deliberation.</div>`;
 
   // Vote bar
   if (totalVotes > 0) {
@@ -1419,6 +1521,7 @@ function buildTheRoom(dash, data, rolePackets = {}, dPacket = {}) {
 function buildManagementHandoff(mso, dir, rolePackets = {}) {
   let html = `<div class="page-break"></div><div class="section" data-color="blue">`;
   html += `<div class="section-header"><div class="section-num">07</div><h2>Management Handoff</h2></div>`;
+  html += `<div class="section-insight">Functional mandates, escalation triggers, and ownership assignments for execution readiness.</div>`;
 
   // Functional mandates per role from direction_package
   const funcMandates = dir.functional_mandates || dir.role_mandates || {};
@@ -1517,6 +1620,7 @@ function buildManagementHandoff(mso, dir, rolePackets = {}) {
 function buildBoardReport(bgp, meta, dash, gov, mso = {}) {
   let html = `<div class="page-break"></div><div class="section" data-color="purple">`;
   html += `<div class="section-header"><div class="section-num">08</div><h2>Board Report</h2></div>`;
+  html += `<div class="section-insight">Board-ready governance summary, vote outcome, strategic rationale, and formal action requested.</div>`;
 
   // Board action requested (most important for board members)
   const boardAction = bgp.board_action_requested || bgp.action_requested || '';
@@ -1626,11 +1730,12 @@ function buildBoardCoverSummary(meta, dash, exec, bgp = {}, fm = {}) {
   const voteSplit = dash.vote_split || {};
   const totalVotes = Object.values(voteSplit).reduce((a, b) => a + (typeof b === 'number' ? b : 0), 0);
 
-  let html = `<div class="page-break"></div><div class="section" data-color="purple">`;
+  let html = `<div class="page-break"></div><div class="section conf-watermark" data-color="purple">`;
   html += `<div class="section-header"><div class="section-num">01</div><h2>Board Memorandum</h2></div>`;
+  html += `<div class="section-insight">Formal memorandum summarizing the decision recommendation, rationale, and requested board action.</div>`;
 
-  // Board memo header
-  html += `<table style="margin-bottom:20px;"><tr><th style="width:120px;">To:</th><td>Board of Directors</td></tr>`;
+  // Board memo header — printed memo style
+  html += `<table class="memo-header"><tr><th>To:</th><td>Board of Directors</td></tr>`;
   html += `<tr><th>From:</th><td>StratOS Decision Intelligence</td></tr>`;
   html += `<tr><th>Date:</th><td>${meta.date}</td></tr>`;
   html += `<tr><th>Subject:</th><td><strong>${esc(meta.question)}</strong></td></tr>`;
@@ -1679,6 +1784,7 @@ function buildRiskOverview(dash, data, mso = {}) {
 
   let html = `<div class="page-break"></div><div class="section" data-color="rose">`;
   html += `<div class="section-header"><div class="section-num">03</div><h2>Risk Exposure</h2></div>`;
+  html += `<div class="section-insight">Top risk exposures and severity distribution requiring board-level awareness and oversight.</div>`;
 
   if (riskMatrix.summary || riskMatrix.description) {
     html += `<div class="narrative">${esc(riskMatrix.summary || riskMatrix.description)}</div>`;
@@ -1740,6 +1846,7 @@ function buildRiskOverview(dash, data, mso = {}) {
 function buildConditionsKillGates(bgp, mso) {
   let html = `<div class="page-break"></div><div class="section">`;
   html += `<div class="section-header"><div class="section-num">04</div><h2>Conditions &amp; Kill Gates</h2></div>`;
+  html += `<div class="section-insight">Mandatory approval conditions and automatic termination triggers that govern this decision.</div>`;
 
   const conditions = bgp.conditions || bgp.approval_conditions || [];
   if (Array.isArray(conditions) && conditions.length > 0) {

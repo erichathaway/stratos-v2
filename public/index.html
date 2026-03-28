@@ -2719,6 +2719,36 @@ dep-item strong{display:block;font-family:var(--font-mono);font-size:var(--text-
 .pp-signout{background:none;border:none;color:var(--text-muted);font-family:var(--font-mono);font-size:11px;letter-spacing:.04em;cursor:pointer;padding:6px 10px;transition:color 180ms;margin-top:auto;flex-shrink:0;align-self:center}
 .pp-signout:hover{color:var(--text-secondary)}
 @media(max-width:480px){.portal-panel{width:100%}}
+
+/* ── Walkthrough (cinematic auto-tour) ── */
+.wt-active{}
+.wt-fog{position:fixed;background:rgba(7,13,26,.86);backdrop-filter:blur(4px);pointer-events:none;z-index:9500;transition:all .7s cubic-bezier(.4,0,.2,1);opacity:0}
+.wt-active .wt-fog{opacity:1}
+.wt-fog.wt-fog-full{inset:0}
+.wt-spot{position:fixed;z-index:9502;border-radius:16px;border:2px solid rgba(20,184,166,.5);box-shadow:0 0 0 4px rgba(20,184,166,.08),0 0 40px rgba(20,184,166,.2);transition:all .7s cubic-bezier(.4,0,.2,1);opacity:0;pointer-events:none}
+.wt-spot.visible{opacity:1}
+.wt-cursor{position:fixed;z-index:9510;pointer-events:none;width:28px;height:28px;transition:left .8s cubic-bezier(.4,0,.2,1),top .8s cubic-bezier(.4,0,.2,1),opacity .3s ease}
+.wt-cursor-dot{width:10px;height:10px;border-radius:50%;background:var(--teal);box-shadow:0 0 16px var(--teal),0 0 40px rgba(20,184,166,.3);position:absolute;top:9px;left:9px}
+.wt-cursor-ring{width:28px;height:28px;border-radius:50%;border:2px solid rgba(20,184,166,.5);position:absolute;top:0;left:0;animation:wt-pulse 1.2s ease infinite}
+@keyframes wt-pulse{0%,100%{transform:scale(1);opacity:.6}50%{transform:scale(1.5);opacity:0}}
+.wt-cursor.clicking .wt-cursor-ring{animation:wt-click .3s ease forwards}
+@keyframes wt-click{0%{transform:scale(1);opacity:.8}50%{transform:scale(2.2);opacity:.2}100%{transform:scale(1);opacity:.6}}
+.wt-caption{position:fixed;z-index:9520;bottom:60px;left:50%;transform:translateX(-50%);text-align:center;max-width:680px;opacity:0;transition:opacity .4s ease,transform .4s ease;transform:translateX(-50%) translateY(12px);pointer-events:none}
+.wt-caption.visible{opacity:1;transform:translateX(-50%) translateY(0)}
+.wt-caption-label{font-family:var(--font-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);margin-bottom:6px}
+.wt-caption-title{font-family:var(--font-display);font-size:28px;font-weight:800;color:var(--text-bright);line-height:1.2;margin-bottom:8px;text-shadow:0 2px 20px rgba(0,0,0,.5)}
+.wt-caption-body{font-family:var(--font-body);font-size:14px;color:var(--text-secondary);line-height:1.6;max-width:560px;margin:0 auto}
+.wt-progress{position:fixed;z-index:9530;bottom:0;left:0;height:3px;background:linear-gradient(90deg,var(--teal),var(--blue));transition:width .3s linear;border-radius:0 2px 0 0}
+.wt-controls{position:fixed;z-index:9530;bottom:24px;right:24px;display:flex;gap:8px;opacity:0;pointer-events:none;transition:opacity .3s ease}
+.wt-active .wt-controls{opacity:1;pointer-events:all}
+.wt-btn{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:var(--text-secondary);font-family:var(--font-mono);font-size:11px;padding:6px 14px;border-radius:8px;cursor:pointer;transition:all .15s ease;backdrop-filter:blur(8px)}
+.wt-btn:hover{background:rgba(255,255,255,.14);color:var(--text-bright)}
+.wt-btn-skip{background:rgba(20,184,166,.15);border-color:rgba(20,184,166,.3);color:var(--teal)}
+.wt-counter{position:fixed;z-index:9530;top:24px;right:24px;font-family:var(--font-mono);font-size:11px;letter-spacing:.06em;color:var(--text-muted);opacity:0;transition:opacity .3s ease}
+.wt-active .wt-counter{opacity:1}
+.sb-walkthrough-btn{display:flex;align-items:center;gap:8px;width:100%;padding:7px 14px;background:none;border:none;color:var(--text-muted);font-family:var(--font-body);font-size:12px;cursor:pointer;transition:color .15s ease;text-align:left;white-space:nowrap}
+.sb-walkthrough-btn:hover{color:var(--teal)}
+.sb-walkthrough-btn span:first-child{font-size:15px;flex-shrink:0}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -2779,8 +2809,32 @@ dep-item strong{display:block;font-family:var(--font-mono);font-size:var(--text-
         <span class="sb-label">Ask StratOS</span>
       </button>
     </div>
+    <button class="sb-walkthrough-btn" onclick="startWalkthrough()">
+      <span>&#9655;</span>
+      <span class="sb-label">1-Min Walkthrough</span>
+    </button>
   </div>
 </aside>
+
+<!-- WALKTHROUGH FOG PANELS -->
+<div class="wt-fog" id="wt-fog-top"></div>
+<div class="wt-fog" id="wt-fog-bottom"></div>
+<div class="wt-fog" id="wt-fog-left"></div>
+<div class="wt-fog" id="wt-fog-right"></div>
+<div class="wt-fog wt-fog-full" id="wt-fog-full"></div>
+<div class="wt-spot" id="wt-spot"></div>
+<div class="wt-cursor" id="wt-cursor"><div class="wt-cursor-dot"></div><div class="wt-cursor-ring"></div></div>
+<div class="wt-caption" id="wt-caption">
+  <div class="wt-caption-label" id="wt-cap-label"></div>
+  <div class="wt-caption-title" id="wt-cap-title"></div>
+  <div class="wt-caption-body" id="wt-cap-body"></div>
+</div>
+<div class="wt-progress" id="wt-progress"></div>
+<div class="wt-counter" id="wt-counter"></div>
+<div class="wt-controls">
+  <button class="wt-btn" onclick="endWalkthrough()">ESC to Exit</button>
+  <button class="wt-btn wt-btn-skip" onclick="wtSkip()">Skip &rarr;</button>
+</div>
 
 <!-- PORTAL PANEL (My Decisions slide-out) -->
 <div class="portal-panel-backdrop" id="pp-backdrop" onclick="togglePortalPanel(false)"></div>
@@ -8192,6 +8246,210 @@ window.sendChat = async function(){
       togglePortalPanel(false);
     }
   });
+})();
+</script>
+
+<!-- WALKTHROUGH ENGINE -->
+<script>
+(function() {
+  var _wtActive = false, _wtIdx = 0, _wtTimer = null;
+
+  var WT_SCENES = [
+    { sec: null, el: null, dur: 3500,
+      label: 'Welcome', title: 'Your Decision Brief',
+      body: 'A complete strategic analysis generated by StratOS. Let\'s walk through what you\'re looking at in 60 seconds.' },
+    { sec: 'briefing', el: '.verdict-hero', dur: 5000,
+      label: 'Briefing', title: 'The Verdict',
+      body: 'The headline decision from a governed 3-round deliberation. This is the bottom line before any detail.' },
+    { sec: 'briefing', el: '.g5.dim-group', dur: 4000,
+      label: 'Briefing', title: 'Key Metrics',
+      body: 'Five headline numbers from the decision engine. Every value is sourced and cited.' },
+    { sec: 'command', el: '.cmd-opp-hero', dur: 4500,
+      label: 'Command Center', title: 'The Opportunity',
+      body: 'Market window, investment structure, and projected returns. The strategic case in one panel.' },
+    { sec: 'command', el: '.g2', dur: 4000,
+      label: 'Command Center', title: 'Decision Dashboard',
+      body: 'Room consensus with all role stances and the capital structure with phase-gated deployment.' },
+    { sec: 'risk', el: '.g7030', dur: 5000,
+      label: 'Risk & Intel', title: 'Risk Matrix',
+      body: '15 risks plotted by probability and impact. Critical risks in the ACT NOW zone are flagged for immediate attention.' },
+    { sec: 'risk', el: '.risk-row-list', dur: 3500,
+      label: 'Risk & Intel', title: 'Decision-Breaking Risks',
+      body: 'The risks with both high impact and high probability. Any one of these can invalidate the decision.' },
+    { sec: 'financials', el: '.fin-header', dur: 4000,
+      label: 'Financials', title: 'Financial Overview',
+      body: 'Investment, revenue targets, and unit economics. The numbers that must hold for this decision to work.' },
+    { sec: 'financials', el: '.fin-scenario-wrap', dur: 4000,
+      label: 'Financials', title: 'Scenario Analysis',
+      body: 'Three cases modeled across best, base, and worst scenarios. Phase 1 caps maximum exposure.' },
+    { sec: 'room', el: '.g7030', dur: 5000,
+      label: 'The Room', title: 'Deliberation Grid',
+      body: 'Watch ten roles converge across three rounds. From fragmented positions to conditional alignment.' },
+    { sec: 'room', el: '.room-role-table', dur: 4000,
+      label: 'The Room', title: 'Role Breakdown',
+      body: 'Every role\'s final confidence, stance evolution, and hard gate condition. Click any row for their direct quote.' },
+    { sec: 'management', el: '.mh-hero', dur: 4500,
+      label: 'Management', title: 'Execution Timeline',
+      body: 'Phase-gated deployment. Phase 1 deploys immediately, Phase 2 releases only after validated GO/NO-GO gate.' },
+    { sec: 'management', el: '.mh-priority-grid', dur: 3500,
+      label: 'Management', title: 'Priority Actions',
+      body: 'The three actions gating everything else. Running in parallel, not sequence.' },
+    { sec: 'board', el: '.verdict-hero', dur: 4500,
+      label: 'Board Report', title: 'Board Action',
+      body: 'The formal governance packet. Unanimous conditional approval with specific conditions and kill gates.' },
+    { sec: 'board', el: '.board-gov-grid', dur: 4000,
+      label: 'Board Report', title: 'Governance Framework',
+      body: 'Oversight requirements, reporting cadence, and escalation triggers. The Board maintains control through execution.' },
+    { sec: null, el: null, dur: 4000,
+      label: 'Ready', title: 'Your Turn',
+      body: 'Use the sidebar to jump to any section. Click the tour button for guided step-by-step detail. This is your decision brief.' }
+  ];
+
+  var totalDur = WT_SCENES.reduce(function(s, sc) { return s + sc.dur; }, 0);
+
+  function $(id) { return document.getElementById(id); }
+  function qs(sel, ctx) { return (ctx || document).querySelector(sel); }
+
+  function _setFog(id, css) { var e = $(id); if (e) e.style.cssText = css; }
+
+  function _positionFog(r) {
+    // Four panels around the spotlight cutout — content shows through the gap
+    var pad = 14;
+    var tx = r.left - pad, ty = r.top - pad, tw = r.width + pad * 2, th = r.height + pad * 2;
+    _setFog('wt-fog-top',    'top:0;left:0;right:0;height:' + ty + 'px');
+    _setFog('wt-fog-bottom', 'top:' + (ty + th) + 'px;left:0;right:0;bottom:0');
+    _setFog('wt-fog-left',   'top:' + ty + 'px;left:0;width:' + tx + 'px;height:' + th + 'px');
+    _setFog('wt-fog-right',  'top:' + ty + 'px;left:' + (tx + tw) + 'px;right:0;height:' + th + 'px');
+    // Hide full-screen fog
+    _setFog('wt-fog-full', 'display:none');
+  }
+
+  function _fullFog() {
+    // Full screen fog (intro/outro — no cutout)
+    _setFog('wt-fog-top', '');
+    _setFog('wt-fog-bottom', '');
+    _setFog('wt-fog-left', '');
+    _setFog('wt-fog-right', '');
+    _setFog('wt-fog-full', 'inset:0;display:block');
+  }
+
+  function _clearFog() {
+    ['wt-fog-top','wt-fog-bottom','wt-fog-left','wt-fog-right','wt-fog-full'].forEach(function(id) {
+      var e = $(id); if (e) e.style.cssText = '';
+    });
+  }
+
+  window.startWalkthrough = function() {
+    if (_wtActive) return;
+    _wtActive = true;
+    _wtIdx = 0;
+    document.body.classList.add('wt-active');
+    document.addEventListener('keydown', _wtKey);
+    _fullFog();
+    _playScene(0);
+  };
+
+  window.endWalkthrough = function() {
+    if (!_wtActive) return;
+    _wtActive = false;
+    clearTimeout(_wtTimer);
+    document.body.classList.remove('wt-active');
+    _clearFog();
+    $('wt-spot').classList.remove('visible');
+    $('wt-spot').style.cssText = '';
+    $('wt-caption').classList.remove('visible');
+    $('wt-cursor').style.opacity = '0';
+    $('wt-progress').style.width = '0';
+    document.removeEventListener('keydown', _wtKey);
+  };
+
+  window.wtSkip = function() {
+    if (!_wtActive) return;
+    clearTimeout(_wtTimer);
+    if (_wtIdx < WT_SCENES.length - 1) { _wtIdx++; _playScene(_wtIdx); }
+    else endWalkthrough();
+  };
+
+  function _wtKey(e) {
+    if (e.key === 'Escape') endWalkthrough();
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); wtSkip(); }
+  }
+
+  function _playScene(idx) {
+    if (!_wtActive || idx >= WT_SCENES.length) { endWalkthrough(); return; }
+    _wtIdx = idx;
+    var sc = WT_SCENES[idx];
+    var spot = $('wt-spot');
+    var cursor = $('wt-cursor');
+    var caption = $('wt-caption');
+
+    // Progress
+    var elapsed = 0;
+    for (var i = 0; i < idx; i++) elapsed += WT_SCENES[i].dur;
+    $('wt-progress').style.width = Math.round((elapsed / totalDur) * 100) + '%';
+    $('wt-counter').textContent = (idx + 1) + ' / ' + WT_SCENES.length;
+
+    // Switch section
+    if (sc.sec) {
+      var sbTab = qs('.sb-tab[data-sec="' + sc.sec + '"]');
+      if (sbTab && typeof switchTab === 'function') switchTab(sbTab);
+    }
+
+    caption.classList.remove('visible');
+
+    setTimeout(function() {
+      var secEl = sc.sec ? qs('#sec-' + sc.sec) : null;
+      var target = sc.el ? qs(sc.el, secEl) : null;
+
+      if (target && target.offsetHeight > 0) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+        setTimeout(function() {
+          var r = target.getBoundingClientRect();
+          var pad = 14;
+
+          // Position fog panels around the target
+          _positionFog(r);
+
+          // Position spotlight ring
+          spot.style.left = (r.left - pad) + 'px';
+          spot.style.top = (r.top - pad) + 'px';
+          spot.style.width = (r.width + pad * 2) + 'px';
+          spot.style.height = (r.height + pad * 2) + 'px';
+          spot.classList.add('visible');
+
+          // Cursor
+          cursor.style.left = (r.left + r.width * 0.35) + 'px';
+          cursor.style.top = (r.top + r.height * 0.25) + 'px';
+          cursor.style.opacity = '1';
+          setTimeout(function() {
+            cursor.classList.add('clicking');
+            setTimeout(function() { cursor.classList.remove('clicking'); }, 400);
+          }, 300);
+        }, 350);
+      } else {
+        // Intro/outro — full fog, no cutout
+        _fullFog();
+        spot.classList.remove('visible');
+        cursor.style.opacity = '0';
+      }
+
+      // Caption
+      $('wt-cap-label').textContent = sc.label;
+      $('wt-cap-title').textContent = sc.title;
+      $('wt-cap-body').textContent = sc.body;
+      setTimeout(function() { caption.classList.add('visible'); }, 200);
+
+      // Auto-advance
+      _wtTimer = setTimeout(function() {
+        if (idx < WT_SCENES.length - 1) _playScene(idx + 1);
+        else {
+          $('wt-progress').style.width = '100%';
+          setTimeout(function() { endWalkthrough(); }, 2000);
+        }
+      }, sc.dur);
+    }, 150);
+  }
 })();
 </script>
 </body></html>

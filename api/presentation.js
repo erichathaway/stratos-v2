@@ -5,8 +5,7 @@
 
 export const config = { maxDuration: 120 };
 
-// TODO: Move to environment variable
-const GAMMA_API_KEY = 'sk-gamma-P3kSiUkiWN5I8WUxcAEtO6fxjuK3p0VBVrByDQzJ8rA';
+const GAMMA_API_KEY = process.env.GAMMA_API_KEY || 'sk-gamma-P3kSiUkiWN5I8WUxcAEtO6fxjuK3p0VBVrByDQzJ8rA';
 const GAMMA_BASE = 'https://public-api.gamma.app';
 
 export default async function handler(req, res) {

@@ -2730,13 +2730,9 @@ dep-item strong{display:block;font-family:var(--font-mono);font-size:var(--text-
 .demo-popup-step{font-family:var(--font-mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);margin-bottom:8px}
 .demo-popup-title{font-family:var(--font-display);font-size:22px;font-weight:800;color:var(--text-bright);line-height:1.25;margin-bottom:10px}
 .demo-popup-body{font-family:var(--font-body);font-size:13px;color:var(--text-secondary);line-height:1.65}
-.demo-popup-nav{display:flex;justify-content:center;gap:8px;margin-top:16px}
-.demo-popup-btn{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:var(--text-secondary);font-family:var(--font-mono);font-size:11px;padding:7px 16px;border-radius:8px;cursor:pointer;transition:all .15s ease}
-.demo-popup-btn:hover{background:rgba(255,255,255,.12);color:var(--text-bright)}
-.demo-popup-btn.primary{background:rgba(20,184,166,.15);border-color:rgba(20,184,166,.3);color:var(--teal)}
-.demo-popup-progress{display:flex;gap:4px;justify-content:center;margin-top:12px}
-.demo-pip{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.12);transition:background .2s ease}
-.demo-pip.active{background:var(--teal)}
+.demo-progress{position:fixed;z-index:9560;bottom:0;left:0;height:3px;background:linear-gradient(90deg,var(--teal),var(--blue));border-radius:0 2px 0 0;width:0;transition:width .3s linear}
+.demo-esc-hint{position:fixed;z-index:9560;bottom:16px;right:16px;font-family:var(--font-mono);font-size:10px;letter-spacing:.06em;color:var(--text-muted);opacity:0;transition:opacity .4s ease}
+.demo-active .demo-esc-hint{opacity:1}
 .sb-demo-btn{display:flex;align-items:center;gap:8px;width:100%;padding:7px 14px;background:none;border:none;color:var(--text-muted);font-family:var(--font-body);font-size:12px;cursor:pointer;transition:color .15s ease;text-align:left;white-space:nowrap}
 .sb-demo-btn:hover{color:var(--teal)}
 .sb-demo-btn span:first-child{font-size:15px;flex-shrink:0}
@@ -2813,12 +2809,9 @@ dep-item strong{display:block;font-family:var(--font-mono);font-size:var(--text-
   <div class="demo-popup-step" id="demo-step"></div>
   <div class="demo-popup-title" id="demo-title"></div>
   <div class="demo-popup-body" id="demo-body"></div>
-  <div class="demo-popup-nav">
-    <button class="demo-popup-btn" onclick="endDemo()">Exit</button>
-    <button class="demo-popup-btn primary" onclick="demoNext()" id="demo-next-btn">Next</button>
-  </div>
-  <div class="demo-popup-progress" id="demo-pips"></div>
 </div>
+<div class="demo-progress" id="demo-progress"></div>
+<div class="demo-esc-hint">ESC to exit</div>
 
 <!-- PORTAL PANEL (My Decisions slide-out) -->
 <div class="portal-panel-backdrop" id="pp-backdrop" onclick="togglePortalPanel(false)"></div>
@@ -8226,187 +8219,179 @@ window.sendChat = async function(){
 })();
 </script>
 
-<!-- PRODUCT DEMO ENGINE -->
+<!-- PRODUCT DEMO ENGINE (fluid 30s auto-play) -->
 <script>
 (function() {
-  var _dActive = false, _dIdx = -1;
-
-  // Each step: action to perform, then show popup
-  // Actions: click tab, scroll to element, hover element, click element
-  var DEMO = [
-    { step: '1 of 10', title: 'Welcome to Your Decision Brief',
-      body: 'This dashboard is a complete strategic analysis. Seven tabs, each a different lens on the same decision. Let\'s walk through how to use it.',
-      actions: [] },
-
-    { step: '2 of 10', title: 'Navigate with the Sidebar',
-      body: 'Click any tab to jump between sections. The sidebar shows all seven analysis areas. You\'re currently on Briefing — the executive summary.',
-      actions: [{ type:'tab', sec:'briefing' }] },
-
-    { step: '3 of 10', title: 'Everything is Cited',
-      body: 'Hover any colored diamond to see its source. Every number, claim, and recommendation traces back to the deliberation record or financial model. Nothing is unattributed.',
-      actions: [{ type:'scroll', el:'#sec-briefing .verdict-hero' }, { type:'hover', el:'#sec-briefing .cite', delay:800 }] },
-
-    { step: '4 of 10', title: 'Insight Briefs Explain Each Section',
-      body: 'Every section has a three-column brief answering key questions. Below that: an audio overview button and downloadable report. Click the audio button to listen while you read.',
-      actions: [{ type:'scroll', el:'#sec-briefing .ib-wrap' }] },
-
-    { step: '5 of 10', title: 'Command Center — The Strategic Case',
-      body: 'This tab frames the opportunity: market window, investment structure, projected returns, and the room\'s verdict. The Command Brief distills the "why" behind the decision.',
-      actions: [{ type:'tab', sec:'command' }, { type:'scroll', el:'#sec-command .cmd-opp-hero' }] },
-
-    { step: '6 of 10', title: 'Risk Matrix — Interactive',
-      body: 'Risks are plotted by probability and impact. Hover any dot to expand the risk detail. Red zone = ACT NOW. The risk register below lists every identified risk with mitigations.',
-      actions: [{ type:'tab', sec:'risk' }, { type:'scroll', el:'#sec-risk .g7030' }] },
-
-    { step: '7 of 10', title: 'Financials — Scenario Analysis',
-      body: 'Unit economics, capital waterfall, and three-case scenario modeling. The numbers that gate whether Phase 2 funding releases. Hover the KPI values for source citations.',
-      actions: [{ type:'tab', sec:'financials' }, { type:'scroll', el:'#sec-financials .fin-header' }] },
-
-    { step: '8 of 10', title: 'The Room — Watch Consensus Form',
-      body: 'Ten expert roles deliberated across three rounds. The convergence grid shows how positions shifted from fragmented to aligned. Click any role row to read their direct quote.',
-      actions: [{ type:'tab', sec:'room' }, { type:'scroll', el:'#sec-room .g7030' }] },
-
-    { step: '9 of 10', title: 'Management Handoff — Action Plans',
-      body: 'Phase-gated execution timeline with department-level action plans. Click any role tab to expand their Phase 1 commitments, success metrics, and kill gate conditions.',
-      actions: [{ type:'tab', sec:'management' }, { type:'scroll', el:'#sec-management .mh-hero' }] },
-
-    { step: '10 of 10', title: 'Board Report — Governance Packet',
-      body: 'The formal Board recommendation. Conditions of approval, kill criteria, open questions, and the governance framework. Everything the Board needs to make an informed decision.',
-      actions: [{ type:'tab', sec:'board' }, { type:'scroll', el:'#sec-board .verdict-hero' }] }
-  ];
+  var _dActive = false, _dTimers = [], _dStart = 0, _dTotal = 33000, _dRaf = 0;
 
   function $(id) { return document.getElementById(id); }
+  function qs(sel) { return document.querySelector(sel); }
 
-  function _moveCursor(x, y, cb) {
+  // ── Cursor helpers ──
+  function moveTo(sel, offX, offY) {
+    var el = typeof sel === 'string' ? qs(sel) : sel;
+    if (!el || !el.offsetHeight) return;
+    var r = el.getBoundingClientRect();
     var cur = $('demo-cursor');
-    cur.style.transition = 'left .6s cubic-bezier(.4,0,.2,1), top .6s cubic-bezier(.4,0,.2,1)';
-    cur.style.left = x + 'px';
-    cur.style.top = y + 'px';
-    if (cb) setTimeout(cb, 650);
+    cur.style.transition = 'left .55s cubic-bezier(.4,0,.2,1), top .55s cubic-bezier(.4,0,.2,1)';
+    cur.style.left = (r.left + (offX || r.width * 0.4)) + 'px';
+    cur.style.top = (r.top + (offY || r.height * 0.35)) + 'px';
   }
 
-  function _clickAnim() {
+  function clickAnim() {
     var cur = $('demo-cursor');
     cur.classList.add('clicking');
     setTimeout(function() { cur.classList.remove('clicking'); }, 200);
   }
 
-  function _runActions(actions, cb) {
-    if (!actions || !actions.length) { cb(); return; }
-    var i = 0;
-    function next() {
-      if (i >= actions.length) { cb(); return; }
-      var a = actions[i++];
-      if (a.type === 'tab') {
-        var sbTab = document.querySelector('.sb-tab[data-sec="' + a.sec + '"]');
-        if (sbTab) {
-          var r = sbTab.getBoundingClientRect();
-          _moveCursor(r.left + r.width / 2, r.top + r.height / 2, function() {
-            _clickAnim();
-            setTimeout(function() {
-              if (typeof switchTab === 'function') switchTab(sbTab);
-              setTimeout(next, 300);
-            }, 200);
-          });
-        } else next();
-      } else if (a.type === 'scroll') {
-        var el = document.querySelector(a.el);
-        if (el) {
-          el.scrollIntoView({ behavior:'smooth', block:'center' });
-          setTimeout(function() {
-            var r = el.getBoundingClientRect();
-            _moveCursor(r.left + r.width * 0.3, r.top + 40, function() { next(); });
-          }, 400);
-        } else next();
-      } else if (a.type === 'hover') {
-        setTimeout(function() {
-          var el = document.querySelector(a.el);
-          if (el) {
-            var r = el.getBoundingClientRect();
-            _moveCursor(r.left + r.width / 2, r.top + r.height / 2, function() {
-              // Trigger hover state
-              el.dispatchEvent(new MouseEvent('mouseenter', {bubbles:true}));
-              setTimeout(function() {
-                el.dispatchEvent(new MouseEvent('mouseleave', {bubbles:true}));
-                next();
-              }, 1200);
-            });
-          } else next();
-        }, a.delay || 0);
-      } else if (a.type === 'click') {
-        var el = document.querySelector(a.el);
-        if (el) {
-          var r = el.getBoundingClientRect();
-          _moveCursor(r.left + r.width / 2, r.top + r.height / 2, function() {
-            _clickAnim();
-            setTimeout(function() { el.click(); setTimeout(next, 400); }, 200);
-          });
-        } else next();
-      } else next();
-    }
-    next();
+  function goTab(sec) {
+    var tab = qs('.sb-tab[data-sec="' + sec + '"]');
+    if (tab) { moveTo(tab); setTimeout(function() { clickAnim(); setTimeout(function() { if (typeof switchTab === 'function') switchTab(tab); }, 150); }, 550); }
   }
 
-  function _showPopup() {
-    var s = DEMO[_dIdx];
-    $('demo-step').textContent = s.step;
-    $('demo-title').textContent = s.title;
-    $('demo-body').textContent = s.body;
-    $('demo-next-btn').textContent = _dIdx >= DEMO.length - 1 ? 'Finish' : 'Next';
-    // Pips
-    var pips = $('demo-pips');
-    pips.innerHTML = '';
-    for (var i = 0; i < DEMO.length; i++) {
-      var p = document.createElement('div');
-      p.className = 'demo-pip' + (i === _dIdx ? ' active' : '');
-      pips.appendChild(p);
-    }
+  function scrollTo(sel) {
+    var el = qs(sel);
+    if (el) el.scrollIntoView({ behavior:'smooth', block:'center' });
+  }
+
+  function hoverEl(sel, dur) {
+    var el = qs(sel);
+    if (!el) return;
+    moveTo(el);
+    setTimeout(function() {
+      el.dispatchEvent(new MouseEvent('mouseenter', {bubbles:true}));
+      setTimeout(function() { el.dispatchEvent(new MouseEvent('mouseleave', {bubbles:true})); }, dur || 1200);
+    }, 600);
+  }
+
+  function clickEl(sel) {
+    var el = qs(sel);
+    if (!el) return;
+    moveTo(el);
+    setTimeout(function() { clickAnim(); setTimeout(function() { el.click(); }, 150); }, 550);
+  }
+
+  function showCard(label, title, body, dur) {
+    $('demo-step').textContent = label;
+    $('demo-title').textContent = title;
+    $('demo-body').textContent = body;
     $('demo-popup').classList.add('visible');
+    setTimeout(function() { $('demo-popup').classList.remove('visible'); }, dur || 2500);
   }
 
-  function _hidePopup(cb) {
-    $('demo-popup').classList.remove('visible');
-    setTimeout(cb || function(){}, 350);
+  function hideCard() { $('demo-popup').classList.remove('visible'); }
+
+  // ── Schedule a function at time offset ──
+  function at(ms, fn) { _dTimers.push(setTimeout(fn, ms)); }
+
+  // ── Progress bar updater ──
+  function _updateProgress() {
+    if (!_dActive) return;
+    var pct = Math.min(100, ((Date.now() - _dStart) / _dTotal) * 100);
+    $('demo-progress').style.width = pct + '%';
+    _dRaf = requestAnimationFrame(_updateProgress);
   }
 
+  // ── Timeline ──
+  function _buildTimeline() {
+    // 0s — scroll to top, intro card
+    at(0, function() {
+      window.scrollTo({ top:0, behavior:'smooth' });
+      goTab('briefing');
+    });
+    at(400, function() { showCard('OVERVIEW', 'Your Decision Brief', 'Seven tabs. Every insight cited. Full strategic analysis in one dashboard.', 2200); });
+
+    // 3s — Briefing: click "THE UPSIDE" tab in verdict header
+    at(3000, function() { scrollTo('#sec-briefing .verdict-hero'); });
+    at(3600, function() {
+      var tabs = document.querySelectorAll('#sec-briefing .brief-intel-tab');
+      var upside = tabs[1]; // THE UPSIDE
+      if (upside) { moveTo(upside); setTimeout(function() { clickAnim(); setTimeout(function() { upside.click(); }, 150); }, 550); }
+    });
+
+    // 5s — Hover a citation diamond
+    at(5000, function() { hoverEl('#sec-briefing .cite', 1400); });
+
+    // 7s — Command Center
+    at(7200, function() { goTab('command'); });
+    at(8200, function() { scrollTo('#sec-command .ib-wrap'); });
+    at(8800, function() { showCard('INTELLIGENCE', 'Every Section Has Audio + Brief', 'Three-column insight brief with audio narration and downloadable reports.', 2200); });
+
+    // 11s — Click on-page audio button
+    at(11000, function() {
+      var aud = qs('#sec-command .ib-audio');
+      if (aud) { moveTo(aud); setTimeout(function() { clickAnim(); }, 550); }
+    });
+
+    // 12.5s — Risk
+    at(12500, function() { goTab('risk'); });
+    at(13500, function() { scrollTo('#sec-risk .g7030'); });
+    at(14200, function() { hoverEl('#sec-risk .risk-dot-abs', 1200); });
+
+    // 16s — Financials
+    at(16000, function() { goTab('financials'); });
+    at(17000, function() { scrollTo('#sec-financials .fin-kpi-row'); });
+    at(17600, function() { hoverEl('#sec-financials .num-cite', 1400); });
+
+    // 19.5s — Room
+    at(19500, function() { goTab('room'); });
+    at(20500, function() { scrollTo('#sec-room .room-role-table'); });
+    at(21200, function() { clickEl('#sec-room .room-role-row'); });
+
+    // 23s — Board
+    at(23000, function() { goTab('board'); });
+    at(24000, function() { scrollTo('#sec-board .verdict-hero'); });
+    at(24500, function() { showCard('FEATURES', 'Audio, Reports, Chat, Tour', 'Everything in the sidebar. One click to listen, download, ask questions, or take the guided tour.', 2500); });
+
+    // 27s — Highlight sidebar features
+    at(27000, function() { moveTo('.sb-audio-link'); });
+    at(27800, function() { moveTo('.sb-deck-link'); });
+    at(28600, function() {
+      var tourBtn = qs('.s-header .tour-trigger') || qs('.s-header-btn');
+      if (tourBtn) moveTo(tourBtn);
+    });
+
+    // 30s — Final card
+    at(30000, function() { showCard('READY', 'Your Turn', 'Click any tab to explore. Use the guided tour for step-by-step detail.', 2500); });
+
+    // 33s — Auto-close
+    at(33000, function() { endDemo(); });
+  }
+
+  // ── Public API ──
   window.startDemo = function() {
     if (_dActive) return;
     _dActive = true;
-    _dIdx = -1;
+    _dStart = Date.now();
     document.body.classList.add('demo-active');
-    // Position cursor off-screen initially
     var cur = $('demo-cursor');
+    cur.style.transition = 'none';
     cur.style.left = '-40px';
     cur.style.top = '50%';
-    cur.style.transition = 'none';
+    $('demo-progress').style.width = '0';
     document.addEventListener('keydown', _dKey);
-    demoNext();
+    _updateProgress();
+    _buildTimeline();
   };
 
   window.endDemo = function() {
     if (!_dActive) return;
     _dActive = false;
-    _hidePopup();
+    _dTimers.forEach(clearTimeout);
+    _dTimers = [];
+    cancelAnimationFrame(_dRaf);
+    hideCard();
     document.body.classList.remove('demo-active');
     $('demo-cursor').style.opacity = '0';
+    $('demo-progress').style.width = '0';
     document.removeEventListener('keydown', _dKey);
-  };
-
-  window.demoNext = function() {
-    if (!_dActive) return;
-    _dIdx++;
-    if (_dIdx >= DEMO.length) { endDemo(); return; }
-    _hidePopup(function() {
-      _runActions(DEMO[_dIdx].actions, function() {
-        _showPopup();
-      });
+    // Clean up any lingering hover states
+    document.querySelectorAll('.cite, .num-cite, .risk-dot-abs').forEach(function(el) {
+      el.dispatchEvent(new MouseEvent('mouseleave', {bubbles:true}));
     });
   };
 
-  function _dKey(e) {
-    if (e.key === 'Escape') endDemo();
-    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); demoNext(); }
-  }
+  function _dKey(e) { if (e.key === 'Escape') endDemo(); }
 })();
 </script>
 </body></html>

@@ -8359,18 +8359,22 @@ window.sendChat = async function(){
     });
   }
 
-  // FIX 3: always cancel previous card timer before showing new one
   function showCard(label, title, body, dur) {
     hideCard();
     $('demo-step').textContent = label;
     $('demo-title').textContent = title;
     $('demo-body').textContent = body;
     var popup = $('demo-popup');
-    // Position: prefer right of cursor, then left, then below
-    var px = _curX + 32;
-    var py = _curY - 10;
+    // Read cursor's ACTUAL rendered position (not stale _curX/_curY)
+    var cur = $('demo-cursor');
+    var cx = parseFloat(cur.style.left) || _curX;
+    var cy = parseFloat(cur.style.top) || _curY;
+    // Position right of cursor
+    var px = cx + 32;
+    var py = cy - 10;
+    // Boundary checks
     var minLeft = SIDEBAR_W + 12;
-    if (px + 275 > window.innerWidth - 12) px = _curX - 280;
+    if (px + 275 > window.innerWidth - 12) px = cx - 280;
     if (px < minLeft) px = minLeft;
     if (py < 12) py = 12;
     if (py + 120 > window.innerHeight - 12) py = window.innerHeight - 130;

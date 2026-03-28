@@ -8216,376 +8216,332 @@ window.sendChat = async function(){
 })();
 </script>
 
-<!-- PRODUCT DEMO ENGINE v6 -->
+<!-- PRODUCT DEMO ENGINE v11 — sequential queue, no fixed timers -->
 <script>
 (function() {
-  var _dOn = false, _dT = [], _dStart = 0, _dTotal = 52000, _dRaf = 0;
-  var _curX = -40, _curY = 300;
-  var _hoverInterval = null;
-  var _cardTimer = null; // FIX 3: single timer prevents overlapping popups
-  var SIDEBAR_W = 240;
+  var _dOn = false, _dQ = [], _dQi = 0, _dStart = 0, _dRaf = 0;
+  var _hoverInt = null, _cardTimer = null;
+  var SW = 240; // sidebar width
 
   function $(id) { return document.getElementById(id); }
-  function qs(sel) { return document.querySelector(sel); }
-  function at(ms, fn) { if (_dOn) _dT.push(setTimeout(fn, ms)); }
+  function qs(s) { return document.querySelector(s); }
 
-  function _resetScroll() { // FIX 1+5: reset BOTH page and sidebar
-    window.scrollTo(0, 0);
-    document.documentElement.scrollTop = 0;
-    document.body.scrollTop = 0;
-    var sb = $('s-sidebar');
-    if (sb) sb.scrollTop = 0;
+  // ── Queue: each step calls next() when done. Try/catch prevents stalls. ──
+  function next() {
+    _dQi++;
+    if (_dOn && _dQi < _dQ.length) {
+      try { _dQ[_dQi](); }
+      catch(e) { console.warn('[Demo] step ' + _dQi + ' error:', e.message); next(); }
+    }
   }
+  function wait(ms) { _dQ.push(function() { setTimeout(next, ms); }); }
 
   // ── Position cursor + ring on element ──
-  function _posAt(el, offX, offY) {
+  function posAt(el, ox, oy) {
     if (!el) return;
     var r = el.getBoundingClientRect();
-    _curX = r.left + (offX != null ? offX : r.width * 0.4);
-    _curY = r.top + (offY != null ? offY : r.height * 0.4);
-    $('demo-cursor').style.left = _curX + 'px';
-    $('demo-cursor').style.top = _curY + 'px';
-    var ring = $('demo-ring');
-    ring.style.left = (_curX - 24) + 'px';
-    ring.style.top = (_curY - 24) + 'px';
-    ring.classList.add('visible');
+    var x = r.left + (ox != null ? ox : r.width * 0.4);
+    var y = r.top + (oy != null ? oy : r.height * 0.4);
+    $('demo-cursor').style.left = x + 'px';
+    $('demo-cursor').style.top = y + 'px';
+    $('demo-ring').style.left = (x - 24) + 'px';
+    $('demo-ring').style.top = (y - 24) + 'px';
+    $('demo-ring').classList.add('visible');
   }
 
   function hideRing() { $('demo-ring').classList.remove('visible'); }
-  function clickAnim() {
-    $('demo-cursor').classList.add('clicking');
-    setTimeout(function() { $('demo-cursor').classList.remove('clicking'); }, 200);
-  }
+  function clickAnim() { $('demo-cursor').classList.add('clicking'); setTimeout(function() { $('demo-cursor').classList.remove('clicking'); }, 200); }
 
-  function scrollAndPoint(sel, cb, offX, offY) {
-    var el = typeof sel === 'string' ? qs(sel) : sel;
-    if (!el) { if (cb) cb(el); return; }
-    // Sidebar elements: position immediately if visible, skip if off-screen
-    if (el.closest('.s-sidebar')) {
-      var r = el.getBoundingClientRect();
-      if (r.left >= 0 && r.right <= window.innerWidth) _posAt(el, offX, offY);
-      if (cb) cb(el);
-      return;
-    }
-    // Content: scroll into view, verify element is visible, then position
-    el.scrollIntoView({ behavior:'smooth', block:'center' });
-    setTimeout(function() {
-      // Verify element is actually in viewport now
-      var r = el.getBoundingClientRect();
-      if (r.top < 0 || r.top > window.innerHeight) {
-        // Still not in viewport — force instant scroll and retry
-        el.scrollIntoView({ block:'center' });
-        setTimeout(function() { _posAt(el, offX, offY); if (cb) cb(el); }, 100);
-      } else {
-        _posAt(el, offX, offY);
-        if (cb) cb(el);
-      }
-    }, 800);
-  }
-
-  // ── Synthetic mouse events with real coordinates ──
-  function fakeEvent(el, type) {
+  function fakeEvt(el, type) {
     if (!el) return;
     var r = el.getBoundingClientRect();
-    var cx = r.left + r.width / 2, cy = r.top + r.height / 2;
-    el.dispatchEvent(new MouseEvent(type, { bubbles:true, clientX:cx, clientY:cy }));
-    if (type === 'mouseenter') {
-      document.dispatchEvent(new MouseEvent('mousemove', { bubbles:true, clientX:cx, clientY:cy }));
-    }
+    el.dispatchEvent(new MouseEvent(type, { bubbles:true, clientX:r.left+r.width/2, clientY:r.top+r.height/2 }));
+    if (type === 'mouseenter') document.dispatchEvent(new MouseEvent('mousemove', { bubbles:true, clientX:r.left+r.width/2, clientY:r.top+r.height/2 }));
   }
 
-  // ── Actions ──
-  function goTab(sec, cb) {
-    var tab = qs('.sb-tab[data-sec="' + sec + '"]');
-    if (!tab) return;
-    var r = tab.getBoundingClientRect();
-    var tabVisible = r.left >= 0 && r.right <= window.innerWidth && r.top >= 0;
-    if (tabVisible) {
-      _posAt(tab);
-      setTimeout(function() {
-        clickAnim();
+  // ── Scroll to element, wait until it's in viewport, position cursor, then next() ──
+  function qScrollTo(sel, ox, oy) {
+    _dQ.push(function() {
+      var el = typeof sel === 'string' ? qs(sel) : sel;
+      if (!el || !el.offsetHeight) { next(); return; }
+      if (el.closest && el.closest('.s-sidebar')) {
+        var r = el.getBoundingClientRect();
+        if (r.left >= 0) posAt(el, ox, oy);
+        next(); return;
+      }
+      // INSTANT scroll — no race conditions. Cursor CSS transition = visual smoothness.
+      el.scrollIntoView({ block:'center' });
+      setTimeout(function() { posAt(el, ox, oy); next(); }, 50);
+    });
+  }
+
+  // ── Switch tab via sidebar click, wait for scroll settle ──
+  function qTab(sec) {
+    _dQ.push(function() {
+      var tab = qs('.sb-tab[data-sec="' + sec + '"]');
+      if (!tab) { next(); return; }
+      var r = tab.getBoundingClientRect();
+      if (r.left >= 0 && r.right <= window.innerWidth) {
+        posAt(tab);
         setTimeout(function() {
-          switchTab(tab);
-          // switchTab scrolls to top — wait for that to finish before callback
-          if (cb) setTimeout(cb, 800);
-        }, 180);
-      }, 700);
-    } else {
-      hideRing();
-      switchTab(tab);
-      // switchTab scrolls to top — wait for it
-      if (cb) setTimeout(cb, 800);
-    }
-  }
-
-  function hoverEl(sel, dur, cb) {
-    var el = typeof sel === 'string' ? qs(sel) : sel;
-    if (!el) { if (cb) cb(); return; }
-    scrollAndPoint(sel, function(el2) {
-      setTimeout(function() {
-        fakeEvent(el2, 'mouseenter');
-        if (_hoverInterval) clearInterval(_hoverInterval);
-        _hoverInterval = setInterval(function() {
-          var r2 = el2.getBoundingClientRect();
-          document.dispatchEvent(new MouseEvent('mousemove', {
-            bubbles:true, clientX:r2.left+r2.width/2, clientY:r2.top+r2.height/2
-          }));
-        }, 80);
-        setTimeout(function() {
-          clearInterval(_hoverInterval);
-          _hoverInterval = null;
-          fakeEvent(el2, 'mouseleave');
-          if (cb) cb();
-        }, dur || 1500);
-      }, 350);
+          clickAnim();
+          setTimeout(function() {
+            switchTab(tab);
+            // Force instant scroll to top (switchTab uses smooth which races)
+            window.scrollTo(0, 0);
+            setTimeout(next, 300);
+          }, 200);
+        }, 700);
+      } else {
+        switchTab(tab);
+        window.scrollTo(0, 0);
+        setTimeout(next, 300);
+      }
     });
   }
 
-  function clickEl(sel, cb) {
-    var el = typeof sel === 'string' ? qs(sel) : sel;
-    if (!el) { if (cb) cb(); return; }
-    scrollAndPoint(sel, function(el2) {
+  function qClick(sel) {
+    _dQ.push(function() {
+      var el = typeof sel === 'string' ? qs(sel) : sel;
+      if (!el || !el.offsetHeight) { next(); return; }
+      if (el.closest && !el.closest('.s-sidebar')) el.scrollIntoView({ block:'center' });
       setTimeout(function() {
-        clickAnim();
-        setTimeout(function() { el2.click(); if (cb) cb(); }, 180);
-      }, 350);
+        posAt(el);
+        setTimeout(function() { clickAnim(); setTimeout(function() { el.click(); next(); }, 200); }, 500);
+      }, 50);
     });
   }
 
-  // FIX 4: visual-only click — cursor moves, click animation, but NO actual click()
-  function fakeClickEl(sel, cb) {
-    var el = typeof sel === 'string' ? qs(sel) : sel;
-    if (!el) { if (cb) cb(); return; }
-    scrollAndPoint(sel, function() {
+  function qFakeClick(sel) {
+    _dQ.push(function() {
+      var el = typeof sel === 'string' ? qs(sel) : sel;
+      if (!el || !el.offsetHeight) { next(); return; }
+      if (el.closest && !el.closest('.s-sidebar')) el.scrollIntoView({ block:'center' });
       setTimeout(function() {
-        clickAnim();
-        if (cb) setTimeout(cb, 200);
-      }, 350);
+        posAt(el);
+        setTimeout(function() { clickAnim(); setTimeout(next, 200); }, 500);
+      }, 50);
     });
   }
 
-  function showCard(label, title, body, dur) {
-    hideCard();
-    $('demo-step').textContent = label;
-    $('demo-title').textContent = title;
-    $('demo-body').textContent = body;
-    var popup = $('demo-popup');
-    // Read cursor's ACTUAL rendered position (not stale _curX/_curY)
-    var cur = $('demo-cursor');
-    var cx = parseFloat(cur.style.left) || _curX;
-    var cy = parseFloat(cur.style.top) || _curY;
-    // Position right of cursor
-    var px = cx + 32;
-    var py = cy - 10;
-    // Boundary checks
-    var minLeft = SIDEBAR_W + 12;
-    if (px + 275 > window.innerWidth - 12) px = cx - 280;
-    if (px < minLeft) px = minLeft;
-    if (py < 12) py = 12;
-    if (py + 120 > window.innerHeight - 12) py = window.innerHeight - 130;
-    popup.style.left = px + 'px';
-    popup.style.top = py + 'px';
-    popup.style.transform = 'none';
-    popup.classList.add('visible');
-    _cardTimer = setTimeout(function() { popup.classList.remove('visible'); _cardTimer = null; }, dur || 2500);
+  // ── Hover element with real mouseenter/mousemove/mouseleave ──
+  function qHover(sel, dur) {
+    _dQ.push(function() {
+      var el = typeof sel === 'string' ? qs(sel) : sel;
+      if (!el) { next(); return; }
+      // Already positioned from a previous qScrollTo — just hover
+      fakeEvt(el, 'mouseenter');
+      if (_hoverInt) clearInterval(_hoverInt);
+      _hoverInt = setInterval(function() {
+        var r = el.getBoundingClientRect();
+        document.dispatchEvent(new MouseEvent('mousemove', { bubbles:true, clientX:r.left+r.width/2, clientY:r.top+r.height/2 }));
+      }, 80);
+      setTimeout(function() {
+        clearInterval(_hoverInt); _hoverInt = null;
+        fakeEvt(el, 'mouseleave');
+        next();
+      }, dur || 1500);
+    });
   }
 
-  function showCenterCard(label, title, body, dur) {
-    hideCard();
-    setTimeout(function() {
+  // ── Show card at current cursor position ──
+  function qCard(label, title, body, dur) {
+    _dQ.push(function() {
+      hideCard();
       $('demo-step').textContent = label;
       $('demo-title').textContent = title;
       $('demo-body').textContent = body;
       var popup = $('demo-popup');
-      popup.style.left = (SIDEBAR_W + (window.innerWidth - SIDEBAR_W) / 2) + 'px';
+      var cx = parseFloat($('demo-cursor').style.left) || 0;
+      var cy = parseFloat($('demo-cursor').style.top) || 0;
+      var px = cx + 32, py = cy - 10;
+      if (px + 275 > window.innerWidth - 12) px = cx - 280;
+      if (px < SW + 12) px = SW + 12;
+      if (py < 12) py = 12;
+      if (py + 120 > window.innerHeight - 12) py = window.innerHeight - 130;
+      popup.style.left = px + 'px';
+      popup.style.top = py + 'px';
+      popup.style.transform = 'none';
+      popup.classList.add('visible');
+      _cardTimer = setTimeout(function() {
+        popup.classList.remove('visible'); _cardTimer = null;
+        next();
+      }, dur || 2000);
+    });
+  }
+
+  // ── Center card (intro/outro) ──
+  function qCenter(label, title, body, dur) {
+    _dQ.push(function() {
+      hideCard();
+      $('demo-step').textContent = label;
+      $('demo-title').textContent = title;
+      $('demo-body').textContent = body;
+      var popup = $('demo-popup');
+      popup.style.left = (SW + (window.innerWidth - SW) / 2) + 'px';
       popup.style.top = '38%';
       popup.style.transform = 'translate(-50%,-50%)';
       popup.classList.add('visible');
-      _cardTimer = setTimeout(function() { popup.classList.remove('visible'); _cardTimer = null; }, dur || 3000);
-    }, 50);
+      _cardTimer = setTimeout(function() {
+        popup.classList.remove('visible'); _cardTimer = null;
+        next();
+      }, dur || 2500);
+    });
   }
 
   function hideCard() {
-    if (_cardTimer !== null) { clearTimeout(_cardTimer); _cardTimer = null; }
+    if (_cardTimer) { clearTimeout(_cardTimer); _cardTimer = null; }
     $('demo-popup').classList.remove('visible');
   }
 
   function _progress() {
     if (!_dOn) return;
-    $('demo-progress').style.width = Math.min(100, ((Date.now() - _dStart) / _dTotal) * 100) + '%';
+    var total = _dQ.length;
+    $('demo-progress').style.width = Math.min(100, (_dQi / total) * 100) + '%';
     _dRaf = requestAnimationFrame(_progress);
   }
 
   // ══════════════════════════════════════════════
-  //  TIMELINE (~42s) — cards chained to cursor arrival
+  //  BUILD SEQUENCE — every step waits for previous
   // ══════════════════════════════════════════════
-  function _run() {
+  function _build() {
+    _dQ = []; _dQi = 0;
 
-    // ── 0s: Reset everything ──
-    at(0, function() {
-      _resetScroll();
+    // Reset
+    _dQ.push(function() {
+      console.log('[Demo] queue started, ' + _dQ.length + ' steps');
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      var sb = $('s-sidebar'); if (sb) sb.scrollTop = 0;
       var tab = qs('.sb-tab[data-sec="briefing"]');
-      if (tab && typeof switchTab === 'function') switchTab(tab);
+      if (tab) switchTab(tab);
+      window.scrollTo(0, 0); // force after switchTab
+      setTimeout(next, 500);
     });
 
-    // ── 1s: Intro card (centered, no cursor yet) ──
-    at(1000, function() {
-      showCenterCard('OVERVIEW', 'Your Decision Brief', 'Seven tabs. Every insight cited.', 2200);
-    });
+    // Intro
+    qCenter('OVERVIEW', 'Your Decision Brief', 'Seven tabs. Every insight cited.', 2200);
 
-    // ── 3.5s: Cursor enters → verdict hero (top of page, always visible) ──
-    at(3500, function() {
-      var hero = qs('#sec-briefing .verdict-hero');
-      if (hero) _posAt(hero, 140, 50);
-    });
+    // Cursor → verdict hero
+    qScrollTo('#sec-briefing .verdict-hero', 140, 50);
+    wait(800);
 
-    // ── 5s: Click "THE UPSIDE" brief tab ──
-    at(5000, function() {
-      var tabs = document.querySelectorAll('#sec-briefing .brief-intel-tab');
-      if (tabs.length > 1) clickEl(tabs[1]);
-    });
+    // Click "THE UPSIDE" tab
+    qClick('#sec-briefing .brief-intel-tab:nth-child(2)');
+    wait(600);
 
-    // ── 7.5s: Card FIRST, then hover citation after card fades ──
-    at(7500, function() {
-      showCard('CITATIONS', 'Sourced', 'Every claim traces to the record.', 1600);
-    });
-    at(9500, function() {
-      hoverEl('#sec-briefing .cite', 1500);
-    });
+    // Show card about citations — the card IS the explanation, no hover needed
+    qCard('CITATIONS', 'Sourced', 'Every claim traces to the record.', 1800);
+    wait(300);
 
-    // ── 12s: Command Center (goTab waits 800ms for switchTab scroll) ──
-    at(12000, function() { goTab('command'); });
-    // 12s + 700(cursor) + 180(click) + 800(scroll settle) = ~14.7s ready
-    at(15000, function() {
-      scrollAndPoint('#sec-command .ib-wrap', function() {
-        showCard('INTELLIGENCE', 'Audio + Brief', 'Three-column brief with narration.', 1800);
-      });
-    });
+    // Command Center
+    qTab('command');
+    qScrollTo('#sec-command .ib-wrap');
+    qCard('INTELLIGENCE', 'Audio + Brief', 'Three-column brief with narration.', 2000);
 
-    // ── 18s: Audio button — visual only, card after cursor arrives ──
-    at(18000, function() {
-      fakeClickEl('#sec-command .ib-audio', function() {
-        showCard('AUDIO', 'Listen While You Read', 'Each section has audio.', 1500);
-      });
-    });
+    // Audio button (visual only)
+    qFakeClick('#sec-command .ib-audio');
+    qCard('AUDIO', 'Listen While You Read', 'Each section has audio.', 1500);
 
-    // ── 21.5s: Risk ──
-    at(21500, function() { goTab('risk'); });
-    at(24000, function() {
-      scrollAndPoint('#sec-risk .g7030', function() {
-        showCard('RISK', 'Interactive', 'Hover any dot to expand.', 1500);
-      });
-    });
-    at(26000, function() {
-      hoverEl('#sec-risk .risk-dot-abs', 1500);
-    });
+    // Risk
+    qTab('risk');
+    qScrollTo('#sec-risk .g7030');
+    qCard('RISK', 'Interactive', 'Hover any dot to expand.', 1500);
+    qScrollTo('#sec-risk .risk-dot-abs');
+    qHover('#sec-risk .risk-dot-abs', 1500);
+    wait(300);
 
-    // ── 28.5s: Financials ──
-    at(28500, function() { goTab('financials'); });
-    at(31000, function() {
-      scrollAndPoint('#sec-financials .fin-kpi-row', function() {
-        showCard('FINANCIALS', 'Cited', 'Hover any value for source.', 1500);
-      });
-    });
-    at(33000, function() {
-      hoverEl('#sec-financials .num-cite', 1500);
-    });
+    // Financials
+    qTab('financials');
+    qScrollTo('#sec-financials .fin-kpi-row');
+    qCard('FINANCIALS', 'Cited', 'Hover any value for source.', 1500);
+    qScrollTo('#sec-financials .num-cite');
+    qHover('#sec-financials .num-cite', 1500);
+    wait(300);
 
-    // ── 35.5s: Room ──
-    at(35500, function() { goTab('room'); });
-    at(38000, function() {
-      clickEl('#sec-room .room-role-row', function() {
+    // Room
+    qTab('room');
+    qScrollTo('#sec-room .room-role-table');
+    qClick('#sec-room .room-role-row');
+    wait(300);
+    qCard('THE ROOM', 'Expand Roles', 'Quotes and stance evolution.', 1500);
+
+    // Board
+    qTab('board');
+    qScrollTo('#sec-board .verdict-hero', 200, 50);
+    wait(800);
+
+    // Sidebar features
+    _dQ.push(function() {
+      var al = qs('.sb-audio-link');
+      if (al && al.getBoundingClientRect().left >= 0) {
+        posAt(al);
+        setTimeout(function() { posAt(qs('.sb-deck-link')); }, 700);
         setTimeout(function() {
-          showCard('THE ROOM', 'Expand Roles', 'Quotes and stance evolution.', 1500);
-        }, 300);
-      });
+          posAt(qs('.sb-chat-link'));
+          next();
+        }, 1400);
+      } else { next(); }
     });
+    qCard('SIDEBAR', 'Audio, Reports, Chat', 'All one click away.', 1500);
 
-    // ── 41s: Board ──
-    at(41000, function() { goTab('board'); });
-
-    // ── 43.5s: Sidebar features (only if visible) ──
-    at(43500, function() {
-      var audioLink = qs('.sb-audio-link');
-      if (audioLink && audioLink.getBoundingClientRect().left >= 0) {
-        _posAt(audioLink);
-        setTimeout(function() { _posAt(qs('.sb-deck-link')); }, 700);
-        setTimeout(function() {
-          _posAt(qs('.sb-chat-link'));
-          showCard('SIDEBAR', 'Audio, Reports, Chat', 'All one click away.', 1500);
-        }, 1500);
-        // Open chat briefly
-        setTimeout(function() {
-          clickAnim();
-          if (typeof toggleChat === 'function') toggleChat();
-        }, 3200);
-        // Close chat + final
-        setTimeout(function() {
-          var p = $('strat-chat-panel');
-          if (p && p.classList.contains('open') && typeof toggleChat === 'function') toggleChat();
-          hideRing();
-          showCenterCard('READY', 'Your Turn', 'Click any tab to explore.', 2000);
-        }, 4700);
-      } else {
-        // Mobile: skip sidebar tour, show chat, then final
-        showCard('FEATURES', 'Chat, Audio, Reports', 'All in the sidebar menu.', 1800);
-        setTimeout(function() {
-          hideRing();
-          showCenterCard('READY', 'Your Turn', 'Click any tab to explore.', 2000);
-        }, 2500);
-      }
+    // Open chat briefly
+    _dQ.push(function() {
+      clickAnim();
+      if (typeof toggleChat === 'function') toggleChat();
+      setTimeout(function() {
+        var p = $('strat-chat-panel');
+        if (p && p.classList.contains('open') && typeof toggleChat === 'function') toggleChat();
+        next();
+      }, 1500);
     });
+    wait(300);
 
-    at(52000, function() { endDemo(); });
+    // Final
+    _dQ.push(function() { hideRing(); next(); });
+    qCenter('READY', 'Your Turn', 'Click any tab to explore.', 2200);
+
+    // End
+    _dQ.push(function() { endDemo(); });
   }
 
-  // ══════════════════════════════════════════════
-  //  PUBLIC API
   // ══════════════════════════════════════════════
   window.startDemo = function() {
     if (_dOn) return;
     _dOn = true;
     _dStart = Date.now();
-    _resetScroll(); // FIX 1: reset page AND sidebar
+    window.scrollTo(0, 0);
+    var sb = $('s-sidebar'); if (sb) sb.scrollTop = 0;
     document.body.classList.add('demo-active');
     var cur = $('demo-cursor');
     cur.style.transition = 'none';
-    cur.style.left = '-60px';
-    cur.style.top = '-60px';
-    _curX = -60; _curY = -60;
+    cur.style.left = '-60px'; cur.style.top = '-60px';
     var ring = $('demo-ring');
     ring.style.transition = 'none';
-    ring.style.left = '-84px';
-    ring.style.top = '-84px';
+    ring.style.left = '-84px'; ring.style.top = '-84px';
     ring.classList.remove('visible');
-    requestAnimationFrame(function() {
-      requestAnimationFrame(function() {
-        cur.style.transition = '';
-        ring.style.transition = '';
-      });
-    });
+    requestAnimationFrame(function() { requestAnimationFrame(function() {
+      cur.style.transition = ''; ring.style.transition = '';
+    }); });
     $('demo-progress').style.width = '0';
     document.addEventListener('keydown', _dKey);
+    _build();
     _progress();
-    _run();
+    _dQ[0]();
   };
 
   window.endDemo = function() {
     if (!_dOn) return;
     _dOn = false;
-    _dT.forEach(clearTimeout);
-    _dT = [];
-    if (_hoverInterval) { clearInterval(_hoverInterval); _hoverInterval = null; }
+    _dQ = []; _dQi = 999;
+    if (_hoverInt) { clearInterval(_hoverInt); _hoverInt = null; }
     cancelAnimationFrame(_dRaf);
-    hideCard();
-    hideRing();
+    hideCard(); hideRing();
     document.body.classList.remove('demo-active');
     $('demo-cursor').style.opacity = '0';
     $('demo-progress').style.width = '0';
     document.removeEventListener('keydown', _dKey);
-    document.querySelectorAll('.cite, .num-cite, .risk-dot-abs').forEach(function(el) {
-      fakeEvent(el, 'mouseleave');
-    });
+    document.querySelectorAll('.cite, .num-cite, .risk-dot-abs').forEach(function(el) { fakeEvt(el, 'mouseleave'); });
   };
 
   function _dKey(e) { if (e.key === 'Escape') endDemo(); }

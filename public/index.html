@@ -5338,10 +5338,12 @@ function applyLiveData(raw) {
     } else if (lbl === 'Avg Confidence') {
       if (valEl) valEl.textContent = conf;
       syncDataset({ val: conf + '%', source: 'dashboard.decision_confidence', note: 'Range ' + confMin + '\u2013' + confMax + '%. Groupthink: ' + (gt.severity || 'HIGH') + '.' });
-    } else if (lbl === 'Total Capital') {
-      const capVal = fm.total_investment || fm.capital_required || (bgp.financial_overview && bgp.financial_overview.total_budget) || '—';
-      if (valEl) valEl.textContent = (capVal || '—').toString().replace(/[^0-9$.,KMBkmb]/g, '') || '—';
-      syncDataset({ val: capVal || '—', source: fm.total_investment ? 'financial_mechanics.total_investment' : 'board_governance_packet.financial_overview.total_budget', note: fm.mechanics_summary || 'Phase-gated. Board approval required.' });
+    } else if (lbl === 'Total Capital' || lbl === 'Capital Approved') {
+      var capRaw = fm.total_investment || fm.capital_required || (bgp.financial_overview && bgp.financial_overview.total_budget) || null;
+      function fmtCap(v) { if(!v)return null; var n=typeof v==='number'?v:parseFloat(String(v).replace(/[^0-9.]/g,'')); if(isNaN(n))return String(v); if(n>=1e9)return '$'+Math.round(n/1e9)+'B'; if(n>=1e6)return '$'+(n/1e6).toFixed(1).replace(/\.0$/,'')+'M'; if(n>=1e3)return '$'+Math.round(n/1e3)+'K'; return '$'+n; }
+      var capDisplay = fmtCap(capRaw) || '—';
+      if (valEl) valEl.textContent = capDisplay;
+      syncDataset({ val: capDisplay, source: fm.total_investment ? 'financial_mechanics.total_investment' : 'board_governance_packet.financial_overview.total_budget', note: fm.mechanics_summary || 'Phase-gated. Board approval required.' });
     } else if (lbl === 'Kill Gates') {
       const hardGates = Array.isArray(tl.hard_gates) ? tl.hard_gates : Object.values(tl.hard_gates || {});
       const killCount = hardGates.length || (Array.isArray(bgp.kill_criteria) ? bgp.kill_criteria.length : 0);
@@ -5359,9 +5361,15 @@ function applyLiveData(raw) {
   // Stat sub-lines
   set('stat-sub-votes', 'All ' + voteTotal + ' roles');
   set('stat-sub-conf', 'Range ' + confMin + '\u2013' + confMax + '%');
-  const p1 = fm.phase_1_immediate || '—';
-  const p2 = fm.phase_2_gated || '—';
-  set('stat-sub-cap', p1 + ' now \u00b7 ' + p2 + ' gated');
+  const p1 = fm.phase_1_immediate || null;
+  const p2 = fm.phase_2_gated || null;
+  if (p1 && p2) {
+    set('stat-sub-cap', p1 + ' now \u00b7 ' + p2 + ' gated');
+  } else if (fm.total_investment) {
+    set('stat-sub-cap', 'Phase-gated deployment');
+  } else {
+    set('stat-sub-cap', '');
+  }
 
   // Insight box (briefing)
   const r0defers = stages.filter(s => s.section === 'D' && s.round === 0 &&

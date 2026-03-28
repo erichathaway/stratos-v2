@@ -172,7 +172,7 @@ async function callGammaAPI(slideContent, deckType) {
       language: 'en',
     },
     imageOptions: {
-      source: 'web',
+      source: 'webFreeToUse',
     },
     cardOptions: {
       dimensions: '16x9',

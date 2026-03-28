@@ -247,6 +247,23 @@ function wrapHTML(body, meta) {
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
+/* ── Brand Colors ── */
+:root {
+  --cyan: #00e5ff;
+  --teal: #14b8a6;
+  --green: #10b981;
+  --emerald: #059669;
+  --amber: #f59e0b;
+  --orange: #f97316;
+  --rose: #f43f5e;
+  --red: #dc2626;
+  --violet: #a855f7;
+  --purple: #7c3aed;
+  --blue: #3b82f6;
+  --navy: #1a365d;
+  --dark: #0f172a;
+}
+
 /* ── Reset ── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 body {
@@ -262,13 +279,13 @@ body {
 /* ── Typography ── */
 h1, h2, h3, h4 {
   font-family: 'Sora', 'Helvetica Neue', sans-serif;
-  color: #0f172a;
+  color: var(--dark);
   letter-spacing: -0.01em;
   line-height: 1.25;
 }
 h1 { font-size: 28px; font-weight: 800; }
 h2 { font-size: 18px; font-weight: 700; margin-bottom: 12px; }
-h3 { font-size: 14px; font-weight: 600; margin-bottom: 8px; color: #1a365d; }
+h3 { font-size: 14px; font-weight: 600; margin-bottom: 8px; color: var(--navy); }
 h4 { font-size: 12px; font-weight: 600; margin-bottom: 6px; color: #334155; }
 p { margin-bottom: 8px; }
 strong { font-weight: 600; color: #1e293b; }
@@ -351,15 +368,24 @@ h2, h3, h4 { page-break-after: avoid; break-after: avoid; }
   gap: 12px;
   margin-bottom: 20px;
   padding-bottom: 10px;
-  border-bottom: 2px solid #e2e8f0;
+  border-bottom: 3px solid;
+  border-image: linear-gradient(90deg, var(--section-color, var(--teal)), transparent) 1;
 }
 .section-num {
   font-family: 'Sora', sans-serif;
   font-size: 28px;
   font-weight: 800;
-  color: #cbd5e1;
+  color: var(--section-color, var(--teal));
   line-height: 1;
+  opacity: 0.6;
 }
+/* Section color coding */
+.section[data-color="green"] { --section-color: var(--green); }
+.section[data-color="rose"] { --section-color: var(--rose); }
+.section[data-color="teal"] { --section-color: var(--teal); }
+.section[data-color="amber"] { --section-color: var(--amber); }
+.section[data-color="blue"] { --section-color: var(--blue); }
+.section[data-color="purple"] { --section-color: var(--purple); }
 
 /* ── Metric cards ── */
 .metrics-grid {
@@ -371,6 +397,7 @@ h2, h3, h4 { page-break-after: avoid; break-after: avoid; }
 .metric-card {
   background: #f8fafc;
   border: 1px solid #e2e8f0;
+  border-top: 3px solid var(--section-color, var(--teal));
   border-radius: 8px;
   padding: 16px;
   text-align: center;
@@ -379,9 +406,14 @@ h2, h3, h4 { page-break-after: avoid; break-after: avoid; }
   font-family: 'Sora', sans-serif;
   font-size: 28px;
   font-weight: 700;
-  color: #0f172a;
+  color: var(--dark);
   line-height: 1.1;
 }
+.metric-value.green { color: var(--emerald); }
+.metric-value.amber { color: var(--amber); }
+.metric-value.rose { color: var(--rose); }
+.metric-value.teal { color: var(--teal); }
+.metric-value.blue { color: var(--blue); }
 .metric-label {
   font-size: 10px;
   color: #64748b;
@@ -398,7 +430,7 @@ table {
   font-size: 10.5px;
 }
 th {
-  background: #1a365d;
+  background: var(--dark);
   color: #ffffff;
   font-weight: 600;
   text-align: left;
@@ -407,6 +439,7 @@ th {
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
+.table-branded th { background: linear-gradient(135deg, var(--dark), var(--navy)); }
 td {
   padding: 8px 12px;
   border-bottom: 1px solid #e2e8f0;
@@ -418,14 +451,35 @@ tr:nth-child(odd) td { background: #ffffff; }
 /* ── Callout boxes ── */
 .callout {
   background: #f8fafc;
-  border-left: 4px solid #1a365d;
+  border-left: 4px solid var(--teal);
   padding: 14px 18px;
   margin-bottom: 16px;
   border-radius: 0 6px 6px 0;
 }
-.callout-green { border-left-color: #16a34a; background: #f0fdf4; }
-.callout-amber { border-left-color: #d97706; background: #fffbeb; }
-.callout-red   { border-left-color: #dc2626; background: #fef2f2; }
+.callout-green { border-left-color: var(--green); background: #f0fdf4; }
+.callout-amber { border-left-color: var(--amber); background: #fffbeb; }
+.callout-red   { border-left-color: var(--rose); background: #fef2f2; }
+.callout-teal  { border-left-color: var(--teal); background: #f0fdfa; }
+.callout-blue  { border-left-color: var(--blue); background: #eff6ff; }
+.callout-purple { border-left-color: var(--purple); background: #faf5ff; }
+
+/* Brand accent bar at top of cover */
+.cover-accent { height: 4px; background: linear-gradient(90deg, var(--cyan), var(--teal), var(--green), var(--amber), var(--rose), var(--purple)); margin-bottom: 0; }
+
+/* Confidence bar */
+.conf-bar { height: 8px; border-radius: 4px; background: #e2e8f0; overflow: hidden; margin: 6px 0; }
+.conf-bar-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, var(--teal), var(--green)); }
+.conf-bar-fill.high { background: linear-gradient(90deg, var(--green), var(--emerald)); }
+.conf-bar-fill.medium { background: linear-gradient(90deg, var(--amber), var(--orange)); }
+.conf-bar-fill.low { background: linear-gradient(90deg, var(--rose), var(--red)); }
+
+/* Vote bar */
+.vote-bar { display: flex; height: 6px; border-radius: 3px; overflow: hidden; margin: 4px 0; }
+.vote-bar-seg { height: 100%; }
+.vote-bar-seg.approve { background: var(--green); }
+.vote-bar-seg.conditional { background: var(--amber); }
+.vote-bar-seg.oppose { background: var(--rose); }
+.vote-bar-seg.defer { background: #94a3b8; }
 
 /* ── Narrative blocks ── */
 .narrative {
@@ -914,7 +968,7 @@ function buildBriefingSection(meta, dash, exec, dir, mso = {}) {
   const evidencePanel = dir.evidence_panel || dir.evidence || [];
   const strategicWins = dash.strategic_wins || mso.strategic_wins || [];
 
-  let html = `<div class="page-break"></div><div class="section">`;
+  let html = `<div class="page-break"></div><div class="section" data-color="teal">`;
   html += `<div class="section-header"><div class="section-num">02</div><h2>Executive Briefing</h2></div>`;
 
   if (decision) {
@@ -998,7 +1052,7 @@ function buildBriefingSection(meta, dash, exec, dir, mso = {}) {
 
 
 function buildCommandCenter(mso, dir, dash = {}, tlViz = {}) {
-  let html = `<div class="page-break"></div><div class="section">`;
+  let html = `<div class="page-break"></div><div class="section" data-color="green">`;
   html += `<div class="section-header"><div class="section-num">03</div><h2>Command Center</h2></div>`;
 
   // Decision record
@@ -1096,7 +1150,7 @@ function buildRiskIntel(dash, data, mso = {}) {
   const risks = riskMatrix.risks || riskMatrix.items || [];
   const topRisks = dash.top_3_risks || dash.top_risks || [];
 
-  let html = `<div class="page-break"></div><div class="section">`;
+  let html = `<div class="page-break"></div><div class="section" data-color="rose">`;
   html += `<div class="section-header"><div class="section-num">04</div><h2>Risk &amp; Intelligence</h2></div>`;
 
   if (riskMatrix.summary || riskMatrix.description) {
@@ -1169,7 +1223,7 @@ function buildRiskIntel(dash, data, mso = {}) {
 
 function buildFinancials(fm, dash, bgp = {}) {
   const finOverview = bgp.financial_overview || {};
-  let html = `<div class="page-break"></div><div class="section">`;
+  let html = `<div class="page-break"></div><div class="section" data-color="teal">`;
   html += `<div class="section-header"><div class="section-num">05</div><h2>Financial Analysis</h2></div>`;
 
   // Financial overview narrative from board governance
@@ -1253,7 +1307,7 @@ function buildTheRoom(dash, data, rolePackets = {}, dPacket = {}) {
   const totalVotes = Object.values(voteSplit).reduce((a, b) => a + (typeof b === 'number' ? b : 0), 0);
   const rolePreview = dash.role_assessment_preview || [];
 
-  let html = `<div class="page-break"></div><div class="section">`;
+  let html = `<div class="page-break"></div><div class="section" data-color="amber">`;
   html += `<div class="section-header"><div class="section-num">06</div><h2>The Room</h2></div>`;
 
   // Vote bar
@@ -1356,7 +1410,7 @@ function buildTheRoom(dash, data, rolePackets = {}, dPacket = {}) {
 
 
 function buildManagementHandoff(mso, dir, rolePackets = {}) {
-  let html = `<div class="page-break"></div><div class="section">`;
+  let html = `<div class="page-break"></div><div class="section" data-color="blue">`;
   html += `<div class="section-header"><div class="section-num">07</div><h2>Management Handoff</h2></div>`;
 
   // Functional mandates per role from direction_package
@@ -1454,7 +1508,7 @@ function buildManagementHandoff(mso, dir, rolePackets = {}) {
 
 
 function buildBoardReport(bgp, meta, dash, gov, mso = {}) {
-  let html = `<div class="page-break"></div><div class="section">`;
+  let html = `<div class="page-break"></div><div class="section" data-color="purple">`;
   html += `<div class="section-header"><div class="section-num">08</div><h2>Board Report</h2></div>`;
 
   // Board action requested (most important for board members)
@@ -1565,7 +1619,7 @@ function buildBoardCoverSummary(meta, dash, exec, bgp = {}, fm = {}) {
   const voteSplit = dash.vote_split || {};
   const totalVotes = Object.values(voteSplit).reduce((a, b) => a + (typeof b === 'number' ? b : 0), 0);
 
-  let html = `<div class="page-break"></div><div class="section">`;
+  let html = `<div class="page-break"></div><div class="section" data-color="purple">`;
   html += `<div class="section-header"><div class="section-num">01</div><h2>Board Memorandum</h2></div>`;
 
   // Board memo header
@@ -1616,7 +1670,7 @@ function buildRiskOverview(dash, data, mso = {}) {
   const risks = riskMatrix.risks || riskMatrix.items || [];
   const topRisks = dash.top_3_risks || dash.top_risks || [];
 
-  let html = `<div class="page-break"></div><div class="section">`;
+  let html = `<div class="page-break"></div><div class="section" data-color="rose">`;
   html += `<div class="section-header"><div class="section-num">03</div><h2>Risk Exposure</h2></div>`;
 
   if (riskMatrix.summary || riskMatrix.description) {

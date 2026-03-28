@@ -5519,6 +5519,43 @@ function hideEmptySections() {
 
   // 3. Market Intel tab: only show if data arrived
   // (tab starts display:none and is shown by applyLiveData when marketIntelBlob exists)
+
+  // 4. Hide individual metric elements that still show dashes
+  document.querySelectorAll('.cmd-opp-metric, .cmd-win-stat, .fin-kpi').forEach(function(el) {
+    var val = el.querySelector('.num-cite, .cmd-opp-metric-val, .cmd-win-stat-val, .fin-kpi-value');
+    if (val) {
+      var text = val.textContent.trim();
+      if (text === '\u2014' || text === '—' || text === 'Pending data' || text === '') {
+        el.style.display = 'none';
+      }
+    }
+  });
+
+  // 5. Hide capital split section if both phases are dashes
+  document.querySelectorAll('.cmd-capital-amount').forEach(function(el) {
+    var text = el.textContent.trim();
+    if (text === '\u2014' || text === '—' || text === '') {
+      var wrapper = el.closest('.cmd-capital-phase');
+      if (wrapper) wrapper.style.display = 'none';
+    }
+  });
+
+  // 6. Hide pipeline/runway/budget sub-metrics if dashes
+  document.querySelectorAll('.cmd-capital-num').forEach(function(el) {
+    var text = el.textContent.trim();
+    if (text === '\u2014' || text === '—' || text === '') {
+      var wrapper = el.parentElement;
+      if (wrapper) wrapper.style.display = 'none';
+    }
+  });
+
+  // 7. Hide management phase amounts if dashes
+  document.querySelectorAll('.mh-tl-amount').forEach(function(el) {
+    var text = el.textContent.trim();
+    if (text === '\u2014' || text === '—' || text === '') {
+      el.style.display = 'none';
+    }
+  });
 }
 
 function showUpsellCards(raw, bgp, dash) {

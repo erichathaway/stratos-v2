@@ -1821,7 +1821,7 @@ dep-item strong{display:block;font-family:var(--font-mono);font-size:var(--text-
 
 /* ── Hide UI chrome ── */
 .pdf-mode .s-nav, .pdf-mode .s-header, .pdf-mode #ap,
-.pdf-mode #strat-chat-fab, .pdf-mode #strat-chat-panel { display: none !important; }
+.pdf-mode #strat-chat-panel { display: none !important; }
 .pdf-mode .tour-overlay, .pdf-mode #tour-overlay { display: none !important; }
 .pdf-mode audio, .pdf-mode .audio-btn { display: none !important; }
 
@@ -4409,7 +4409,7 @@ function exportPDF() {
   var nav = document.querySelector('.s-nav');
   var header = document.querySelector('.s-header');
   var tour = document.getElementById('ap');
-  var chatFab = document.getElementById('strat-chat-fab');
+  var chatFab = null; // FAB removed — chat via sidebar
   var chatPanel = document.getElementById('strat-chat-panel');
   if (nav) nav.style.display = 'none';
   if (header) header.style.display = 'none';
@@ -4484,7 +4484,7 @@ function exportFullReport() {
   var nav = document.querySelector('.s-nav');
   var header = document.querySelector('.s-header');
   var tour = document.getElementById('ap');
-  var chatFab = document.getElementById('strat-chat-fab');
+  var chatFab = null; // FAB removed — chat via sidebar
   var chatPanel = document.getElementById('strat-chat-panel');
   if (nav) nav.style.display = 'none';
   if (header) header.style.display = 'none';
@@ -7779,9 +7779,6 @@ function toggleMgmtExpand(trigger){
 
 <!-- StratOS Chat Widget -->
 <style>
-#strat-chat-fab{position:fixed;bottom:24px;left:24px;z-index:10001;width:44px;height:44px;border-radius:50%;background:rgba(20,24,33,.85);border:1px solid var(--border-hover);cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 12px rgba(0,0,0,.4);transition:transform .2s,box-shadow .2s,border-color .2s;backdrop-filter:blur(8px)}
-#strat-chat-fab:hover{transform:scale(1.08);box-shadow:0 4px 20px rgba(38,200,176,.3);border-color:var(--teal)}
-#strat-chat-fab svg{width:20px;height:20px}
 #strat-chat-panel{position:fixed;bottom:86px;left:24px;z-index:10001;width:420px;max-height:560px;background:var(--bg-surface);border:1px solid var(--border-hover);border-radius:var(--r-xl);box-shadow:0 8px 40px rgba(0,0,0,.5);display:none;flex-direction:column;overflow:hidden}
 #strat-chat-panel.open{display:flex}
 #sc-header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--border);background:var(--bg-surface-2)}
@@ -7807,9 +7804,6 @@ function toggleMgmtExpand(trigger){
 @media(max-width:500px){#strat-chat-panel{left:8px;right:8px;width:auto;bottom:78px}}
 </style>
 
-<button id="strat-chat-fab" onclick="toggleChat()" title="Ask about this decision">
-<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9.5" stroke="rgba(255,255,255,.25)" stroke-width="1"/><circle cx="12" cy="12" r="2" fill="var(--teal)"/><path d="M12 2.5v4M12 17.5v4M2.5 12h4M17.5 12h4" stroke="rgba(255,255,255,.35)" stroke-width="1" stroke-linecap="round"/><path d="M12 4L14 10.5H12L14 12L12 20L10 12H12L10 10.5L12 4Z" fill="var(--teal)" opacity=".9"/><line x1="12" y1="4" x2="12" y2="20" stroke="rgba(255,255,255,.5)" stroke-width=".5"/></svg>
-</button>
 
 <div id="strat-chat-panel">
 <div id="sc-header">
@@ -8222,19 +8216,21 @@ window.sendChat = async function(){
 })();
 </script>
 
-<!-- PRODUCT DEMO ENGINE (fluid ~40s auto-play) -->
+<!-- PRODUCT DEMO ENGINE v5 -->
 <script>
 (function() {
-  var _dActive = false, _dTimers = [], _dStart = 0, _dTotal = 42000, _dRaf = 0;
-  var _curX = 0, _curY = 0; // track cursor position for tooltip positioning
+  var _dOn = false, _dT = [], _dStart = 0, _dTotal = 42000, _dRaf = 0;
+  var _curX = -40, _curY = 300;
+  var _hoverInterval = null;
+  var SIDEBAR_W = 240;
 
   function $(id) { return document.getElementById(id); }
   function qs(sel) { return document.querySelector(sel); }
+  function at(ms, fn) { if (_dOn) _dT.push(setTimeout(fn, ms)); }
 
-  // ── Cursor + ring ──
-  function moveTo(sel, offX, offY) {
-    var el = typeof sel === 'string' ? qs(sel) : sel;
-    if (!el || !el.offsetHeight) return;
+  // ── Core: move cursor + ring to an element (must already be in viewport) ──
+  function _posAt(el, offX, offY) {
+    if (!el) return;
     var r = el.getBoundingClientRect();
     _curX = r.left + (offX != null ? offX : r.width * 0.4);
     _curY = r.top + (offY != null ? offY : r.height * 0.4);
@@ -8247,220 +8243,274 @@ window.sendChat = async function(){
   }
 
   function hideRing() { $('demo-ring').classList.remove('visible'); }
-
   function clickAnim() {
     $('demo-cursor').classList.add('clicking');
     setTimeout(function() { $('demo-cursor').classList.remove('clicking'); }, 200);
   }
 
-  // Dispatch synthetic mouse event with real coordinates so tooltips position correctly
-  function fakeMouseEvent(el, type) {
+  // ── Scroll to element, wait for settle, THEN position cursor ──
+  function scrollAndPoint(sel, cb, offX, offY) {
+    var el = typeof sel === 'string' ? qs(sel) : sel;
+    if (!el) return;
+    el.scrollIntoView({ behavior:'smooth', block:'center' });
+    setTimeout(function() {
+      _posAt(el, offX, offY);
+      if (cb) cb(el);
+    }, 550); // wait for scroll to finish
+  }
+
+  // ── Synthetic mouse events with real coordinates ──
+  function fakeEvent(el, type) {
     var r = el.getBoundingClientRect();
     var cx = r.left + r.width / 2, cy = r.top + r.height / 2;
     el.dispatchEvent(new MouseEvent(type, { bubbles:true, clientX:cx, clientY:cy }));
-    // Also fire a mousemove on document so posTooltip picks up the coordinates
     if (type === 'mouseenter') {
       document.dispatchEvent(new MouseEvent('mousemove', { bubbles:true, clientX:cx, clientY:cy }));
     }
   }
 
-  function goTab(sec) {
+  // ── High-level actions ──
+  function goTab(sec, cb) {
     var tab = qs('.sb-tab[data-sec="' + sec + '"]');
     if (!tab) return;
-    moveTo(tab);
+    _posAt(tab);
     setTimeout(function() {
       clickAnim();
-      setTimeout(function() { if (typeof switchTab === 'function') switchTab(tab); }, 180);
+      setTimeout(function() {
+        if (typeof switchTab === 'function') switchTab(tab);
+        // After tab switch, scroll to top of new section
+        setTimeout(function() {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+          if (cb) setTimeout(cb, 400);
+        }, 200);
+      }, 180);
     }, 700);
   }
 
-  function scrollEl(sel) {
-    var el = qs(sel);
-    if (el) el.scrollIntoView({ behavior:'smooth', block:'center' });
-  }
-
-  function hoverEl(sel, dur) {
-    var el = qs(sel);
-    if (!el) return;
-    moveTo(el);
-    setTimeout(function() {
-      fakeMouseEvent(el, 'mouseenter');
-      // Keep firing mousemove so tooltip tracks
-      var moveInterval = setInterval(function() {
-        var r2 = el.getBoundingClientRect();
-        document.dispatchEvent(new MouseEvent('mousemove', { bubbles:true, clientX:r2.left+r2.width/2, clientY:r2.top+r2.height/2 }));
-      }, 100);
-      setTimeout(function() {
-        clearInterval(moveInterval);
-        fakeMouseEvent(el, 'mouseleave');
-      }, dur || 1500);
-    }, 750);
-  }
-
-  function clickEl(sel) {
+  function hoverEl(sel, dur, cb) {
     var el = typeof sel === 'string' ? qs(sel) : sel;
-    if (!el) return;
-    moveTo(el);
-    setTimeout(function() { clickAnim(); setTimeout(function() { el.click(); }, 180); }, 700);
+    if (!el) { if (cb) cb(); return; }
+    scrollAndPoint(sel, function(el2) {
+      setTimeout(function() {
+        fakeEvent(el2, 'mouseenter');
+        // Keep mousemove firing so tooltips track correctly
+        if (_hoverInterval) clearInterval(_hoverInterval);
+        _hoverInterval = setInterval(function() {
+          var r2 = el2.getBoundingClientRect();
+          document.dispatchEvent(new MouseEvent('mousemove', {
+            bubbles:true, clientX:r2.left+r2.width/2, clientY:r2.top+r2.height/2
+          }));
+        }, 80);
+        setTimeout(function() {
+          clearInterval(_hoverInterval);
+          _hoverInterval = null;
+          fakeEvent(el2, 'mouseleave');
+          if (cb) cb();
+        }, dur || 1500);
+      }, 350);
+    });
   }
 
-  // ── Popup near cursor position ──
+  function clickEl(sel, cb) {
+    var el = typeof sel === 'string' ? qs(sel) : sel;
+    if (!el) { if (cb) cb(); return; }
+    scrollAndPoint(sel, function(el2) {
+      setTimeout(function() {
+        clickAnim();
+        setTimeout(function() { el2.click(); if (cb) cb(); }, 180);
+      }, 350);
+    });
+  }
+
+  // ── Show card near cursor — always dismiss previous first ──
   function showCard(label, title, body, dur) {
-    $('demo-step').textContent = label;
-    $('demo-title').textContent = title;
-    $('demo-body').textContent = body;
-    var popup = $('demo-popup');
-    // Position near the current cursor
-    var px = _curX + 30;
-    var py = _curY - 40;
-    // Keep on screen
-    if (px + 370 > window.innerWidth) px = _curX - 390;
-    if (px < 20) px = 20;
-    if (py < 20) py = 20;
-    if (py + 160 > window.innerHeight) py = window.innerHeight - 180;
-    popup.style.left = px + 'px';
-    popup.style.top = py + 'px';
-    popup.style.transform = 'none';
-    popup.classList.add('visible');
-    setTimeout(function() { popup.classList.remove('visible'); }, dur || 2800);
+    hideCard();
+    setTimeout(function() {
+      $('demo-step').textContent = label;
+      $('demo-title').textContent = title;
+      $('demo-body').textContent = body;
+      var popup = $('demo-popup');
+      // Position to right of cursor, offset from sidebar
+      var px = _curX + 36;
+      var py = Math.max(40, _curY - 30);
+      // Boundary: keep on screen, respect sidebar
+      var minLeft = SIDEBAR_W + 16;
+      if (px < minLeft) px = minLeft;
+      if (px + 370 > window.innerWidth - 16) px = Math.max(minLeft, _curX - 390);
+      if (py + 180 > window.innerHeight - 16) py = window.innerHeight - 200;
+      popup.style.left = px + 'px';
+      popup.style.top = py + 'px';
+      popup.style.transform = 'none';
+      popup.classList.add('visible');
+      _dT.push(setTimeout(function() { popup.classList.remove('visible'); }, dur || 2800));
+    }, 50);
   }
 
-  // Centered card for intro/outro
   function showCenterCard(label, title, body, dur) {
-    $('demo-step').textContent = label;
-    $('demo-title').textContent = title;
-    $('demo-body').textContent = body;
-    var popup = $('demo-popup');
-    popup.style.left = '50%';
-    popup.style.top = '40%';
-    popup.style.transform = 'translate(-50%,-50%)';
-    popup.classList.add('visible');
-    setTimeout(function() { popup.classList.remove('visible'); }, dur || 3000);
+    hideCard();
+    setTimeout(function() {
+      $('demo-step').textContent = label;
+      $('demo-title').textContent = title;
+      $('demo-body').textContent = body;
+      var popup = $('demo-popup');
+      // Center in the content area (account for sidebar)
+      popup.style.left = (SIDEBAR_W + (window.innerWidth - SIDEBAR_W) / 2) + 'px';
+      popup.style.top = '38%';
+      popup.style.transform = 'translate(-50%,-50%)';
+      popup.classList.add('visible');
+      _dT.push(setTimeout(function() { popup.classList.remove('visible'); }, dur || 3000));
+    }, 50);
   }
 
   function hideCard() { $('demo-popup').classList.remove('visible'); }
 
-  function at(ms, fn) { _dTimers.push(setTimeout(fn, ms)); }
-
-  function _updateProgress() {
-    if (!_dActive) return;
+  function _progress() {
+    if (!_dOn) return;
     $('demo-progress').style.width = Math.min(100, ((Date.now() - _dStart) / _dTotal) * 100) + '%';
-    _dRaf = requestAnimationFrame(_updateProgress);
+    _dRaf = requestAnimationFrame(_progress);
   }
 
-  // ── Timeline (~42s) ──
-  function _buildTimeline() {
-    // 0s — Force scroll to absolute top, switch to briefing
+  // ══════════════════════════════════════════════
+  //  TIMELINE (~42s)
+  //  Pattern: scroll → wait → cursor → wait → interact → card
+  // ══════════════════════════════════════════════
+  function _run() {
+
+    // ── 0s: INSTANT scroll to top, switch to briefing ──
     at(0, function() {
-      document.documentElement.scrollTop = 0;
-      document.body.scrollTop = 0;
       window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
       var tab = qs('.sb-tab[data-sec="briefing"]');
       if (tab && typeof switchTab === 'function') switchTab(tab);
     });
 
-    // 1s — Wait for scroll to settle, then show intro
-    at(1000, function() {
-      _curX = window.innerWidth / 2;
-      _curY = window.innerHeight * 0.35;
+    // ── 0.8s: Intro card (centered in content area) ──
+    at(800, function() {
       showCenterCard('OVERVIEW', 'Your Decision Brief', 'Seven tabs. Every insight cited. Full strategic analysis in one dashboard.', 2500);
     });
 
-    // 3.5s — Cursor enters, moves to verdict
-    at(3500, function() { moveTo('#sec-briefing .verdict-hero', 140, 50); });
+    // ── 3.5s: Cursor enters → verdict hero (already at top, in view) ──
+    at(3500, function() {
+      var hero = qs('#sec-briefing .verdict-hero');
+      if (hero) _posAt(hero, 140, 50);
+    });
 
-    // 5s — Click "THE UPSIDE" brief tab
+    // ── 5s: Scroll to & click "THE UPSIDE" brief tab ──
     at(5000, function() {
       var tabs = document.querySelectorAll('#sec-briefing .brief-intel-tab');
       if (tabs.length > 1) clickEl(tabs[1]);
     });
 
-    // 7s — Hover citation diamond
-    at(7000, function() { hoverEl('#sec-briefing .cite', 1800); });
-    at(7300, function() { showCard('CITATIONS', 'Every Claim is Sourced', 'Hover any diamond to see the source.', 2200); });
-
-    // 10s — Command Center
-    at(10000, function() { goTab('command'); });
-    at(11500, function() { scrollEl('#sec-command .ib-wrap'); });
-    at(12000, function() { showCard('INTELLIGENCE', 'Audio + Insight Brief', 'Three-column brief with audio narration.', 2400); });
-
-    // 14.5s — Click audio button
-    at(14500, function() {
-      var aud = qs('#sec-command .ib-audio');
-      if (aud) { moveTo(aud); setTimeout(clickAnim, 700); }
+    // ── 7.5s: Scroll to citation, hover it ──
+    at(7500, function() {
+      hoverEl('#sec-briefing .cite', 1800);
+    });
+    at(8200, function() {
+      showCard('CITATIONS', 'Every Claim is Sourced', 'Hover any diamond to trace it to the deliberation record.', 2200);
     });
 
-    // 16s — Risk
-    at(16000, function() { goTab('risk'); });
-    at(17500, function() { scrollEl('#sec-risk .g7030'); });
-    at(18500, function() { hoverEl('#sec-risk .risk-dot-abs', 1600); });
-    at(18800, function() { showCard('RISK', 'Interactive Risk Matrix', 'Hover any dot to expand details.', 2200); });
+    // ── 11s: Command Center ──
+    at(11000, function() { goTab('command'); });
+    at(13000, function() {
+      scrollAndPoint('#sec-command .ib-wrap', function() {
+        showCard('INTELLIGENCE', 'Audio + Insight Brief', 'Three-column brief with audio narration and downloadable reports.', 2500);
+      });
+    });
 
-    // 21.5s — Financials
-    at(21500, function() { goTab('financials'); });
-    at(23000, function() { scrollEl('#sec-financials .fin-kpi-row'); });
-    at(24000, function() { hoverEl('#sec-financials .num-cite', 1600); });
-    at(24300, function() { showCard('FINANCIALS', 'Cited Numbers', 'Hover any value for source and methodology.', 2200); });
+    // ── 16s: Click audio button ──
+    at(16000, function() {
+      clickEl('#sec-command .ib-audio');
+    });
 
-    // 27s — Room
-    at(27000, function() { goTab('room'); });
-    at(28500, function() { scrollEl('#sec-room .room-role-table'); });
-    at(29500, function() { clickEl('#sec-room .room-role-row'); });
-    at(30000, function() { showCard('THE ROOM', 'Click Any Role', 'Expand for direct quotes and stance evolution.', 2200); });
+    // ── 18s: Risk ──
+    at(18000, function() { goTab('risk'); });
+    at(20000, function() {
+      hoverEl('#sec-risk .risk-dot-abs', 1600);
+    });
+    at(20600, function() {
+      showCard('RISK', 'Interactive Risk Matrix', 'Hover any dot to expand risk details. Red = act now.', 2200);
+    });
 
-    // 33s — Board
-    at(33000, function() { goTab('board'); });
-    at(34500, function() { scrollEl('#sec-board .verdict-hero'); });
+    // ── 23.5s: Financials ──
+    at(23500, function() { goTab('financials'); });
+    at(25500, function() {
+      hoverEl('#sec-financials .num-cite', 1600);
+    });
+    at(26100, function() {
+      showCard('FINANCIALS', 'Cited Numbers', 'Hover any value for source and methodology.', 2200);
+    });
 
-    // 35.5s — Sidebar features
-    at(35500, function() { moveTo('.sb-audio-link'); });
-    at(35800, function() { showCard('SIDEBAR', 'Audio, Reports, Chat, Tour', 'Everything one click away.', 2500); });
-    at(37000, function() { moveTo('.sb-deck-link'); });
-    at(38200, function() { moveTo('.sb-chat-link'); });
+    // ── 29s: Room ──
+    at(29000, function() { goTab('room'); });
+    at(31000, function() {
+      clickEl('#sec-room .room-role-row');
+    });
+    at(31800, function() {
+      showCard('THE ROOM', 'Click Any Role', 'Expand for direct quotes and stance evolution across rounds.', 2200);
+    });
 
-    // 39.5s — Final
-    at(39500, function() {
+    // ── 34.5s: Board ──
+    at(34500, function() { goTab('board'); });
+
+    // ── 36.5s: Sidebar features ──
+    at(36500, function() {
+      _posAt(qs('.sb-audio-link'));
+      showCard('SIDEBAR', 'Audio, Reports, Chat, Tour', 'Everything accessible from the sidebar. One click away.', 2500);
+    });
+    at(38000, function() { _posAt(qs('.sb-deck-link')); });
+    at(39000, function() { _posAt(qs('.sb-chat-link')); });
+
+    // ── 40s: Final ──
+    at(40000, function() {
       hideRing();
       showCenterCard('READY', 'Your Turn', 'Click any tab to explore. Use the guided tour for step-by-step detail.', 2500);
     });
 
-    at(42000, function() { endDemo(); });
+    at(42500, function() { endDemo(); });
   }
 
-  // ── Public API ──
+  // ══════════════════════════════════════════════
+  //  PUBLIC API
+  // ══════════════════════════════════════════════
   window.startDemo = function() {
-    if (_dActive) return;
-    _dActive = true;
+    if (_dOn) return;
+    _dOn = true;
     _dStart = Date.now();
-    // Force scroll to top BEFORE anything else
+    // Instant scroll to top
+    window.scrollTo(0, 0);
     document.documentElement.scrollTop = 0;
     document.body.scrollTop = 0;
-    window.scrollTo(0, 0);
     document.body.classList.add('demo-active');
+    // Cursor off-screen
     var cur = $('demo-cursor');
     cur.style.transition = 'none';
     cur.style.left = '-40px';
     cur.style.top = '300px';
+    _curX = -40; _curY = 300;
     var ring = $('demo-ring');
     ring.style.transition = 'none';
     ring.style.left = '-64px';
     ring.style.top = '276px';
     ring.classList.remove('visible');
+    // Re-enable transitions next frame
     requestAnimationFrame(function() {
-      cur.style.transition = '';
-      ring.style.transition = '';
+      requestAnimationFrame(function() {
+        cur.style.transition = '';
+        ring.style.transition = '';
+      });
     });
     $('demo-progress').style.width = '0';
     document.addEventListener('keydown', _dKey);
-    _updateProgress();
-    _buildTimeline();
+    _progress();
+    _run();
   };
 
   window.endDemo = function() {
-    if (!_dActive) return;
-    _dActive = false;
-    _dTimers.forEach(clearTimeout);
-    _dTimers = [];
+    if (!_dOn) return;
+    _dOn = false;
+    _dT.forEach(clearTimeout);
+    _dT = [];
+    if (_hoverInterval) { clearInterval(_hoverInterval); _hoverInterval = null; }
     cancelAnimationFrame(_dRaf);
     hideCard();
     hideRing();
@@ -8468,8 +8518,9 @@ window.sendChat = async function(){
     $('demo-cursor').style.opacity = '0';
     $('demo-progress').style.width = '0';
     document.removeEventListener('keydown', _dKey);
+    // Clean up hover states
     document.querySelectorAll('.cite, .num-cite, .risk-dot-abs').forEach(function(el) {
-      fakeMouseEvent(el, 'mouseleave');
+      fakeEvent(el, 'mouseleave');
     });
   };
 

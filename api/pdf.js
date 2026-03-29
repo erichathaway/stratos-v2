@@ -8,8 +8,11 @@ import puppeteer from 'puppeteer-core';
 
 export const config = { maxDuration: 60 };
 
+import { validateRunId, rateLimit, validateOrigin } from './_auth.js';
+
 export default async function handler(req, res) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  validateOrigin(req, res);
+  if (!rateLimit(req, res)) return;
   res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
   if (req.method === 'OPTIONS') return res.status(200).end();
 

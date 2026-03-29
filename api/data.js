@@ -1,16 +1,19 @@
+import { validateRunId, rateLimit, validateOrigin } from './_auth.js';
+
 export default async function handler(req, res) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  validateOrigin(req, res);
   res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   res.setHeader('Cache-Control', 's-maxage=30, stale-while-revalidate=60');
-  res.setHeader('X-Content-Type-Options', 'nosniff');
 
-  if (req.method === 'OPTIONS') {
-    res.status(200).end();
-    return;
-  }
+  if (req.method === 'OPTIONS') { res.status(200).end(); return; }
+  if (!rateLimit(req, res)) return;
 
   let { run_id } = req.query;
+  // Validate run_id format (if provided)
+  if (run_id && !validateRunId(run_id)) {
+    return res.status(400).json({ error: 'Invalid run_id format' });
+  }
   const SB_URL = process.env.SUPABASE_URL;
   const SB_KEY = process.env.SUPABASE_ANON_KEY;
 

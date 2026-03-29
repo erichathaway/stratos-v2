@@ -5,8 +5,7 @@
 
 export const config = { maxDuration: 120 };
 
-const GAMMA_API_KEY = process.env.GAMMA_API_KEY;
-if (!GAMMA_API_KEY) console.warn('[presentation] GAMMA_API_KEY not set');
+const GAMMA_API_KEY = process.env.GAMMA_API_KEY || 'sk-gamma-P3kSiUkiWN5I8WUxcAEtO6fxjuK3p0VBVrByDQzJ8rA';
 const GAMMA_BASE = 'https://public-api.gamma.app';
 const GAMMA_THEME_ID = process.env.GAMMA_THEME_ID || '2kzw2fo24ga3blg'; // StratOS brand theme
 

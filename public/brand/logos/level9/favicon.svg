@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Level9 — favicon variant. Tilted "9" already reads at favicon sizes;
+  this variant just bleeds the chip to the edges so the "9" gets more
+  canvas at 16-32px.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 320" role="img" aria-label="Level9">
+  <defs>
+    <linearGradient id="l9FavCool" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"  stop-color="#8B5CF6"/>
+      <stop offset="55%" stop-color="#06B6D4"/>
+      <stop offset="100%" stop-color="#0D9488"/>
+    </linearGradient>
+    <linearGradient id="l9FavObs" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"  stop-color="#14082E"/>
+      <stop offset="100%" stop-color="#041521"/>
+    </linearGradient>
+  </defs>
+  <rect x="8" y="8" width="304" height="304" rx="56" fill="url(#l9FavObs)" stroke="url(#l9FavCool)" stroke-width="6"/>
+  <text x="160" y="164" text-anchor="middle" dominant-baseline="central" font-family="Inter, system-ui, sans-serif" font-weight="900" font-size="220" fill="#FFFFFF" transform="rotate(-14 160 164)" style="letter-spacing:-0.04em">9</text>
+</svg>

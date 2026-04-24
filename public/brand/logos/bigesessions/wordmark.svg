@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Big E Sessions — Wordmark (mini bars chip + "Big E Sessions" text)
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 80" role="img" aria-label="Big E Sessions">
+  <defs>
+    <linearGradient id="bewObs" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0E0703"/>
+      <stop offset="100%" stop-color="#040201"/>
+    </linearGradient>
+    <linearGradient id="bewEdge" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FBBF24"/>
+      <stop offset="100%" stop-color="#F59E0B"/>
+    </linearGradient>
+    <linearGradient id="bewGlass" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.10"/>
+      <stop offset="40%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <!-- Mini chip 56x56 with bars-only mark (matches the <80px treatment) -->
+  <rect x="12" y="12" width="56" height="56" rx="12" fill="url(#bewObs)" stroke="url(#bewEdge)" stroke-width="1"/>
+  <rect x="12" y="12" width="56" height="56" rx="12" fill="url(#bewGlass)"/>
+  <g fill="#F59E0B">
+    <rect x="20" y="44" width="2.5" height="10" rx="0.5"/>
+    <rect x="24" y="40" width="2.5" height="14" rx="0.5"/>
+    <rect x="28" y="34" width="2.5" height="20" rx="0.5"/>
+    <rect x="32" y="28" width="2.5" height="26" rx="0.5"/>
+    <rect x="36" y="24" width="2.5" height="30" rx="0.5"/>
+    <rect x="40" y="28" width="2.5" height="26" rx="0.5"/>
+    <rect x="44" y="34" width="2.5" height="20" rx="0.5"/>
+    <rect x="48" y="40" width="2.5" height="14" rx="0.5"/>
+    <rect x="52" y="44" width="2.5" height="10" rx="0.5"/>
+  </g>
+  <!-- Wordmark -->
+  <text x="86" y="55"
+        font-family="Inter, system-ui, sans-serif" font-weight="900" font-size="40"
+        letter-spacing="-1.5">
+    <tspan fill="#FFFFFF">big</tspan><tspan fill="#F59E0B">E</tspan><tspan fill="#FFFFFF" font-size="34"> Sessions</tspan>
+  </text>
+</svg>

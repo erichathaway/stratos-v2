@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  NextGenIntern — PLACEHOLDER chip with capital "N"
+  Spec: 320×320, rx=56. Blues edge gradient (cyan → sky → deep blue).
+  PLACEHOLDER ONLY — brand-agent designs final mark.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 320" role="img" aria-label="NextGenIntern">
+  <defs>
+    <linearGradient id="ngObs" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0A1226"/>
+      <stop offset="100%" stop-color="#02060F"/>
+    </linearGradient>
+    <linearGradient id="ngEdge" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"   stop-color="#0EA5E9"/>
+      <stop offset="55%"  stop-color="#3B82F6"/>
+      <stop offset="100%" stop-color="#1E3A8A"/>
+    </linearGradient>
+    <linearGradient id="ngGlass" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.10"/>
+      <stop offset="40%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect x="40" y="40" width="240" height="240" rx="56" fill="url(#ngObs)" stroke="url(#ngEdge)" stroke-width="1.5"/>
+  <rect x="40" y="40" width="240" height="240" rx="56" fill="url(#ngGlass)"/>
+  <text x="160" y="162" text-anchor="middle" dominant-baseline="central"
+        font-family="Inter, system-ui, sans-serif"
+        font-weight="900" font-size="180" fill="#FFFFFF"
+        style="letter-spacing:-0.04em">N</text>
+</svg>

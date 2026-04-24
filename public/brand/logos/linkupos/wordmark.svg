@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  LinkupOS — Horizontal wordmark, NO border
+  Spec: anchor mark from #10 (Lucide upside-down) on the left,
+        "LinkupOS" text on the right, transparent background.
+        Use in headers, email signatures, anywhere a horizontal logo is needed.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 80" role="img" aria-label="LinkupOS">
+  <!-- Anchor mark: Lucide upside-down, scaled 2.4×, no border, no chip -->
+  <g transform="translate(40,40) scale(2.4) rotate(180) translate(-12,-12)" fill="none" stroke="#F59E0B" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 6v16"/>
+    <path d="m19 13 2-1a9 9 0 0 1-18 0l2 1"/>
+    <path d="M9 11h6"/>
+    <circle cx="12" cy="4" r="2"/>
+  </g>
+  <!-- Wordmark "LinkupOS" — amber Link / silver up / amber OS -->
+  <text x="100" y="55"
+        font-family="Inter, system-ui, sans-serif"
+        font-weight="900" font-size="44" letter-spacing="-1.5"
+        fill="#F59E0B">Link<tspan fill="#E5E7EB">up</tspan>OS</text>
+</svg>

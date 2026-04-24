@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  The Alignment Advantage — book (rounded chip)
+  ─────────────────────────────────────────────────────────────────
+  Spec: 320 × 320, family chip format (matches level9 / erichathaway / etc).
+  Concept: Dark red editorial. A closed hardcover book viewed slightly
+           from the side so the spine + front cover both read. Three
+           horizontal alignment bars on the cover as a subtle nod to
+           the four-pillar thesis (the fourth is Alignment — it's the
+           one that's even with the others).
+  Palette: dark red family (#B91C1C → #7F1D1D). Warm obsidian. Cream
+           book for contrast.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 320" role="img" aria-label="The Alignment Advantage">
+  <defs>
+    <linearGradient id="aaRedEdge" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"  stop-color="#B91C1C"/>
+      <stop offset="55%" stop-color="#991B1B"/>
+      <stop offset="100%" stop-color="#7F1D1D"/>
+    </linearGradient>
+    <linearGradient id="aaObsidian" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"  stop-color="#1E0A0C"/>
+      <stop offset="100%" stop-color="#080203"/>
+    </linearGradient>
+    <linearGradient id="aaGlassHi" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%"  stop-color="#FFFFFF" stop-opacity="0.12"/>
+      <stop offset="40%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="aaCover" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"  stop-color="#F3E8D5"/>
+      <stop offset="100%" stop-color="#D9C39A"/>
+    </linearGradient>
+    <linearGradient id="aaSpine" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%"  stop-color="#7F1D1D"/>
+      <stop offset="100%" stop-color="#991B1B"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Frame -->
+  <rect x="40" y="40" width="240" height="240" rx="56" fill="url(#aaObsidian)" stroke="url(#aaRedEdge)" stroke-width="1.5"/>
+  <rect x="40" y="40" width="240" height="240" rx="56" fill="url(#aaGlassHi)"/>
+
+  <!-- Book group: centered at (160, 160). Slight forward tilt so you see
+       the spine on the left + the front cover on the right. -->
+  <g transform="translate(160 160)">
+    <!-- Back cover / pages (offset behind the main cover to give depth) -->
+    <rect x="-64" y="-86" width="128" height="172" rx="4"
+          fill="#2A0A0C" stroke="#4A1518" stroke-width="1"/>
+    <!-- Page edge (right side) -->
+    <rect x="60" y="-82" width="4" height="164" fill="#F3E8D5" opacity="0.35"/>
+
+    <!-- Spine (left side of book) -->
+    <rect x="-72" y="-86" width="14" height="172" rx="2"
+          fill="url(#aaSpine)" stroke="#7F1D1D" stroke-width="0.8"/>
+
+    <!-- Front cover -->
+    <rect x="-58" y="-86" width="118" height="172" rx="3"
+          fill="url(#aaRedEdge)" stroke="#991B1B" stroke-width="1"/>
+
+    <!-- Alignment bars on cover: 4 horizontal bars, the fourth (Alignment)
+         extending to meet the others in perfect column — visual metaphor
+         for the four-pillar thesis. -->
+    <g>
+      <!-- First three pillars: short/misaligned -->
+      <rect x="-40" y="-40" width="52" height="5" rx="2" fill="url(#aaCover)" opacity="0.85"/>
+      <rect x="-40" y="-22" width="60" height="5" rx="2" fill="url(#aaCover)" opacity="0.65"/>
+      <rect x="-40" y="-4"  width="44" height="5" rx="2" fill="url(#aaCover)" opacity="0.70"/>
+      <!-- Fourth bar: longest, fully opaque — the Alignment pillar snaps them all into line -->
+      <rect x="-40" y="14"  width="80" height="5" rx="2" fill="url(#aaCover)"/>
+    </g>
+
+    <!-- Subtle gold title bar near the top of the cover -->
+    <rect x="-40" y="-68" width="80" height="2" fill="url(#aaCover)" opacity="0.9"/>
+    <rect x="-40" y="-62" width="56" height="1.5" fill="url(#aaCover)" opacity="0.55"/>
+
+    <!-- Author mark at bottom of cover -->
+    <rect x="-40" y="46" width="36" height="1.5" fill="url(#aaCover)" opacity="0.6"/>
+  </g>
+</svg>

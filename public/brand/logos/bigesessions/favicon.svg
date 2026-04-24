@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Big E Sessions — favicon variant. Reuses the existing mini.svg
+  equalizer-mountain mark with full-bleed chip frame for 16-32px weight.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 320" role="img" aria-label="Big E Sessions">
+  <defs>
+    <linearGradient id="beFavObs" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0E0703"/>
+      <stop offset="100%" stop-color="#040201"/>
+    </linearGradient>
+    <linearGradient id="beFavEdge" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FBBF24"/>
+      <stop offset="100%" stop-color="#F59E0B"/>
+    </linearGradient>
+  </defs>
+  <rect x="8" y="8" width="304" height="304" rx="56" fill="url(#beFavObs)" stroke="url(#beFavEdge)" stroke-width="6"/>
+  <g fill="#F59E0B">
+    <rect x="60"  y="190" width="16" height="44"  rx="3"/>
+    <rect x="84"  y="168" width="16" height="66"  rx="3"/>
+    <rect x="108" y="142" width="16" height="92"  rx="3"/>
+    <rect x="132" y="114" width="16" height="120" rx="3"/>
+    <rect x="156" y="84"  width="16" height="150" rx="3"/>
+    <rect x="180" y="114" width="16" height="120" rx="3"/>
+    <rect x="204" y="142" width="16" height="92"  rx="3"/>
+    <rect x="228" y="168" width="16" height="66"  rx="3"/>
+  </g>
+</svg>

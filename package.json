@@ -4,7 +4,9 @@
   "description": "StratOS Dashboard v2",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "sync-brand-logos": "node node_modules/@level9/brand/scripts/sync-logos.mjs ./public/brand/logos",
+    "postinstall": "npm run sync-brand-logos"
   },
   "repository": {
     "type": "git",
@@ -19,6 +21,7 @@
   },
   "homepage": "https://github.com/erichathaway/stratos-v2#readme",
   "dependencies": {
+    "@level9/brand": "github:erichathaway/level9-brand#main",
     "@sparticuz/chromium": "^143.0.4",
     "puppeteer-core": "^24.40.0"
   }

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  LinkupOS — Rounded chip (NEW v0.1, family format)
+  Spec: 320×320, rx=56. Obsidian fill + amber edge gradient + glass overlay.
+  Mark: Lucide anchor from #10, scaled up + rotated 180° (upside-down anchor).
+  Brand color: amber (matches Execute pressure point + OutboundOS umbrella).
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 320" role="img" aria-label="LinkupOS">
+  <defs>
+    <linearGradient id="lpObs" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1A1208"/>
+      <stop offset="100%" stop-color="#08040A"/>
+    </linearGradient>
+    <linearGradient id="lpEdge" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FBBF24"/>
+      <stop offset="100%" stop-color="#F59E0B"/>
+    </linearGradient>
+    <linearGradient id="lpGlass" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.10"/>
+      <stop offset="40%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect x="40" y="40" width="240" height="240" rx="56" fill="url(#lpObs)" stroke="url(#lpEdge)" stroke-width="1.5"/>
+  <rect x="40" y="40" width="240" height="240" rx="56" fill="url(#lpGlass)"/>
+  <!-- Anchor (upside-down Lucide), scaled 7×, centered at (160,160) -->
+  <g transform="translate(160,160) scale(7) rotate(180) translate(-12,-12)" fill="none" stroke="#F59E0B" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 6v16"/>
+    <path d="m19 13 2-1a9 9 0 0 1-18 0l2 1"/>
+    <path d="M9 11h6"/>
+    <circle cx="12" cy="4" r="2"/>
+  </g>
+</svg>

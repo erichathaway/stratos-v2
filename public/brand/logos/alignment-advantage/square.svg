@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- The Alignment Advantage — square (edge-to-edge, app-icon format) -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 320" role="img" aria-label="The Alignment Advantage">
+  <defs>
+    <linearGradient id="aaSqRed" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"  stop-color="#B91C1C"/>
+      <stop offset="55%" stop-color="#991B1B"/>
+      <stop offset="100%" stop-color="#7F1D1D"/>
+    </linearGradient>
+    <linearGradient id="aaSqObs" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"  stop-color="#1E0A0C"/>
+      <stop offset="100%" stop-color="#080203"/>
+    </linearGradient>
+    <linearGradient id="aaSqGlass" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%"  stop-color="#FFFFFF" stop-opacity="0.12"/>
+      <stop offset="40%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="aaSqCover" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"  stop-color="#F3E8D5"/>
+      <stop offset="100%" stop-color="#D9C39A"/>
+    </linearGradient>
+    <linearGradient id="aaSqSpine" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%"  stop-color="#7F1D1D"/>
+      <stop offset="100%" stop-color="#991B1B"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="0" y="0" width="320" height="320" fill="url(#aaSqObs)"/>
+  <rect x="0" y="0" width="320" height="320" fill="url(#aaSqGlass)"/>
+  <rect x="4" y="4" width="312" height="312" fill="none" stroke="url(#aaSqRed)" stroke-width="4"/>
+
+  <!-- Book, scaled larger for edge-to-edge -->
+  <g transform="translate(160 160) scale(1.2)">
+    <rect x="-64" y="-86" width="128" height="172" rx="4" fill="#2A0A0C" stroke="#4A1518" stroke-width="1"/>
+    <rect x="60" y="-82" width="4" height="164" fill="#F3E8D5" opacity="0.35"/>
+    <rect x="-72" y="-86" width="14" height="172" rx="2" fill="url(#aaSqSpine)" stroke="#7F1D1D" stroke-width="0.8"/>
+    <rect x="-58" y="-86" width="118" height="172" rx="3" fill="url(#aaSqRed)" stroke="#991B1B" stroke-width="1"/>
+    <g>
+      <rect x="-40" y="-40" width="52" height="5" rx="2" fill="url(#aaSqCover)" opacity="0.85"/>
+      <rect x="-40" y="-22" width="60" height="5" rx="2" fill="url(#aaSqCover)" opacity="0.65"/>
+      <rect x="-40" y="-4"  width="44" height="5" rx="2" fill="url(#aaSqCover)" opacity="0.70"/>
+      <rect x="-40" y="14"  width="80" height="5" rx="2" fill="url(#aaSqCover)"/>
+    </g>
+    <rect x="-40" y="-68" width="80" height="2" fill="url(#aaSqCover)" opacity="0.9"/>
+    <rect x="-40" y="-62" width="56" height="1.5" fill="url(#aaSqCover)" opacity="0.55"/>
+    <rect x="-40" y="46" width="36" height="1.5" fill="url(#aaSqCover)" opacity="0.6"/>
+  </g>
+</svg>

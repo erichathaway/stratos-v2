@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  COO Playbook — Wordmark (mini alignment-bars chip + "COO Playbook" text)
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 80" role="img" aria-label="COO Playbook">
+  <defs>
+    <linearGradient id="cpwObs" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0F1117"/>
+      <stop offset="100%" stop-color="#050709"/>
+    </linearGradient>
+    <linearGradient id="cpwEdge" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#94A3B8"/>
+      <stop offset="100%" stop-color="#64748B"/>
+    </linearGradient>
+    <linearGradient id="cpwGlass" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.10"/>
+      <stop offset="40%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="cpwBar" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#8B5CF6"/>
+      <stop offset="100%" stop-color="#06B6D4"/>
+    </linearGradient>
+  </defs>
+  <!-- Mini chip 56x56 -->
+  <rect x="12" y="12" width="56" height="56" rx="12" fill="url(#cpwObs)" stroke="url(#cpwEdge)" stroke-width="1"/>
+  <rect x="12" y="12" width="56" height="56" rx="12" fill="url(#cpwGlass)"/>
+  <!-- 4 alignment bars scaled inside -->
+  <rect x="20" y="22" width="32" height="5" rx="2.5" fill="url(#cpwBar)" opacity="0.92"/>
+  <rect x="20" y="32" width="24" height="5" rx="2.5" fill="url(#cpwBar)" opacity="0.68"/>
+  <rect x="20" y="42" width="32" height="5" rx="2.5" fill="url(#cpwBar)" opacity="0.92"/>
+  <rect x="20" y="52" width="18" height="5" rx="2.5" fill="url(#cpwBar)" opacity="0.46"/>
+  <circle cx="56" cy="24" r="3" fill="#EC4899"/>
+  <!-- Wordmark -->
+  <text x="86" y="55"
+        font-family="Inter, system-ui, sans-serif" font-weight="900" font-size="42"
+        letter-spacing="-1" fill="#FFFFFF">COO <tspan fill="#94A3B8">Playbook</tspan></text>
+</svg>

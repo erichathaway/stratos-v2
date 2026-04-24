@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  OutboundOS — Wordmark (mini "O" placeholder chip + "OutboundOS" text)
+  PLACEHOLDER ONLY — brand-agent designs final.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 80" role="img" aria-label="OutboundOS">
+  <defs>
+    <linearGradient id="obwObs" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1A1208"/>
+      <stop offset="100%" stop-color="#08040A"/>
+    </linearGradient>
+    <linearGradient id="obwEdge" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FBBF24"/>
+      <stop offset="100%" stop-color="#F59E0B"/>
+    </linearGradient>
+    <linearGradient id="obwGlass" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.10"/>
+      <stop offset="40%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <!-- Mini chip 56x56 with placeholder "O" -->
+  <rect x="12" y="12" width="56" height="56" rx="12" fill="url(#obwObs)" stroke="url(#obwEdge)" stroke-width="1"/>
+  <rect x="12" y="12" width="56" height="56" rx="12" fill="url(#obwGlass)"/>
+  <text x="40" y="52" text-anchor="middle"
+        font-family="Inter, system-ui, sans-serif" font-weight="900" font-size="34" fill="#FFFFFF"
+        style="letter-spacing:-0.04em">O</text>
+  <!-- Wordmark -->
+  <text x="86" y="55"
+        font-family="Inter, system-ui, sans-serif" font-weight="900" font-size="40"
+        letter-spacing="-1" fill="#F59E0B">Outbound<tspan fill="#FFFFFF">OS</tspan></text>
+</svg>

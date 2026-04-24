@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  StratOS — Wordmark (mini circular compass + "StratOS" text)
+  Note: StratOS is "always round" — mini mark stays circular, no chip.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 80" role="img" aria-label="StratOS">
+  <defs>
+    <radialGradient id="srwCenter" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#67E8F9"/>
+      <stop offset="60%" stop-color="#06B6D4"/>
+      <stop offset="100%" stop-color="#0891B2"/>
+    </radialGradient>
+  </defs>
+  <!-- Circular compass mark, 56px circle -->
+  <circle cx="40" cy="40" r="28" fill="#070D1A"/>
+  <circle cx="40" cy="40" r="26" fill="none" stroke="#00E5FF" stroke-width="1" opacity="0.7"/>
+  <line x1="40" y1="14" x2="40" y2="20" stroke="#00E5FF" stroke-width="1" opacity="0.5"/>
+  <line x1="66" y1="40" x2="60" y2="40" stroke="#00E5FF" stroke-width="1" opacity="0.5"/>
+  <line x1="40" y1="66" x2="40" y2="60" stroke="#00E5FF" stroke-width="1" opacity="0.5"/>
+  <line x1="14" y1="40" x2="20" y2="40" stroke="#00E5FF" stroke-width="1" opacity="0.5"/>
+  <!-- North pointing needle -->
+  <polygon points="40,16 38,38 42,38" fill="#00E5FF"/>
+  <polygon points="40,64 38,42 42,42" fill="#0E7490" opacity="0.5"/>
+  <circle cx="40" cy="40" r="3" fill="url(#srwCenter)"/>
+  <circle cx="40" cy="40" r="1.2" fill="#00E5FF"/>
+  <!-- Wordmark -->
+  <text x="86" y="55"
+        font-family="Inter, system-ui, sans-serif" font-weight="900" font-size="42"
+        letter-spacing="-1" fill="#06B6D4">Strat<tspan fill="#8B5CF6">OS</tspan></text>
+</svg>

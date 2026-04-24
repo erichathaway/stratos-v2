@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  OutboundOS — PLACEHOLDER edge-to-edge square with capital "O"
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 320" role="img" aria-label="OutboundOS">
+  <defs>
+    <linearGradient id="obsObs" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1A1208"/>
+      <stop offset="100%" stop-color="#08040A"/>
+    </linearGradient>
+    <linearGradient id="obsEdge" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FBBF24"/>
+      <stop offset="100%" stop-color="#F59E0B"/>
+    </linearGradient>
+    <linearGradient id="obsGlass" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.10"/>
+      <stop offset="40%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect x="0.75" y="0.75" width="318.5" height="318.5" fill="url(#obsObs)" stroke="url(#obsEdge)" stroke-width="1.5"/>
+  <rect x="0.75" y="0.75" width="318.5" height="318.5" fill="url(#obsGlass)"/>
+  <text x="160" y="162" text-anchor="middle" dominant-baseline="central"
+        font-family="Inter, system-ui, sans-serif"
+        font-weight="900" font-size="220" fill="#FFFFFF"
+        style="letter-spacing:-0.04em">O</text>
+</svg>

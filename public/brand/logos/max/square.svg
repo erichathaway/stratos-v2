@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- MAX — square (edge-to-edge, app-icon format) -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 320" role="img" aria-label="MAX">
+  <defs>
+    <linearGradient id="maxSqFuchsia" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"  stop-color="#F472B6"/>
+      <stop offset="55%" stop-color="#EC4899"/>
+      <stop offset="100%" stop-color="#BE185D"/>
+    </linearGradient>
+    <linearGradient id="maxSqObs" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"  stop-color="#1A0814"/>
+      <stop offset="100%" stop-color="#060208"/>
+    </linearGradient>
+    <linearGradient id="maxSqGlass" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%"  stop-color="#FFFFFF" stop-opacity="0.12"/>
+      <stop offset="40%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="maxSqMLetter" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%"  stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#FBCFE8"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="0" y="0" width="320" height="320" fill="url(#maxSqObs)"/>
+  <rect x="0" y="0" width="320" height="320" fill="url(#maxSqGlass)"/>
+  <rect x="4" y="4" width="312" height="312" fill="none" stroke="url(#maxSqFuchsia)" stroke-width="4"/>
+
+  <!-- Waveform scaled up slightly -->
+  <g transform="translate(160 240)" opacity="0.7">
+    <rect x="-74" y="-6"  width="4" height="12" rx="2" fill="#EC4899" opacity="0.35"/>
+    <rect x="-62" y="-10" width="4" height="20" rx="2" fill="#EC4899" opacity="0.55"/>
+    <rect x="-50" y="-14" width="4" height="28" rx="2" fill="#EC4899" opacity="0.75"/>
+    <rect x="-38" y="-18" width="4" height="36" rx="2" fill="#EC4899" opacity="0.90"/>
+    <rect x="-26" y="-22" width="4" height="44" rx="2" fill="#EC4899"/>
+    <rect x="-14" y="-26" width="4" height="52" rx="2" fill="url(#maxSqFuchsia)"/>
+    <rect x="-2"  y="-22" width="4" height="44" rx="2" fill="url(#maxSqFuchsia)"/>
+    <rect x="10"  y="-26" width="4" height="52" rx="2" fill="url(#maxSqFuchsia)"/>
+    <rect x="22"  y="-22" width="4" height="44" rx="2" fill="#EC4899"/>
+    <rect x="34"  y="-18" width="4" height="36" rx="2" fill="#EC4899" opacity="0.90"/>
+    <rect x="46"  y="-14" width="4" height="28" rx="2" fill="#EC4899" opacity="0.75"/>
+    <rect x="58"  y="-10" width="4" height="20" rx="2" fill="#EC4899" opacity="0.55"/>
+    <rect x="70"  y="-6"  width="4" height="12" rx="2" fill="#EC4899" opacity="0.35"/>
+  </g>
+
+  <!-- Larger M for edge-to-edge -->
+  <text x="160" y="162" text-anchor="middle" dominant-baseline="central"
+        font-family="Inter, system-ui, sans-serif" font-weight="900" font-size="200"
+        fill="url(#maxSqMLetter)" transform="rotate(-14 160 162)"
+        style="letter-spacing:-0.06em">M</text>
+</svg>

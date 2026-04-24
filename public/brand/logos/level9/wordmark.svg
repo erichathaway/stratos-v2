@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Level9 — Wordmark (mini chip + "Level9" text, no border)
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 80" role="img" aria-label="Level9">
+  <defs>
+    <linearGradient id="l9wCool" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8B5CF6"/>
+      <stop offset="55%" stop-color="#06B6D4"/>
+      <stop offset="100%" stop-color="#0D9488"/>
+    </linearGradient>
+    <linearGradient id="l9wObs" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#14082E"/>
+      <stop offset="100%" stop-color="#041521"/>
+    </linearGradient>
+    <linearGradient id="l9wGlass" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.14"/>
+      <stop offset="40%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <!-- Mini chip 56x56 -->
+  <rect x="12" y="12" width="56" height="56" rx="12" fill="url(#l9wObs)" stroke="url(#l9wCool)" stroke-width="1"/>
+  <rect x="12" y="12" width="56" height="56" rx="12" fill="url(#l9wGlass)"/>
+  <text x="40" y="52" text-anchor="middle" dominant-baseline="alphabetic"
+        font-family="Inter, system-ui, sans-serif" font-weight="900" font-size="42"
+        fill="#FFFFFF" transform="rotate(-14 40 50)" style="letter-spacing:-0.04em">9</text>
+  <!-- Wordmark -->
+  <text x="86" y="55"
+        font-family="Inter, system-ui, sans-serif" font-weight="900" font-size="42"
+        letter-spacing="-1" fill="url(#l9wCool)">Level9</text>
+</svg>

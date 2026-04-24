@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Big E Sessions — MINI variant: bars only, no "bigE" text
+  Use at sizes <80px (favicon, nav at small breakpoints).
+  Same chip frame, equalizer mountain CENTERED inside.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 320" role="img" aria-label="Big E Sessions">
+  <defs>
+    <linearGradient id="bemObs" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0E0703"/>
+      <stop offset="100%" stop-color="#040201"/>
+    </linearGradient>
+    <linearGradient id="bemEdge" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FBBF24"/>
+      <stop offset="100%" stop-color="#F59E0B"/>
+    </linearGradient>
+    <linearGradient id="bemGlass" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.10"/>
+      <stop offset="40%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect x="40" y="40" width="240" height="240" rx="56" fill="url(#bemObs)" stroke="url(#bemEdge)" stroke-width="1.5"/>
+  <rect x="40" y="40" width="240" height="240" rx="56" fill="url(#bemGlass)"/>
+  <!-- Mountain bars, centered + bigger (no text competing for space) -->
+  <g fill="#F59E0B">
+    <rect x="80"  y="200" width="12" height="36"  rx="2"/>
+    <rect x="98"  y="184" width="12" height="52"  rx="2"/>
+    <rect x="116" y="166" width="12" height="70"  rx="2"/>
+    <rect x="134" y="146" width="12" height="90"  rx="2"/>
+    <rect x="152" y="120" width="12" height="116" rx="2"/>
+    <rect x="170" y="100" width="12" height="136" rx="2"/>
+    <rect x="188" y="120" width="12" height="116" rx="2"/>
+    <rect x="206" y="146" width="12" height="90"  rx="2"/>
+    <rect x="224" y="166" width="12" height="70"  rx="2"/>
+  </g>
+</svg>

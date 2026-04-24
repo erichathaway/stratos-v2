@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Eric Hathaway — favicon variant (mini, <64px optimized)
+  Simplified from chip.svg: the tiny compass details collapse at 16-32px.
+  This variant keeps the identity (dominant white North needle + amber
+  center hub on obsidian/amber-edged chip) but drops the tick marks,
+  diagonal needles, and N letter. Single-glance readable at 16px.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 320" role="img" aria-label="Eric Hathaway">
+  <defs>
+    <linearGradient id="ehFavObs" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"  stop-color="#1A1208"/>
+      <stop offset="100%" stop-color="#08040A"/>
+    </linearGradient>
+    <linearGradient id="ehFavEdge" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"  stop-color="#FBBF24"/>
+      <stop offset="100%" stop-color="#F59E0B"/>
+    </linearGradient>
+    <linearGradient id="ehFavNorth" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%"  stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#E5E7EB"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Full-bleed chip frame for maximum visual weight at tiny sizes -->
+  <rect x="8" y="8" width="304" height="304" rx="56" fill="url(#ehFavObs)" stroke="url(#ehFavEdge)" stroke-width="6"/>
+
+  <!-- Dominant white North needle (~62% of canvas, readable at 16px) -->
+  <polygon points="160,36 130,176 190,176" fill="url(#ehFavNorth)"/>
+
+  <!-- Amber south counter-needle (anchors the compass concept) -->
+  <polygon points="160,284 138,176 182,176" fill="#F59E0B" opacity="0.85"/>
+
+  <!-- Center hub -->
+  <circle cx="160" cy="176" r="20" fill="#FFFFFF"/>
+  <circle cx="160" cy="176" r="10" fill="#F59E0B"/>
+</svg>

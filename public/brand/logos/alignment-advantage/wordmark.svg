@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- The Alignment Advantage — wordmark (mini chip + title) -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 80" role="img" aria-label="The Alignment Advantage">
+  <defs>
+    <linearGradient id="aaWmRed" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"  stop-color="#B91C1C"/>
+      <stop offset="55%" stop-color="#991B1B"/>
+      <stop offset="100%" stop-color="#7F1D1D"/>
+    </linearGradient>
+    <linearGradient id="aaWmObs" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"  stop-color="#1E0A0C"/>
+      <stop offset="100%" stop-color="#080203"/>
+    </linearGradient>
+    <linearGradient id="aaWmGlass" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%"  stop-color="#FFFFFF" stop-opacity="0.12"/>
+      <stop offset="40%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="aaWmCover" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"  stop-color="#F3E8D5"/>
+      <stop offset="100%" stop-color="#D9C39A"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Mini chip 56x56 on left -->
+  <rect x="12" y="12" width="56" height="56" rx="12" fill="url(#aaWmObs)" stroke="url(#aaWmRed)" stroke-width="1"/>
+  <rect x="12" y="12" width="56" height="56" rx="12" fill="url(#aaWmGlass)"/>
+  <!-- Simplified book inside mini chip -->
+  <g transform="translate(40 40)">
+    <rect x="-14" y="-18" width="28" height="36" rx="2" fill="url(#aaWmRed)" stroke="#7F1D1D" stroke-width="0.6"/>
+    <rect x="-18" y="-18" width="4" height="36" rx="1" fill="#7F1D1D"/>
+    <rect x="-10" y="-4" width="20" height="1.5" fill="url(#aaWmCover)" opacity="0.9"/>
+    <rect x="-10" y="2"  width="14" height="1.5" fill="url(#aaWmCover)" opacity="0.6"/>
+    <rect x="-10" y="8"  width="16" height="1.5" fill="url(#aaWmCover)" opacity="0.7"/>
+  </g>
+
+  <!-- Wordmark: editorial, two-line balance -->
+  <text x="86" y="36"
+        font-family="Inter, system-ui, sans-serif" font-weight="700" font-size="18"
+        letter-spacing="0.15em" fill="#D9C39A">THE ALIGNMENT</text>
+  <text x="86" y="64"
+        font-family="Inter, system-ui, sans-serif" font-weight="900" font-size="30"
+        letter-spacing="-0.5" fill="url(#aaWmRed)">Advantage</text>
+</svg>

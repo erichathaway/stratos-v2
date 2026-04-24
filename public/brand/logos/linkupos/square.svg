@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  LinkupOS — Edge-to-edge square (NEW v0.1)
+  Spec: 320×320, sharp corners. Same obsidian + amber edge as chip,
+        anchor scaled larger (9×) for app icon use.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 320" role="img" aria-label="LinkupOS">
+  <defs>
+    <linearGradient id="lpsObs" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1A1208"/>
+      <stop offset="100%" stop-color="#08040A"/>
+    </linearGradient>
+    <linearGradient id="lpsEdge" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FBBF24"/>
+      <stop offset="100%" stop-color="#F59E0B"/>
+    </linearGradient>
+    <linearGradient id="lpsGlass" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.10"/>
+      <stop offset="40%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect x="0.75" y="0.75" width="318.5" height="318.5" fill="url(#lpsObs)" stroke="url(#lpsEdge)" stroke-width="1.5"/>
+  <rect x="0.75" y="0.75" width="318.5" height="318.5" fill="url(#lpsGlass)"/>
+  <g transform="translate(160,160) scale(9) rotate(180) translate(-12,-12)" fill="none" stroke="#F59E0B" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 6v16"/>
+    <path d="m19 13 2-1a9 9 0 0 1-18 0l2 1"/>
+    <path d="M9 11h6"/>
+    <circle cx="12" cy="4" r="2"/>
+  </g>
+</svg>

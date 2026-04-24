@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  MAX — conversational voice layer (rounded chip)
+  ─────────────────────────────────────────────────────────────────
+  Spec: 320 × 320, family chip format.
+  Concept: Tilted "M" in the family signature treatment (matches Level9's
+           rotated 9, erichathaway's compass). MAX is the voice layer
+           across the whole stack — the M is flanked by a small voice-
+           amplitude waveform to signal "speak to the operation."
+  Palette: fuchsia family (#EC4899 → #DB2777 → #BE185D). Warm dark obsidian.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 320" role="img" aria-label="MAX">
+  <defs>
+    <linearGradient id="maxFuchsiaEdge" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"  stop-color="#F472B6"/>
+      <stop offset="55%" stop-color="#EC4899"/>
+      <stop offset="100%" stop-color="#BE185D"/>
+    </linearGradient>
+    <linearGradient id="maxObsidian" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"  stop-color="#1A0814"/>
+      <stop offset="100%" stop-color="#060208"/>
+    </linearGradient>
+    <linearGradient id="maxGlassHi" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%"  stop-color="#FFFFFF" stop-opacity="0.12"/>
+      <stop offset="40%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="maxMLetter" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%"  stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#FBCFE8"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Frame -->
+  <rect x="40" y="40" width="240" height="240" rx="56" fill="url(#maxObsidian)" stroke="url(#maxFuchsiaEdge)" stroke-width="1.5"/>
+  <rect x="40" y="40" width="240" height="240" rx="56" fill="url(#maxGlassHi)"/>
+
+  <!-- Voice waveform band below the M. Amplitude bars radiating outward,
+       like a speech signal meter. Subtle — supports the M, doesn't compete. -->
+  <g transform="translate(160 220)" opacity="0.7">
+    <!-- Left side bars (ascending in from the center) -->
+    <rect x="-74" y="-6"  width="4" height="12" rx="2" fill="#EC4899" opacity="0.35"/>
+    <rect x="-62" y="-10" width="4" height="20" rx="2" fill="#EC4899" opacity="0.55"/>
+    <rect x="-50" y="-14" width="4" height="28" rx="2" fill="#EC4899" opacity="0.75"/>
+    <rect x="-38" y="-18" width="4" height="36" rx="2" fill="#EC4899" opacity="0.90"/>
+    <rect x="-26" y="-22" width="4" height="44" rx="2" fill="#EC4899"/>
+    <!-- Center tallest bars (the "peak" of the voice) -->
+    <rect x="-14" y="-26" width="4" height="52" rx="2" fill="url(#maxFuchsiaEdge)"/>
+    <rect x="-2"  y="-22" width="4" height="44" rx="2" fill="url(#maxFuchsiaEdge)"/>
+    <rect x="10"  y="-26" width="4" height="52" rx="2" fill="url(#maxFuchsiaEdge)"/>
+    <!-- Right side bars (descending) -->
+    <rect x="22"  y="-22" width="4" height="44" rx="2" fill="#EC4899"/>
+    <rect x="34"  y="-18" width="4" height="36" rx="2" fill="#EC4899" opacity="0.90"/>
+    <rect x="46"  y="-14" width="4" height="28" rx="2" fill="#EC4899" opacity="0.75"/>
+    <rect x="58"  y="-10" width="4" height="20" rx="2" fill="#EC4899" opacity="0.55"/>
+    <rect x="70"  y="-6"  width="4" height="12" rx="2" fill="#EC4899" opacity="0.35"/>
+  </g>
+
+  <!-- The M — tilted like Level9's 9 for family signature consistency.
+       Sits above the waveform. -->
+  <text x="160" y="152" text-anchor="middle" dominant-baseline="central"
+        font-family="Inter, system-ui, sans-serif" font-weight="900" font-size="170"
+        fill="url(#maxMLetter)" transform="rotate(-14 160 152)"
+        style="letter-spacing:-0.06em">M</text>
+</svg>

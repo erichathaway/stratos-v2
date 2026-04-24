@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  COO Playbook — Rounded chip (NEW v0.1)
+  Spec: 320×320, rx=56. Obsidian + slate edge.
+  Mark: 4 alignment bars (violet→cyan gradient, descending widths) +
+        pink dot indicator. Same design as #15 favicon, scaled to chip.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 320" role="img" aria-label="COO Playbook">
+  <defs>
+    <linearGradient id="cpObs" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0F1117"/>
+      <stop offset="100%" stop-color="#050709"/>
+    </linearGradient>
+    <linearGradient id="cpEdge" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#94A3B8"/>
+      <stop offset="100%" stop-color="#64748B"/>
+    </linearGradient>
+    <linearGradient id="cpGlass" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.10"/>
+      <stop offset="40%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="cpBar" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#8B5CF6"/>
+      <stop offset="100%" stop-color="#06B6D4"/>
+    </linearGradient>
+  </defs>
+  <rect x="40" y="40" width="240" height="240" rx="56" fill="url(#cpObs)" stroke="url(#cpEdge)" stroke-width="1.5"/>
+  <rect x="40" y="40" width="240" height="240" rx="56" fill="url(#cpGlass)"/>
+  <!-- 4 alignment bars (descending widths: 140, 105, 140, 80) -->
+  <rect x="80"  y="105" width="140" height="22" rx="11" fill="url(#cpBar)" opacity="0.92"/>
+  <rect x="80"  y="143" width="105" height="22" rx="11" fill="url(#cpBar)" opacity="0.68"/>
+  <rect x="80"  y="181" width="140" height="22" rx="11" fill="url(#cpBar)" opacity="0.92"/>
+  <rect x="80"  y="219" width="80"  height="22" rx="11" fill="url(#cpBar)" opacity="0.46"/>
+  <!-- Pink alignment indicator -->
+  <circle cx="240" cy="116" r="14" fill="#EC4899"/>
+</svg>

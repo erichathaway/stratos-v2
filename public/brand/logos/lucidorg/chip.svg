@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  LucidORG — Square Logo (V4: traced from real Asset 5.svg)
+  ───────────────────────────────────────────────────────────────────────────
+  Spec: 320 × 320
+  Source: /Users/erichathaway/Desktop/Asset 5.svg
+          Original viewBox 187.95 × 187.42, single olive #a2b185 fill.
+  Recreation: 6 paths embedded VERBATIM from source. Only changes:
+    1. Per-path fill colors (cyan / sky-blue / violet, 180° rotational symmetry)
+    2. Scaled + centered to fit inside the 240×240 obsidian chip frame
+  Frame: matches Level9 chip family for ecosystem consistency.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 320" role="img" aria-label="LucidORG">
+  <defs>
+    <linearGradient id="loFrameObs" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"  stop-color="#0A1A2E"/>
+      <stop offset="100%" stop-color="#020812"/>
+    </linearGradient>
+    <linearGradient id="loFrameEdge" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"  stop-color="#0EA5E9"/>
+      <stop offset="55%" stop-color="#8B5CF6"/>
+      <stop offset="100%" stop-color="#06B6D4"/>
+    </linearGradient>
+    <linearGradient id="loGlassHi" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%"  stop-color="#FFFFFF" stop-opacity="0.10"/>
+      <stop offset="40%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Frame: obsidian rounded square + cool gradient edge + glass highlight -->
+  <rect x="40" y="40" width="240" height="240" rx="56" fill="url(#loFrameObs)" stroke="url(#loFrameEdge)" stroke-width="1.5"/>
+  <rect x="40" y="40" width="240" height="240" rx="56" fill="url(#glassHi)"/>
+
+  <!--
+    LOGO — exact paths from Asset 5.svg, scaled 0.958× and translated to
+    center the original (94, 93.7) at chip center (160, 160).
+    Per-path fills replace the single olive #a2b185 with brand colors:
+      Path 1 (top-right):    cyan #06B6D4
+      Path 2 (right):        sky  #0EA5E9
+      Path 3 (bottom-right): violet #8B5CF6
+      Path 4 (bottom-left):  cyan #06B6D4
+      Path 5 (left):         sky  #0EA5E9
+      Path 6 (top-left):     violet #8B5CF6
+    180° rotational symmetry. Opacity 0.85 for the "faded in" effect.
+  -->
+  <g transform="translate(69.95, 70.23) scale(0.958)" opacity="0.92">
+    <path fill="#06B6D4" d="M134.05,37.97C112.17,25.37,90.28,12.76,68.39.16l-.03-.05-.03.02-.22-.13-.22.38L24.93,25.11,6.48,57.38l61.85-35.61,68.54,39.46.1-.16v-21.42c-.97-.56-1.94-1.12-2.91-1.68Z"/>
+    <path fill="#0EA5E9" d="M162.55,100.82c0-25.21,0-50.41,0-75.62l.03-.05-.03-.02v-.25s-.44,0-.44,0L119.15.15l-37.25.19,61.85,35.61v78.93s.19,0,.19,0l18.6-10.71c0-1.12,0-2.23,0-3.35Z"/>
+    <path fill="#8B5CF6" d="M122.01,156.62c21.89-12.6,43.78-25.21,65.66-37.81h.06s0-.03,0-.03l.22-.13-.22-.38v-49.47s-18.79-32.07-18.79-32.07v71.23s-68.54,39.46-68.54,39.46l.1.16,18.6,10.71c.97-.56,1.94-1.12,2.91-1.68Z"/>
+    <path fill="#06B6D4" d="M53.39,149.45c21.89,12.6,43.78,25.21,65.66,37.81l.03.05.03-.02.22.13.22-.38,42.96-24.73,18.45-32.27-61.85,35.61-68.54-39.46-.1.16v21.42c.97.56,1.94,1.12,2.91,1.68Z"/>
+    <path fill="#0EA5E9" d="M24.91,86.68c0,25.21,0,50.41,0,75.62l-.03.05.03.02v.25s.44,0,.44,0l42.96,24.73,37.25-.19-61.85-35.61v-78.93s-.19,0-.19,0l-18.6,10.71c0,1.12,0,2.23,0,3.35Z"/>
+    <path fill="#8B5CF6" d="M65.95,30.88C44.06,43.48,22.17,56.08.28,68.69h-.06s0,.03,0,.03l-.22.13.22.38v49.47s18.79,32.07,18.79,32.07v-71.23s68.54-39.46,68.54-39.46l-.1-.16-18.6-10.71c-.97.56-1.94,1.12-2.91,1.68Z"/>
+  </g>
+</svg>

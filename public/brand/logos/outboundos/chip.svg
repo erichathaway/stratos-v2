@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  OutboundOS — PLACEHOLDER chip with capital "O"
+  Spec: 320×320, rx=56. Amber chip family format.
+  PLACEHOLDER ONLY — brand-agent designs final mark with umbrella metaphor.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 320" role="img" aria-label="OutboundOS">
+  <defs>
+    <linearGradient id="obObs" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1A1208"/>
+      <stop offset="100%" stop-color="#08040A"/>
+    </linearGradient>
+    <linearGradient id="obEdge" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FBBF24"/>
+      <stop offset="100%" stop-color="#F59E0B"/>
+    </linearGradient>
+    <linearGradient id="obGlass" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.10"/>
+      <stop offset="40%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect x="40" y="40" width="240" height="240" rx="56" fill="url(#obObs)" stroke="url(#obEdge)" stroke-width="1.5"/>
+  <rect x="40" y="40" width="240" height="240" rx="56" fill="url(#obGlass)"/>
+  <text x="160" y="162" text-anchor="middle" dominant-baseline="central"
+        font-family="Inter, system-ui, sans-serif"
+        font-weight="900" font-size="180" fill="#FFFFFF"
+        style="letter-spacing:-0.04em">O</text>
+</svg>

@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StratOS — Executive Decision Infrastructure</title>
+<link rel="icon" type="image/svg+xml" href="/brand/logos/stratos/favicon.svg" />
+<link rel="apple-touch-icon" href="/brand/logos/stratos/chip.svg" />
+<meta name="description" content="StratOS. Strategy decisions that hold. AI-facilitated strategy rooms with governance-grade audit trails.">
+<meta property="og:title" content="StratOS. Strategy decisions that hold.">
+<meta property="og:description" content="AI-facilitated strategy rooms. Decide with clarity, align without churn.">
+<meta property="og:image" content="https://stratos.lucidorg.com/brand/logos/stratos/chip.svg">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://stratos.lucidorg.com">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://stratos.lucidorg.com/brand/logos/stratos/chip.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=Inter:wght@400;500;600&family=DM+Mono&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-page:      #08080e;
+  --bg-surface:   #0f1118;
+  --bg-surface-2: #141820;
+  --border:       #1c2232;
+  --border-hover: #28305a;
+  --blue:   #5b9cf6;
+  --amber:  #f0a030;
+  --teal:   #26c8b0;
+  --purple: #9b78f0;
+  --text-primary:   #edf1fa;
+  --text-secondary: #7a8aa8;
+  --text-muted:     #404e68;
+  --accent: var(--blue);
+  --font-display: 'Sora', system-ui, sans-serif;
+  --font-body:    'Inter', system-ui, sans-serif;
+  --font-mono:    'DM Mono', monospace;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg-page);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  line-height: 1.6;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── NAV ──────────────────────────────────────────────── */
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 2rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.logo {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+}
+
+.logo span { color: var(--accent); }
+
+nav a {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+nav a:hover { color: var(--text-primary); }
+
+/* ── HERO ─────────────────────────────────────────────── */
+.hero {
+  text-align: center;
+  padding: 6rem 2rem 4rem;
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.hero-badge {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--accent);
+  background: rgba(91, 156, 246, 0.08);
+  border: 1px solid rgba(91, 156, 246, 0.15);
+  border-radius: 100px;
+  padding: 0.35rem 1rem;
+  margin-bottom: 2rem;
+  letter-spacing: 0.04em;
+}
+
+h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2.25rem, 5vw, 3.5rem);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  margin-bottom: 1.5rem;
+}
+
+h1 em {
+  font-style: normal;
+  background: linear-gradient(135deg, var(--blue), var(--purple));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero p {
+  font-size: 1.125rem;
+  color: var(--text-secondary);
+  max-width: 540px;
+  margin: 0 auto 2.5rem;
+  line-height: 1.7;
+}
+
+.cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #fff;
+  background: var(--accent);
+  border: none;
+  border-radius: 8px;
+  padding: 0.8rem 2rem;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+  text-decoration: none;
+}
+
+.cta:hover {
+  background: #4a8be5;
+  transform: translateY(-1px);
+}
+
+.cta svg {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: none;
+}
+
+/* ── FEATURES ─────────────────────────────────────────── */
+.features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.25rem;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem 2rem 6rem;
+}
+
+.card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 2rem;
+  transition: border-color 0.25s, transform 0.2s;
+}
+
+.card:hover {
+  border-color: var(--border-hover);
+  transform: translateY(-2px);
+}
+
+.card-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.25rem;
+}
+
+.card-icon svg {
+  width: 20px;
+  height: 20px;
+  stroke-width: 1.5;
+  fill: none;
+}
+
+.card-icon.blue   { background: rgba(91, 156, 246, 0.1); }
+.card-icon.blue svg   { stroke: var(--blue); }
+.card-icon.amber  { background: rgba(240, 160, 48, 0.1); }
+.card-icon.amber svg  { stroke: var(--amber); }
+.card-icon.teal   { background: rgba(38, 200, 176, 0.1); }
+.card-icon.teal svg   { stroke: var(--teal); }
+
+.card h3 {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin-bottom: 0.6rem;
+  letter-spacing: -0.01em;
+}
+
+.card p {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.65;
+}
+
+/* ── FOOTER ───────────────────────────────────────────── */
+footer {
+  text-align: center;
+  padding: 2rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">Strat<span>OS</span></div>
+  <a href="/index.html">Open Dashboard &rarr;</a>
+</nav>
+
+<section class="hero">
+  <div class="hero-badge">EXECUTIVE DECISION INFRASTRUCTURE</div>
+  <h1>Strategic decisions.<br><em>Structured. Governed. Auditable.</em></h1>
+  <p>StratOS routes high-stakes decisions through C-suite role agents across structured deliberation rounds — delivering McKinsey-grade analysis with full governance audit trails.</p>
+  <a href="/index.html" class="cta">
+    Launch Dashboard
+    <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+  </a>
+</section>
+
+<section class="features">
+  <div class="card">
+    <div class="card-icon blue">
+      <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+    </div>
+    <h3>Structured Deliberation</h3>
+    <p>Multi-round analysis through CEO, CFO, COO, CHRO, and Legal role agents. Each round builds on the last — arguments, rebuttals, evidence synthesis, and final verdict.</p>
+  </div>
+  <div class="card">
+    <div class="card-icon amber">
+      <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+    </div>
+    <h3>Governance Audit Trail</h3>
+    <p>Every deliberation step is logged with timestamps, confidence scores, and source citations. Full proof chain from raw evidence to final recommendation.</p>
+  </div>
+  <div class="card">
+    <div class="card-icon teal">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+    </div>
+    <h3>Multi-LLM Orchestration</h3>
+    <p>Routes to Claude, Gemini, and GPT based on task requirements. Cross-model validation reduces single-model bias and hallucination risk.</p>
+  </div>
+</section>
+
+<footer>StratOS &middot; Decision Intelligence</footer>
+
+</body>
+</html>

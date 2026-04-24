@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  NextGenIntern — Wordmark (mini "N" placeholder chip + "NextGenIntern" text)
+  PLACEHOLDER ONLY — brand-agent designs final. Brand color: blues.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 80" role="img" aria-label="NextGenIntern">
+  <defs>
+    <linearGradient id="ngwObs" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0A1226"/>
+      <stop offset="100%" stop-color="#02060F"/>
+    </linearGradient>
+    <linearGradient id="ngwEdge" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"   stop-color="#0EA5E9"/>
+      <stop offset="55%"  stop-color="#3B82F6"/>
+      <stop offset="100%" stop-color="#1E3A8A"/>
+    </linearGradient>
+    <linearGradient id="ngwGlass" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.10"/>
+      <stop offset="40%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="ngwText" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%"   stop-color="#0EA5E9"/>
+      <stop offset="100%" stop-color="#3B82F6"/>
+    </linearGradient>
+  </defs>
+  <!-- Mini chip 56x56 with placeholder "N" -->
+  <rect x="12" y="12" width="56" height="56" rx="12" fill="url(#ngwObs)" stroke="url(#ngwEdge)" stroke-width="1"/>
+  <rect x="12" y="12" width="56" height="56" rx="12" fill="url(#ngwGlass)"/>
+  <text x="40" y="52" text-anchor="middle"
+        font-family="Inter, system-ui, sans-serif" font-weight="900" font-size="34" fill="#FFFFFF"
+        style="letter-spacing:-0.04em">N</text>
+  <!-- Wordmark -->
+  <text x="86" y="55"
+        font-family="Inter, system-ui, sans-serif" font-weight="900" font-size="38"
+        letter-spacing="-1" fill="url(#ngwText)">NextGen<tspan fill="#FFFFFF">Intern</tspan></text>
+</svg>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  CommandOS — Rounded chip, Option A (simple chevron, scaled from favicon)
+  Spec: 320×320, rx=56. Obsidian fill + emerald edge gradient.
+  Mark: chevron + terminal block (from #13 favicon, recolored to emerald).
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 320" role="img" aria-label="CommandOS">
+  <defs>
+    <linearGradient id="cmdAObs" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0A1A14"/>
+      <stop offset="100%" stop-color="#02080A"/>
+    </linearGradient>
+    <linearGradient id="cmdAEdge" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#34D399"/>
+      <stop offset="100%" stop-color="#10B981"/>
+    </linearGradient>
+    <linearGradient id="cmdAGlass" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.10"/>
+      <stop offset="40%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect x="40" y="40" width="240" height="240" rx="56" fill="url(#cmdAObs)" stroke="url(#cmdAEdge)" stroke-width="1.5"/>
+  <rect x="40" y="40" width="240" height="240" rx="56" fill="url(#cmdAGlass)"/>
+  <!-- Chevron > -->
+  <path d="M 110 100 L 180 160 L 110 220" stroke="#10B981" stroke-width="22" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <!-- Terminal-style block (cursor) -->
+  <rect x="200" y="148" width="44" height="24" rx="6" fill="#10B981"/>
+</svg>

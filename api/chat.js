@@ -1,4 +1,5 @@
 import { rateLimit, validateOrigin } from './_auth.js';
+import { logRouting } from './_routing-log.js';
 
 export default async function handler(req, res) {
   validateOrigin(req, res);
@@ -48,6 +49,8 @@ ${typeof context === 'string' ? context : JSON.stringify(context, null, 1)}`;
   }
   messages.push({ role: 'user', content: message });
 
+  const MODEL = 'claude-sonnet-4-20250514';
+  const t0 = Date.now();
   try {
     const apiRes = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
@@ -57,22 +60,42 @@ ${typeof context === 'string' ? context : JSON.stringify(context, null, 1)}`;
         'anthropic-version': '2023-06-01',
       },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
+        model: MODEL,
         max_tokens: 1024,
         system: systemPrompt,
         messages,
       }),
     });
 
+    const durationMs = Date.now() - t0;
+
     if (!apiRes.ok) {
       const err = await apiRes.text();
       console.error('[chat.js] Anthropic API error:', apiRes.status, err);
+      // Best-effort: log the failed call so error rate shows in dashboard.
+      logRouting({
+        taskType: 'STRATOS_CHAT',
+        model: MODEL,
+        usage: {},
+        durationMs,
+        outcome: apiRes.status === 429 ? 'rate_limited' : 'error',
+      });
       res.status(502).json({ error: 'AI service error', status: apiRes.status });
       return;
     }
 
     const data = await apiRes.json();
     const text = data.content?.[0]?.text || '';
+
+    // Visibility: log this call to cmd_routing_log so the dashboard sees
+    // stratos chat spend alongside classifier + officer + marketing.
+    logRouting({
+      taskType: 'STRATOS_CHAT',
+      model: MODEL,
+      usage: data.usage || {},
+      durationMs,
+      outcome: 'success',
+    });
 
     // Extract tab references from the response
     const tabRefs = [];

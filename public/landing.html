@@ -16,7 +16,9 @@
 <meta name="twitter:image" content="https://stratos.lucidorg.com/brand/og-stratos.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=Inter:wght@400;500;600&family=DM+Mono&display=swap" rel="stylesheet">
+<!-- Non-render-blocking font load: stylesheet is fetched in parallel as media="print" (so it doesn't block first paint), then the onload handler swaps it to media="all". With display=swap on the font face, fallback fonts paint immediately and Sora/Inter/DM Mono swap in as soon as they arrive. Visually identical to the prior render-blocking version. -->
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=Inter:wght@400;500;600&family=DM+Mono&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=Inter:wght@400;500;600&family=DM+Mono&display=swap" rel="stylesheet"></noscript>
 <style>
 :root {
   --bg-page:      #08080e;

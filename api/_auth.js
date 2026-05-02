@@ -49,7 +49,13 @@ export function securityHeaders(res) {
   res.setHeader('X-Frame-Options', 'DENY');
   res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
   // Restrict CORS to known origins in production
+  // 2026-04-30: stratosonline.com is the canonical primary; lucidorg.com kept
+  // during transition period (registrar still locked at GoDaddy until 2026-06-03).
   const allowedOrigins = [
+    'https://results.stratosonline.com',
+    'https://app.stratosonline.com',
+    'https://stratosonline.com',
+    'https://www.stratosonline.com',
     'https://results.stratos.lucidorg.com',
     'https://app.stratos.lucidorg.com',
     'https://stratos.lucidorg.com',

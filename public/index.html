@@ -9,11 +9,11 @@
 <meta name="description" content="StratOS. Strategy decisions that hold. AI-facilitated strategy rooms with governance-grade audit trails.">
 <meta property="og:title" content="StratOS. Strategy decisions that hold.">
 <meta property="og:description" content="AI-facilitated strategy rooms. Decide with clarity, align without churn.">
-<meta property="og:image" content="https://stratos.lucidorg.com/brand/og-stratos.png">
+<meta property="og:image" content="https://stratosonline.com/brand/og-stratos.png">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://stratos.lucidorg.com">
+<meta property="og:url" content="https://stratosonline.com">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://stratos.lucidorg.com/brand/og-stratos.png">
+<meta name="twitter:image" content="https://stratosonline.com/brand/og-stratos.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <style>
 /* STRATOS MASTER CSS v2.0
@@ -4951,7 +4951,7 @@ function applyLiveData(raw) {
         h += '<div class="mi-paywall-lock">&#128274;</div>';
         h += '<div class="mi-paywall-title">Unlock Full Market Intelligence</div>';
         h += '<div class="mi-paywall-desc">Competitive dossiers, opportunity pipeline, M&A activity, risk register, and deep-dive research — included with Professional ($99) and Enterprise ($249) plans, or add to any decision for $49.</div>';
-        h += '<a href="https://app.stratos.lucidorg.com" class="mi-paywall-cta">Upgrade Now</a>';
+        h += '<a href="https://app.stratosonline.com" class="mi-paywall-cta">Upgrade Now</a>';
         h += '</div>';
       }
       h += '<div class="mi-premium-sections' + (isPremium ? '' : ' mi-locked') + '">';
@@ -5611,20 +5611,20 @@ function showUpsellCards(raw, bgp, dash) {
     var audioRows = document.querySelectorAll('.sb-audio-row');
     audioRows.forEach(function(row) {
       row.innerHTML = '';
-      row.appendChild(makeUpsell('\uD83D\uDD12', 'Audio Walkthroughs', 'Narrated section overviews available in Professional plan.', 'Learn more', 'https://stratos.lucidorg.com/pricing'));
+      row.appendChild(makeUpsell('\uD83D\uDD12', 'Audio Walkthroughs', 'Narrated section overviews available in Professional plan.', 'Learn more', 'https://stratosonline.com/pricing'));
     });
   }
   // Market Intelligence: show upsell if section has no real data
   var marketSec = document.getElementById('sec-market');
   if (marketSec && marketSec.dataset.empty === '1') {
     marketSec.innerHTML = '';
-    marketSec.appendChild(makeUpsell('\uD83D\uDCCA', 'Market Intelligence', 'Add competitive analysis, market signals, and regulatory tracking.', 'Add for $50', 'https://stratos.lucidorg.com/pricing'));
+    marketSec.appendChild(makeUpsell('\uD83D\uDCCA', 'Market Intelligence', 'Add competitive analysis, market signals, and regulatory tracking.', 'Add for $50', 'https://stratosonline.com/pricing'));
     marketSec.style.padding = '0 var(--page-pad-x)';
   }
   // Board governance: check if grid is empty
   var govGrid = document.getElementById('board-gov-grid');
   if (govGrid && !govGrid.children.length) {
-    govGrid.appendChild(makeUpsell('\uD83D\uDCCB', 'Board Governance Packet', 'Full oversight requirements, reporting cadence, and escalation triggers.', 'Available in Enterprise', 'https://stratos.lucidorg.com/pricing'));
+    govGrid.appendChild(makeUpsell('\uD83D\uDCCB', 'Board Governance Packet', 'Full oversight requirements, reporting cadence, and escalation triggers.', 'Available in Enterprise', 'https://stratosonline.com/pricing'));
   }
 }
 
@@ -7754,7 +7754,7 @@ window.__RUN_ID = SB_RUN;
 
 async function fetchRunData() {
   // Try local API first (works on Vercel), fall back to production
-  var urls = ['/api/data?run_id=' + SB_RUN, 'https://results.stratos.lucidorg.com/api/data?run_id=' + SB_RUN];
+  var urls = ['/api/data?run_id=' + SB_RUN, 'https://results.stratosonline.com/api/data?run_id=' + SB_RUN];
   for (var i = 0; i < urls.length; i++) {
     try {
       var ac = new AbortController();
@@ -8098,7 +8098,7 @@ window.sendChat = async function(){
         '<div class="pp-login-heading">Access Your Decisions</div>' +
         '<div class="pp-login-sub">Sign in to view and manage your StratOS decision history</div>' +
         '<div class="pp-login-buttons">' +
-          '<a class="pp-btn-linkedin" href="https://app.stratos.lucidorg.com/login?provider=linkedin&redirect=dashboard">' +
+          '<a class="pp-btn-linkedin" href="https://app.stratosonline.com/login?provider=linkedin&redirect=dashboard">' +
             '<span class="pp-btn-linkedin-icon">in</span>' +
             'Sign in with LinkedIn' +
           '</a>' +
@@ -8245,7 +8245,7 @@ window.sendChat = async function(){
     return '<div class="pp-empty">' +
       '<div class="pp-empty-icon">&#9670;</div>' +
       '<div class="pp-empty-text">No decisions yet &mdash; start your first one</div>' +
-      '<a class="pp-empty-cta" href="https://app.stratos.lucidorg.com" target="_blank">Launch StratOS &rarr;</a>' +
+      '<a class="pp-empty-cta" href="https://app.stratosonline.com" target="_blank">Launch StratOS &rarr;</a>' +
     '</div>';
   }
 

@@ -1,3 +1,26 @@
+---
+id: LVL9-STRAT-README
+title: "StratOS"
+version: "0.1"
+effective: 2026-04-24
+last_verified: 2026-05-19
+owner: Eric Hathaway
+status: live
+review_cadence: quarterly
+audience: private
+authority: technical
+tags:
+  - section:operations
+  - audience:private
+  - layer:L2-product
+  - type:md
+  - authority:technical
+  - origin:ai-drafted
+  - topic:stratos
+  - topic:documentation
+  - topic:agent-config
+  - product:stratos
+---
 # StratOS
 
 Multi-agent executive decision engine with a McKinsey-grade React dashboard. Routes strategic decisions through C-suite role agents (CEO, CFO, COO, CHRO, LEGAL) across structured deliberation rounds with governance-grade audit trails.

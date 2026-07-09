@@ -1,3 +1,25 @@
+---
+id: LVL9-STRAT-CLAUDE
+title: "Claude"
+version: "0.1"
+effective: 2026-04-19
+last_verified: 2026-05-19
+owner: Eric Hathaway
+status: live
+review_cadence: quarterly
+audience: private
+authority: technical
+tags:
+  - section:operations
+  - audience:private
+  - layer:L2-product
+  - type:agent-contract
+  - authority:technical
+  - origin:ai-drafted
+  - topic:stratos
+  - topic:agent-config
+  - product:stratos
+---
 ## Canonical Stack (read before you write)
 
 This project participates in the Level9 portfolio's canonical stack. Before hardcoding a color, font, logo, legal line, LLC attribution, API key, or ID, check the canonical source:

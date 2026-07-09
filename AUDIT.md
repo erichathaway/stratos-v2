@@ -1,3 +1,26 @@
+---
+id: LVL9-STRAT-AUDIT
+title: "StratOS Decision Engine — Full Audit Reference"
+version: "0.1"
+effective: 2026-03-22
+last_verified: 2026-05-19
+owner: Eric Hathaway
+status: live
+review_cadence: quarterly
+audience: private
+authority: technical
+tags:
+  - section:operations
+  - audience:private
+  - layer:L2-product
+  - type:audit-report
+  - authority:technical
+  - origin:ai-drafted
+  - topic:audit
+  - topic:stratos
+  - topic:agent-config
+  - product:stratos
+---
 # StratOS Decision Engine — Full Audit Reference
 
 **Date:** 2026-03-21

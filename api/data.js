@@ -1,13 +1,14 @@
-import { validateRunId, rateLimit, validateOrigin } from './_auth.js';
+import { validateRunId, rateLimit, validateOrigin, requireAccessToken } from './_auth.js';
 
 export default async function handler(req, res) {
   validateOrigin(req, res);
   res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, X-Access-Token');
   res.setHeader('Cache-Control', 's-maxage=30, stale-while-revalidate=60');
 
   if (req.method === 'OPTIONS') { res.status(200).end(); return; }
   if (!rateLimit(req, res)) return;
+  if (!requireAccessToken(req, res)) return;
 
   let { run_id } = req.query;
   // Validate run_id format (if provided)
@@ -15,7 +16,7 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Invalid run_id format' });
   }
   const SB_URL = process.env.SUPABASE_URL;
-  const SB_KEY = process.env.SUPABASE_ANON_KEY;
+  const SB_KEY = process.env.SUPABASE_SERVICE_ROLE;
 
   if (!SB_URL || !SB_KEY) {
     res.status(500).json({ error: 'Server configuration error. Please contact support.' });

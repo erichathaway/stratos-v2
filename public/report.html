@@ -236,7 +236,11 @@ function stanceLabel(s){ if(!s)return'—';s=s.toUpperCase();if(s.includes('APPR
 
 function gate(title){ return '<div class="rpt-gate"><h4>'+esc(title)+'</h4><p>Available with full analysis package</p><a href="#">Unlock Full Report</a></div>'; }
 
-var apiUrl = '/api/data' + (runId ? '?run_id='+encodeURIComponent(runId) : '');
+var accessToken = params.get('k') || '';
+var apiQs = [];
+if (runId) apiQs.push('run_id=' + encodeURIComponent(runId));
+if (accessToken) apiQs.push('k=' + encodeURIComponent(accessToken));
+var apiUrl = '/api/data' + (apiQs.length ? '?' + apiQs.join('&') : '');
 fetch(apiUrl).then(function(r){return r.json()}).then(render).catch(function(e){
   document.getElementById('loading').innerHTML='<div style="color:var(--red)">Failed: '+esc(e.message)+'</div>';
 });

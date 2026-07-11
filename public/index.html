@@ -4361,6 +4361,8 @@ function openServerPDF(reportType) {
     || '';
   var url = '/api/pdf?type=' + encodeURIComponent(reportType);
   if (runId) url += '&run_id=' + encodeURIComponent(runId);
+  var accessToken = window.__ACCESS_TOKEN || new URLSearchParams(location.search).get('k') || '';
+  if (accessToken) url += '&k=' + encodeURIComponent(accessToken);
   window.open(url, '_blank');
 }
 
@@ -4393,6 +4395,8 @@ function openGammaDeck(deckType) {
     || '';
   var url = '/api/presentation?type=' + encodeURIComponent(deckType);
   if (runId) url += '&run_id=' + encodeURIComponent(runId);
+  var accessToken = window.__ACCESS_TOKEN || new URLSearchParams(location.search).get('k') || '';
+  if (accessToken) url += '&k=' + encodeURIComponent(accessToken);
   fetch(url)
     .then(function(r) { return r.json(); })
     .then(function(data) {
@@ -7751,10 +7755,13 @@ function _renderStep() {
 // ── DATA FETCH ───────────────────────────────────────────────────────────────
 const SB_RUN = new URLSearchParams(window.location.search).get('run') || '';
 window.__RUN_ID = SB_RUN;
+const SB_ACCESS_TOKEN = new URLSearchParams(window.location.search).get('k') || '';
+window.__ACCESS_TOKEN = SB_ACCESS_TOKEN;
+const SB_ACCESS_QS = SB_ACCESS_TOKEN ? '&k=' + encodeURIComponent(SB_ACCESS_TOKEN) : '';
 
 async function fetchRunData() {
   // Try local API first (works on Vercel), fall back to production
-  var urls = ['/api/data?run_id=' + SB_RUN, 'https://results.stratosonline.com/api/data?run_id=' + SB_RUN];
+  var urls = ['/api/data?run_id=' + SB_RUN + SB_ACCESS_QS, 'https://results.stratosonline.com/api/data?run_id=' + SB_RUN + SB_ACCESS_QS];
   for (var i = 0; i < urls.length; i++) {
     try {
       var ac = new AbortController();

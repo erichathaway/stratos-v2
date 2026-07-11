@@ -9,14 +9,15 @@ const GAMMA_API_KEY = process.env.GAMMA_API_KEY || 'sk-gamma-P3kSiUkiWN5I8WUxcAE
 const GAMMA_BASE = 'https://public-api.gamma.app';
 const GAMMA_THEME_ID = process.env.GAMMA_THEME_ID || '2kzw2fo24ga3blg'; // StratOS brand theme
 
-import { validateRunId, rateLimit, validateOrigin } from './_auth.js';
+import { validateRunId, rateLimit, validateOrigin, requireAccessToken } from './_auth.js';
 
 export default async function handler(req, res) {
   validateOrigin(req, res);
   res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, X-Access-Token');
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (!rateLimit(req, res)) return;
+  if (!requireAccessToken(req, res)) return;
 
   let { run_id, type } = req.query;
   const deckType = type || 'executive';
@@ -27,7 +28,7 @@ export default async function handler(req, res) {
 
   /* ── Fetch data from Supabase (same pattern as pdf.js) ── */
   const SB_URL = process.env.SUPABASE_URL;
-  const SB_KEY = process.env.SUPABASE_ANON_KEY;
+  const SB_KEY = process.env.SUPABASE_SERVICE_ROLE;
   if (!SB_URL || !SB_KEY) {
     return res.status(500).json({ error: 'Server configuration error' });
   }

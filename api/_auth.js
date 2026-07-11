@@ -63,6 +63,23 @@ export function securityHeaders(res) {
   return allowedOrigins;
 }
 
+// Gate data-serving endpoints behind a single shared access token.
+// Accepts ?k=<token> query param or X-Access-Token header. Compares against
+// process.env.STRATOS_RESULTS_TOKEN (no fallback — fails closed).
+export function requireAccessToken(req, res) {
+  const expected = process.env.STRATOS_RESULTS_TOKEN;
+  if (!expected) {
+    res.status(500).json({ error: 'Server configuration error. Please contact support.' });
+    return false;
+  }
+  const supplied = req.query?.k || req.headers['x-access-token'];
+  if (!supplied || supplied !== expected) {
+    res.status(401).json({ error: 'Unauthorized' });
+    return false;
+  }
+  return true;
+}
+
 export function validateOrigin(req, res) {
   const origin = req.headers.origin || req.headers.referer || '';
   const allowed = securityHeaders(res);

@@ -8,13 +8,15 @@ import puppeteer from 'puppeteer-core';
 
 export const config = { maxDuration: 60 };
 
-import { validateRunId, rateLimit, validateOrigin } from './_auth.js';
+import { validateRunId, rateLimit, validateOrigin, requireAccessToken } from './_auth.js';
 
 export default async function handler(req, res) {
   validateOrigin(req, res);
   if (!rateLimit(req, res)) return;
   res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, X-Access-Token');
   if (req.method === 'OPTIONS') return res.status(200).end();
+  if (!requireAccessToken(req, res)) return;
 
   let { run_id, type } = req.query;
   const reportType = type || 'executive-brief';
@@ -25,7 +27,7 @@ export default async function handler(req, res) {
 
   /* ── Fetch data from Supabase ── */
   const SB_URL = process.env.SUPABASE_URL;
-  const SB_KEY = process.env.SUPABASE_ANON_KEY;
+  const SB_KEY = process.env.SUPABASE_SERVICE_ROLE;
   if (!SB_URL || !SB_KEY) {
     return res.status(500).json({ error: 'Server configuration error' });
   }

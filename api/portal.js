@@ -68,8 +68,13 @@ export default async function handler(req, res) {
       return;
     }
 
+    // NOTE: the widget's original query also selected confidence_score, but
+    // that column does not exist on engine_master_state (confirmed against a
+    // full row via /api/data) — PostgREST 400s on an unknown column, which
+    // was being silently swallowed into []. Select only real columns; the
+    // widget already null-checks confidence_score before rendering a badge.
     const runIds = decisions.map(r => r.run_id).filter(Boolean);
-    const masterUrl = `${SB_URL}/rest/v1/engine_master_state?select=run_id,question,decision_id,confidence_score&run_id=in.(${runIds.map(encodeURIComponent).join(',')})`;
+    const masterUrl = `${SB_URL}/rest/v1/engine_master_state?select=run_id,question,decision_id&run_id=in.(${runIds.map(encodeURIComponent).join(',')})`;
     const masterRes = await safeFetch(masterUrl, 'engine_master_state');
     const master = await safeJson(masterRes, []);
 

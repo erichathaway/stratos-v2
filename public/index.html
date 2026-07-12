@@ -2749,6 +2749,7 @@ dep-item strong{display:block;font-family:var(--font-mono);font-size:var(--text-
 .sb-demo-btn span:first-child{font-size:15px;flex-shrink:0}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
@@ -8038,16 +8039,18 @@ window.sendChat = async function(){
 
 // ── PORTAL PANEL (My Decisions) — with auth gate ────────────────────────
 (function(){
-  // The hardcoded Supabase anon key formerly here has been removed. It was
-  // used for (a) direct REST reads of execution_control/engine_master_state
-  // (RLS-locked, no anon policy — silently returned []; now served by the
-  // token-gated /api/portal endpoint, see portalFetch() below) and (b) the
-  // Supabase Auth client below for magic-link sign-in. On verification
-  // (2026-07-11) that same key returned "Invalid API key" from both
-  // /rest/v1 and /auth/v1 — it is a dead/rotated credential, so magic-link
-  // sign-in was already non-functional before this change. Flagged, not
-  // fixed here: reissuing a working anon key for client-side Supabase Auth
-  // is a separate decision outside this task's scope.
+  // Anon key retained ONLY to init the Supabase Auth (GoTrue) client below for
+  // magic-link sign-in (sbClient.auth.signInWithOtp). This is the standard,
+  // intended public use of a Supabase anon key and does not touch PostgREST.
+  // It is NOT used for table data — the direct REST reads of execution_control
+  // / engine_master_state (RLS-locked, no anon policy, silently returned [])
+  // have been removed; that data now comes from the token-gated /api/portal
+  // endpoint. See portalFetch() below.
+  // Reissued 2026-07-12 after the prior key was found dead/rotated (see
+  // 077c35e); this is the current project anon key, verified live against
+  // /auth/v1/settings before shipping.
+  var SUPABASE_URL = 'https://xwmjrphmdjhlhveyyfey.supabase.co';
+  var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh3bWpycGhtZGpobGh2ZXl5ZmV5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE2MTc5MDgsImV4cCI6MjA4NzE5MzkwOH0.P1DfiIshwfC6Qq80q7MxmwBgy86Q9qg8d3qc_acWEuI';
   var panelEl = document.getElementById('portal-panel');
   var backdropEl = document.getElementById('pp-backdrop');
   var bodyEl = document.getElementById('pp-body');
@@ -8077,13 +8080,16 @@ window.sendChat = async function(){
 
   window.portalSignOut = clearAuth;
 
+  // Init Supabase client for magic link auth
+  var sbClient = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
+
   // Check for magic-link callback (access_token in URL hash)
   function checkMagicLinkCallback() {
     var hash = window.location.hash;
     if (hash && hash.indexOf('access_token') !== -1) {
       var params = new URLSearchParams(hash.substring(1));
       var token = params.get('access_token');
-      if (token) {
+      if (token && sbClient) {
         // Decode JWT to get email
         try {
           var payload = JSON.parse(atob(token.split('.')[1]));
@@ -8138,18 +8144,29 @@ window.sendChat = async function(){
         var msg = document.getElementById('pp-email-msg');
         if (inp) inp.focus();
         if (btn) {
-          btn.addEventListener('click', function() {
+          btn.addEventListener('click', async function() {
             var email = (inp.value || '').trim();
             if (!email || email.indexOf('@') === -1) {
               msg.className = 'pp-login-err';
               msg.textContent = 'Please enter a valid email address';
               return;
             }
-            // Email magic-link sign-in is currently unavailable (see note above
-            // sbClient's former declaration). Report honestly instead of
-            // claiming an email was sent when none can be.
-            msg.className = 'pp-login-err';
-            msg.textContent = 'Email sign-in is temporarily unavailable. Please use "Sign in with LinkedIn" above.';
+            btn.disabled = true;
+            btn.textContent = 'Sending…';
+            try {
+              if (sbClient) {
+                var result = await sbClient.auth.signInWithOtp({ email: email });
+                if (result.error) throw result.error;
+              }
+              msg.className = 'pp-login-msg';
+              msg.textContent = 'Check your email for a sign-in link';
+              btn.textContent = 'Link Sent';
+            } catch(e) {
+              msg.className = 'pp-login-err';
+              msg.textContent = e.message || 'Failed to send magic link';
+              btn.disabled = false;
+              btn.textContent = 'Send Magic Link';
+            }
           });
         }
         // Enter key triggers send

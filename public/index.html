@@ -8039,6 +8039,13 @@ window.sendChat = async function(){
 
 // ── PORTAL PANEL (My Decisions) — with auth gate ────────────────────────
 (function(){
+  // Anon key retained ONLY to init the Supabase Auth (GoTrue) client below for
+  // magic-link sign-in (sbClient.auth.signInWithOtp). This is the standard,
+  // intended public use of a Supabase anon key and does not touch PostgREST.
+  // It is NOT used for table data — the direct REST reads of execution_control
+  // / engine_master_state (RLS-locked, no anon policy, silently returned [])
+  // have been removed; that data now comes from the token-gated /api/portal
+  // endpoint. See portalFetch() below.
   var SUPABASE_URL = 'https://xwmjrphmdjhlhveyyfey.supabase.co';
   var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh3bWpycGhtZGpobGh2ZXl5ZmV5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE2MTc5MDgsImV4cCI6MjA4NzE5MzkwOH0.wrHIaQiAFOFCE4hHd_jBLsgsv0v8n7ZwWJMzmYjd22g';
   var panelEl = document.getElementById('portal-panel');
@@ -8169,23 +8176,23 @@ window.sendChat = async function(){
     }
   }
 
-  // ── Data fetching (unchanged logic) ──
-  function supaFetch(path) {
-    return fetch(SUPABASE_URL + '/rest/v1/' + path, {
-      headers: {
-        'apikey': SUPABASE_KEY,
-        'Authorization': 'Bearer ' + SUPABASE_KEY,
-        'Accept': 'application/json'
-      }
-    }).then(function(r){ return r.json(); });
+  // ── Data fetching — server-side, token-gated (was: direct Supabase REST
+  // with the anon key; execution_control/engine_master_state are RLS-locked
+  // with no anon policy, so that path silently returned []) ──
+  function portalFetch(customerKey) {
+    var params = new URLSearchParams();
+    if (window.__ACCESS_TOKEN) params.set('k', window.__ACCESS_TOKEN);
+    if (customerKey) params.set('customer_key', customerKey);
+    return fetch('/api/portal?' + params.toString(), { headers: { 'Accept': 'application/json' } })
+      .then(function(r){ return r.json(); });
   }
 
   function getUserFilter() {
     var p = new URLSearchParams(window.location.search);
     var email = p.get('email') || localStorage.getItem('stratos_email') || getAuthEmail();
     var ck = p.get('customer_key') || localStorage.getItem('stratos_customer_key');
-    if (ck) return '&customer_key=eq.' + encodeURIComponent(ck);
-    if (email) return '&customer_key=eq.' + encodeURIComponent(email);
+    if (ck) return ck;
+    if (email) return email;
     return '';
   }
 
@@ -8260,24 +8267,15 @@ window.sendChat = async function(){
     loadingEl.style.display = '';
     signoutEl.style.display = '';
     try {
-      var filter = getUserFilter();
-      var ecData = await supaFetch(
-        'execution_control?select=run_id,current_section,section_status,started_at,customer_key' +
-        '&order=started_at.desc&limit=20' + filter
-      );
-      if (!Array.isArray(ecData) || ecData.length === 0) {
+      var customerKey = getUserFilter();
+      var portalData = await portalFetch(customerKey);
+      if (portalData && portalData.error) throw new Error(portalData.error);
+      var ecData = portalData && Array.isArray(portalData.decisions) ? portalData.decisions : [];
+      if (ecData.length === 0) {
         bodyEl.innerHTML = renderEmpty();
         return;
       }
-      // Fetch master state for questions/confidence
-      var runIds = ecData.map(function(r){ return r.run_id; });
-      var masterData = [];
-      try {
-        masterData = await supaFetch(
-          'engine_master_state?select=run_id,question,decision_id,confidence_score' +
-          '&run_id=in.(' + runIds.map(encodeURIComponent).join(',') + ')'
-        );
-      } catch(e) { /* non-critical */ }
+      var masterData = (portalData && Array.isArray(portalData.master)) ? portalData.master : [];
       var masterMap = {};
       if (Array.isArray(masterData)) {
         masterData.forEach(function(m){ masterMap[m.run_id] = m; });

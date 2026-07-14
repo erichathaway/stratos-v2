@@ -56,9 +56,6 @@ export function securityHeaders(res) {
     'https://app.stratosonline.com',
     'https://stratosonline.com',
     'https://www.stratosonline.com',
-    'https://results.stratos.lucidorg.com',
-    'https://app.stratos.lucidorg.com',
-    'https://stratos.lucidorg.com',
   ];
   return allowedOrigins;
 }
